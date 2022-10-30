@@ -1,4 +1,5 @@
 import { HTMLMotionProps, Variants, motion } from 'framer-motion';
+import { Fade } from '@chakra-ui/react';
 import React from 'react';
 // type Props = {
 //   children: ReactNode;
@@ -29,6 +30,7 @@ const FadeInUp = (props: FadeInUpProps) => {
       transition={{ delay, ease: [0.4, 0, 0.2, 1], duration }} //cubic-bezier(0.4, 0, 0.2, 1)
       {...props}
     />
+
   );
 };
 

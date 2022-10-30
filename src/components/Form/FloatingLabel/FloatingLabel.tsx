@@ -8,7 +8,7 @@ import {
   InputProps,
   useColorModeValue,
 } from '@chakra-ui/react';
-import React from 'react';
+import useCustomColorMode from '~/hooks/useColorMode';
 
 type FloatingLabelProps = {
   label: string;
@@ -19,11 +19,12 @@ type FloatingLabelProps = {
 
 const FloatingLabel = (props: FloatingLabelProps) => {
   const { label, errorMessage, helperText, value, name, ...rest } = props;
+  const { bgColor } = useCustomColorMode();
   return (
-    <FormControl variant='floating' bg={useColorModeValue('gray.50', 'gray.900')} {...rest}>
+    <FormControl variant='floating' {...rest}>
       <Input name={name} focusBorderColor='ttpq.300' placeholder=' ' value={value} />
       {/* It is important that the Label comes after the Control due to css selectors */}
-      <FormLabel bgColor={'inherit'}>{label}</FormLabel>
+      <FormLabel bgColor={bgColor}>{label}</FormLabel>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
       {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
     </FormControl>
