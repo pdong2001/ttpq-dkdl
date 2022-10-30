@@ -32,7 +32,7 @@ export default function Home() {
         <Container
           as={SimpleGrid}
           maxW={'full'}
-          columns={{ base: 1, md: 2 }}
+          columns={{ base: 1, lg: 2 }}
           gap={{ base: 1 }}
           spacing={{ base: 10, lg: 32 }}
           py={{ base: 32 }}
