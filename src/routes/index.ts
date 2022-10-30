@@ -3,13 +3,14 @@ import DepartmentInfos from '~/pages/DeparmentInfos';
 import GreatCeremonyInfo from '~/pages/GreatCeremonyInfo';
 import Home from '~/pages/Home';
 import MultiStepRegister from '~/pages/MultiStepRegister';
+import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
 import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
 
 export type RouteType = {
   key: string;
-  path: string | string[];
+  path?: string | string[];
   needAuth?: boolean;
   exact?: boolean;
   component: (props: any) => JSX.Element;
@@ -40,7 +41,7 @@ const ROUTES: RouteType[] = [
   },
   {
     key: 'REGISTER_INFO',
-    path: '/register-info/:id',
+    path: ['/register-info/:id', '/register-info'],
     component: RegisterInfo,
     layout: MainLayout,
   },
@@ -54,6 +55,11 @@ const ROUTES: RouteType[] = [
     key: 'DEPARTMENT_INFO',
     path: '/department-info',
     component: DepartmentInfos,
+    layout: MainLayout,
+  },
+  {
+    key: 'NOT_FOUND',
+    component: NotFound,
     layout: MainLayout,
   },
 ];
