@@ -15,6 +15,8 @@ import {
   VStack,
   Image,
   Square,
+  Flex,
+  Spacer,
 } from '@chakra-ui/react';
 import CoverImage from '~/assets/festival_cover.jpg';
 import FadeInUp from '~/components/Animation/FadeInUp';
@@ -142,25 +144,31 @@ export default function Home() {
             </Box>
           </VStack>
           <FadeInUp>
-            <Image src={AboutImage} maxW='full' maxH='sm' rounded={'md'} objectFit={'contain'} />
+            <Image src={AboutImage} maxW='full' rounded={'md'} objectFit={'contain'} />
           </FadeInUp>
         </Container>
 
         {/* CONFERENCE DATE */}
         <FadeInUp>
-          <Stack
+          <Flex
             direction={['column', 'row']}
-            spacing={10}
+            // spacing={10}
             color='white'
             rounded='md'
             justifyContent={'center'}
           >
             <VStack justifyContent='center' alignItems={['center', 'start']} spacing={5}>
-              <Text textTransform='uppercase' fontWeight='bold' fontSize={['xl', '2xl']} color={'ttpq.500'}>
+              <Text
+                textTransform='uppercase'
+                fontWeight='bold'
+                fontSize={['xl', '2xl']}
+                color={'ttpq.500'}
+              >
                 Thời gian diễn ra
               </Text>
               <Text textTransform='uppercase'>Số ngày còn lại</Text>
             </VStack>
+            <Spacer />
             <HStack spacing={5} justifyContent='center'>
               {new Array(4).fill('00').map((time, i) => {
                 const times = ['Ngày', 'Giờ', 'Phút', 'Giây'];
@@ -176,7 +184,7 @@ export default function Home() {
                 );
               })}
             </HStack>
-          </Stack>
+          </Flex>
         </FadeInUp>
       </Box>
     </Box>
