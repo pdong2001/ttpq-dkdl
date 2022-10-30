@@ -10,13 +10,11 @@ import {
   Input,
   IconButton,
   useColorModeValue,
-  VStack,
   HStack,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { BiMailSend } from 'react-icons/bi';
-import React from 'react';
 import Logo from '../Logo';
 import FadeInUp from '../Animation/FadeInUp';
 
