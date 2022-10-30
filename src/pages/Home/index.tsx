@@ -14,7 +14,6 @@ import {
   FormControl,
   VStack,
   Image,
-  Flex,
   Square,
 } from '@chakra-ui/react';
 import CoverImage from '~/assets/festival_cover.jpg';
@@ -24,7 +23,7 @@ import AboutImage from '~/assets/about.jpg';
 
 export default function Home() {
   const backgroundColor = useColorModeValue('gray.50', 'gray.900');
-  const textColor = useColorModeValue('gray.500', 'gray.200');
+  const formTextColor = useColorModeValue('gray.500', 'gray.200');
   return (
     <Box position={'relative'} w='full' minW={'sm'}>
       <Box bgImage={CoverImage} bgSize={'cover'} backgroundAttachment='fixed'>
@@ -61,14 +60,18 @@ export default function Home() {
               </Stack>
               <Box as={'form'} mt={10}>
                 <Stack spacing={4}>
-                  <FloatingLabel name='name' label='Họ và tên' color={textColor} />
-                  <FloatingLabel name='phone' label='Số điện thoại' color={textColor} />
-                  <FloatingLabel name='phone' label='Số căn cước / Hộ chiếu' color={textColor} />
+                  <FloatingLabel name='name' label='Họ và tên' color={formTextColor} />
+                  <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} />
+                  <FloatingLabel
+                    name='phone'
+                    label='Số căn cước / Hộ chiếu'
+                    color={formTextColor}
+                  />
                   <FormControl as='fieldset' border={1}>
-                    <FormLabel as='legend' color={textColor}>
+                    <FormLabel as='legend' color={formTextColor}>
                       Hình thức đăng ký
                     </FormLabel>
-                    <RadioGroup defaultValue='0' color={textColor}>
+                    <RadioGroup defaultValue='0' color={formTextColor}>
                       <HStack spacing='24px'>
                         <Radio value='0'>Cá nhân</Radio>
                         <Radio value='1'>Nhóm</Radio>
@@ -145,14 +148,20 @@ export default function Home() {
 
         {/* CONFERENCE DATE */}
         <FadeInUp>
-          <Stack direction={['column', 'row']} spacing={2}>
-            <VStack justifyContent={'center'} alignItems={'start'} spacing={5}>
-              <Text textTransform='uppercase' fontWeight='bold' color={'ttpq.500'}>
+          <Stack
+            direction={['column', 'row']}
+            spacing={10}
+            color='white'
+            rounded='md'
+            justifyContent={'center'}
+          >
+            <VStack justifyContent='center' alignItems={['center', 'start']} spacing={5}>
+              <Text textTransform='uppercase' fontWeight='bold' fontSize={['xl', '2xl']} color={'ttpq.500'}>
                 Thời gian diễn ra
               </Text>
               <Text textTransform='uppercase'>Số ngày còn lại</Text>
             </VStack>
-            <HStack spacing={5}>
+            <HStack spacing={5} justifyContent='center'>
               {new Array(4).fill('00').map((time, i) => {
                 const times = ['Ngày', 'Giờ', 'Phút', 'Giây'];
                 return (
