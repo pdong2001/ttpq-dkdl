@@ -1,11 +1,5 @@
 import { HTMLMotionProps, Variants, motion } from 'framer-motion';
-import { Fade } from '@chakra-ui/react';
-import React from 'react';
-// type Props = {
-//   children: ReactNode;
-//   duration?: number;
-//   type?: string;
-// } & HTMLMotionProps<'div'>;
+
 const fadeInVariants: Variants = {
   start: {
     opacity: 0,

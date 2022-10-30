@@ -14,9 +14,9 @@ import FadeInUp from '~/components/Animation/FadeInUp';
 import AboutImage from '~/assets/about.jpg';
 import useCustomColorMode from '~/hooks/useColorMode';
 
-type Props = {};
+// type Props = {};
 
-const GreatCeremonyInfo = (props: Props) => {
+const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
   return (
     <Box bgColor={'darkBlue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}>

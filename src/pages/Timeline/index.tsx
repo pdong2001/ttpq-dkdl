@@ -1,9 +1,9 @@
 import { Box, Container } from '@chakra-ui/react';
 import React from 'react';
 
-type Props = {};
+// type Props = {};
 
-const Timeline = (props: Props) => {
+const Timeline = () => {
   return (
     <Box>
       <Container minH={'100vh'} centerContent justifyContent='center'>

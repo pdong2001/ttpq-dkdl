@@ -6,7 +6,6 @@ import {
   FormLabel,
   Input,
   InputProps,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 

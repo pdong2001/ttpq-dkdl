@@ -1,9 +1,8 @@
 import { Circle } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { StepProps } from '..';
 
-const FinalStep = (props: StepProps) => {
+const FinalStep = () => {
   const { primaryColor, bgColor } = useCustomColorMode();
   const history = useHistory();
   return (
