@@ -18,7 +18,11 @@ import {
 import QRCode from "react-qr-code";
 
 
-export default function SuccessRegisterModal({ LinkQrCode = 'https://dangkydaile.vn/user/1', isOpen = true }) {
+export default function SuccessRegisterModal({
+  LinkQrCode = 'https://dangkydaile.vn/user/1',
+  isOpen = true,
+  linkDetail = 'https://dangkydaile.vn/user/1'
+}) {
   const { onClose } = useDisclosure();
 
   const onImageDownload = () => {
@@ -90,7 +94,9 @@ export default function SuccessRegisterModal({ LinkQrCode = 'https://dangkydaile
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" onClick={onImageDownload} style={{ marginRight: 10 }}>Tải mã QR</Button>
-            <Button colorScheme="yellow" mr={3} onClick={onClose}>
+            <Button colorScheme="yellow" mr={3} onClick={() => {
+              window.location.href = linkDetail;
+            }}>
               Thông tin đăng ký
             </Button>
           </ModalFooter>
