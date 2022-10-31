@@ -5,7 +5,7 @@ type Props = {};
 
 function DepartmentInfos({}: Props) {
   return (
-    <Box minH={'100vh'}>
+    <Box bgGradient={'linear(to-r, blue.300, ttpq.700)'}>
       <Container minH={'100vh'} centerContent justifyContent='center'>
         Department information
       </Container>

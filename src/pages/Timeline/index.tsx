@@ -5,8 +5,8 @@ import React from 'react';
 
 const Timeline = () => {
   return (
-    <Box>
-      <Container minH={'100vh'} centerContent justifyContent='center'>
+    <Box bgGradient={'linear(to-r, darkBlue.400, darkBlue.600)'} w='full'>
+      <Container minH={'100vh'} centerContent justifyContent='center' alignItems='center'>
         Timeline
       </Container>
     </Box>

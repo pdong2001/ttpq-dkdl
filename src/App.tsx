@@ -9,7 +9,6 @@ function App() {
       {ROUTES.map((route) => (
         <AppRoute {...route} />
       ))}
-      {/* <Route component={NotFound} /> */}
     </Switch>
   );
 }
