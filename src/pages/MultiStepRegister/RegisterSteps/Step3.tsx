@@ -64,7 +64,7 @@ const Step3 = (props: StepProps) => {
       </Stack>
       <Box as={'form'} mt={10}>
         <Stack spacing={4}>
-          <FormControl name='departLocation' as='fieldset' border={1}>
+          <FormControl name='departLocation' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Nơi xuất phát
             </FormLabel>
@@ -76,7 +76,7 @@ const Step3 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='timeToStart' as='fieldset' border={1}>
+          <FormControl name='timeToStart' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Thời gian khởi hành
             </FormLabel>
@@ -88,7 +88,7 @@ const Step3 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='timeToReturn' as='fieldset' border={1}>
+          <FormControl name='timeToReturn' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Thời gian trở về
             </FormLabel>

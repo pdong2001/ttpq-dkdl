@@ -92,7 +92,7 @@ const Step4 = (props: StepProps) => {
       </Stack>
       <Box as={'form'} mt={10}>
         <Stack spacing={4}>
-          <FormControl name='numberOfServing' as='fieldset' border={1}>
+          <FormControl name='numberOfServing' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Số lần về chùa công quả
             </FormLabel>
@@ -106,7 +106,7 @@ const Step4 = (props: StepProps) => {
               </HStack>
             </RadioGroup>
           </FormControl>
-          <FormControl name='skill' as='fieldset' border={1}>
+          <FormControl name='skill' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Kỹ năng, sở trường
             </FormLabel>
@@ -118,7 +118,7 @@ const Step4 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='experienceDept' as='fieldset' border={1}>
+          <FormControl name='experienceDept' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Kinh nghiệm ở ban
             </FormLabel>
@@ -130,7 +130,7 @@ const Step4 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='aspirationDept' as='fieldset' border={1}>
+          <FormControl name='aspirationDept' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Nguyện vọng vào ban
             </FormLabel>
@@ -142,7 +142,7 @@ const Step4 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='receiveCardLocation' as='fieldset' border={1}>
+          <FormControl name='receiveCardLocation' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Nơi nhận thẻ
             </FormLabel>

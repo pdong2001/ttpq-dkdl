@@ -17,10 +17,10 @@ type FloatingLabelProps = {
   InputProps;
 
 const FloatingLabel = (props: FloatingLabelProps) => {
-  const { label, errorMessage, helperText, value, name, ...rest } = props;
+  const { label, errorMessage, helperText, value, name, isInvalid, ...rest } = props;
   const { bgColor } = useCustomColorMode();
   return (
-    <FormControl variant='floating' {...rest}>
+    <FormControl variant='floating' isInvalid={isInvalid} {...rest}>
       <Input name={name} focusBorderColor='ttpq.300' placeholder=' ' value={value} />
       {/* It is important that the Label comes after the Control due to css selectors */}
       <FormLabel bgColor={bgColor}>{label}</FormLabel>

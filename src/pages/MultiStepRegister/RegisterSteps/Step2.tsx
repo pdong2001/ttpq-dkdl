@@ -197,7 +197,7 @@ const Step2 = (props: StepProps) => {
       </Stack>
       <Box as={'form'} mt={10}>
         <Stack spacing={4}>
-          <FormControl as='fieldset' border={1}>
+          <FormControl as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Vai trò trong nhóm
             </FormLabel>
@@ -214,9 +214,10 @@ const Step2 = (props: StepProps) => {
             name='citizenIdOfLeader'
             label='Số căn cước của trưởng nhóm'
             color={formTextColor}
+            isRequired
           />
           <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
-          <FormControl as='fieldset' border={1}>
+          <FormControl as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Giới tính
             </FormLabel>
@@ -227,7 +228,7 @@ const Step2 = (props: StepProps) => {
               </HStack>
             </RadioGroup>
           </FormControl>
-          <FormControl as='fieldset' border={1}>
+          <FormControl as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Ngày sinh
             </FormLabel>
@@ -241,8 +242,8 @@ const Step2 = (props: StepProps) => {
             </Select>
             <FloatingLabel name='yearOfBirth' label='Năm' color={formTextColor} />
           </FormControl>
-          <FloatingLabel name='email' label='Email' color={formTextColor} />
-          <FormControl name='permanentAddress' as='fieldset' border={1}>
+          <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
+          <FormControl name='permanentAddress' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Địa chỉ thường trú
             </FormLabel>
@@ -268,7 +269,7 @@ const Step2 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='temporaryAddress' as='fieldset' border={1}>
+          <FormControl name='temporaryAddress' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Địa chỉ tạm trú
             </FormLabel>
@@ -294,7 +295,7 @@ const Step2 = (props: StepProps) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl name='youthAssociation' as='fieldset' border={1}>
+          <FormControl name='youthAssociation' as='fieldset' border={1} isRequired>
             <FormLabel as='legend' color={formTextColor}>
               Nơi sinh hoạt
             </FormLabel>
