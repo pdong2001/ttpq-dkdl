@@ -2,11 +2,11 @@ import {
   FormControl,
   FormControlProps,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   Input,
   InputProps,
 } from '@chakra-ui/react';
+import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 type FloatingLabelProps = {
@@ -17,17 +17,22 @@ type FloatingLabelProps = {
   InputProps;
 
 const FloatingLabel = (props: FloatingLabelProps) => {
-  const { label, errorMessage, helperText, value, name, isInvalid, ...rest } = props;
-  const { bgColor } = useCustomColorMode();
+  const { label, name, defaultValue, ...rest } = props;
+  const { bgColor, primaryColor } = useCustomColorMode();
+  // @ts-ignore
+  const [field, meta] = useField(name);
+  field.value ??= defaultValue; // set default value on props
+
   return (
-    <FormControl variant='floating' isInvalid={isInvalid} {...rest}>
-      <Input name={name} focusBorderColor='ttpq.300' placeholder=' ' value={value} />
+    <FormControl variant='floating' isInvalid={!!meta.error && meta.touched} {...rest}>
+      <Input focusBorderColor={primaryColor} placeholder=' ' {...field} {...props} />
       {/* It is important that the Label comes after the Control due to css selectors */}
       <FormLabel bgColor={bgColor}>{label}</FormLabel>
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
+      {meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>
   );
 };
+
+FloatingLabel.defaultProps = { autoComplete: 'off' } as FloatingLabelProps;
 
 export default FloatingLabel;
