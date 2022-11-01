@@ -3,18 +3,20 @@ import {
   Heading,
   FormControl,
   FormLabel,
-  RadioGroup,
   HStack,
   Radio,
   Button,
   Box,
   Text,
-  Select,
 } from '@chakra-ui/react';
-import React from 'react';
+import { Form, FormikProvider, useFormik } from 'formik';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
+import * as Yup from 'yup';
+import Select from '~/components/Form/CustomSelect';
+import Address from '~/components/Form/Address';
+import Radios from '~/components/Form/Radios';
 
 const monthOfBirth = [
   { id: '1', name: '01' },
@@ -31,89 +33,11 @@ const monthOfBirth = [
   { id: '12', name: '12' },
 ];
 
-// địa chỉ
-const provinceList = [
-  {
-    id: 1,
-    ma: '80',
-    ten: 'Long An',
-    createdBy: 0,
-    createdOn: '2019-03-15T15:20:01.373',
-    editedBy: null,
-    editedOn: '2019-03-15T15:20:01.373',
-    idQuocGia: 57,
-    huyens: null,
-  },
-  {
-    id: 2,
-    ma: '64',
-    ten: 'Gia Lai',
-    createdBy: 0,
-    createdOn: '2019-03-15T15:20:01.39',
-    editedBy: null,
-    editedOn: '2019-03-15T15:20:01.39',
-    idQuocGia: 57,
-    huyens: null,
-  },
-];
-
-// huyen
-const districtList = [
-  {
-    id: 1,
-    ma: '8014',
-    ten: 'Châu Thành',
-    createdBy: 0,
-    createdOn: '2019-03-15T15:49:53.763',
-    editedBy: null,
-    editedOn: '2019-03-15T15:49:53.763',
-    idTinh: 1,
-    tinh: null,
-    xas: null,
-  },
-  {
-    id: 2,
-    ma: '8009',
-    ten: 'Bến Lức',
-    createdBy: 0,
-    createdOn: '2019-03-15T15:49:53.763',
-    editedBy: null,
-    editedOn: '2019-03-15T15:49:53.763',
-    idTinh: 1,
-    tinh: null,
-    xas: null,
-  },
-];
-const villageList = [
-  {
-    id: 848,
-    ma: '800105',
-    ten: 'P. 3',
-    createdBy: 0,
-    createdOn: '2019-03-15T16:23:16.997',
-    editedBy: null,
-    editedOn: '2019-03-15T16:23:16.997',
-    idHuyen: 4,
-    huyen: null,
-  },
-  {
-    id: 2360,
-    ma: '800101',
-    ten: 'P. 5',
-    createdBy: 0,
-    createdOn: '2019-03-15T16:23:24.607',
-    editedBy: null,
-    editedOn: '2019-03-15T16:23:24.607',
-    idHuyen: 4,
-    huyen: null,
-  },
-];
-
 // nơi sinh hoạt
 const youthAssociationList = [
   {
-    Id: 1,
-    Name: 'CTN Hà Nội',
+    id: 1,
+    name: 'CTN Hà Nội',
     ParentId: 0,
     Status: 1,
     Sort: 0,
@@ -124,8 +48,8 @@ const youthAssociationList = [
     DeleteReason: null,
   },
   {
-    Id: 2,
-    Name: 'Tổ 1',
+    id: 2,
+    name: 'Tổ 1',
     ParentId: 1398,
     Status: 1,
     Sort: 0,
@@ -139,8 +63,8 @@ const youthAssociationList = [
 // tổ
 const groupOfYouthAssociationList = [
   {
-    Id: 1,
-    Name: 'CTN Hà Nội',
+    id: 1,
+    name: 'CTN Hà Nội',
     ParentId: 0,
     Status: 1,
     Sort: 0,
@@ -151,8 +75,8 @@ const groupOfYouthAssociationList = [
     DeleteReason: null,
   },
   {
-    Id: 1403,
-    Name: 'Thứ 2 Chùa Đồng',
+    id: 1403,
+    name: 'Thứ 2 Chùa Đồng',
     ParentId: 1,
     Status: 1,
     Sort: 20,
@@ -170,6 +94,36 @@ const Step2 = (props: StepProps) => {
   const name = 'Nguyen Van A';
   const phone = '0909990909';
   const citizenId = '1234567890';
+
+  const formik = useFormik({
+    initialValues: {
+      roleInGroup: '2',
+      citizenIdOfLeader: '',
+      buddhistName: '',
+      dayOfBirth: '',
+      monthOfBirth: '',
+      yearOfBirth: '',
+      email: '',
+      permanentAddressProvince: '',
+      permanentAddressDistrict: '',
+      permanentAddressVillage: '',
+      temporaryAddressProvince: '',
+      temporaryAddressDistrict: '',
+      temporaryAddressVillage: '',
+      youthAssociationList: '',
+      groupOfYouthAssociation: '',
+    },
+    validationSchema: Yup.object({
+      citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / CMND của trưởng nhóm'),
+      permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
+      permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
+      permanentAddressVillage: Yup.string().required('Xã là bắt buộc'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      nextStep();
+    },
+  });
 
   return (
     <Stack
@@ -195,136 +149,58 @@ const Step2 = (props: StepProps) => {
           {`SĐT: ${phone} - CCCD: ${citizenId}`}
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FormControl as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Vai trò trong nhóm
-            </FormLabel>
-            <RadioGroup name='roleInGroup' defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
+      <Box mt={10}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
                 <Radio value='0'>Trưởng nhóm</Radio>
                 <Radio value='1'>Phó nhóm</Radio>
                 <Radio value='2'>Cá nhân</Radio>
-                {/* <Radio value='3'>Đăng ký lẻ</Radio> */}
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-          <FloatingLabel
-            name='citizenIdOfLeader'
-            label='Số căn cước của trưởng nhóm'
-            color={formTextColor}
-            isRequired
-          />
-          <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
-          <FormControl as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Giới tính
-            </FormLabel>
-            <RadioGroup name='gender' defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
+              </Radios>
+              <FloatingLabel
+                name='citizenIdOfLeader'
+                label='Số căn cước của trưởng nhóm'
+                color={formTextColor}
+                isRequired
+              />
+              <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
+              <Radios label='Giới tính' name='gender' defaultValue='0'>
                 <Radio value='0'>Nam</Radio>
                 <Radio value='1'>Nữ</Radio>
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-          <FormControl as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Ngày sinh
-            </FormLabel>
-            <FloatingLabel name='dayOfBirth' label='Ngày' color={formTextColor} />
-            <Select name='monthOfBirth'>
-              {monthOfBirth?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-            <FloatingLabel name='yearOfBirth' label='Năm' color={formTextColor} />
-          </FormControl>
-          <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
-          <FormControl name='permanentAddress' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Địa chỉ thường trú
-            </FormLabel>
-            <Select placeholder='Tỉnh'>
-              {provinceList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.ten}
-                </option>
-              ))}
-            </Select>
-            <Select placeholder='Huyện'>
-              {districtList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.ten}
-                </option>
-              ))}
-            </Select>
-            <Select placeholder='Xã'>
-              {villageList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.ten}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='temporaryAddress' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Địa chỉ tạm trú
-            </FormLabel>
-            <Select placeholder='Tỉnh'>
-              {provinceList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.ten}
-                </option>
-              ))}
-            </Select>
-            <Select placeholder='Huyện'>
-              {districtList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.ten}
-                </option>
-              ))}
-            </Select>
-            <Select placeholder='Xã'>
-              {villageList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.ten}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='youthAssociation' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Nơi sinh hoạt
-            </FormLabel>
-            <Select>
-              {youthAssociationList?.map((item) => (
-                <option key={item.Id} value={item.Id}>
-                  {item.Name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='groupOfYouthAssociation' as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Tổ sinh hoạt
-            </FormLabel>
-            <Select>
-              {groupOfYouthAssociationList?.map((item) => (
-                <option key={item.Id} value={item.Id}>
-                  {item.Name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+              </Radios>
+              <FormControl as='fieldset' isRequired>
+                <FormLabel as='legend' color={formTextColor}>
+                  Ngày sinh
+                </FormLabel>
+                <HStack align='flex-end'>
+                  <FloatingLabel name='dayOfBirth' label='Ngày' color={formTextColor} />
+                  <Select placeholder='Tháng' name='monthOfBirth' data={monthOfBirth} />
+                  <FloatingLabel name='yearOfBirth' label='Năm' color={formTextColor} />
+                </HStack>
+              </FormControl>
+              <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
+              <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
+              <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
+              <Select
+                name='youthAssociationList'
+                data={youthAssociationList}
+                label='Nơi sinh hoạt'
+                isRequired
+              />
+              <Select
+                name='groupOfYouthAssociation'
+                data={groupOfYouthAssociationList}
+                label='Tổ sinh hoạt'
+                isRequired
+              />
+            </Stack>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
     </Stack>
   );
 };
