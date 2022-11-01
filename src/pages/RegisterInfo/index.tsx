@@ -3,6 +3,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Tooltip
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -17,6 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { MdPhone, MdContentCopy, MdDepartureBoard, MdLocationCity, MdFacebook } from "react-icons/md";
+import { FaUserSecret, FaUserTie } from "react-icons/fa";
 import { InputGroup, Input, InputRightElement } from '@chakra-ui/react'
 import { FormControl, FormLabel } from '@chakra-ui/react'
 import {
@@ -53,10 +55,10 @@ const RegisterInfo = () => {
   ]
 
   const groupMembers = [
-    { name: 'Nguyễn Văn A', phone: '09*****123' },
-    { name: 'Hoàng Thị Hồng Nhung', phone: '09*****456' },
-    { name: 'Trần Văn B', phone: '09*****555' },
-    { name: 'Đỗ Thị D', phone: '09*****666' },
+    { name: 'Nguyễn Văn A', phone: '09*****123', role: 1 },
+    { name: 'Hoàng Thị Hồng Nhung', phone: '09*****456', role: 2 },
+    { name: 'Trần Văn B', phone: '09*****555', role: 0 },
+    { name: 'Đỗ Thị D', phone: '09*****666', role: 0 },
   ]
 
   const departments = [
@@ -265,7 +267,13 @@ const RegisterInfo = () => {
                           <Tbody>
                             {groupMembers.map((ele) => (
                               <Tr>
-                                <Td py={1} minW={'120px'} px={0}><Text>{ele.name}</Text></Td>
+                                <Td py={1} px={0}>
+                                  <Text>{ele.name}</Text>
+                                </Td>
+                                <Td>
+                                  {ele.role == 1 && <Tooltip label='Trưởng nhóm'><span><FaUserSecret /></span></Tooltip>}
+                                  {ele.role == 2 && <Tooltip label='Phó nhóm'><span><FaUserTie /></span></Tooltip>}
+                                </Td>
                                 <Td py={1} px={0}>
                                   <Tag colorScheme={'blue'}><TagLeftIcon boxSize='12px' as={MdPhone} />
                                     <TagLabel>{ele.phone}</TagLabel></Tag>
