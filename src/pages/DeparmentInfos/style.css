@@ -1,0 +1,21 @@
+.wrap-department {
+    display: block;
+    text-align: center;
+    margin: 0 -50px;
+    ;
+    /* width: 1100px; */
+}
+
+.wrap-department div {
+    height: auto;
+    margin: 20px 10px;
+}
+
+.wrap-department ul {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body-department div {
+    height: auto;
+}
