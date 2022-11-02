@@ -1,20 +1,19 @@
 import {
   Stack,
   Heading,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  HStack,
-  Radio,
   Button,
   Box,
   Text,
-  Select,
   Textarea,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react';
 import React from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
+import * as Yup from 'yup';
+import Select from '~/components/Form/CustomSelect';
+import { Form, FormikProvider, useFormik } from 'formik';
 
 // số lần công quả
 const numberOfServingList = [
@@ -24,7 +23,6 @@ const numberOfServingList = [
   { id: 3, name: '3 lần' },
   { id: 4, name: 'Trên 3 lần' },
 ];
-// const descNumberOfServingList = ['Chưa lần nào', '1 lần', '2 lần', '3 lần', 'Trên 3 lần'];
 
 // danh sách ban
 const departmentList = [
@@ -68,6 +66,27 @@ const receiveCardLocationList = [
 const Step4 = (props: StepProps) => {
   const { nextStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const formik = useFormik({
+    initialValues: {
+      numberOfServing: '',
+      skill: '',
+      experienceDept: '',
+      aspirationDept: '',
+      receiveCardLocation: '',
+      note: '',
+    },
+    validationSchema: Yup.object({
+      numberOfServing: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
+      skill: Yup.string().required('Xin hãy chọn kỹ năng, sở trường'),
+      experienceDept: Yup.string().required('Xin hãy chọn ban có kinh nghiệm'),
+      aspirationDept: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
+      receiveCardLocation: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      nextStep();
+    },
+  });
 
   return (
     <Stack
@@ -90,88 +109,64 @@ const Step4 = (props: StepProps) => {
           PL.2565 - DL.2022
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FormControl name='numberOfServing' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Số lần về chùa công quả
-            </FormLabel>
-            <RadioGroup defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
-                {numberOfServingList?.map((item) => (
-                  <Radio value={item.id} key={item.id}>
-                    {item.name}
-                  </Radio>
-                ))}
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-          <FormControl name='skill' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Kỹ năng, sở trường
-            </FormLabel>
-            <Select>
-              {skillList?.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='experienceDept' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Kinh nghiệm ở ban
-            </FormLabel>
-            <Select>
-              {departmentList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='aspirationDept' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Nguyện vọng vào ban
-            </FormLabel>
-            <Select>
-              {departmentList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='receiveCardLocation' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Nơi nhận thẻ
-            </FormLabel>
-            <Select>
-              {receiveCardLocationList?.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='receiveCardLocation' as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Hình thẻ
-            </FormLabel>
-            thẻ
-          </FormControl>
-          <FormControl name='note' as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Ghi chú
-            </FormLabel>
-            <Textarea placeholder='Huynh đệ có thắc mắc gì không ạ?' size='sm' />
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+      <Box mt={10}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <Select
+                name='numberOfServing'
+                data={numberOfServingList}
+                label='Số lần về chùa công quả'
+                placeholder='Chọn số lần về chùa công quả'
+                isRequired
+              />
+              <Select
+                name='skill'
+                data={skillList}
+                label='Kỹ năng, sở trường'
+                placeholder='Chọn kỹ năng, sở trường'
+                isRequired
+              />
+              <Select
+                name='experienceDept'
+                data={departmentList}
+                label='Kinh nghiệm ở ban'
+                placeholder='Chọn ban'
+                isRequired
+              />
+              <Select
+                name='aspirationDept'
+                data={departmentList}
+                label='Nguyện vọng vào ban'
+                placeholder='Chọn ban'
+                isRequired
+              />
+              <Select
+                name='receiveCardLocation'
+                data={receiveCardLocationList}
+                label='Nơi nhận thẻ'
+                placeholder='Chọn nơi nhận thẻ'
+                isRequired
+              />
+              <FormControl name='avatar' as='fieldset' border={1}>
+                <FormLabel as='legend' color={formTextColor}>
+                  Hình thẻ
+                </FormLabel>
+                thẻ
+              </FormControl>
+              <FormControl name='note' as='fieldset' border={1}>
+                <FormLabel as='legend' color={formTextColor}>
+                  Ghi chú
+                </FormLabel>
+                <Textarea placeholder='Huynh đệ có thắc mắc gì không ạ?' size='sm' />
+              </FormControl>
+            </Stack>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
     </Stack>
   );
 };

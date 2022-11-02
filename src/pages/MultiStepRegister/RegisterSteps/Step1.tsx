@@ -24,13 +24,14 @@ const Step1 = (props: StepProps) => {
       phone: Yup.string()
         .required('Xin hãy nhập số điện thoại')
         .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
-      citizenId: Yup.string().required('Xin hãy nhập số căn cước'),
+      citizenId: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
       nextStep();
     },
   });
+  const greatCeremony = 'Đại lễ Thành Đạo 2022';
 
   return (
     <Stack
@@ -47,10 +48,10 @@ const Step1 = (props: StepProps) => {
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
         >
-          Đăng ký đại lễ step 1
+          {`Đăng Ký Công Quả`}
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
+          {`${greatCeremony} PL.2565 - DL.2022`}
         </Text>
       </Stack>
       <Box mt={10}>
@@ -60,8 +61,8 @@ const Step1 = (props: StepProps) => {
               <FloatingLabel name='name' label='Họ và tên' color={formTextColor} isRequired />
               <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} isRequired />
               <FloatingLabel
-                name='name'
-                label='Số căn cước / Hộ chiếu'
+                name='citizenId'
+                label='Số CCCD / Hộ chiếu'
                 color={formTextColor}
                 isRequired
               />
@@ -71,7 +72,7 @@ const Step1 = (props: StepProps) => {
               </Radios>
             </Stack>
 
-            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo
             </Button>
           </Form>
