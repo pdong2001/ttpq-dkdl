@@ -1,16 +1,10 @@
-import {
-  Stack,
-  Heading,
-  FormControl,
-  FormLabel,
-  Button,
-  Box,
-  Text,
-  Select,
-} from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, Text } from '@chakra-ui/react';
 import React from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
+import Select from '~/components/Form/CustomSelect';
+import * as Yup from 'yup';
+import { Form, FormikProvider, useFormik } from 'formik';
 
 // nơi xuất phát
 const departLocationList = [
@@ -39,7 +33,24 @@ const timeToReturnList = [
 
 const Step3 = (props: StepProps) => {
   const { nextStep } = props;
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const { bgColor, primaryColor } = useCustomColorMode();
+
+  const formik = useFormik({
+    initialValues: {
+      departLocation: '',
+      timeToStart: '',
+      timeToReturn: '',
+    },
+    validationSchema: Yup.object({
+      departLocation: Yup.string().required('Xin hãy chọn nơi xuất phát'),
+      timeToStart: Yup.string().required('Xin hãy chọn thời gian khởi hành'),
+      timeToReturn: Yup.string().required('Xin hãy chọn thời gian trở về'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      nextStep();
+    },
+  });
 
   return (
     <Stack
@@ -62,50 +73,38 @@ const Step3 = (props: StepProps) => {
           PL.2565 - DL.2022
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FormControl name='departLocation' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Nơi xuất phát
-            </FormLabel>
-            <Select>
-              {departLocationList?.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='timeToStart' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Thời gian khởi hành
-            </FormLabel>
-            <Select>
-              {timeToStartList?.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl name='timeToReturn' as='fieldset' border={1} isRequired>
-            <FormLabel as='legend' color={formTextColor}>
-              Thời gian trở về
-            </FormLabel>
-            <Select>
-              {timeToReturnList?.map((item) => (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+      <Box mt={10}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <Select
+                name='departLocation'
+                data={departLocationList}
+                label='Nơi xuất phát'
+                placeholder='Nơi xuất phát'
+                isRequired
+              />
+              <Select
+                name='timeToStart'
+                data={timeToStartList}
+                label='Thời gian khởi hành'
+                placeholder='Thời gian khởi hành'
+                isRequired
+              />
+              <Select
+                name='timeToReturn'
+                data={timeToReturnList}
+                label='Thời gian trở về'
+                placeholder='Thời gian trở về'
+                isRequired
+              />
+            </Stack>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
     </Stack>
   );
 };

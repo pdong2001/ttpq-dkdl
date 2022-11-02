@@ -1,14 +1,4 @@
-import {
-  Stack,
-  Heading,
-  FormControl,
-  FormLabel,
-  HStack,
-  Radio,
-  Button,
-  Box,
-  Text,
-} from '@chakra-ui/react';
+import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
@@ -17,21 +7,8 @@ import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import Address from '~/components/Form/Address';
 import Radios from '~/components/Form/Radios';
-
-const monthOfBirth = [
-  { id: '1', name: '01' },
-  { id: '2', name: '02' },
-  { id: '3', name: '03' },
-  { id: '4', name: '04' },
-  { id: '5', name: '05' },
-  { id: '6', name: '06' },
-  { id: '7', name: '07' },
-  { id: '8', name: '08' },
-  { id: '9', name: '09' },
-  { id: '10', name: '10' },
-  { id: '11', name: '11' },
-  { id: '12', name: '12' },
-];
+import DateOfBirth from '~/components/Form/DateOfBirth';
+import { REGEX_YEAR } from '~/utils/common';
 
 // nơi sinh hoạt
 const youthAssociationList = [
@@ -91,18 +68,18 @@ const groupOfYouthAssociationList = [
 const Step2 = (props: StepProps) => {
   const { nextStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-  const name = 'Nguyen Van A';
-  const phone = '0909990909';
-  const citizenId = '1234567890';
+  const name = 'Nguyen Van A'; // lấy từ step 1
+  const phone = '0909990909'; // lấy từ step 1
+  const citizenId = '1234567890'; // lấy từ step 1
 
   const formik = useFormik({
     initialValues: {
       roleInGroup: '2',
       citizenIdOfLeader: '',
       buddhistName: '',
-      dayOfBirth: '',
-      monthOfBirth: '',
-      yearOfBirth: '',
+      dateOfBirthDay: '',
+      dateOfBirthMonth: '',
+      dateOfBirthYear: '',
       email: '',
       permanentAddressProvince: '',
       permanentAddressDistrict: '',
@@ -110,14 +87,27 @@ const Step2 = (props: StepProps) => {
       temporaryAddressProvince: '',
       temporaryAddressDistrict: '',
       temporaryAddressVillage: '',
-      youthAssociationList: '',
+      youthAssociation: '',
       groupOfYouthAssociation: '',
     },
     validationSchema: Yup.object({
-      citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / CMND của trưởng nhóm'),
+      citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
+      // dateOfBirth: Yup.string()
+      //   .required('Xin hãy nhập ngày sinh')
+      //   .matches(REGEX_DAY_MONTH_YEAR, 'Ngày sinh không hợp lệ'),
+      dateOfBirthDay: Yup.string().required('Ngày là bắt buộc'),
+      dateOfBirthMonth: Yup.string().required('Tháng là bắt buộc'),
+      dateOfBirthYear: Yup.string()
+        .required('Năm là bắt buộc')
+        .matches(REGEX_YEAR, 'Năm không hợp lệ'),
+      email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
       permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
       permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
       permanentAddressVillage: Yup.string().required('Xã là bắt buộc'),
+      temporaryAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
+      temporaryAddressDistrict: Yup.string().required('Huyện là buộc'),
+      temporaryAddressVillage: Yup.string().required('Xã là bắt buộc'),
+      youthAssociation: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -156,43 +146,35 @@ const Step2 = (props: StepProps) => {
               <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
                 <Radio value='0'>Trưởng nhóm</Radio>
                 <Radio value='1'>Phó nhóm</Radio>
-                <Radio value='2'>Cá nhân</Radio>
+                <Radio value='2'>Thành viên</Radio>
               </Radios>
               <FloatingLabel
                 name='citizenIdOfLeader'
-                label='Số căn cước của trưởng nhóm'
+                label='Số CCCD / Hộ chiếu của trưởng nhóm'
                 color={formTextColor}
                 isRequired
               />
               <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
-              <Radios label='Giới tính' name='gender' defaultValue='0'>
+              <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
                 <Radio value='0'>Nam</Radio>
                 <Radio value='1'>Nữ</Radio>
               </Radios>
-              <FormControl as='fieldset' isRequired>
-                <FormLabel as='legend' color={formTextColor}>
-                  Ngày sinh
-                </FormLabel>
-                <HStack align='flex-end'>
-                  <FloatingLabel name='dayOfBirth' label='Ngày' color={formTextColor} />
-                  <Select placeholder='Tháng' name='monthOfBirth' data={monthOfBirth} />
-                  <FloatingLabel name='yearOfBirth' label='Năm' color={formTextColor} />
-                </HStack>
-              </FormControl>
+              <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
               <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
               <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
               <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
               <Select
-                name='youthAssociationList'
+                name='youthAssociation'
                 data={youthAssociationList}
                 label='Nơi sinh hoạt'
+                placeholder='Nơi sinh hoạt'
                 isRequired
               />
               <Select
                 name='groupOfYouthAssociation'
                 data={groupOfYouthAssociationList}
-                label='Tổ sinh hoạt'
-                isRequired
+                label='Tổ'
+                placeholder='Tổ'
               />
             </Stack>
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
