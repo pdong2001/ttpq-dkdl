@@ -7,6 +7,8 @@ import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
 import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
+import FinalStep from '~/pages/MultiStepRegister/RegisterSteps/FinalStep';
+import BlankLayout from '~/components/containers/layouts/BlankLayout';
 
 export type RouteType = {
   key: string;
@@ -56,6 +58,12 @@ const ROUTES: RouteType[] = [
     path: '/department-info',
     component: DepartmentInfos,
     layout: MainLayout,
+  },
+  {
+    key: 'REGISTER_SUCCESS',
+    path: '/register-success',
+    component: FinalStep,
+    layout: BlankLayout,
   },
   {
     key: 'NOT_FOUND',
