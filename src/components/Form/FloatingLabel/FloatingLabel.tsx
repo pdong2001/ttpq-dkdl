@@ -13,11 +13,12 @@ type FloatingLabelProps = {
   label: string;
   helperText?: string;
   errorMessage?: string;
+  hiddenErrorMessage?: boolean;
 } & FormControlProps &
   InputProps;
 
 const FloatingLabel = (props: FloatingLabelProps) => {
-  const { label, name, defaultValue, ...rest } = props;
+  const { label, name, defaultValue, hiddenErrorMessage, ...rest } = props;
   const { bgColor, primaryColor } = useCustomColorMode();
   // @ts-ignore
   const [field, meta] = useField(name);
@@ -28,7 +29,7 @@ const FloatingLabel = (props: FloatingLabelProps) => {
       <Input focusBorderColor={primaryColor} placeholder=' ' {...field} {...props} />
       {/* It is important that the Label comes after the Control due to css selectors */}
       <FormLabel bgColor={bgColor}>{label}</FormLabel>
-      {meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
+      {!hiddenErrorMessage && meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>
   );
 };

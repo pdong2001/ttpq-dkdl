@@ -8,6 +8,7 @@ import Select from '~/components/Form/CustomSelect';
 import Address from '~/components/Form/Address';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
+import Validator from '~/utils/common/validator';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 
 // nơi sinh hoạt
@@ -92,43 +93,27 @@ const Step2 = (props: StepProps) => {
     },
     validationSchema: Yup.object({
       citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
-      dateOfBirthDay: Yup.number().required('Ngày là bắt buộc'),
-      dateOfBirthMonth: Yup.number().required('Tháng là bắt buộc'),
-      dateOfBirthYear: Yup.number().required('Năm là bắt buộc'),
-      // .matches(REGEX_YEAR, 'Năm không hợp lệ'),
-      // dateOfBirth: Yup.string()
-      //   .required('Xin hãy nhập ngày sinh')
-      //   .matches(REGEX_DAY_MONTH_YEAR, 'Ngày sinh không hợp lệ'),
-      dob: Yup.string().when(['dateOfBirthYear', 'dateOfBirthMonth', 'dateOfBirthDay'], {
-        is: (dateOfBirthYear: number, dateOfBirthMonth: number, dateOfBirthDay: number) => {
-          if (
-            dateOfBirthDay == 31 &&
-            (dateOfBirthMonth == 4 ||
-              dateOfBirthMonth == 6 ||
-              dateOfBirthMonth == 9 ||
-              dateOfBirthMonth == 11)
-          ) {
-            return false; // 31st of a month with 30 days
-          } else if (dateOfBirthDay >= 30 && dateOfBirthMonth == 2) {
-            return false; // February 30th or 31st
-          } else if (
-            dateOfBirthMonth == 2 &&
-            dateOfBirthDay == 29 &&
-            !(
-              dateOfBirthYear % 4 == 0 &&
-              (dateOfBirthYear % 100 != 0 || dateOfBirthYear % 400 == 0)
-            )
-          ) {
-            return false; // February 29th outside a leap year
-          } else {
-            return true; // Valid date
-          }
-        },
-        then: (schema) =>
-          schema
-            .required('Bạn ơi, nhập ngày sinh nha')
-            .matches(REGEX_YEAR_MONTH_DAY, 'Bạn ơi, Ngày không hợp lệ rồi'),
-      }),
+      dateOfBirth: Yup.object()
+        .shape({
+          day: Yup.string(),
+          month: Yup.string(),
+          year: Yup.string(),
+        })
+        .test({
+          name: 'validDOB',
+          test: (value, context) => {
+            const { year, month, day } = value;
+            if (!(year || month || day)) {
+              return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
+            }
+            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, day].join('/'));
+            const isValidDateFollowCalender = Validator.validateCalenderDate(value);
+            return (
+              (isValidDateFormat && isValidDateFollowCalender) ||
+              context.createError({ message: 'Bạn ơi, Ngày không hợp lệ rồi' })
+            );
+          },
+        }),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
       permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
       permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
@@ -190,7 +175,7 @@ const Step2 = (props: StepProps) => {
               </Radios>
               <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
 
-              <FloatingLabel name='dob' label='Ngày sinh' color={formTextColor} isRequired />
+              {/*<FloatingLabel name='dob' label='Ngày sinh' color={formTextColor} isRequired />*/}
               <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
               <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
               <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />

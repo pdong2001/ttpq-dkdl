@@ -24,7 +24,15 @@ const Radios = (props: RadiosProps) => {
       <FormLabel as='legend' color={formTextColor}>
         {label}
       </FormLabel>
-      <RadioGroup color={formTextColor} {...field} {...props} onChange={setValue}>
+      <RadioGroup
+        color={formTextColor}
+        {...field}
+        {...props}
+        onChange={(e) => {
+          console.log('onchange radio', e);
+          setValue(e);
+        }}
+      >
         <Stack spacing={spacing} direction={direction}>
           {children}
         </Stack>
