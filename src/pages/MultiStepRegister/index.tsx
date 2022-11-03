@@ -2,7 +2,7 @@ import { Box, Container, SimpleGrid } from '@chakra-ui/react';
 import { useState } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import CoverImage from '~/assets/festival_cover.jpg';
-import Step1 from './RegisterSteps/Step1';
+// import Step1 from './RegisterSteps/Step1';
 import Step2 from './RegisterSteps/Step2';
 import Step3 from './RegisterSteps/Step3';
 import Step4 from './RegisterSteps/Step4';
@@ -14,7 +14,8 @@ export type StepProps = {
   nextStep: () => void;
 };
 
-const registerSteps = [Step1, Step2, Step3, Step4, FinalStep];
+// const registerSteps = [Step1, Step2, Step3, Step4, FinalStep];
+const registerSteps = [Step2, Step3, Step4, FinalStep];
 
 const MultiStepRegister = () => {
   const [step, setStep] = useState(0);
