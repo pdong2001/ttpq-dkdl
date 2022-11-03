@@ -7,6 +7,7 @@ import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
 import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
+import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 
 export type RouteType = {
   key: string;
@@ -35,8 +36,15 @@ const ROUTES: RouteType[] = [
   },
   {
     key: 'GREAT_CEREMORY_INFO',
-    path: '/great-ceremory-info',
+    path: '/great-ceremony-info',
+    exact: true,
     component: GreatCeremonyInfo,
+    layout: MainLayout,
+  },
+  {
+    key: 'GREAT_CEREMORY_INFO',
+    path: '/great-ceremony-info/details',
+    component: GreatCeremonyInfoDetails,
     layout: MainLayout,
   },
   {
