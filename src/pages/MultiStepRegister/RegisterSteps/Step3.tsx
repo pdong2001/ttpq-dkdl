@@ -1,23 +1,56 @@
-import {
-  Stack,
-  Heading,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  HStack,
-  Radio,
-  Button,
-  Box,
-  Text,
-} from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, Text } from '@chakra-ui/react';
 import React from 'react';
-import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
+import Select from '~/components/Form/CustomSelect';
+import * as Yup from 'yup';
+import { Form, FormikProvider, useFormik } from 'formik';
+
+// nơi xuất phát
+const departLocationList = [
+  { id: 0, code: 'tutuc', name: 'Tự túc' },
+  { id: 1, code: 'hcm-nonglam', name: 'Bến xe buýt Trường Đại học Nông Lâm' },
+  {
+    id: 2,
+    code: 'hcm-bdt',
+    name: 'Cầu Bùi Đình Túy, số 47 Bùi Đình Túy, P.24, Q. Bình Thạnh, Tp.HCM',
+  },
+];
+// thời điểm khởi hành
+const timeToStartList = [
+  { id: 0, code: 'tutuc', name: 'Tự túc' },
+  { id: 1, code: 'dot1', name: 'Đợt 1: 19h45 Thứ hai, ngày 08/08/2022' },
+  { id: 2, code: 'dot2', name: 'Đợt 2: 19h45 Thứ ba, ngày 09/08/2022 (Đợt chính thức)' },
+  { id: 3, code: 'dot3', name: 'Đợt 3: 06h00 Thứ tư, ngày 10/08/2022' },
+];
+
+// thời điểm về lại nơi xuất phát
+const timeToReturnList = [
+  { id: 0, code: 'tutuc', name: 'Tự túc' },
+  { id: 1, code: 'dot1', name: 'Đợt 1: 18h00 Thứ sáu, ngày 12/08/2022' },
+  { id: 2, code: 'dot2', name: 'Đợt 2: 18h00 Chủ nhật, ngày 14/08/2022' },
+];
 
 const Step3 = (props: StepProps) => {
   const { nextStep } = props;
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const { bgColor, primaryColor } = useCustomColorMode();
+
+  const formik = useFormik({
+    initialValues: {
+      departLocation: '',
+      timeToStart: '',
+      timeToReturn: '',
+    },
+    validationSchema: Yup.object({
+      departLocation: Yup.string().required('Xin hãy chọn nơi xuất phát'),
+      timeToStart: Yup.string().required('Xin hãy chọn thời gian khởi hành'),
+      timeToReturn: Yup.string().required('Xin hãy chọn thời gian trở về'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      nextStep();
+    },
+  });
 
   return (
     <Stack
@@ -34,34 +67,44 @@ const Step3 = (props: StepProps) => {
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
         >
-          Đăng ký đại lễ
+          Lịch trình
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           PL.2565 - DL.2022
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FloatingLabel name='name' label='Họ và tên' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số căn cước / Hộ chiếu' color={formTextColor} />
-          <FormControl as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Hình thức đăng ký
-            </FormLabel>
-            <RadioGroup defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
-                <Radio value='0'>Cá nhân</Radio>
-                <Radio value='1'>Nhóm</Radio>
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+      <Box mt={10}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <Select
+                name='departLocation'
+                data={departLocationList}
+                label='Nơi xuất phát'
+                placeholder='Nơi xuất phát'
+                isRequired
+              />
+              <Select
+                name='timeToStart'
+                data={timeToStartList}
+                label='Thời gian khởi hành'
+                placeholder='Thời gian khởi hành'
+                isRequired
+              />
+              <Select
+                name='timeToReturn'
+                data={timeToReturnList}
+                label='Thời gian trở về'
+                placeholder='Thời gian trở về'
+                isRequired
+              />
+            </Stack>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
     </Stack>
   );
 };
