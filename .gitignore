@@ -24,3 +24,5 @@ dist-ssr
 
 # ts
 tsconfig.tsbuildinfo
+package-lock.json
+yarn.lock
