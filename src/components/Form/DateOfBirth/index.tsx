@@ -42,9 +42,7 @@ function DateOfBirth(props: DateOfBirthProps) {
   const [{ value: day }, { touched: dayTouched }] = useField(`${name}Day`);
   const [{ value: month }, { touched: monthTouched }] = useField(`${name}Month`);
   const [{ value: year }, { touched: yearTouched }] = useField(`${name}Year`);
-  console.log('dob value', field.value);
   useEffect(() => {
-    console.log(day, month, year);
     setValue({ year, month, day });
   }, [day, month, year, delimiter]);
   return (
