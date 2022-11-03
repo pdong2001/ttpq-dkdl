@@ -1,24 +1,37 @@
-import {
-  Stack,
-  Heading,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  HStack,
-  Radio,
-  Button,
-  Box,
-  Text,
-} from '@chakra-ui/react';
-import React from 'react';
+import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
+import { Form, FormikProvider, useFormik } from 'formik';
+import * as Yup from 'yup';
+import { REGEX_PHONE } from '~/utils/common';
+import Radios from '~/components/Form/Radios';
 
 const Step1 = (props: StepProps) => {
+  // @ts-ignore
   const { nextStep } = props;
+
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-  console.log('primary Color', primaryColor);
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      phone: '',
+      citizenId: '',
+      registerType: '0',
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required('Xin hãy nhập họ và tên'),
+      phone: Yup.string()
+        .required('Xin hãy nhập số điện thoại')
+        .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
+      citizenId: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      nextStep();
+    },
+  });
+  const greatCeremony = 'Đại lễ Thành Đạo 2022';
 
   return (
     <Stack
@@ -35,34 +48,36 @@ const Step1 = (props: StepProps) => {
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
         >
-          Đăng ký đại lễ
+          {`Đăng Ký Công Quả`}
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
+          {`${greatCeremony} PL.2565 - DL.2022`}
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FloatingLabel name='name' label='Họ và tên' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số căn cước / Hộ chiếu' color={formTextColor} />
-          <FormControl as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Hình thức đăng ký
-            </FormLabel>
-            <RadioGroup defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
+      <Box mt={10}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <FloatingLabel name='name' label='Họ và tên' color={formTextColor} isRequired />
+              <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} isRequired />
+              <FloatingLabel
+                name='citizenId'
+                label='Số CCCD / Hộ chiếu'
+                color={formTextColor}
+                isRequired
+              />
+              <Radios isRequired label='Hình thức đăng ký' name='registerType'>
                 <Radio value='0'>Cá nhân</Radio>
                 <Radio value='1'>Nhóm</Radio>
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+              </Radios>
+            </Stack>
+
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
     </Stack>
   );
 };
