@@ -1,23 +1,119 @@
-import {
-  Stack,
-  Heading,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  HStack,
-  Radio,
-  Button,
-  Box,
-  Text,
-} from '@chakra-ui/react';
-import React from 'react';
+import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
+import { Form, FormikProvider, useFormik } from 'formik';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
+import * as Yup from 'yup';
+import Select from '~/components/Form/CustomSelect';
+import Address from '~/components/Form/Address';
+import Radios from '~/components/Form/Radios';
+import DateOfBirth from '~/components/Form/DateOfBirth';
+import { REGEX_YEAR } from '~/utils/common';
+
+// nơi sinh hoạt
+const youthAssociationList = [
+  {
+    id: 1,
+    name: 'CTN Hà Nội',
+    ParentId: 0,
+    Status: 1,
+    Sort: 0,
+    Type: 2,
+    ProvinceId: 2,
+    DistrictIds: null,
+    PerDelId: 0,
+    DeleteReason: null,
+  },
+  {
+    id: 2,
+    name: 'Tổ 1',
+    ParentId: 1398,
+    Status: 1,
+    Sort: 0,
+    Type: 1,
+    ProvinceId: 2,
+    DistrictIds: '1,4',
+    PerDelId: 0,
+    DeleteReason: null,
+  },
+];
+// tổ
+const groupOfYouthAssociationList = [
+  {
+    id: 1,
+    name: 'CTN Hà Nội',
+    ParentId: 0,
+    Status: 1,
+    Sort: 0,
+    Type: 2,
+    ProvinceId: 2,
+    DistrictIds: null,
+    PerDelId: 0,
+    DeleteReason: null,
+  },
+  {
+    id: 1403,
+    name: 'Thứ 2 Chùa Đồng',
+    ParentId: 1,
+    Status: 1,
+    Sort: 20,
+    Type: 1,
+    ProvinceId: 0,
+    DistrictIds: null,
+    PerDelId: 0,
+    DeleteReason: null,
+  },
+];
 
 const Step2 = (props: StepProps) => {
   const { nextStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const name = 'Nguyen Van A'; // lấy từ step 1
+  const phone = '0909990909'; // lấy từ step 1
+  const citizenId = '1234567890'; // lấy từ step 1
+
+  const formik = useFormik({
+    initialValues: {
+      roleInGroup: '2',
+      citizenIdOfLeader: '',
+      buddhistName: '',
+      dateOfBirthDay: '',
+      dateOfBirthMonth: '',
+      dateOfBirthYear: '',
+      email: '',
+      permanentAddressProvince: '',
+      permanentAddressDistrict: '',
+      permanentAddressVillage: '',
+      temporaryAddressProvince: '',
+      temporaryAddressDistrict: '',
+      temporaryAddressVillage: '',
+      youthAssociation: '',
+      groupOfYouthAssociation: '',
+    },
+    validationSchema: Yup.object({
+      citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
+      // dateOfBirth: Yup.string()
+      //   .required('Xin hãy nhập ngày sinh')
+      //   .matches(REGEX_DAY_MONTH_YEAR, 'Ngày sinh không hợp lệ'),
+      dateOfBirthDay: Yup.string().required('Ngày là bắt buộc'),
+      dateOfBirthMonth: Yup.string().required('Tháng là bắt buộc'),
+      dateOfBirthYear: Yup.string()
+        .required('Năm là bắt buộc')
+        .matches(REGEX_YEAR, 'Năm không hợp lệ'),
+      email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
+      permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
+      permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
+      permanentAddressVillage: Yup.string().required('Xã là bắt buộc'),
+      temporaryAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
+      temporaryAddressDistrict: Yup.string().required('Huyện là buộc'),
+      temporaryAddressVillage: Yup.string().required('Xã là bắt buộc'),
+      youthAssociation: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
+    }),
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+      nextStep();
+    },
+  });
 
   return (
     <Stack
@@ -34,34 +130,59 @@ const Step2 = (props: StepProps) => {
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
         >
-          Đăng ký đại lễ
+          Cập nhật thông tin
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
+          {`Xin chào bạn ${name}`}
+        </Text>
+        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+          {`SĐT: ${phone} - CCCD: ${citizenId}`}
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FloatingLabel name='name' label='Họ và tên' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số căn cước / Hộ chiếu' color={formTextColor} />
-          <FormControl as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Hình thức đăng ký
-            </FormLabel>
-            <RadioGroup defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
-                <Radio value='0'>Cá nhân</Radio>
-                <Radio value='1'>Nhóm</Radio>
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+      <Box mt={10}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
+                <Radio value='0'>Trưởng nhóm</Radio>
+                <Radio value='1'>Phó nhóm</Radio>
+                <Radio value='2'>Thành viên</Radio>
+              </Radios>
+              <FloatingLabel
+                name='citizenIdOfLeader'
+                label='Số CCCD / Hộ chiếu của trưởng nhóm'
+                color={formTextColor}
+                isRequired
+              />
+              <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
+              <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
+                <Radio value='0'>Nam</Radio>
+                <Radio value='1'>Nữ</Radio>
+              </Radios>
+              <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
+              <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
+              <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
+              <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
+              <Select
+                name='youthAssociation'
+                data={youthAssociationList}
+                label='Nơi sinh hoạt'
+                placeholder='Nơi sinh hoạt'
+                isRequired
+              />
+              <Select
+                name='groupOfYouthAssociation'
+                data={groupOfYouthAssociationList}
+                label='Tổ'
+                placeholder='Tổ'
+              />
+            </Stack>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
     </Stack>
   );
 };

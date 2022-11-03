@@ -17,7 +17,7 @@ export type StepProps = {
 const registerSteps = [Step1, Step2, Step3, Step4, FinalStep];
 
 const MultiStepRegister = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
 
   const Step: Step = registerSteps[step];
   return (
