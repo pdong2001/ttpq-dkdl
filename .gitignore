@@ -21,3 +21,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+package-lock.json
+yarn.lock
+tsconfig.tsbuildinfo
+yarn.lock
