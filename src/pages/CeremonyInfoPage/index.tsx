@@ -4,9 +4,11 @@ import {
   useColorModeValue,
   Container,
   Flex,
-  Stack, StackDivider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Wrap, WrapItem, useDisclosure, SimpleGrid, Divider
+  Stack, StackDivider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Wrap, WrapItem, useDisclosure, SimpleGrid, Divider, HStack
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
+import Ceremonys from './Ceremonys'
 
 // type Props = {};
 const data = {
@@ -49,11 +51,34 @@ const CeremonyInfoPage = () => {
     onOpen();
   };
 
+  interface BlogAuthorProps {
+    date: Date;
+    name: string;
+  }
+
+  const BlogAuthor: React.FC<BlogAuthorProps> = (props) => {
+    return (
+      <HStack marginTop="2" spacing="2" display="flex" alignItems="center" float={'right'}>
+        <Image
+          borderRadius="full"
+          boxSize="40px"
+          src="https://100k-faces.glitch.me/random-image"
+          alt={`Avatar of ${props.name}`}
+        />
+        <Text fontWeight="medium">{props.name}</Text>
+        <Text>—</Text>
+        <Text>{props.date.toLocaleDateString()}</Text>
+      </HStack>
+    );
+  };
+
   return (
     <Container maxW={'7xl'} p="12">
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} style={{ marginBottom: 20, marginTop: 40 }}>
         <Stack spacing={2}>
           <Heading>{data.header}</Heading>
+          <BlogAuthor name="Phạm Huyền" date={new Date('2021-04-06T19:01:27Z')} />
+          <Divider />
           <Text color={'gray.500'} fontSize={'lg'}>
             {data.shortContent}
           </Text>
@@ -104,12 +129,49 @@ const CeremonyInfoPage = () => {
               sapien. Suspendisse placerat vulputate posuere. Curabitur neque
               tortor, mattis nec lacus non, placerat congue elit.
             </Text>
+            <Text as="p" fontSize="lg">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+              condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
+              pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
+              imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
+              sapien. Suspendisse placerat vulputate posuere. Curabitur neque
+              tortor, mattis nec lacus non, placerat congue elit.
+            </Text>
+            <Text as="p" fontSize="lg">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+              condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
+              pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
+              imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
+              sapien. Suspendisse placerat vulputate posuere. Curabitur neque
+              tortor, mattis nec lacus non, placerat congue elit.
+            </Text>
+            <Text as="p" fontSize="lg">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+              condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
+              pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
+              imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
+              sapien. Suspendisse placerat vulputate posuere. Curabitur neque
+              tortor, mattis nec lacus non, placerat congue elit.
+            </Text>
+            <Text as="p" fontSize="lg">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+              condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
+              pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
+              imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
+              sapien. Suspendisse placerat vulputate posuere. Curabitur neque
+              tortor, mattis nec lacus non, placerat congue elit.
+            </Text>
           </VStack>
         </VStack>
       </Stack>
       <Wrap spacing='10px' className='wrap-department'>
         {data.linkSubImg.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
       </Wrap>
+      <HStack>
+        <Ceremonys />
+        <Ceremonys />
+        <Ceremonys />
+      </HStack>
       <Modal isOpen={isOpen} size='2xl' onClose={onClose} isCentered scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
