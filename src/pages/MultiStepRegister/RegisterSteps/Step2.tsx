@@ -1,4 +1,4 @@
-import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
@@ -67,7 +67,7 @@ const groupOfYouthAssociationList = [
 ];
 
 const Step2 = (props: StepProps) => {
-  const { nextStep } = props;
+  const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const name = 'Nguyen Van A'; // lấy từ step 1
   const phone = '0909990909'; // lấy từ step 1
@@ -193,9 +193,14 @@ const Step2 = (props: StepProps) => {
                 placeholder='Tổ'
               />
             </Stack>
-            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
-              Tiếp theo
-            </Button>
+            <ButtonGroup mt={8} w={'full'}>
+              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+                Trở về
+              </Button>
+              <Button flexGrow={1} type='submit' fontFamily={'heading'}>
+                Tiếp theo
+              </Button>
+            </ButtonGroup>
           </Form>
         </FormikProvider>
       </Box>
