@@ -5,6 +5,7 @@ import Home from '~/pages/Home';
 import MultiStepRegister from '~/pages/MultiStepRegister';
 import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
+import CeremonyInfoPage from '~/pages/CeremonyInfoPage';
 import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
 import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
@@ -72,6 +73,12 @@ const ROUTES: RouteType[] = [
     path: '/register-success',
     component: FinalStep,
     layout: BlankLayout,
+  },
+  {
+    key: 'CEREMONY_PAGE',
+    path: '/ceremony-page',
+    component: CeremonyInfoPage,
+    layout: MainLayout,
   },
   {
     key: 'NOT_FOUND',
