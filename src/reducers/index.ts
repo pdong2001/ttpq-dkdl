@@ -1,8 +1,5 @@
-import requestReducer from '~/apis/request/reducer';
-import { RequestData } from '~/apis/request/type';
-export type State = {
-  request: RequestData;
-};
-const rootReducer = { request: requestReducer };
+import registerReducer from '~/pages/MultiStepRegister/redux/slice';
+
+const rootReducer = { register: registerReducer };
 
 export default rootReducer;

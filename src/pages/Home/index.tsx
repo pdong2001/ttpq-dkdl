@@ -1,27 +1,26 @@
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { APIRequest } from '~/apis/request/action';
-import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import useAPIData from '~/hooks/useAPIData';
 import DepartmentInfos from '../DeparmentInfos';
 
 import GreatCeremonyInfo from '../GreatCeremonyInfo';
 import MultiStepRegister from '../MultiStepRegister';
 import Timeline from '../Timeline';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import useAPIData from '~/hooks/useAPIData';
+import { login, register } from '~/pages/MultiStepRegister/redux/slice';
 
 export default function Home() {
   const dispatch = useAppDispatch();
-  const request = useAppSelector((state) => state.request);
+  const registers = useAppSelector((state) => state.register);
 
   useEffect(() => {
-    dispatch(
-      APIRequest.post('/api/v1/Auth/login', {
-        data: { Username: 'ToolDKDL', Password: 'ToolDKDL@1231@' },
-      }),
-    );
-  }, []);
-  useAPIData(request, {
-    onFullfilled: (data) => console.log('success', data),
+    dispatch(login({ Username: 'ToolDKDL', Password: 'ToolDKDL@1231@' }));
+    dispatch(register(null));
+  }, [dispatch]);
+  useAPIData(registers, {
+    onFullfilled: (data) => {
+      console.log('success', data);
+    },
     onPending: () => {
       console.log('loading...');
     },

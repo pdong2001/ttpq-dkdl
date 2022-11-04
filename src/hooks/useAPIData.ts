@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { APIError, APIStatus, RequestData } from '~/apis/request/type';
-import { UnhandledError } from '~/apis/request/constant';
+import { APIError, APIStatus, RequestData } from '~/apis/common/type';
+import { UnhandledError } from '~/apis/common/constant';
 
 const useAPIData = <DataType>(
   response: RequestData,

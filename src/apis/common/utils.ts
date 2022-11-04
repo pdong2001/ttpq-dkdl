@@ -1,5 +1,5 @@
 import { APIError } from './type';
-import { InternalError } from '~/apis/request/constant';
+import { InternalError } from '~/apis/common/constant';
 
 export const getExceptionPayload = (ex: unknown): APIError => {
   if (typeof ex !== 'object' || !ex) {
@@ -7,7 +7,9 @@ export const getExceptionPayload = (ex: unknown): APIError => {
   }
 
   const typedException = ex as APIError;
-  const matchErrorStructure = ex.hasOwnProperty('message') && ex.hasOwnProperty('code');
+  const matchErrorStructure =
+    Object.prototype.hasOwnProperty.call(ex, 'message') &&
+    Object.prototype.hasOwnProperty.call(ex, 'code');
 
   if (matchErrorStructure) {
     return typedException;

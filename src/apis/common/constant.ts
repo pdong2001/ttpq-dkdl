@@ -1,4 +1,4 @@
-import { APIError } from '~/apis/request/type';
+import { APIError } from '~/apis/common/type';
 
 export const InternalError: APIError = {
   Message: 'Internal error during request.',
