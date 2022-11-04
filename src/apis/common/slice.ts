@@ -38,6 +38,7 @@ const createAppSlide = (
         })
         .addCase(action.rejected, (state, action) => {
           state.status = APIStatus.REJECTED;
+          state.error = action.payload;
           onRejected && onRejected(state, action);
         });
     }, builder);

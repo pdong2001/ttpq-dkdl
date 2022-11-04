@@ -11,12 +11,12 @@ export enum APIStatus {
 }
 
 export type APIError = {
-  Message: string;
-  Code: number;
+  message: string;
+  code: number;
 };
 
 export type APIData<DataType = any> = {
-  status: APIStatus;
+  status?: APIStatus;
   error?: APIError;
   data?: DataType;
 };

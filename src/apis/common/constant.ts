@@ -1,10 +1,10 @@
 import { APIError } from '~/apis/common/type';
 
 export const InternalError: APIError = {
-  Message: 'Internal error during request.',
-  Code: 500,
+  message: 'Internal error during request.',
+  code: 500,
 };
 export const UnhandledError: APIError = {
-  Message: 'Cannot handle error data.',
-  Code: 400,
+  message: 'Cannot handle error data.',
+  code: 400,
 };
