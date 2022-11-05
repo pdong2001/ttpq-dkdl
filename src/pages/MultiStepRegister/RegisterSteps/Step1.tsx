@@ -17,9 +17,9 @@ const Step1 = (props: StepProps) => {
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const formik = useFormik({
     initialValues: {
-      name,
-      phone,
-      citizenId,
+      name: name || '',
+      phone: phone || '',
+      citizenId: citizenId || '',
       registerType: registerType || '0',
     },
     validationSchema: Yup.object({
@@ -30,9 +30,8 @@ const Step1 = (props: StepProps) => {
       citizenId: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-
       dispatch(fillForm(values));
+      // dispatch(register(values));
       nextStep();
     },
   });

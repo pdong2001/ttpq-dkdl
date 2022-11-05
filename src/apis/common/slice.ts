@@ -18,7 +18,7 @@ type AsyncReducers<Response, Request = any> = {
   onRejected?: (state: Draft<NoInfer<ResponseData<Response>>>, action: ErrorPayloadAction) => void;
 };
 
-const createAsyncSlice = <State extends ResponseData>(
+const createAppSlice = <State extends ResponseData>(
   sliceName: string,
   initialState: ResponseData<State['data']>,
   reducers: ValidateSliceCaseReducers<
@@ -59,4 +59,4 @@ const createAsyncSlice = <State extends ResponseData>(
   });
 };
 
-export default createAsyncSlice;
+export default createAppSlice;
