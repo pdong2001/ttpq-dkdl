@@ -1,4 +1,4 @@
-import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -6,18 +6,21 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { fillForm } from '~/pages/MultiStepRegister/redux/slice';
 
 const Step1 = (props: StepProps) => {
-  // @ts-ignore
   const { nextStep } = props;
-
+  const dispatch = useAppDispatch();
+  const { name, phone, citizenId, registerType } =
+    useAppSelector((state) => state.register.data) || {};
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const formik = useFormik({
     initialValues: {
-      name: '',
-      phone: '',
-      citizenId: '',
-      registerType: '0',
+      name,
+      phone,
+      citizenId,
+      registerType: registerType || '0',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Xin hãy nhập họ và tên'),
@@ -28,6 +31,8 @@ const Step1 = (props: StepProps) => {
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
+
+      dispatch(fillForm(values));
       nextStep();
     },
   });

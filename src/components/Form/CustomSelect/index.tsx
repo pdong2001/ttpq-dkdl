@@ -10,10 +10,11 @@ type Data = {
 type CustomSelectProps = {
   data: Data[];
   label?: string;
+  hiddenErrorMessage?: boolean;
 } & SelectProps;
 
 const CustomSelect = (props: CustomSelectProps) => {
-  const { data, label, name, isRequired } = props;
+  const { data, label, name, isRequired, hiddenErrorMessage } = props;
   const { formTextColor } = useCustomColorMode();
 
   // @ts-ignore
@@ -32,7 +33,7 @@ const CustomSelect = (props: CustomSelectProps) => {
           </option>
         ))}
       </Select>
-      <FormErrorMessage>{meta?.error}</FormErrorMessage>
+      {!hiddenErrorMessage && meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>
   );
 };

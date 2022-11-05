@@ -1,4 +1,4 @@
-import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
@@ -8,7 +8,11 @@ import Select from '~/components/Form/CustomSelect';
 import Address from '~/components/Form/Address';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
-import { REGEX_YEAR } from '~/utils/common';
+import Validator from '~/utils/common/validator';
+import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
+import { fillForm } from '~/pages/MultiStepRegister/redux/slice';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { RegisterType } from '~/pages/MultiStepRegister/constants';
 
 // nơi sinh hoạt
 const youthAssociationList = [
@@ -66,11 +70,11 @@ const groupOfYouthAssociationList = [
 ];
 
 const Step2 = (props: StepProps) => {
-  const { nextStep } = props;
+  const dispatch = useAppDispatch();
+  const { name, phone, citizenId, registerType } =
+    useAppSelector((state) => state.register.data) || {};
+  const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-  const name = 'Nguyen Van A'; // lấy từ step 1
-  const phone = '0909990909'; // lấy từ step 1
-  const citizenId = '1234567890'; // lấy từ step 1
 
   const formik = useFormik({
     initialValues: {
@@ -92,14 +96,27 @@ const Step2 = (props: StepProps) => {
     },
     validationSchema: Yup.object({
       citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
-      // dateOfBirth: Yup.string()
-      //   .required('Xin hãy nhập ngày sinh')
-      //   .matches(REGEX_DAY_MONTH_YEAR, 'Ngày sinh không hợp lệ'),
-      dateOfBirthDay: Yup.string().required('Ngày là bắt buộc'),
-      dateOfBirthMonth: Yup.string().required('Tháng là bắt buộc'),
-      dateOfBirthYear: Yup.string()
-        .required('Năm là bắt buộc')
-        .matches(REGEX_YEAR, 'Năm không hợp lệ'),
+      dateOfBirth: Yup.object()
+        .shape({
+          day: Yup.string(),
+          month: Yup.string(),
+          year: Yup.string(),
+        })
+        .test({
+          name: 'validDOB',
+          test: (value, context) => {
+            const { year, month, day } = value;
+            if (!(year || month || day)) {
+              return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
+            }
+            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, day].join('/'));
+            const isValidDateFollowCalender = Validator.validateCalenderDate(value);
+            return (
+              (isValidDateFormat && isValidDateFollowCalender) ||
+              context.createError({ message: 'Bạn ơi, Ngày không hợp lệ rồi' })
+            );
+          },
+        }),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
       permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
       permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
@@ -111,6 +128,7 @@ const Step2 = (props: StepProps) => {
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
+      dispatch(fillForm(values));
       nextStep();
     },
   });
@@ -143,23 +161,30 @@ const Step2 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
-                <Radio value='0'>Trưởng nhóm</Radio>
-                <Radio value='1'>Phó nhóm</Radio>
-                <Radio value='2'>Thành viên</Radio>
-              </Radios>
-              <FloatingLabel
-                name='citizenIdOfLeader'
-                label='Số CCCD / Hộ chiếu của trưởng nhóm'
-                color={formTextColor}
-                isRequired
-              />
+              {registerType === RegisterType.GROUP.toString() && (
+                <>
+                  {' '}
+                  <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
+                    <Radio value='0'>Trưởng nhóm</Radio>
+                    <Radio value='1'>Phó nhóm</Radio>
+                    <Radio value='2'>Thành viên</Radio>
+                  </Radios>
+                  <FloatingLabel
+                    name='citizenIdOfLeader'
+                    label='Số CCCD / Hộ chiếu của trưởng nhóm'
+                    color={formTextColor}
+                    isRequired
+                  />
+                </>
+              )}
               <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
               <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
                 <Radio value='0'>Nam</Radio>
                 <Radio value='1'>Nữ</Radio>
               </Radios>
               <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
+
+              {/*<FloatingLabel name='dob' label='Ngày sinh' color={formTextColor} isRequired />*/}
               <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
               <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
               <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
@@ -177,9 +202,14 @@ const Step2 = (props: StepProps) => {
                 placeholder='Tổ'
               />
             </Stack>
-            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
-              Tiếp theo
-            </Button>
+            <ButtonGroup mt={8} w={'full'}>
+              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+                Trở về
+              </Button>
+              <Button flexGrow={1} type='submit' fontFamily={'heading'}>
+                Tiếp theo
+              </Button>
+            </ButtonGroup>
           </Form>
         </FormikProvider>
       </Box>
