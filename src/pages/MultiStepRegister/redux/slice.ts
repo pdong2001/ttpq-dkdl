@@ -4,7 +4,7 @@ import { createAsyncRequest } from '~/apis/common/action';
 import API from '~/apis/constants';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-type RegisterDTO = {
+type RegisterRequestDTO = {
   id?: string;
   name: string;
   phone: string;
@@ -12,15 +12,27 @@ type RegisterDTO = {
   registerType: string;
 };
 
-const initialState: ResponseData<RegisterDTO> = {
+type RegisterResponseDTO = {
+  id?: string;
+  name: string;
+  phone: string;
+  citizenId: string;
+  registerType: string;
+};
+
+const initialState: ResponseData<RegisterResponseDTO> = {
   status: APIStatus.IDLE,
   data: undefined,
 };
 
-export const register = createAsyncRequest<RegisterDTO>('register', {
-  method: 'post',
-  url: API.REGISTER,
-});
+export const register = createAsyncRequest<RegisterRequestDTO>(
+  'register',
+  {
+    method: 'post',
+    url: API.REGISTER,
+  },
+  (response) => response.data.data,
+);
 
 const slide = createAppSlice<typeof initialState>(
   'register',
@@ -29,7 +41,7 @@ const slide = createAppSlice<typeof initialState>(
     /* non-async action */
     /* ở đây vừa tạo ra reducer vừa tạo ra action với type là sliceName/fillForm */
     /* khi dùng action fillForm thì mình sẽ dispatch(fillForm(payload))*/
-    fillForm: (state, action: PayloadAction<RegisterDTO>) => {
+    fillForm: (state, action: PayloadAction<RegisterRequestDTO>) => {
       state.data = { ...state.data, ...action.payload };
     },
   },
@@ -39,7 +51,7 @@ const slide = createAppSlice<typeof initialState>(
       action: register,
       onFullfilled: (state, action) => {
         /*TODO: handle success response*/
-        state.data = action.payload; // just example
+        state.data = action.payload;
       },
       onRejected: (state, action) => {
         // default: state.error = action.payload;

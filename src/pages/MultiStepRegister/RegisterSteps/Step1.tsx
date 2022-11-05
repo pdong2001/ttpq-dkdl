@@ -17,9 +17,9 @@ const Step1 = (props: StepProps) => {
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const formik = useFormik({
     initialValues: {
-      name,
-      phone,
-      citizenId,
+      name: name || '',
+      phone: phone || '',
+      citizenId: citizenId || '',
       registerType: registerType || '0',
     },
     validationSchema: Yup.object({
@@ -31,6 +31,7 @@ const Step1 = (props: StepProps) => {
     }),
     onSubmit: (values) => {
       dispatch(fillForm(values));
+      // dispatch(register(values));
       nextStep();
     },
   });
