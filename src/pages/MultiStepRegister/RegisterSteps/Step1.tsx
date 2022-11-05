@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm } from '~/pages/MultiStepRegister/redux/slice';
+import { fillForm, register } from '~/pages/MultiStepRegister/redux/slice';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -15,6 +15,7 @@ const Step1 = (props: StepProps) => {
   const { name, phone, citizenId, registerType } =
     useAppSelector((state) => state.register.data) || {};
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+
   const formik = useFormik({
     initialValues: {
       name: name || '',
