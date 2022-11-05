@@ -1,26 +1,28 @@
 import {
   Box,
   Button,
-  Container,
+  Flex,
+  Stack,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ModalOverlay,
   useDisclosure,
-  Wrap,
-  WrapItem,
+  SimpleGrid,
+  Heading,
+  Text
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Image } from '@chakra-ui/react';
 // import environmentDepartment from '~/assets/enviroment.jpg';
 import department_names from '../../configs/departmemt';
 import './style.css';
+import { InfoIcon } from '@chakra-ui/icons'
+
 type Props = {};
 
-function DepartmentInfos({}: Props) {
+function DepartmentInfos({ }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [departmentSelected, setDepartmentSelected] = useState({
     name: '',
@@ -37,91 +39,106 @@ function DepartmentInfos({}: Props) {
     onOpen();
   };
   return (
-    <Box bgGradient={'linear(to-r, blue.300, ttpq.700)'}>
-      <Container
-        minH={'100vh'}
-        centerContent
-        justifyContent='center'
-        py='30px'
-        className='container'
-      >
-        {/* Department information */}
-        <Wrap spacing='10px' w={{ xl: '1100px', md: '760px' }} className='wrap-department'>
-          {department_names.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
-        </Wrap>
-        <Modal isOpen={isOpen} size='2xl' onClose={onClose} isCentered scrollBehavior='inside'>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>
-              <h1
-                style={{
-                  textAlign: 'center',
-                  fontSize: '30px',
-                }}
-              >
-                {departmentSelected && departmentSelected.name}
-              </h1>
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody className='modal-body-department'>
-              <Container boxSize='lg' mb='20px'>
+    <Box bgGradient={'linear(to-r, blue.300, ttpq.700)'}
+      py={12}
+      px={{ base: 10, md: 16, lg: 28, xl: 28 }}
+    >
+      <Box w='100%' textAlign='center'>
+        <Heading
+          as={'h6'}
+          color='ttpq.500'
+          lineHeight={1.6}
+          fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
+          textTransform='uppercase'
+          borderBottom={'2px'}
+          borderColor='darkBlue.100'
+          mb={10}
+          display='inline-block'
+        >
+          Các ban trong đại lễ
+        </Heading>
+      </Box>
+
+      <SimpleGrid columns={{ md: 2, xl: 3 }} spacing='10px'>
+        {department_names.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
+      </SimpleGrid>
+      <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
+        <ModalOverlay />
+        <ModalContent>
+          {/* <ModalHeader color='ttpq.500'>{departmentSelected && departmentSelected.name}</ModalHeader> */}
+          <ModalCloseButton />
+          <ModalBody p={0}>
+            <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+              <Flex flex={1}>
                 <Image
+                  alt={'Login Image'}
+                  objectFit={'cover'}
                   src={departmentSelected && departmentSelected.image}
-                  alt='MT'
-                  borderRadius={'lg'}
-                  _hover={{
-                    scale: '1.2',
-                  }}
-                ></Image>
-              </Container>
-              {departmentSelected && departmentSelected.desc}
+                />
+              </Flex>
+              <Flex p={8} flex={1} align={'center'} justify={'center'}>
+                <Stack spacing={6} w={'full'} maxW={'lg'}>
+                  <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+                    <Text color={'blue.400'} as={'span'}>
+                      {departmentSelected && departmentSelected.name}
+                    </Text>{' '}
+                  </Heading>
+                  {/* <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
+                    The project board is an exclusive resource for contract work. It's
+                    perfect for freelancers, agencies, and moonlighters.
+                  </Text> */}
+                  {departmentSelected && departmentSelected.desc}
+                  <Stack textAlign='center' spacing={4}>
+                    <Button
+                      size='lg'
+                    >
+                      Đăng ký
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Flex>
+            </Stack>
 
-              {/* <Lorem count={2} />
-               */}
-            </ModalBody>
+            {/* <Container boxSize='lg'>
+              <Image
+                src={departmentSelected && departmentSelected.image}
+                alt='MT'
+                borderRadius={'lg'}
+                _hover={{
+                  scale: '1.2',
+                }}
+              ></Image>
+            </Container>
+            {departmentSelected && departmentSelected.desc} */}
 
-            <ModalFooter display={'block'} textAlign='center'>
-              <Button colorScheme='blue' mr={3}>
-                Đăng ký ngay!
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </Container>
-    </Box>
+
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
+    </Box >
   );
 }
 const DepartmentItem = (index: number, item: any, handleViewDetail: any) => {
-  const [hide, setHide] = useState(true);
 
   return (
-    <WrapItem key={index} mb='10px'>
-      <Box
-        boxSize='xs'
-        pos='relative'
-        onMouseOver={() => setHide(false)}
-        onMouseOut={() => setHide(true)}
-        _hover={{
-          // opacity: 0.5,
-          scale: '1.2',
-        }}
-      >
-        <Image
-          src={item.image}
-          alt={item.name}
-          borderRadius={'lg'}
-          _hover={{
-            // opacity: 0.5,
-            scale: '1.2',
-          }}
-        ></Image>
-        {!hide && (
-          <Box pos='absolute' zIndex={100} w='100%' top='45%' opacity={1.5}>
-            <Button onClick={() => handleViewDetail(item)}>Xem thêm</Button>
-          </Box>
-        )}
+    <Box key={index}
+      bgImage={`url(${item.image})`}
+      bgSize={'cover'}
+      w={'100%'}
+      h={{ base: '200px', sm: '320px', md: '300px', xl: '250px' }}
+      display={'flex'}
+      alignItems={'end'}
+      borderRadius='xl'
+      cursor={'pointer'}
+      onClick={() => handleViewDetail(item)}
+    >
+      <Box bgColor={'rgba(0, 0, 0, 0.8)'} w={'100%'} h={'50px'} p={2} display='flex' alignItems={'center'}
+        borderBottomRadius='xl'>
+        <Text color={'white'}>{item.name}</Text>
+        <InfoIcon marginLeft={'auto'} w={5} h={5} color={'rgba(255, 255, 255, 0.54)'} />
       </Box>
-    </WrapItem>
+    </Box>
   );
 };
 export default DepartmentInfos;
