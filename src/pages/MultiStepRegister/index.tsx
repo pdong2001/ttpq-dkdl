@@ -8,6 +8,8 @@ import Step3 from './RegisterSteps/Step3';
 import Step4 from './RegisterSteps/Step4';
 import FinalStep from './RegisterSteps/FinalStep';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '~/hooks/reduxHook';
+import { register } from '~/pages/MultiStepRegister/redux/slice';
 
 // type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
@@ -20,7 +22,13 @@ const registerSteps = [Step1, Step2, Step3, Step4, FinalStep];
 const registerPath = '/register';
 
 const MultiStepRegister = () => {
-  const [step, setStep] = useState(0);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(register({ name: 'Nguyen Van A', cccd: '194630664', phone: '0973708453' }));
+  }, [dispatch]);
+
+  const [step, setStep] = useState<number>(0);
   const { pathname } = useLocation<Location>();
   const history = useHistory();
   const Step: Step = registerSteps[step];

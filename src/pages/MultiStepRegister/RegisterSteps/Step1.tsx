@@ -1,4 +1,4 @@
-import { Stack, Heading, Radio, Button, Box, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -8,7 +8,6 @@ import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 
 const Step1 = (props: StepProps) => {
-  // @ts-ignore
   const { nextStep } = props;
 
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();

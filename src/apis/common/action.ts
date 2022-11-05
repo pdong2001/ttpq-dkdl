@@ -5,8 +5,11 @@ import { getExceptionPayload } from './utils';
 import { AxiosRequestConfig } from 'axios';
 
 const hasParamsMethod = ['get', 'GET', 'put', 'PUT'];
-export const createAsyncAction = (type: string, config: AxiosRequestConfig) =>
-  createAsyncThunk<any, any | void, { rejectValue: APIError }>(type, async (data, ThunkAPI) => {
+export const createAsyncRequest = <Request = any, Response = any>(
+  type: string,
+  config: AxiosRequestConfig,
+) =>
+  createAsyncThunk<Response, Request, { rejectValue: APIError }>(type, async (data, ThunkAPI) => {
     try {
       // const;
       let response;

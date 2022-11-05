@@ -1,33 +1,48 @@
-import createSlide from '~/apis/common/slice';
-import { APIStatus, RequestData } from '~/apis/common/type';
-import { login, register } from '~/pages/MultiStepRegister/redux/actions';
+import createAsyncSlice from '~/apis/common/slice';
+import { APIStatus } from '~/apis/common/type';
+import { createAsyncRequest } from '~/apis/common/action';
+import API from '~/apis/constants';
 
-const initialState: RequestData = {
-  status: APIStatus.IDLE,
-  data: [],
+type RegisterResponse = {
+  // các field trả về từ response của API
 };
 
-const slide = createSlide('register', initialState, [
+const initialState = {
+  status: APIStatus.IDLE,
+  data: {} as RegisterResponse,
+};
+type RegisterRequest = { name: string; phone: string; cccd: string };
+
+export const register = createAsyncRequest<RegisterRequest>('register', {
+  method: 'get',
+  url: API.REGISTER,
+});
+
+const slide = createAsyncSlice<typeof initialState>(
+  'register',
+  initialState,
   {
-    action: login,
-    onFullfilled: (state, action) => {
-      state.data = action.payload;
-    },
-    onRejected: (state, action) => {
+    /* non-async action */
+    test: (state, action) => {
       state.data = action.payload;
     },
   },
-  {
-    action: register,
-    onFullfilled: (state) => {
-      state.data.push('hello success');
+  [
+    {
+      action: register,
+      onFullfilled: (state, action) => {
+        /*TODO: handle success response*/
+        state.data = action.payload; // just example
+      },
+      onRejected: (state, action) => {
+        // default: state.error = action.payload;
+        /*TODO: do other logic when reject */
+        console.error(action.payload, state);
+      },
     },
-    onRejected: (state) => {
-      state.data.push('hello error');
-    },
-  },
-]);
+  ],
+);
 
 const registerReducer = slide.reducer;
-// export const { createRegister } = slide.actions;
+export const { test } = slide.actions;
 export default registerReducer;

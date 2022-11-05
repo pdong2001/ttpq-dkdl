@@ -1,7 +1,5 @@
-import rootReducer from '~/reducers';
-import { AllKeys } from '~/types';
 import { PayloadAction, SerializedError } from '@reduxjs/toolkit';
-import { createAsyncAction } from '~/apis/common/action';
+import { createAsyncRequest } from '~/apis/common/action';
 
 export enum APIStatus {
   IDLE,
@@ -15,39 +13,38 @@ export type APIError = {
   code: number;
 };
 
-export type APIData<DataType = any> = {
-  status?: APIStatus;
+export type ResponseData<Data = any> = {
+  status: APIStatus;
   error?: APIError;
-  data?: DataType;
+  data?: Data;
 };
 
-export type RequestData = APIData<any>;
-
-export type AppReducer = AllKeys<typeof rootReducer>;
-
-export type SuccessPayloadAction = PayloadAction<
-  any,
+export type SuccessPayloadAction<Response = any, Request = RequestData> = PayloadAction<
+  Response,
   string,
-  { arg: void; requestId: string; requestStatus: 'fulfilled' }
+  SuccessMeta<Request>
 >;
-export type ErrorPayloadAction = PayloadAction<
-  APIError | undefined,
-  string,
-  | ({
-      arg: void;
-      requestId: string;
-      requestStatus: 'rejected';
-      aborted: boolean;
-      condition: boolean;
-    } & { rejectedWithValue: true })
-  | ({
-      arg: void;
-      requestId: string;
-      requestStatus: 'rejected';
-      aborted: boolean;
-      condition: boolean;
-    } & { rejectedWithValue: false }),
+export type ErrorPayloadAction<Request = RequestData> = PayloadAction<
+  APIError | undefined, // error type
+  string, // action type
+  ErrorMeta<Request>,
   SerializedError
 >;
 
-export type AppSyncAction = ReturnType<typeof createAsyncAction>;
+export type AsyncAction<Response = any, Request = RequestData> = ReturnType<
+  typeof createAsyncRequest<Request, Response>
+>;
+
+export type RequestData = { [K: string]: any } | void;
+type Meta<Request> = {
+  arg: Request;
+  requestId: string;
+};
+type ErrorMeta<Request> = Meta<Request> & {
+  requestStatus: 'rejected';
+  aborted: boolean;
+  condition: boolean;
+} & {
+  rejectedWithValue: boolean;
+};
+type SuccessMeta<Request> = Meta<Request> & { requestStatus: 'fulfilled' };

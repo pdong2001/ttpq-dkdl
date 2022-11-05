@@ -1,32 +1,40 @@
 import { ActionReducerMapBuilder, createSlice, Draft } from '@reduxjs/toolkit';
 import {
   APIStatus,
-  AppSyncAction,
+  AsyncAction,
   ErrorPayloadAction,
-  RequestData,
+  ResponseData,
   SuccessPayloadAction,
 } from './type';
 import { NoInfer } from '@reduxjs/toolkit/dist/tsHelpers';
 import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
 
-type AsyncReducers = {
-  action: AppSyncAction;
-  onFullfilled?: (state: Draft<NoInfer<RequestData>>, action: SuccessPayloadAction) => void;
-  onRejected?: (state: Draft<NoInfer<RequestData>>, action: ErrorPayloadAction) => void;
+type AsyncReducers<Response, Request = any> = {
+  action: AsyncAction<Response, Request>;
+  onFullfilled?: (
+    state: Draft<NoInfer<ResponseData<Response>>>,
+    action: SuccessPayloadAction<Response>,
+  ) => void;
+  onRejected?: (state: Draft<NoInfer<ResponseData<Response>>>, action: ErrorPayloadAction) => void;
 };
 
-const createAppSlide = (
+const createAsyncSlice = <State extends ResponseData>(
   sliceName: string,
-  initialState: RequestData,
-  asyncReducers: AsyncReducers[],
-  reducers?: ValidateSliceCaseReducers<RequestData, SliceCaseReducers<RequestData>>,
+  initialState: ResponseData<State['data']>,
+  reducers: ValidateSliceCaseReducers<
+    ResponseData<State['data']>,
+    SliceCaseReducers<ResponseData<State['data']>>
+  >,
+  asyncReducers: AsyncReducers<State['data']>[],
 ) => {
-  const _initialState: RequestData = {
+  const _initialState: ResponseData = {
     status: APIStatus.IDLE,
     data: undefined,
     error: undefined,
   };
-  const commonReducers = (builder: ActionReducerMapBuilder<NoInfer<RequestData>>) => {
+  const commonReducers = (
+    builder: ActionReducerMapBuilder<NoInfer<ResponseData<State['data']>>>,
+  ) => {
     asyncReducers.reduce((build, { action, onFullfilled, onRejected }) => {
       return build
         .addCase(action.pending, (state) => {
@@ -51,4 +59,4 @@ const createAppSlide = (
   });
 };
 
-export default createAppSlide;
+export default createAsyncSlice;
