@@ -1,19 +1,23 @@
 import createAsyncSlice from '~/apis/common/slice';
-import { APIStatus } from '~/apis/common/type';
+import { APIStatus, ResponseData } from '~/apis/common/type';
 import { createAsyncRequest } from '~/apis/common/action';
 import API from '~/apis/constants';
+import { PayloadAction } from '@reduxjs/toolkit';
 
-type RegisterResponse = {
-  // các field trả về từ response của API
+type RegisterDTO = {
+  id?: string;
+  name: string;
+  phone: string;
+  citizenId: string;
+  registerType: string;
 };
 
-const initialState = {
+const initialState: ResponseData<RegisterDTO> = {
   status: APIStatus.IDLE,
-  data: {} as RegisterResponse,
+  data: undefined,
 };
-type RegisterRequest = { name: string; phone: string; cccd: string };
 
-export const register = createAsyncRequest<RegisterRequest>('register', {
+export const register = createAsyncRequest<RegisterDTO>('register', {
   method: 'get',
   url: API.REGISTER,
 });
@@ -23,8 +27,8 @@ const slide = createAsyncSlice<typeof initialState>(
   initialState,
   {
     /* non-async action */
-    test: (state, action) => {
-      state.data = action.payload;
+    fillForm: (state, action: PayloadAction<RegisterDTO>) => {
+      state.data = { ...state.data, ...action.payload };
     },
   },
   [
@@ -44,5 +48,5 @@ const slide = createAsyncSlice<typeof initialState>(
 );
 
 const registerReducer = slide.reducer;
-export const { test } = slide.actions;
+export const { fillForm } = slide.actions;
 export default registerReducer;

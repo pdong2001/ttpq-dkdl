@@ -27,7 +27,7 @@ const createAsyncSlice = <State extends ResponseData>(
   >,
   asyncReducers: AsyncReducers<State['data']>[],
 ) => {
-  const _initialState: ResponseData = {
+  const _initialState: ResponseData<State['data']> = {
     status: APIStatus.IDLE,
     data: undefined,
     error: undefined,

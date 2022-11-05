@@ -10,6 +10,9 @@ import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
 import Validator from '~/utils/common/validator';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
+import { fillForm } from '~/pages/MultiStepRegister/redux/slice';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { RegisterType } from '~/pages/MultiStepRegister/constants';
 
 // nơi sinh hoạt
 const youthAssociationList = [
@@ -67,11 +70,11 @@ const groupOfYouthAssociationList = [
 ];
 
 const Step2 = (props: StepProps) => {
+  const dispatch = useAppDispatch();
+  const { name, phone, citizenId, registerType } =
+    useAppSelector((state) => state.register.data) || {};
   const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-  const name = 'Nguyen Van A'; // lấy từ step 1
-  const phone = '0909990909'; // lấy từ step 1
-  const citizenId = '1234567890'; // lấy từ step 1
 
   const formik = useFormik({
     initialValues: {
@@ -125,6 +128,7 @@ const Step2 = (props: StepProps) => {
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
+      dispatch(fillForm(values));
       nextStep();
     },
   });
@@ -157,17 +161,22 @@ const Step2 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
-                <Radio value='0'>Trưởng nhóm</Radio>
-                <Radio value='1'>Phó nhóm</Radio>
-                <Radio value='2'>Thành viên</Radio>
-              </Radios>
-              <FloatingLabel
-                name='citizenIdOfLeader'
-                label='Số CCCD / Hộ chiếu của trưởng nhóm'
-                color={formTextColor}
-                isRequired
-              />
+              {registerType === RegisterType.GROUP.toString() && (
+                <>
+                  {' '}
+                  <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
+                    <Radio value='0'>Trưởng nhóm</Radio>
+                    <Radio value='1'>Phó nhóm</Radio>
+                    <Radio value='2'>Thành viên</Radio>
+                  </Radios>
+                  <FloatingLabel
+                    name='citizenIdOfLeader'
+                    label='Số CCCD / Hộ chiếu của trưởng nhóm'
+                    color={formTextColor}
+                    isRequired
+                  />
+                </>
+              )}
               <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
               <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
                 <Radio value='0'>Nam</Radio>
