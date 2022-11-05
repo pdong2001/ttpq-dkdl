@@ -30,8 +30,6 @@ const Step1 = (props: StepProps) => {
       citizenId: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-
       dispatch(fillForm(values));
       nextStep();
     },
