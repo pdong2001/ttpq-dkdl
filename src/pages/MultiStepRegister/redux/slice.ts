@@ -1,4 +1,4 @@
-import createAsyncSlice from '~/apis/common/slice';
+import createAppSlice from '~/apis/common/slice';
 import { APIStatus, ResponseData } from '~/apis/common/type';
 import { createAsyncRequest } from '~/apis/common/action';
 import API from '~/apis/constants';
@@ -22,17 +22,20 @@ export const register = createAsyncRequest<RegisterDTO>('register', {
   url: API.REGISTER,
 });
 
-const slide = createAsyncSlice<typeof initialState>(
+const slide = createAppSlice<typeof initialState>(
   'register',
   initialState,
   {
     /* non-async action */
+    /* ở đây vừa tạo ra reducer vừa tạo ra action với type là sliceName/fillForm */
+    /* khi dùng action fillForm thì mình sẽ dispatch(fillForm(payload))*/
     fillForm: (state, action: PayloadAction<RegisterDTO>) => {
       state.data = { ...state.data, ...action.payload };
     },
   },
   [
     {
+      /* ở đây mình dùng dispatch(register(payload)) ạ */
       action: register,
       onFullfilled: (state, action) => {
         /*TODO: handle success response*/
@@ -48,5 +51,5 @@ const slide = createAsyncSlice<typeof initialState>(
 );
 
 const registerReducer = slide.reducer;
-export const { fillForm } = slide.actions;
+export const { fillForm } = slide.actions; // các action được defined ở trong reducers sẽ get ra ở đây ạ
 export default registerReducer;
