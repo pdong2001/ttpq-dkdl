@@ -18,7 +18,7 @@ const initialState: ResponseData<RegisterDTO> = {
 };
 
 export const register = createAsyncRequest<RegisterDTO>('register', {
-  method: 'get',
+  method: 'post',
   url: API.REGISTER,
 });
 
