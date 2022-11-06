@@ -4,15 +4,15 @@ import { createAsyncRequest } from '~/apis/common/action';
 import API from '~/apis/constants';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-type RegisterRequestDTO = {
+export type RegisterRequestDTO = {
   // id?: string;
-  name: string;
-  phone: string;
-  citizenId: string;
-  // registerType: string;
+  hoTen: string;
+  soDienThoai: string;
+  cccd: string;
+  registerType: string;
 };
 
-type RegisterResponseDTO = {
+export type RegisterResponseDTO = {
   id?: string;
   name: string;
   phone: string;

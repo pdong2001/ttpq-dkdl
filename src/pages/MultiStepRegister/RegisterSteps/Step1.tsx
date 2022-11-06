@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm } from '~/pages/MultiStepRegister/redux/slice';
+import { fillForm, register, RegisterRequestDTO } from '~/pages/MultiStepRegister/redux/slice';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -18,11 +18,11 @@ const Step1 = (props: StepProps) => {
 
   const formik = useFormik({
     initialValues: {
-      name: name || '',
-      phone: phone || '',
-      citizenId: citizenId || '',
+      hoTen: name || '',
+      soDienThoai: phone || '',
+      cccd: citizenId || '',
       registerType: registerType || '0',
-    },
+    } as RegisterRequestDTO,
     validationSchema: Yup.object({
       name: Yup.string().required('Xin hãy nhập họ và tên'),
       phone: Yup.string()
@@ -32,6 +32,7 @@ const Step1 = (props: StepProps) => {
     }),
     onSubmit: (values) => {
       dispatch(fillForm(values));
+      dispatch(register(values));
       nextStep();
     },
   });
