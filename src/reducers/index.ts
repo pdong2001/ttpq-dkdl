@@ -1,4 +1,4 @@
-import registerReducer from '~/pages/MultiStepRegister/redux/slice';
+import registerReducer from '~/pages/MultiStepRegister/services/slice';
 import authReducer from '~/apis/auth/slice';
 import requestReducer from '~/apis/request/slice';
 

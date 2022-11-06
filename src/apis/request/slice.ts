@@ -1,4 +1,4 @@
-import { APIStatus, ResponseData } from './../common/type';
+import { APIStatus, ReduxState } from './../common/type';
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { NoInfer } from '@reduxjs/toolkit/dist/tsHelpers';
 import { httpDelete, httpGet, httpPatch, httpPost, httpPut } from '~/apis/request/index';
@@ -9,7 +9,7 @@ const initialState: Requests = {
 };
 type Requests<Data = any> =
   | {
-      [K: string]: ResponseData<Data>;
+      [K: string]: ReduxState<Data>;
     }
   | { isLoading: boolean };
 export type HttpAsyncAction = ReturnType<typeof makeHttp>;

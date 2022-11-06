@@ -1,39 +1,44 @@
 import { ActionReducerMapBuilder, createSlice, Draft } from '@reduxjs/toolkit';
 import {
+  APIError,
   APIStatus,
   AsyncAction,
   ErrorPayloadAction,
+  ReduxState,
   ResponseData,
   SuccessPayloadAction,
 } from './type';
 import { NoInfer } from '@reduxjs/toolkit/dist/tsHelpers';
 import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
 
-type AsyncReducers<Response, Request = any> = {
+type AsyncReducers<Response extends ResponseData, Request = any> = {
   action: AsyncAction<Response, Request>;
   onFullfilled?: (
-    state: Draft<NoInfer<ResponseData<Response>>>,
+    state: Draft<NoInfer<ReduxState<Response['data']>>>,
     action: SuccessPayloadAction<Response>,
-  ) => void;
-  onRejected?: (state: Draft<NoInfer<ResponseData<Response>>>, action: ErrorPayloadAction) => void;
+  ) => Response['data'];
+  onRejected?: (
+    state: Draft<NoInfer<ReduxState<Response>>>,
+    action: ErrorPayloadAction,
+  ) => APIError | undefined;
 };
 
-const createAppSlice = <State extends ResponseData>(
+const createAppSlice = <State extends ReduxState, Response extends ResponseData>(
   sliceName: string,
-  initialState: ResponseData<State['data']>,
+  initialState: ReduxState<State['data']>,
   reducers: ValidateSliceCaseReducers<
-    ResponseData<State['data']>,
-    SliceCaseReducers<ResponseData<State['data']>>
+    ReduxState<State['data']>,
+    SliceCaseReducers<ReduxState<State['data']>>
   >,
-  asyncReducers: AsyncReducers<State['data']>[],
+  asyncReducers: AsyncReducers<Response>[],
 ) => {
-  const _initialState: ResponseData<State['data']> = {
+  const _initialState: ReduxState<State['data']> = {
     status: APIStatus.IDLE,
     data: undefined,
     error: undefined,
   };
   const commonReducers = (
-    builder: ActionReducerMapBuilder<NoInfer<ResponseData<State['data']>>>,
+    builder: ActionReducerMapBuilder<NoInfer<ReduxState<Response | any>>>,
   ) => {
     asyncReducers.reduce((build, { action, onFullfilled, onRejected }) => {
       return build
@@ -42,13 +47,15 @@ const createAppSlice = <State extends ResponseData>(
         })
         .addCase(action.fulfilled, (state, action) => {
           state.status = APIStatus.FULLFILLED;
-          state.data = action.payload;
-          onFullfilled && onFullfilled(state, action);
+          if (onFullfilled) {
+            state.data = onFullfilled(state, action);
+          }
         })
         .addCase(action.rejected, (state, action) => {
           state.status = APIStatus.REJECTED;
-          state.error = action.payload;
-          onRejected && onRejected(state, action);
+          if (onRejected) {
+            state.error = onRejected(state, action);
+          }
         });
     }, builder);
   };
