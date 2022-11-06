@@ -14,6 +14,7 @@ import { StepProps } from '..';
 import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
+// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // số lần công quả
 const numberOfServingList = [
@@ -68,19 +69,21 @@ const Step4 = (props: StepProps) => {
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const formik = useFormik({
     initialValues: {
-      numberOfServing: '',
-      skill: '',
-      experienceDept: '',
-      aspirationDept: '',
-      receiveCardLocation: '',
-      note: '',
+      soLanDaVeChua: '',
+      kyNangSoTruong: '',
+      idBanKinhNghiem: '',
+      idBanNguyenVong: '',
+      idNoiNhanThe: '',
+      linkAnhDaiDien: '',
+      ghiChu: '',
     },
     validationSchema: Yup.object({
-      numberOfServing: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
-      skill: Yup.string().required('Xin hãy chọn kỹ năng, sở trường'),
-      experienceDept: Yup.string().required('Xin hãy chọn ban có kinh nghiệm'),
-      aspirationDept: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
-      receiveCardLocation: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
+      soLanDaVeChua: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
+      kyNangSoTruong: Yup.string().required('Xin hãy chọn kỹ năng, sở trường'),
+      idBanKinhNghiem: Yup.string().required('Xin hãy chọn ban có kinh nghiệm'),
+      idBanNguyenVong: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
+      idNoiNhanThe: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
+      linkAnhDaiDien: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -114,47 +117,47 @@ const Step4 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <Select
-                name='numberOfServing'
+                name='soLanDaVeChua'
                 data={numberOfServingList}
                 label='Số lần về chùa công quả'
                 placeholder='Chọn số lần về chùa công quả'
                 isRequired
               />
               <Select
-                name='skill'
+                name='kyNangSoTruong'
                 data={skillList}
                 label='Kỹ năng, sở trường'
                 placeholder='Chọn kỹ năng, sở trường'
                 isRequired
               />
               <Select
-                name='experienceDept'
+                name='idBanKinhNghiem'
                 data={departmentList}
                 label='Kinh nghiệm ở ban'
                 placeholder='Chọn ban'
                 isRequired
               />
               <Select
-                name='aspirationDept'
+                name='idBanNguyenVong'
                 data={departmentList}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'
                 isRequired
               />
               <Select
-                name='receiveCardLocation'
+                name='idNoiNhanThe'
                 data={receiveCardLocationList}
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
                 isRequired
               />
-              <FormControl name='avatar' as='fieldset' border={1}>
+              <FormControl name='linkAnhDaiDien' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
                 thẻ
               </FormControl>
-              <FormControl name='note' as='fieldset' border={1}>
+              <FormControl name='ghiChu' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
                   Ghi chú
                 </FormLabel>

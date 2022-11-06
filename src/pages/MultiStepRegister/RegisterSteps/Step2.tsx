@@ -85,6 +85,7 @@ const Step2 = (props: StepProps) => {
       dateOfBirthMonth: '',
       dateOfBirthYear: '',
       email: '',
+      permanentAddress: {},
       permanentAddressProvince: '',
       permanentAddressDistrict: '',
       permanentAddressVillage: '',
@@ -106,6 +107,7 @@ const Step2 = (props: StepProps) => {
           name: 'validDOB',
           test: (value, context) => {
             const { year, month, day } = value;
+
             if (!(year || month || day)) {
               return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
             }
@@ -117,17 +119,55 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
+      dateOfBirthDay: Yup.string().required(),
+      dateOfBirthMonth: Yup.string().required(),
+      dateOfBirthYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
-      permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
-      permanentAddressVillage: Yup.string().required('Xã là bắt buộc'),
-      temporaryAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
-      temporaryAddressDistrict: Yup.string().required('Huyện là buộc'),
-      temporaryAddressVillage: Yup.string().required('Xã là bắt buộc'),
+      permanentAddress: Yup.object()
+        .shape({
+          province: Yup.number(),
+          district: Yup.number(),
+          village: Yup.number(),
+        })
+        .test({
+          name: 'valiAddress',
+          test: (value, context) => {
+            const { province, district, village } = value;
+            console.log(province, district, village);
+
+            if (!(province && district && village)) {
+              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
+            }
+            return true;
+          },
+        }),
+      temporaryAddress: Yup.object()
+        .shape({
+          province: Yup.number(),
+          district: Yup.number(),
+          village: Yup.number(),
+        })
+        .test({
+          name: 'valiAddress',
+          test: (value, context) => {
+            const { province, district, village } = value;
+            console.log(province, district, village);
+
+            if (!(province && district && village)) {
+              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
+            }
+            return true;
+          },
+        }),
+      permanentAddressProvince: Yup.string().required(),
+      permanentAddressDistrict: Yup.string().required(),
+      permanentAddressVillage: Yup.string().required(),
+      temporaryAddressProvince: Yup.string().required(),
+      temporaryAddressDistrict: Yup.string().required(),
+      temporaryAddressVillage: Yup.string().required(),
       youthAssociation: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
       dispatch(fillForm(values));
       nextStep();
     },

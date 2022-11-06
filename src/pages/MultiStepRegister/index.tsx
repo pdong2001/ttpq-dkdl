@@ -22,10 +22,11 @@ const registerPath = '/register';
 
 const MultiStepRegister = () => {
   const data = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(1);
   const { pathname } = useLocation<Location>();
   const history = useHistory();
   const Step: Step = registerSteps[step];
+
   useEffect(() => {
     if (pathname === registerPath && step === 0 && data) {
       setStep(1);

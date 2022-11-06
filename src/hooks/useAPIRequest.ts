@@ -5,25 +5,29 @@ import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { AxiosRequestConfig } from 'axios';
 import { HttpAsyncAction } from '~/apis/request/slice';
 
-const useAPIRequest = <Data = any>(arg: {
-  name: string;
-  method: HttpAsyncAction;
-  config: AxiosRequestConfig;
-  handlers: {
-    onFullfilled?: (data: Data) => void;
-    onRejected?: (error: APIError) => void;
-    onPending?: () => void;
-  };
-}) => {
+const useAPIRequest = <Data = any>(
+  arg: {
+    name: string;
+    method: HttpAsyncAction;
+    config: AxiosRequestConfig;
+    handlers?: {
+      onFullfilled?: (data: Data) => void;
+      onRejected?: (error: APIError) => void;
+      onPending?: () => void;
+    };
+  },
+  dependencies: any[] = [],
+) => {
   const { name, method, config, handlers } = arg;
-  const { onFullfilled, onPending, onRejected } = handlers;
+  const { onFullfilled, onPending, onRejected } = handlers || {};
 
   const dispatch = useAppDispatch();
-  const responses = useAppSelector((state) => state.response);
-  const response = useAppSelector((state) => state.response[name]);
+  const isLoading = useAppSelector((state) => state.response.isLoading);
+  const response = useAppSelector((state) => state.response[name]) || false;
+
   useEffect(() => {
     dispatch(method({ config, name }));
-  }, []);
+  }, [...dependencies]);
   useEffect(() => {
     if (response && response.status === APIStatus.FULLFILLED && onFullfilled) {
       onFullfilled(response.data!);
@@ -31,10 +35,10 @@ const useAPIRequest = <Data = any>(arg: {
     if (response && response.status === APIStatus.REJECTED && onRejected) {
       onRejected(response.error || UnhandledError);
     }
-    if (responses.isLoading && onPending) {
+    if (isLoading && onPending) {
       onPending();
     }
-  }, [responses.isLoading, response, response?.status, onFullfilled, onPending, onRejected]);
+  }, []);
 };
 
 export default useAPIRequest;

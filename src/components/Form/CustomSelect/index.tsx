@@ -2,13 +2,13 @@ import { FormControl, FormErrorMessage, FormLabel, Select, SelectProps } from '@
 import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 
-type Data = {
+export type SelectData = {
   id: number | string;
   name: string;
 };
 
 type CustomSelectProps = {
-  data: Data[];
+  data: SelectData[];
   label?: string;
   hiddenErrorMessage?: boolean;
 } & SelectProps;
@@ -18,7 +18,7 @@ const CustomSelect = (props: CustomSelectProps) => {
   const { formTextColor } = useCustomColorMode();
 
   // @ts-ignore
-  const [field, meta, helpers] = useField(props.name);
+  const [field, meta] = useField(props.name);
   const { primaryColor } = useCustomColorMode();
 
   return (
