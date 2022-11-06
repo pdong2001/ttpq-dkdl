@@ -19,7 +19,7 @@ import { RegisterType } from '~/pages/MultiStepRegister/constants';
 const youthAssociationList = [
   {
     id: 1,
-    name: 'CTN Hà Nội',
+    ten: 'CTN Hà Nội',
     ParentId: 0,
     Status: 1,
     Sort: 0,
@@ -31,7 +31,7 @@ const youthAssociationList = [
   },
   {
     id: 2,
-    name: 'Tổ 1',
+    ten: 'Tổ 1',
     ParentId: 1398,
     Status: 1,
     Sort: 0,
@@ -46,7 +46,7 @@ const youthAssociationList = [
 const groupOfYouthAssociationList = [
   {
     id: 1,
-    name: 'CTN Hà Nội',
+    ten: 'CTN Hà Nội',
     ParentId: 0,
     Status: 1,
     Sort: 0,
@@ -58,7 +58,7 @@ const groupOfYouthAssociationList = [
   },
   {
     id: 1403,
-    name: 'Thứ 2 Chùa Đồng',
+    ten: 'Thứ 2 Chùa Đồng',
     ParentId: 1,
     Status: 1,
     Sort: 20,
