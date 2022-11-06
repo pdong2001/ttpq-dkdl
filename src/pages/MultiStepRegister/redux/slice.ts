@@ -54,6 +54,16 @@ export const register = createAsyncRequest<RegisterRequestDTO>(
   (response) => response.data.data,
 );
 
+export const searchMember = createAsyncRequest<RegisterRequestDTO>(
+  'searchMember',
+  {
+    method: 'post',
+    url: API.SEARCH,
+    // data: Register
+  },
+  (response) => response.data.data,
+);
+
 const slide = createAppSlice<typeof initialState>(
   'register',
   initialState,
@@ -71,6 +81,19 @@ const slide = createAppSlice<typeof initialState>(
       action: register,
       onFullfilled: (state, action) => {
         // default: state.data = action.payload;
+        /*TODO: handle success response*/
+        state.data = action.payload;
+      },
+      onRejected: (state, action) => {
+        // default: state.error = action.payload;
+        /*TODO: do other logic when reject */
+        console.error(action.payload, state);
+      },
+    },
+    {
+      /* search member info ở DB input từ step 1*/
+      action: searchMember,
+      onFullfilled: (state, action) => {
         /*TODO: handle success response*/
         state.data = action.payload;
       },
