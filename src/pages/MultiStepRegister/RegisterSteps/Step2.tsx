@@ -13,7 +13,7 @@ import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { RegisterType } from '~/pages/MultiStepRegister/constants';
-import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
+// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // nơi sinh hoạt
 const youthAssociationList = [
@@ -89,17 +89,16 @@ const Step2 = (props: StepProps) => {
       // dateOfBirthMonth: '',
       // dateOfBirthYear: '',
       email: '',
-      // permanentAddressProvince: '',
-      // permanentAddressDistrict: '',
-      // permanentAddressVillage: '',
-      // temporaryAddressProvince: '',
-      // temporaryAddressDistrict: '',
-      // temporaryAddressVillage: '',
-      permanentAddressCode: '',
-      temporaryAddressCode: '',
-      // youthAssociation: '', //chưa có trong DTO
-      // groupOfYouthAssociation: '', //chưa có trong DTO
-    } as UpSertMemberDto,
+      permanentAddress: {},
+      permanentAddressProvince: '',
+      permanentAddressDistrict: '',
+      permanentAddressVillage: '',
+      temporaryAddressProvince: '',
+      temporaryAddressDistrict: '',
+      temporaryAddressVillage: '',
+      youthAssociation: '',
+      groupOfYouthAssociation: '',
+    },
     validationSchema: Yup.object({
       citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
       ngaySinh: Yup.object()
@@ -112,6 +111,7 @@ const Step2 = (props: StepProps) => {
           name: 'validDOB',
           test: (value, context) => {
             const { year, month, day } = value;
+
             if (!(year || month || day)) {
               return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
             }
@@ -123,17 +123,55 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
+      dateOfBirthDay: Yup.string().required(),
+      dateOfBirthMonth: Yup.string().required(),
+      dateOfBirthYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddressCodeProvince: Yup.string().required('Tỉnh là bắt buộc'),
-      permanentAddressCodeDistrict: Yup.string().required('Huyện là buộc'),
-      permanentAddressCodeVillage: Yup.string().required('Xã là bắt buộc'),
-      temporaryAddressCodeProvince: Yup.string().required('Tỉnh là bắt buộc'),
-      temporaryAddressCodeDistrict: Yup.string().required('Huyện là buộc'),
-      temporaryAddressCodeVillage: Yup.string().required('Xã là bắt buộc'),
+      permanentAddress: Yup.object()
+        .shape({
+          province: Yup.number(),
+          district: Yup.number(),
+          village: Yup.number(),
+        })
+        .test({
+          name: 'valiAddress',
+          test: (value, context) => {
+            const { province, district, village } = value;
+            console.log(province, district, village);
+
+            if (!(province && district && village)) {
+              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
+            }
+            return true;
+          },
+        }),
+      temporaryAddress: Yup.object()
+        .shape({
+          province: Yup.number(),
+          district: Yup.number(),
+          village: Yup.number(),
+        })
+        .test({
+          name: 'valiAddress',
+          test: (value, context) => {
+            const { province, district, village } = value;
+            console.log(province, district, village);
+
+            if (!(province && district && village)) {
+              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
+            }
+            return true;
+          },
+        }),
+      permanentAddressProvince: Yup.string().required(),
+      permanentAddressDistrict: Yup.string().required(),
+      permanentAddressVillage: Yup.string().required(),
+      temporaryAddressProvince: Yup.string().required(),
+      temporaryAddressDistrict: Yup.string().required(),
+      temporaryAddressVillage: Yup.string().required(),
       youthAssociation: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
       dispatch(fillForm(values));
       nextStep();
     },
