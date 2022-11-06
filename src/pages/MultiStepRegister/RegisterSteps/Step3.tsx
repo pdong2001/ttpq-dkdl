@@ -38,13 +38,13 @@ const Step3 = (props: StepProps) => {
   const formik = useFormik({
     initialValues: {
       departLocation: '',
-      timeToStart: '',
-      timeToReturn: '',
+      idThoiDiemVeChua: '',
+      idThoiDiemRoiChua: '',
     },
     validationSchema: Yup.object({
       departLocation: Yup.string().required('Xin hãy chọn nơi xuất phát'),
-      timeToStart: Yup.string().required('Xin hãy chọn thời gian khởi hành'),
-      timeToReturn: Yup.string().required('Xin hãy chọn thời gian trở về'),
+      idThoiDiemVeChua: Yup.string().required('Xin hãy chọn thời gian khởi hành'),
+      idThoiDiemRoiChua: Yup.string().required('Xin hãy chọn thời gian trở về'),
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -85,14 +85,14 @@ const Step3 = (props: StepProps) => {
                 isRequired
               />
               <Select
-                name='timeToStart'
+                name='idThoiDiemVeChua'
                 data={timeToStartList}
                 label='Thời gian khởi hành'
                 placeholder='Thời gian khởi hành'
                 isRequired
               />
               <Select
-                name='timeToReturn'
+                name='idThoiDiemRoiChua'
                 data={timeToReturnList}
                 label='Thời gian trở về'
                 placeholder='Thời gian trở về'
