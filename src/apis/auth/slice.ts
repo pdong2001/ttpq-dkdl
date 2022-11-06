@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { LoginDTO } from '~/apis/auth/type';
 import { SliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
 import { createAsyncRequest } from '~/apis/common/action';
-import { ResponseData } from '~/apis/common/type';
 import API from '~/apis/constants';
 
 type AuthState = {
@@ -15,7 +14,12 @@ const initialState: AuthState = {
   loginData: undefined,
 };
 
-export const login = createAsyncRequest<ResponseData<LoginDTO>>('auth/login', {
+type LoginRequestDTO = {
+  username: string;
+  password: string;
+};
+
+export const login = createAsyncRequest<LoginRequestDTO>('auth/login', {
   method: 'post',
   url: API.LOGIN,
 });

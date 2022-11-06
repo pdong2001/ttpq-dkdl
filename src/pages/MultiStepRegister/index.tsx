@@ -26,7 +26,6 @@ const MultiStepRegister = () => {
   const { pathname } = useLocation<Location>();
   const history = useHistory();
   const Step: Step = registerSteps[step];
-  console.log('data', data);
   useEffect(() => {
     if (pathname === registerPath && step === 0 && data) {
       setStep(1);

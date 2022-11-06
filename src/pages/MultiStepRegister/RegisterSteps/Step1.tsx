@@ -15,6 +15,7 @@ const Step1 = (props: StepProps) => {
   const { name, phone, citizenId, registerType } =
     useAppSelector((state) => state.register.data) || {};
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+
   const formik = useFormik({
     initialValues: {
       name: name || '',
@@ -31,7 +32,6 @@ const Step1 = (props: StepProps) => {
     }),
     onSubmit: (values) => {
       dispatch(fillForm(values));
-      // dispatch(register(values));
       nextStep();
     },
   });

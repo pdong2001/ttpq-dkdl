@@ -109,7 +109,7 @@ const Step2 = (props: StepProps) => {
             if (!(year || month || day)) {
               return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
             }
-            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, day].join('/'));
+            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, day].join('-'));
             const isValidDateFollowCalender = Validator.validateCalenderDate(value);
             return (
               (isValidDateFormat && isValidDateFollowCalender) ||
