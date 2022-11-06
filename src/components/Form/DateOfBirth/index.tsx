@@ -34,7 +34,7 @@ type DateOfBirthProps = SelectProps & FormControlProps & StackProps & { delimite
 
 function DateOfBirth(props: DateOfBirthProps) {
   const { formTextColor } = useCustomColorMode();
-  const { name, label, isRequired, delimiter = '/' } = props;
+  const { name, label, isRequired, delimiter = '-' } = props;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

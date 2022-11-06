@@ -5,11 +5,11 @@ import API from '~/apis/constants';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 type RegisterRequestDTO = {
-  id?: string;
+  // id?: string;
   name: string;
   phone: string;
   citizenId: string;
-  registerType: string;
+  // registerType: string;
 };
 
 type RegisterResponseDTO = {
@@ -18,11 +18,31 @@ type RegisterResponseDTO = {
   phone: string;
   citizenId: string;
   registerType: string;
+  roleInGroup: string;
+  citizenIdOfLeader: string;
+  buddhistName: string;
+  dateOfBirth: string;
+  email: string;
+  permanentAddress: string;
+  temporaryAddress: string;
+  youthAssociation: string;
+  groupOfYouthAssociation: string;
+  departLocation: string;
+  timeToStart: string;
+  timeToReturn: string;
+  numberOfServing: string;
+  skill: string;
+  experienceDept: number;
+  aspirationDept: number;
+  receiveCardLocation: number;
+  avatar: string;
+  note: string;
 };
 
 const initialState: ResponseData<RegisterResponseDTO> = {
   status: APIStatus.IDLE,
   data: undefined,
+  error: undefined,
 };
 
 export const register = createAsyncRequest<RegisterRequestDTO>(
@@ -41,7 +61,7 @@ const slide = createAppSlice<typeof initialState>(
     /* non-async action */
     /* ở đây vừa tạo ra reducer vừa tạo ra action với type là sliceName/fillForm */
     /* khi dùng action fillForm thì mình sẽ dispatch(fillForm(payload))*/
-    fillForm: (state, action: PayloadAction<RegisterRequestDTO>) => {
+    fillForm: (state, action: PayloadAction<RegisterResponseDTO>) => {
       state.data = { ...state.data, ...action.payload };
     },
   },
