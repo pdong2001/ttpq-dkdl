@@ -42,6 +42,7 @@ const createAppSlice = <State extends ResponseData>(
         })
         .addCase(action.fulfilled, (state, action) => {
           state.status = APIStatus.FULLFILLED;
+          state.data = action.payload;
           onFullfilled && onFullfilled(state, action);
         })
         .addCase(action.rejected, (state, action) => {
