@@ -8,7 +8,7 @@ import API from '~/apis/constants';
 import HTTP from '~/apis/request';
 import useAPIRequest from '~/hooks/useAPIRequest';
 export default function Home() {
-  const [response] = useAPIRequest({
+  useAPIRequest({
     name: 'login',
     method: HTTP.post,
     config: {
@@ -16,12 +16,14 @@ export default function Home() {
       data: { username: 'ToolDKDL', password: 'ToolDKDL@1231@' },
     },
     handlers: {
-      onFullfilled: () => {
-        // console.log('data', data);
+      onFullfilled: (data) => {
+        console.log('data', data);
+      },
+      onRejected: (error) => {
+        console.log('error', error);
       },
     },
   });
-  console.log('res', response);
   return (
     <Box position={'relative'} w='full' minW={'sm'}>
       <MultiStepRegister />

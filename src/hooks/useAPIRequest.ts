@@ -35,8 +35,6 @@ const useAPIRequest = <Data = any>(arg: {
       onPending();
     }
   }, [responses.isLoading, response, response?.status, onFullfilled, onPending, onRejected]);
-
-  return [response];
 };
 
 export default useAPIRequest;
