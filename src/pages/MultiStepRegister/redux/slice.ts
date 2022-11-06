@@ -50,6 +50,7 @@ const slide = createAppSlice<typeof initialState>(
       /* ở đây mình dùng dispatch(register(payload)) ạ */
       action: register,
       onFullfilled: (state, action) => {
+        // default: state.data = action.payload;
         /*TODO: handle success response*/
         state.data = action.payload;
       },
