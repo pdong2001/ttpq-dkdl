@@ -3,9 +3,7 @@ import { APIError, APIStatus } from '~/apis/common/type';
 import { UnhandledError } from '~/apis/common/constant';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { AxiosRequestConfig } from 'axios';
-import { makeHttp } from '~/apis/common/action';
-
-type HttpAsyncAction = ReturnType<typeof makeHttp>;
+import { HttpAsyncAction } from '~/apis/request/slice';
 
 const useAPIRequest = <Data = any>(arg: {
   name: string;
