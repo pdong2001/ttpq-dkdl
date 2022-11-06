@@ -14,7 +14,7 @@ import { StepProps } from '..';
 import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
-// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
+import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // số lần công quả
 const numberOfServingList = [
@@ -69,20 +69,24 @@ const Step4 = (props: StepProps) => {
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const formik = useFormik({
     initialValues: {
-      soLanDaVeChua: '',
+      soLanDaVeChua: undefined,
       kyNangSoTruong: '',
-      idBanKinhNghiem: '',
-      idBanNguyenVong: '',
-      idNoiNhanThe: '',
+      dangKyDaiLe: {
+        idBanKinhNghiem: 0,
+        idBanNguyenVong: 0,
+        idNoiNhanThe: 0,
+        ghiChu: '',
+      },
       linkAnhDaiDien: '',
-      ghiChu: '',
-    },
+    } as UpSertMemberDto,
     validationSchema: Yup.object({
       soLanDaVeChua: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
       kyNangSoTruong: Yup.string().required('Xin hãy chọn kỹ năng, sở trường'),
+      // không validate được 3 field trong dangKyDaiLe start
       idBanKinhNghiem: Yup.string().required('Xin hãy chọn ban có kinh nghiệm'),
       idBanNguyenVong: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
       idNoiNhanThe: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
+      // không validate được 3 field trong dangKyDaiLe end
       linkAnhDaiDien: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
     }),
     onSubmit: (values) => {

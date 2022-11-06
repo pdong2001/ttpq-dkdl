@@ -5,6 +5,7 @@ import { StepProps } from '..';
 import Select from '~/components/Form/CustomSelect';
 import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
+import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // nơi xuất phát
 const departLocationList = [
@@ -37,14 +38,18 @@ const Step3 = (props: StepProps) => {
 
   const formik = useFormik({
     initialValues: {
-      departLocation: '',
-      idThoiDiemVeChua: '',
-      idThoiDiemRoiChua: '',
-    },
+      dangKyDaiLe: {
+        // departLocation: '', chưa có
+        idThoiDiemVeChua: 0,
+        idThoiDiemRoiChua: 0,
+      }
+    } as UpSertMemberDto,
     validationSchema: Yup.object({
-      departLocation: Yup.string().required('Xin hãy chọn nơi xuất phát'),
+      // không validate được 3 field trong dangKyDaiLe start
+      // departLocation: Yup.string().required('Xin hãy chọn nơi xuất phát'),
       idThoiDiemVeChua: Yup.string().required('Xin hãy chọn thời gian khởi hành'),
       idThoiDiemRoiChua: Yup.string().required('Xin hãy chọn thời gian trở về'),
+      // không validate được 3 field trong dangKyDaiLe end
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));

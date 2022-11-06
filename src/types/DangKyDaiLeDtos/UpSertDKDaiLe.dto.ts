@@ -30,4 +30,5 @@ export type UpSertDKDaiLeDto = {
   thoiGianVeChuaKhac: string;
   departmentDetailId: number;
   thoiGianRoiChuaKhac: string;
+  roleInGroup: number;
 };

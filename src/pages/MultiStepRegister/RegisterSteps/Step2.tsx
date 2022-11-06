@@ -13,6 +13,7 @@ import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { RegisterType } from '~/pages/MultiStepRegister/constants';
+import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // nơi sinh hoạt
 const youthAssociationList = [
@@ -78,25 +79,30 @@ const Step2 = (props: StepProps) => {
 
   const formik = useFormik({
     initialValues: {
-      roleInGroup: '2',
-      citizenIdOfLeader: '',
-      buddhistName: '',
-      dateOfBirthDay: '',
-      dateOfBirthMonth: '',
-      dateOfBirthYear: '',
+      dangKyDaiLe: {
+        roleInGroup: 2,
+      },
+      // citizenIdOfLeader: '', //chưa có trong DTO
+      phapDanh: '',
+      ngaySinh: '',
+      // dateOfBirthDay: '',
+      // dateOfBirthMonth: '',
+      // dateOfBirthYear: '',
       email: '',
-      permanentAddressProvince: '',
-      permanentAddressDistrict: '',
-      permanentAddressVillage: '',
-      temporaryAddressProvince: '',
-      temporaryAddressDistrict: '',
-      temporaryAddressVillage: '',
-      youthAssociation: '',
-      groupOfYouthAssociation: '',
-    },
+      // permanentAddressProvince: '',
+      // permanentAddressDistrict: '',
+      // permanentAddressVillage: '',
+      // temporaryAddressProvince: '',
+      // temporaryAddressDistrict: '',
+      // temporaryAddressVillage: '',
+      permanentAddressCode: '',
+      temporaryAddressCode: '',
+      // youthAssociation: '', //chưa có trong DTO
+      // groupOfYouthAssociation: '', //chưa có trong DTO
+    } as UpSertMemberDto,
     validationSchema: Yup.object({
       citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
-      dateOfBirth: Yup.object()
+      ngaySinh: Yup.object()
         .shape({
           day: Yup.string(),
           month: Yup.string(),
@@ -118,12 +124,12 @@ const Step2 = (props: StepProps) => {
           },
         }),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
-      permanentAddressDistrict: Yup.string().required('Huyện là buộc'),
-      permanentAddressVillage: Yup.string().required('Xã là bắt buộc'),
-      temporaryAddressProvince: Yup.string().required('Tỉnh là bắt buộc'),
-      temporaryAddressDistrict: Yup.string().required('Huyện là buộc'),
-      temporaryAddressVillage: Yup.string().required('Xã là bắt buộc'),
+      permanentAddressCodeProvince: Yup.string().required('Tỉnh là bắt buộc'),
+      permanentAddressCodeDistrict: Yup.string().required('Huyện là buộc'),
+      permanentAddressCodeVillage: Yup.string().required('Xã là bắt buộc'),
+      temporaryAddressCodeProvince: Yup.string().required('Tỉnh là bắt buộc'),
+      temporaryAddressCodeDistrict: Yup.string().required('Huyện là buộc'),
+      temporaryAddressCodeVillage: Yup.string().required('Xã là bắt buộc'),
       youthAssociation: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
     }),
     onSubmit: (values) => {
@@ -177,16 +183,16 @@ const Step2 = (props: StepProps) => {
                   />
                 </>
               )}
-              <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
+              <FloatingLabel name='phapDanh' label='Pháp danh' color={formTextColor} />
               <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
                 <Radio value='0'>Nam</Radio>
                 <Radio value='1'>Nữ</Radio>
               </Radios>
-              <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
+              <DateOfBirth name='ngaySinh' label='Ngày sinh' isRequired />
 
               {/*<FloatingLabel name='dob' label='Ngày sinh' color={formTextColor} isRequired />*/}
               <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
-              <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
+              <Address name='permanentAddressCode' label='Địa chỉ thường trú' isRequired />
               <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
               <Select
                 name='youthAssociation'
