@@ -13,10 +13,17 @@ export type APIError = {
   code: number;
 };
 
-export type ResponseData<Data = any> = {
+export type ReduxState<Data = any> = {
   status: APIStatus;
   error?: APIError;
   data?: Data;
+};
+
+export type ResponseData<Data = any> = {
+  data: Data;
+  code: number;
+  message: string;
+  success: boolean;
 };
 
 export type SuccessPayloadAction<Response = any, Request = RequestData> = PayloadAction<
@@ -31,7 +38,7 @@ export type ErrorPayloadAction<Request = RequestData> = PayloadAction<
   SerializedError
 >;
 
-export type AsyncAction<Response = any, Request = RequestData> = ReturnType<
+export type AsyncAction<Response = ResponseData, Request = RequestData> = ReturnType<
   typeof createAsyncRequest<Request, Response>
 >;
 

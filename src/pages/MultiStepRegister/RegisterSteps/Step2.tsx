@@ -10,7 +10,7 @@ import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
 import Validator from '~/utils/common/validator';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
-import { fillForm } from '~/pages/MultiStepRegister/redux/slice';
+import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { RegisterType } from '~/pages/MultiStepRegister/constants';
 
@@ -71,7 +71,7 @@ const groupOfYouthAssociationList = [
 
 const Step2 = (props: StepProps) => {
   const dispatch = useAppDispatch();
-  const { name, phone, citizenId, registerType } =
+  const { hinhThucDangKy, soDienThoai, cccd } =
     useAppSelector((state) => state.register.data) || {};
   const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
@@ -154,14 +154,14 @@ const Step2 = (props: StepProps) => {
           {`Xin chào bạn ${name}`}
         </Text>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          {`SĐT: ${phone} - CCCD: ${citizenId}`}
+          {`SĐT: ${soDienThoai} - CCCD: ${cccd}`}
         </Text>
       </Stack>
       <Box mt={10}>
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              {registerType === RegisterType.GROUP.toString() && (
+              {hinhThucDangKy === RegisterType.GROUP.toString() && (
                 <>
                   {' '}
                   <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>

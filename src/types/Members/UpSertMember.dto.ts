@@ -1,0 +1,31 @@
+import { Gender } from '../Enums/Gender.enum';
+import { PositionType } from '../Enums/PositionType.enum';
+import { PhanLoaiThanhNien } from '../Enums/PhanLoaiThanhNien.enum';
+import { UpSertDKDaiLeDto } from '../DangKyDaiLeDtos/UpSertDKDaiLe.dto';
+
+export type UpSertMemberDto = {
+  cccd: string;
+  hoTen: string;
+  email?: string;
+  linkFB?: string;
+  phapDanh?: string;
+  gioiTinh?: Gender;
+  noiLamViec?: string;
+  toSinhHoat?: string;
+  soDienThoai: string;
+  noiSinhHoat?: string;
+  linkAnhCMND?: string;
+  diaChiSoNha?: string;
+  idCoCauToChuc?: string;
+  kyNangSoTruong?: string;
+  hinhThucDangKy?: string;
+  linkAnhDaiDien?: string;
+  permanentAddressCode?: string;
+  temporaryAddressCode?: string;
+  ngaySinh?: string;
+  positionId?: PositionType;
+  soLanDaVeChua?: number;
+  phanTramVeChua?: number;
+  phanLoaiThanhNien?: PhanLoaiThanhNien;
+  dangKyDaiLe?: UpSertDKDaiLeDto;
+};

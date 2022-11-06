@@ -1,11 +1,11 @@
 const REGISTER = '/api/v1/member/add';
 const LOGIN = 'api/v1/Auth/login';
-const SEARCH = '/api/v1/member/search';
+const SEARCH_MEMBER = '/api/v1/member/search';
 
 const API = {
   REGISTER,
   LOGIN,
-  SEARCH,
+  SEARCH_MEMBER,
 };
 
 export default API;
