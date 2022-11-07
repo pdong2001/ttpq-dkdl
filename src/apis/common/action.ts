@@ -1,3 +1,4 @@
+import { setGlobalLoading } from '~/components/Loading/slice';
 import { APIError } from './type';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import publicRequest from './axios';
@@ -12,7 +13,7 @@ export const createAsyncRequest = <Request = any, Response = any>(
 ) =>
   createAsyncThunk<Response, Request, { rejectValue: APIError }>(type, async (data, ThunkAPI) => {
     try {
-      // const;
+      ThunkAPI.dispatch(setGlobalLoading(true));
       let response;
       if (!data) {
         response = await publicRequest.request({ ...config });
@@ -25,6 +26,8 @@ export const createAsyncRequest = <Request = any, Response = any>(
       return convertResponse ? convertResponse(response) : response.data;
     } catch (ex) {
       return ThunkAPI.rejectWithValue(getExceptionPayload(ex));
+    } finally {
+      ThunkAPI.dispatch(setGlobalLoading(false));
     }
   });
 
