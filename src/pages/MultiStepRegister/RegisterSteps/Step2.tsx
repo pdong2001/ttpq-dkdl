@@ -72,7 +72,7 @@ const groupOfYouthAssociationList = [
 
 const Step2 = (props: StepProps) => {
   const dispatch = useAppDispatch();
-  const { hinhThucDangKy, soDienThoai, cccd } =
+  const { hoTen, hinhThucDangKy, soDienThoai, cccd } =
     useAppSelector((state) => state.register.data) || {};
   const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
@@ -195,7 +195,7 @@ const Step2 = (props: StepProps) => {
           Cập nhật thông tin
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          {`Xin chào bạn ${name}`}
+          Xin chào bạn <Text as='b'>{hoTen}</Text>
         </Text>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           {`SĐT: ${soDienThoai} - CCCD: ${cccd}`}

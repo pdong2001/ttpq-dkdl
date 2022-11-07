@@ -35,7 +35,7 @@ const Step1 = (props: StepProps) => {
       soDienThoai: Yup.string()
         .required('Xin hãy nhập số điện thoại')
         .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
-      hinhThucDangKy: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
+      cccd: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
     }),
     onSubmit: (values) => {
       dispatch(fillForm(values));
