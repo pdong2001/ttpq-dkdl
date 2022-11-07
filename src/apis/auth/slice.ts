@@ -3,13 +3,15 @@ import { LoginDTO } from '~/apis/auth/type';
 import { SliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
 import { createAsyncRequest } from '~/apis/common/action';
 import API from '~/apis/constants';
+import { APIStatus, ReduxState } from '~/apis/common/type';
 
-type AuthState = {
+type AuthState = ReduxState & {
   isLoggedIn: boolean;
   loginData?: LoginDTO;
 };
 
 const initialState: AuthState = {
+  status: APIStatus.IDLE,
   isLoggedIn: false,
   loginData: undefined,
 };
