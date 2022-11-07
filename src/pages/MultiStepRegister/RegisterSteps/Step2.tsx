@@ -133,8 +133,6 @@ const Step2 = (props: StepProps) => {
           name: 'valiAddress',
           test: (value, context) => {
             const { province, district, village } = value;
-            console.log(province, district, village);
-
             if (!(province && district && village)) {
               return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
             }

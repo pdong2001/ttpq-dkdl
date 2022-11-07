@@ -6,6 +6,7 @@ import { extendTheme } from '@chakra-ui/react';
 import { floatingLabel, primaryColor, colorMode } from './theme';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from './store';
+import Loading from './components/Loading';
 
 const theme = extendTheme(
   colorMode,
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root') as Element).render(
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <App />
+        <Loading />
       </BrowserRouter>
     </ChakraProvider>
   </ReduxProvider>,
