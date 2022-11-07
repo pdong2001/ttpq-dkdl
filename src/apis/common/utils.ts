@@ -1,9 +1,10 @@
+import { UnhandledError } from './constant';
 import { APIError } from './type';
 import { InternalError } from '~/apis/common/constant';
 
 export const getExceptionPayload = (ex: unknown): APIError => {
   if (typeof ex !== 'object' || !ex) {
-    return InternalError;
+    return UnhandledError;
   }
 
   const typedException = ex as APIError;

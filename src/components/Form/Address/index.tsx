@@ -14,7 +14,7 @@ import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { useField, useFormikContext } from 'formik';
 import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type AddressProps = SelectProps & FormControlProps & StackProps;
 
@@ -36,14 +36,27 @@ function Address(props: AddressProps) {
   //@ts-ignore
   const [field, meta, { setValue }] = useField(name);
   const [{ value: province }, { touched: pTouch }] = useField(`${name}Province`);
-  const [{ value: district }, { touched: dTouch }] = useField(`${name}District`);
-  const [{ value: village }, { touched: vTouch }] = useField(`${name}Village`);
-
+  const [{ value: district }, { touched: dTouch }, { setTouched: setDTouched }] = useField(
+    `${name}District`,
+  );
+  const [{ value: village }, { touched: vTouch }, { setTouched: setVTouched }] = useField(
+    `${name}Village`,
+  );
+  const [address, setAddress] = useState({});
   useEffect(() => {
-    setValue({ province, district, village });
-  }, [province, district, village]);
-  console.log('district', districts);
-
+    setValue(address);
+  }, [address]);
+  useEffect(() => {
+    setAddress({ province });
+    setDTouched(false);
+  }, [province]);
+  useEffect(() => {
+    setAddress((old) => ({ ...old, district, village: undefined }));
+    setVTouched(false);
+  }, [district]);
+  useEffect(() => {
+    setAddress((old) => ({ ...old, village }));
+  }, [village]);
   return (
     <FormControl as='fieldset' isInvalid={!!meta.error && pTouch && dTouch && vTouch} {...rest}>
       <FormLabel as='legend' color={formTextColor}>
