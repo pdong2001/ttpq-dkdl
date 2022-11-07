@@ -6,7 +6,7 @@ import publicRequest from '~/apis/common/axios';
 import { getExceptionPayload } from '~/apis/common/utils';
 import { setGlobalLoading } from '~/components/Loading/slice';
 
-const useAxios = <Data = any>(axiosParams: AxiosRequestConfig) => {
+const useAxios = <Data = any>(axiosParams: AxiosRequestConfig, hideSpinner?: boolean) => {
   const [data, setData] = useState<Data>();
   const [error, setError] = useState<APIError>();
   const [loading, setLoading] = useState(true);
@@ -18,7 +18,7 @@ const useAxios = <Data = any>(axiosParams: AxiosRequestConfig) => {
 
   const makeRequest = async (params: AxiosRequestConfig) => {
     try {
-      dispatch(setGlobalLoading(true));
+      !hideSpinner && dispatch(setGlobalLoading(true));
       const res = await publicRequest.request({
         ...params,
         signal: controllerRef.current.signal,
@@ -28,9 +28,7 @@ const useAxios = <Data = any>(axiosParams: AxiosRequestConfig) => {
       setError(getExceptionPayload(err));
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        dispatch(setGlobalLoading(false));
-      }, 300);
+      !hideSpinner && dispatch(setGlobalLoading(false));
     }
   };
 
