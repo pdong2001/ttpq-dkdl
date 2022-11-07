@@ -1,12 +1,16 @@
 import { useAppDispatch } from '~/hooks/reduxHook';
 import { APIError } from './../apis/common/type';
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import publicRequest from '~/apis/common/axios';
 import { getExceptionPayload } from '~/apis/common/utils';
 import { setGlobalLoading } from '~/components/Loading/slice';
 
-const useAxios = <Data = any>(axiosParams: AxiosRequestConfig, hideSpinner?: boolean) => {
+const useAxios = <Data = any>(
+  axiosParams: AxiosRequestConfig,
+  convertResponse?: (response: AxiosResponse['data']) => any,
+  hideSpinner?: boolean,
+) => {
   const [data, setData] = useState<Data>();
   const [error, setError] = useState<APIError>();
   const [loading, setLoading] = useState(true);
@@ -23,7 +27,8 @@ const useAxios = <Data = any>(axiosParams: AxiosRequestConfig, hideSpinner?: boo
         ...params,
         signal: controllerRef.current.signal,
       });
-      setData(res.data);
+      const convertedData = convertResponse ? convertResponse(res.data) : res.data;
+      setData(convertedData);
     } catch (err: unknown) {
       setError(getExceptionPayload(err));
     } finally {
