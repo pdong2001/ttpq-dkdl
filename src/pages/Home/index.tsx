@@ -7,13 +7,16 @@ import Timeline from '../Timeline';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 export default function Home() {
-  const { data, error, loading } = useAxios({
-    method: 'post',
-    url: API.LOGIN,
-    data: { username: 'ToolDKDL', password: 'ToolDKDL@1231@' },
-  });
+  const { data, error, loading } = useAxios(
+    {
+      method: 'post',
+      url: API.LOGIN,
+      data: { username: 'ToolDKDL', password: 'ToolDKDL@1231@' },
+    },
+    (response) => response.data,
+  );
   if (!loading) {
-    console.log('error login', error?.code, error?.message, data);
+    console.log('test common api', data, error);
   }
 
   return (
