@@ -6,7 +6,6 @@ import MultiStepRegister from '../MultiStepRegister';
 import Timeline from '../Timeline';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
-import Loading from '~/components/Loading';
 export default function Home() {
   const { data, error, loading } = useAxios({
     method: 'post',
@@ -23,7 +22,6 @@ export default function Home() {
       <GreatCeremonyInfo />
       <DepartmentInfos />
       <Timeline />
-      <Loading />
     </Box>
   );
 }
