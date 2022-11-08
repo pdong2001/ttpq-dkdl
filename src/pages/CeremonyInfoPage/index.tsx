@@ -28,6 +28,10 @@ import React, { useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
 import Slider from 'react-slick';
+// import API from '~/apis/constants';
+// import useAxios from '~/hooks/useAxios';
+
+import Ceremonys from './Ceremonys';
 
 // type Props = {};
 const data = {
@@ -57,36 +61,64 @@ const data = {
   date: '27 Tháng Một, 2022',
 };
 
-// Settings for the slider
-const settings = {
-  dots: true,
-  arrows: false,
-  fade: true,
-  infinite: true,
-  autoplay: true,
-  speed: 500,
-  autoplaySpeed: 5000,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-};
+const listCeremony = [
+  {
+    name: 'Đại lễ 1',
+    startDate: '2022-11-08',
+    endDate: '2022-11-08',
+    linkImg: 'https://thientonphatquang.com/wp-content/uploads/2022/01/8a.jpg',
+    shortContent:
+      'Thực hiện theo chỉ đạo của Hòa thượng thượng Thiện hạ Nhơn, chủ tịch Hội Đồng Trị Sự TW GHPGVN, rạng sáng ngày 10/01/2022 (nhằm ngày 08/12 năm Tân Sửu), khi màn sương còn giăng phủ khắp thung lũng núi Dinh, Thiền Tôn Phật Quang đã long trọng tổ chức Đại lễ kính mừng sự kiện Phật Thành Đạo trong bầu không khí vô cùng thiêng liêng và xúc động.',
+  },
+  {
+    name: 'Đại lễ 2',
+    startDate: '2022-11-08',
+    endDate: '2022-11-08',
+    linkImg: 'https://thientonphatquang.com/wp-content/uploads/2022/01/8a.jpg',
+    shortContent:
+      'Thực hiện theo chỉ đạo của Hòa thượng thượng Thiện hạ Nhơn, chủ tịch Hội Đồng Trị Sự TW GHPGVN, rạng sáng ngày 10/01/2022 (nhằm ngày 08/12 năm Tân Sửu), khi màn sương còn giăng phủ khắp thung lũng núi Dinh, Thiền Tôn Phật Quang đã long trọng tổ chức Đại lễ kính mừng sự kiện Phật Thành Đạo trong bầu không khí vô cùng thiêng liêng và xúc động.',
+  },
+  {
+    name: 'Đại lễ 3',
+    startDate: '2022-11-08',
+    endDate: '2022-11-08',
+    linkImg: 'https://thientonphatquang.com/wp-content/uploads/2022/01/8a.jpg',
+    shortContent:
+      'Thực hiện theo chỉ đạo của Hòa thượng thượng Thiện hạ Nhơn, chủ tịch Hội Đồng Trị Sự TW GHPGVN, rạng sáng ngày 10/01/2022 (nhằm ngày 08/12 năm Tân Sửu), khi màn sương còn giăng phủ khắp thung lũng núi Dinh, Thiền Tôn Phật Quang đã long trọng tổ chức Đại lễ kính mừng sự kiện Phật Thành Đạo trong bầu không khí vô cùng thiêng liêng và xúc động.',
+  },
+];
 
 const CeremonyInfoPage = () => {
+  // const { data: data_test, error } = useAxios({
+  //   url: API.LOGIN,
+  //   data: { username: 'test', password: '123' },
+  //   method: 'POST',
+  // });
+
+  const [initSlide, setInitSlide] = useState(0);
+
+  // Settings for the slider
+  const settings = {
+    dots: true,
+    arrows: false,
+    fade: true,
+    infinite: true,
+    autoplay: true,
+    speed: 500,
+    autoplaySpeed: 5000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: initSlide,
+  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slider, setSlider] = useState<Slider | null>(null);
   // buttons as the screen size changes
   const top = useBreakpointValue({ base: '90%', md: '50%' });
   const side = useBreakpointValue({ base: '30%', md: '10px' });
 
-  const [departmentSelected, setDepartmentSelected] = useState({
-    name: '',
-    image: '',
-    desc: <></>,
-  });
-  const handleViewDetail = (item: any) => {
-    setDepartmentSelected(item);
-    console.log('departmentSelected', departmentSelected);
-
-    console.log('item', item);
+  const handleViewDetail = (item: any, index: number) => {
+    setInitSlide(index);
     onOpen();
   };
 
@@ -121,7 +153,7 @@ const CeremonyInfoPage = () => {
           <Heading>{data.header}</Heading>
           <BlogAuthor name='Tổ truyền thông' date={new Date('2021-04-06T19:01:27Z')} />
           <Divider />
-          <Text color={'gray.500'} fontSize={'lg'}>
+          <Text color={'gray.500'} fontSize={'lg'} textAlign='justify'>
             {data.shortContent}
           </Text>
         </Stack>
@@ -139,7 +171,7 @@ const CeremonyInfoPage = () => {
           <VStack paddingTop='40px' spacing='2' alignItems='flex-start'>
             <Heading as='h2'>Chi tiết Đại Lễ</Heading>
             {data.content.map((item, index) => (
-              <Text key={index} as='p' fontSize='lg'>
+              <Text key={index} as='p' fontSize='lg' textAlign='justify'>
                 {item}
               </Text>
             ))}
@@ -149,6 +181,22 @@ const CeremonyInfoPage = () => {
       <Wrap spacing='10px' className='wrap-department'>
         {data.linkSubImg.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
       </Wrap>
+      <Heading as='h2' paddingTop='60px'>
+        Các Đại Lễ khác:
+      </Heading>
+      <Divider />
+      <HStack>
+        {listCeremony.map((item, index) => (
+          <Ceremonys
+            key={index}
+            name={item.name}
+            startDate={item.startDate}
+            endDate={item.endDate}
+            shortContent={item.shortContent}
+            linkImg={item.linkImg}
+          />
+        ))}
+      </HStack>
       <Modal isOpen={isOpen} size='6xl' onClose={onClose} isCentered scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
@@ -204,7 +252,7 @@ const CeremonyInfoPage = () => {
               </IconButton>
               <Slider
                 {...settings}
-                ref={(slider) => {
+                ref={(slider: Slider) => {
                   setSlider(slider);
                   console.log('slide', slider);
                 }}
@@ -241,7 +289,7 @@ const DepartmentItem = (index: number, item: any, handleViewDetail: any) => {
         <Image
           src={item}
           borderRadius={'lg'}
-          onClick={() => handleViewDetail(item)}
+          onClick={() => handleViewDetail(item, index)}
           _hover={{
             scale: '1.2',
           }}
