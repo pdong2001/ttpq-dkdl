@@ -1,6 +1,6 @@
 import { useAppDispatch } from '~/hooks/reduxHook';
 import { APIError } from '~/apis/common/type';
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import publicRequest from '~/apis/common/axios';
 import { getExceptionPayload } from '~/apis/common/utils';
@@ -9,6 +9,7 @@ import { setGlobalLoading } from '~/components/Loading/slice';
 const useAxios = <Data = any>(
   axiosParams: AxiosRequestConfig,
   dependencies: any[] = [],
+  useOriginAxios?: boolean,
   hideSpinner?: boolean,
 ) => {
   const [data, setData] = useState<Data>();
@@ -23,7 +24,8 @@ const useAxios = <Data = any>(
   const makeRequest = async (params: AxiosRequestConfig) => {
     try {
       !hideSpinner && dispatch(setGlobalLoading(true));
-      const res = await publicRequest.request({
+      const ourAxios = useOriginAxios ? axios : publicRequest;
+      const res = await ourAxios.request({
         ...params,
         signal: controllerRef.current.signal,
       });
