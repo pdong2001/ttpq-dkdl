@@ -89,7 +89,7 @@ const Step2 = (props: StepProps) => {
       // dateOfBirthMonth: '',
       // dateOfBirthYear: '',
       email: '',
-      permanentAddress: {},
+      permanentAddressCode: {},
       permanentAddressProvince: '',
       permanentAddressDistrict: '',
       permanentAddressVillage: '',
@@ -174,6 +174,7 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
+  console.log('formiks', formik.values);
 
   return (
     <Stack
