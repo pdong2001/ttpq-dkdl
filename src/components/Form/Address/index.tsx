@@ -38,30 +38,42 @@ function Address(props: AddressProps) {
   const { data: villages } = useAxios(
     {
       method: 'get',
-      url: `${API.GET_DISTRICT}/${districtId}`,
+      url: `${API.GET_VILLAGE}/${districtId}`,
     },
     [districtId],
   );
   //@ts-ignore
-  const [field, meta, { setValue }] = useField(name);
+  const [field, meta, { setValue: setAddressValue }] = useField(name);
   const [{ value: province }, { touched: pTouch }] = useField(provinceName);
-  const [{ value: district }, { touched: dTouch }, { setTouched: setDTouched }] =
-    useField(districtName);
-  const [{ value: village }, { touched: vTouch }, { setTouched: setVTouched }] = useField(
-    `${name}Village`,
-  );
+  const [
+    { value: district },
+    { touched: dTouch },
+    { setTouched: setDTouched, setValue: setDistrict },
+  ] = useField(districtName);
+  const [
+    { value: village },
+    { touched: vTouch },
+    { setTouched: setVTouched, setValue: setVillage },
+  ] = useField(villageName);
+
   const [address, setAddress] = useState({});
   useEffect(() => {
-    setValue(address);
+    setAddressValue(address);
   }, [address]);
+
   useEffect(() => {
     setAddress({ province });
     setDTouched(false);
+    setDistrict('');
+    setVillage('');
   }, [province]);
+
   useEffect(() => {
     setAddress((old) => ({ ...old, district, village: undefined }));
+    setVillage('');
     setVTouched(false);
   }, [district]);
+
   useEffect(() => {
     setAddress((old) => ({ ...old, village }));
   }, [village]);

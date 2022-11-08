@@ -13,6 +13,7 @@ import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { RegisterType } from '~/pages/MultiStepRegister/constants';
+// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // nơi sinh hoạt
 const youthAssociationList = [
@@ -71,21 +72,24 @@ const groupOfYouthAssociationList = [
 
 const Step2 = (props: StepProps) => {
   const dispatch = useAppDispatch();
-  const { hinhThucDangKy, soDienThoai, cccd } =
+  const { hoTen, hinhThucDangKy, soDienThoai, cccd } =
     useAppSelector((state) => state.register.data) || {};
   const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
 
   const formik = useFormik({
     initialValues: {
-      roleInGroup: '2',
-      citizenIdOfLeader: '',
-      buddhistName: '',
-      dateOfBirthDay: '',
-      dateOfBirthMonth: '',
-      dateOfBirthYear: '',
+      dangKyDaiLe: {
+        roleInGroup: 2,
+      },
+      // citizenIdOfLeader: '', //chưa có trong DTO
+      phapDanh: '',
+      ngaySinh: '',
+      ngaySinhDay: '',
+      ngaySinhMonth: '',
+      ngaySinhYear: '',
       email: '',
-      permanentAddress: {},
+      permanentAddressCode: {},
       permanentAddressProvince: '',
       permanentAddressDistrict: '',
       permanentAddressVillage: '',
@@ -97,7 +101,7 @@ const Step2 = (props: StepProps) => {
     },
     validationSchema: Yup.object({
       citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
-      dateOfBirth: Yup.object()
+      ngaySinh: Yup.object()
         .shape({
           day: Yup.string(),
           month: Yup.string(),
@@ -119,9 +123,9 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      dateOfBirthDay: Yup.string().required(),
-      dateOfBirthMonth: Yup.string().required(),
-      dateOfBirthYear: Yup.string().required(),
+      ngaySinhDay: Yup.string().required(),
+      ngaySinhMonth: Yup.string().required(),
+      ngaySinhYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
       permanentAddress: Yup.object()
         .shape({
@@ -170,6 +174,7 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
+  console.log('formiks', formik.errors);
 
   return (
     <Stack
@@ -189,7 +194,7 @@ const Step2 = (props: StepProps) => {
           Cập nhật thông tin
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          {`Xin chào bạn ${name}`}
+          Xin chào bạn <Text as='b'>{hoTen}</Text>
         </Text>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           {`SĐT: ${soDienThoai} - CCCD: ${cccd}`}
@@ -215,16 +220,16 @@ const Step2 = (props: StepProps) => {
                   />
                 </>
               )}
-              <FloatingLabel name='buddhistName' label='Pháp danh' color={formTextColor} />
+              <FloatingLabel name='phapDanh' label='Pháp danh' color={formTextColor} />
               <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
                 <Radio value='0'>Nam</Radio>
                 <Radio value='1'>Nữ</Radio>
               </Radios>
-              <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
+              <DateOfBirth name='ngaySinh' label='Ngày sinh' isRequired />
 
               {/*<FloatingLabel name='dob' label='Ngày sinh' color={formTextColor} isRequired />*/}
               <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
-              <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
+              <Address name='permanentAddressCode' label='Địa chỉ thường trú' isRequired />
               <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
               <Select
                 name='youthAssociation'
