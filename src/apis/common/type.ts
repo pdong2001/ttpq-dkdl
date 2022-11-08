@@ -14,9 +14,9 @@ export type APIError = {
 };
 
 export type ReduxState<Data = any> = {
-  status: APIStatus;
+  loaded?: boolean;
   error?: APIError;
-  data?: Data;
+  data: Data;
 };
 
 export type ResponseData<Data = any> = {

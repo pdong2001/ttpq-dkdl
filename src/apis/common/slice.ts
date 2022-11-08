@@ -1,7 +1,6 @@
 import { ActionReducerMapBuilder, createSlice, Draft } from '@reduxjs/toolkit';
 import {
   APIError,
-  APIStatus,
   AsyncAction,
   ErrorPayloadAction,
   ReduxState,
@@ -23,7 +22,7 @@ type AsyncReducers<Response extends ResponseData, Request = any> = {
   ) => APIError | undefined;
 };
 
-const createAppSlice = <State extends ReduxState, Response extends ResponseData>(
+const createAppSlice = <State extends ReduxState, Response extends ResponseData = ResponseData>(
   sliceName: string,
   initialState: ReduxState<State['data']>,
   reducers: ValidateSliceCaseReducers<
@@ -33,7 +32,7 @@ const createAppSlice = <State extends ReduxState, Response extends ResponseData>
   asyncReducers: AsyncReducers<Response>[],
 ) => {
   const _initialState: ReduxState<State['data']> = {
-    status: APIStatus.IDLE,
+    loaded: false,
     data: undefined,
     error: undefined,
   };
@@ -43,16 +42,16 @@ const createAppSlice = <State extends ReduxState, Response extends ResponseData>
     asyncReducers.reduce((build, { action, onFullfilled, onRejected }) => {
       return build
         .addCase(action.pending, (state) => {
-          state.status = APIStatus.PENDING;
+          state.loaded = false;
         })
         .addCase(action.fulfilled, (state, action) => {
-          state.status = APIStatus.FULLFILLED;
+          state.loaded = true;
           if (onFullfilled) {
             state.data = onFullfilled(state, action);
           }
         })
         .addCase(action.rejected, (state, action) => {
-          state.status = APIStatus.REJECTED;
+          state.loaded = true;
           if (onRejected) {
             state.error = onRejected(state, action);
           }
