@@ -1,3 +1,4 @@
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Modal,
   ModalOverlay,
@@ -13,15 +14,59 @@ import {
   Alert,
   AlertIcon,
   AlertDescription,
+  Avatar,
+  GridItem,
+  Heading,
+  IconButton,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tr,
+  Text,
+  HStack,
+  Tag,
+  Divider,
 } from '@chakra-ui/react';
+import _ from 'lodash';
+import { MdContentCopy, MdDepartureBoard, MdLocationCity } from 'react-icons/md';
 
 import QRCode from 'react-qr-code';
 
-export default function SuccessRegisterModal({
-  LinkQrCode = 'https://dangkydaile.vn/user/1',
-  isOpen = true,
-  linkDetail = 'https://dangkydaile.vn/user/1',
-}) {
+export default function SuccessRegisterModal() {
+
+  const mapTitles = {
+    hoTen: 'Họ Và Tên',
+    soDienThoai: 'Số điện thoại',
+    cccd: 'Căn cước công dân',
+    diaDiemXuatPhat: 'Địa điểm xuất phát',
+    thoiGianXuatPhat: 'Thời gian xuất phát',
+    thoiGianTroVe: 'Thời gian trở về',
+  }
+
+  const dataSuccess = {
+    infos: {
+      soDienThoai: '0994324224',
+      cccd: '001093442424',
+      diaDiemXuatPhat: 'Bến xe buýt Trường ĐH Nông Lâm TP. HCM',
+      thoiGianXuatPhat: '08:00 01-12-2022',
+      thoiGianTroVe: '15:00 05-12-2022',
+    },
+    group: {
+      cccdNhomTruong: '00109342343432',
+      tenNhomTruong: 'Lương Thai Tam',
+    },
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    hinhThucDangKy: '1',
+    LinkQrCode: 'https://dangkydaile.vn/user/1',
+    isOpen: true,
+    hoTen: 'Đăng Duy Thanh',
+  }
+
+  const { infos, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;
   const { onClose } = useDisclosure();
 
   const onImageDownload = () => {
@@ -55,39 +100,97 @@ export default function SuccessRegisterModal({
       eleAlert.style.display = 'none';
     }, 1000);
   };
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Đăng ký thành công</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Box p='6'>
-            <Box display='flex' alignItems='baseline'>
-              <QRCode
-                id='QRCode'
-                size={256}
-                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                value={LinkQrCode}
-                viewBox={`0 0 256 256`}
+          <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
+            <Box
+              textAlign={'center'}
+            >
+              <Avatar
+                size={'2xl'}
+                src={avatar}
+                mb={4}
+                pos={'relative'}
               />
-            </Box>
-            <Box display='flex' style={{ marginTop: 10 }} alignItems='baseline'>
-              <Input value={LinkQrCode} disabled variant='filled' placeholder='Filled' />
-              <Button colorScheme='grey' onClick={copyLinkQR} variant='outline'>
-                Copy
-              </Button>
-            </Box>
-            <Box id='box-alert' style={{ display: 'none' }}>
-              <Alert status='success'>
-                <AlertIcon />
+              <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
+                {hoTen}
+              </Heading>
+              <TableContainer >
+                <Table variant='simple' colorScheme={'gray'}>
+                  <Tbody>
+                    {_.map(infos, (info, key) => {
+                      return <Tr>
+                        <Td pr={0} pl={{ base: 5, sm: 7, md: 5 }}>
+                          <Text as='b'>{mapTitles[key]}</Text>
+                        </Td>
+                        <Td pl={0} pr={{ base: 5, sm: 7, md: 5 }}>
+                          {info}
+                        </Td>
+                      </Tr>
+                    })}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+              <Divider marginTop='5' />
+              <Stack spacing='30px' textAlign={'left'} p={5}>
                 <Box>
-                  <AlertDescription>Coppied</AlertDescription>
+                  <HStack>
+                    <MdLocationCity />
+                    <Text as='b'>Tên nhóm trưởng</Text>
+                  </HStack>
+                  <Tag colorScheme={'pink'}>{group.tenNhomTruong}</Tag>
                 </Box>
-              </Alert>
+                <Box>
+                  <HStack>
+                    <MdDepartureBoard />
+                    <Text as='b'>CCCD nhóm trưởng</Text>
+                  </HStack>
+                  <Box mt={1}>
+                    <Tag colorScheme={'blue'}>{group.cccdNhomTruong}</Tag>
+                  </Box>
+                </Box>
+              </Stack>
+              <Box >
+                <Box w='100%' p={3} textAlign={'center'}>
+                  <QRCode
+                    id='QRCode'
+                    size={256}
+                    style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                    value={LinkQrCode}
+                    viewBox={`0 0 256 256`}
+                  />
+                </Box>
+                <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
+                  <InputGroup size='md'>
+                    <Input
+                      colorScheme={'red'}
+                      isReadOnly={true}
+                      variant='filled'
+                      pr='2.5rem'
+                      type='text'
+                      value={LinkQrCode}
+                    />
+                    <InputRightElement width='2.5rem'>
+                      <IconButton onClick={copyLinkQR} size='sm' aria-label='Copy Link' icon={<MdContentCopy />} />
+                    </InputRightElement>
+                  </InputGroup>
+                </Stack>
+                <Box id='box-alert' style={{ display: 'none' }}>
+                  <Alert status='success'>
+                    <AlertIcon />
+                    <Box>
+                      <AlertDescription>Coppied</AlertDescription>
+                    </Box>
+                  </Alert>
+                </Box>
+              </Box>
             </Box>
-          </Box>
+          </GridItem>
         </ModalBody>
         <ModalFooter>
           <Button variant='ghost' onClick={onImageDownload} style={{ marginRight: 10 }}>
@@ -95,12 +198,12 @@ export default function SuccessRegisterModal({
           </Button>
           <Button
             colorScheme='yellow'
-            mr={3}
             onClick={() => {
-              window.location.href = linkDetail;
+              window.location.href = LinkQrCode;
             }}
           >
             Thông tin đăng ký
+            <ArrowForwardIcon pl={1} />
           </Button>
         </ModalFooter>
       </ModalContent>
