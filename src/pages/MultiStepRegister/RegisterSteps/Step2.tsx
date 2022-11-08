@@ -76,13 +76,13 @@ const Step2 = (props: StepProps) => {
     useAppSelector((state) => state.register.data) || {};
   const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-
+  const isRegisterFollowGroup = hinhThucDangKy === RegisterType.GROUP.toString();
   const formik = useFormik({
     initialValues: {
       dangKyDaiLe: {
         roleInGroup: 2,
       },
-      // citizenIdOfLeader: '', //chưa có trong DTO
+      citizenIdOfLeader: '', //chưa có trong DTO
       phapDanh: '',
       ngaySinh: '',
       ngaySinhDay: '',
@@ -100,7 +100,9 @@ const Step2 = (props: StepProps) => {
       groupOfYouthAssociation: '',
     },
     validationSchema: Yup.object({
-      citizenIdOfLeader: Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm'),
+      citizenIdOfLeader: isRegisterFollowGroup
+        ? Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm')
+        : Yup.string(),
       ngaySinh: Yup.object()
         .shape({
           day: Yup.string(),
@@ -127,7 +129,7 @@ const Step2 = (props: StepProps) => {
       ngaySinhMonth: Yup.string().required(),
       ngaySinhYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddress: Yup.object()
+      permanentAddressCode: Yup.object()
         .shape({
           province: Yup.number(),
           district: Yup.number(),
@@ -161,9 +163,9 @@ const Step2 = (props: StepProps) => {
             return true;
           },
         }),
-      permanentAddressProvince: Yup.string().required(),
-      permanentAddressDistrict: Yup.string().required(),
-      permanentAddressVillage: Yup.string().required(),
+      permanentAddressCodeProvince: Yup.string().required(),
+      permanentAddressCodeDistrict: Yup.string().required(),
+      permanentAddressCodeVillage: Yup.string().required(),
       temporaryAddressProvince: Yup.string().required(),
       temporaryAddressDistrict: Yup.string().required(),
       temporaryAddressVillage: Yup.string().required(),
@@ -204,7 +206,7 @@ const Step2 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              {hinhThucDangKy === RegisterType.GROUP.toString() && (
+              {isRegisterFollowGroup && (
                 <>
                   {' '}
                   <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
