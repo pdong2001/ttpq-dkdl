@@ -1,12 +1,15 @@
 import createAppSlice from '~/apis/common/slice';
-import { APIStatus, ReduxState, ResponseData } from '~/apis/common/type';
+import { ReduxState, ResponseData } from '~/apis/common/type';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
 import { register, searchMember } from '~/pages/MultiStepRegister/services/index';
 
 const initialState: ReduxState<MemberResponseDto> = {
-  status: APIStatus.IDLE,
-  data: undefined,
+  data: {
+    hoTen: '',
+    soDienThoai: '',
+    cccd: '',
+  } as MemberResponseDto,
 };
 
 const slide = createAppSlice<typeof initialState, ResponseData<MemberResponseDto>>(

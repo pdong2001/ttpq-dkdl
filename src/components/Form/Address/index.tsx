@@ -22,23 +22,31 @@ function Address(props: AddressProps) {
   const { formTextColor } = useCustomColorMode();
   const { name, label, direction, spacing, ...rest } = props;
   const { values } = useFormikContext<UpSertMemberDto>();
-
+  const provinceName = `${name}Province`;
+  const districtName = `${name}District`;
+  const villageName = `${name}Village`;
   const { data: provinces } = useAxios({ method: 'get', url: API.GET_PROVINCE });
-
-  const { data: districts } = useAxios({
-    method: 'get',
-    url: `${API.GET_DISTRICT}/${values[`${name}Province`]}`,
-  });
-  const { data: villages } = useAxios({
-    method: 'get',
-    url: `${API.GET_DISTRICT}/${values[`${name}District`]}`,
-  });
+  const provinceId = values[provinceName];
+  const districtId = values[districtName];
+  const { data: districts } = useAxios(
+    {
+      method: 'get',
+      url: `${API.GET_DISTRICT}/${provinceId}`,
+    },
+    [provinceId],
+  );
+  const { data: villages } = useAxios(
+    {
+      method: 'get',
+      url: `${API.GET_DISTRICT}/${districtId}`,
+    },
+    [districtId],
+  );
   //@ts-ignore
   const [field, meta, { setValue }] = useField(name);
-  const [{ value: province }, { touched: pTouch }] = useField(`${name}Province`);
-  const [{ value: district }, { touched: dTouch }, { setTouched: setDTouched }] = useField(
-    `${name}District`,
-  );
+  const [{ value: province }, { touched: pTouch }] = useField(provinceName);
+  const [{ value: district }, { touched: dTouch }, { setTouched: setDTouched }] =
+    useField(districtName);
   const [{ value: village }, { touched: vTouch }, { setTouched: setVTouched }] = useField(
     `${name}Village`,
   );
@@ -63,9 +71,9 @@ function Address(props: AddressProps) {
         {label}
       </FormLabel>
       <Stack direction={direction} spacing={spacing}>
-        <Select placeholder='Tỉnh' name={`${name}Province`} data={provinces} hiddenErrorMessage />
-        <Select placeholder='Huyện' name={`${name}District`} data={districts} hiddenErrorMessage />
-        <Select placeholder='Xã' name={`${name}Village`} data={villages} hiddenErrorMessage />
+        <Select placeholder='Tỉnh' name={provinceName} data={provinces} hiddenErrorMessage />
+        <Select placeholder='Huyện' name={districtName} data={districts} hiddenErrorMessage />
+        <Select placeholder='Xã' name={villageName} data={villages} hiddenErrorMessage />
       </Stack>
       <VisuallyHiddenInput {...field} />
       <FormErrorMessage>{meta?.error}</FormErrorMessage>

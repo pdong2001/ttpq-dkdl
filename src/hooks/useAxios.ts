@@ -1,6 +1,6 @@
 import { useAppDispatch } from '~/hooks/reduxHook';
-import { APIError } from './../apis/common/type';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { APIError } from '~/apis/common/type';
+import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import publicRequest from '~/apis/common/axios';
 import { getExceptionPayload } from '~/apis/common/utils';
@@ -8,12 +8,12 @@ import { setGlobalLoading } from '~/components/Loading/slice';
 
 const useAxios = <Data = any>(
   axiosParams: AxiosRequestConfig,
-  convertResponse?: (response: AxiosResponse['data']) => any,
+  dependencies: any[] = [],
   hideSpinner?: boolean,
 ) => {
   const [data, setData] = useState<Data>();
   const [error, setError] = useState<APIError>();
-  const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const controllerRef = useRef(new AbortController());
   const cancel = () => {
     controllerRef.current.abort();
@@ -27,21 +27,20 @@ const useAxios = <Data = any>(
         ...params,
         signal: controllerRef.current.signal,
       });
-      const convertedData = convertResponse ? convertResponse(res.data) : res.data;
-      setData(convertedData);
+      setData(res.data);
     } catch (err: unknown) {
       setError(getExceptionPayload(err));
     } finally {
-      setLoading(false);
+      setLoaded(true);
       !hideSpinner && dispatch(setGlobalLoading(false));
     }
   };
 
   useEffect(() => {
     makeRequest(axiosParams);
-  }, [axiosParams.url]);
+  }, [...dependencies]);
 
-  return { data, error, loading, cancel };
+  return { data, error, loaded, cancel };
 };
 
 export default useAxios;
