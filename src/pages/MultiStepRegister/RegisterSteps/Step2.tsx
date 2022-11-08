@@ -13,6 +13,7 @@ import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { RegisterType } from '~/pages/MultiStepRegister/constants';
+import { convertDateStringToObject } from '~/utils/date';
 // import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // nơi sinh hoạt
@@ -72,22 +73,35 @@ const groupOfYouthAssociationList = [
 
 const Step2 = (props: StepProps) => {
   const dispatch = useAppDispatch();
-  const { hoTen, hinhThucDangKy, soDienThoai, cccd } =
-    useAppSelector((state) => state.register.data) || {};
+  const {
+    hoTen,
+    hinhThucDangKy,
+    soDienThoai,
+    cccd,
+    phapDanh = '',
+    ngaySinh,
+  } = useAppSelector((state) => state.register.data) || {};
+  const {
+    day: ngaySinhDay = '',
+    month: ngaySinhMonth = '',
+    year: ngaySinhYear = '',
+  } = ngaySinh ? convertDateStringToObject(ngaySinh) || {} : {};
+
   const { nextStep, previousStep } = props;
   const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
   const isRegisterFollowGroup = hinhThucDangKy === RegisterType.GROUP.toString();
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       dangKyDaiLe: {
         roleInGroup: 2,
       },
       citizenIdOfLeader: '', //chưa có trong DTO
-      phapDanh: '',
+      phapDanh,
       ngaySinh: '',
-      ngaySinhDay: '',
-      ngaySinhMonth: '',
-      ngaySinhYear: '',
+      ngaySinhDay,
+      ngaySinhMonth,
+      ngaySinhYear,
       email: '',
       permanentAddressCode: {},
       permanentAddressProvince: '',
@@ -176,7 +190,6 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
-  console.log('formiks', formik.errors);
 
   return (
     <Stack
