@@ -85,9 +85,9 @@ const Step2 = (props: StepProps) => {
       // citizenIdOfLeader: '', //chưa có trong DTO
       phapDanh: '',
       ngaySinh: '',
-      // dateOfBirthDay: '',
-      // dateOfBirthMonth: '',
-      // dateOfBirthYear: '',
+      ngaySinhDay: '',
+      ngaySinhMonth: '',
+      ngaySinhYear: '',
       email: '',
       permanentAddressCode: {},
       permanentAddressProvince: '',
@@ -123,9 +123,9 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      dateOfBirthDay: Yup.string().required(),
-      dateOfBirthMonth: Yup.string().required(),
-      dateOfBirthYear: Yup.string().required(),
+      ngaySinhDay: Yup.string().required(),
+      ngaySinhMonth: Yup.string().required(),
+      ngaySinhYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
       permanentAddress: Yup.object()
         .shape({
@@ -174,7 +174,7 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
-  console.log('formiks', formik.values);
+  console.log('formiks', formik.errors);
 
   return (
     <Stack
