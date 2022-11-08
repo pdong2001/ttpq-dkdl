@@ -118,6 +118,7 @@ const CeremonyInfoPage = () => {
   const side = useBreakpointValue({ base: '30%', md: '10px' });
 
   const handleViewDetail = (item: any, index: number) => {
+    console.log(item);
     setInitSlide(index);
     onOpen();
   };
