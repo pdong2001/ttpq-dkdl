@@ -1,17 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
 import { LoginDTO } from '~/apis/auth/type';
-import { SliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
 import { createAsyncRequest } from '~/apis/common/action';
 import API from '~/apis/constants';
+import { ReduxState } from '~/apis/common/type';
+import createAppSlice from '../common/slice';
 
-type AuthState = {
+type AuthData = {
   isLoggedIn: boolean;
   loginData?: LoginDTO;
 };
 
+type AuthState = ReduxState<AuthData>;
 const initialState: AuthState = {
-  isLoggedIn: false,
-  loginData: undefined,
+  data: { isLoggedIn: false, loginData: undefined },
 };
 
 type LoginRequestDTO = {
@@ -24,21 +24,24 @@ export const login = createAsyncRequest<LoginRequestDTO>('auth/login', {
   url: API.LOGIN,
 });
 
-const authSlice = createSlice<AuthState, SliceCaseReducers<AuthState>, string>({
-  name: 'auth',
+const authSlice = createAppSlice<AuthState>(
+  'auth',
   initialState,
-  reducers: {
-    logout: (state: AuthState) => {
-      state.isLoggedIn = false;
-      state.loginData && (state.loginData.Token = '');
+  {
+    logout: (state) => {
+      state.data.isLoggedIn = false;
+      state.data.loginData && (state.data.loginData.Token = '');
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state) => {
-      state.isLoggedIn = true;
-    });
-  },
-});
+  [
+    {
+      action: login,
+      onFullfilled: (_, action) => {
+        return { ...action.payload.data };
+      },
+    },
+  ],
+);
 
 const authReducer = authSlice.reducer;
 export const { logout } = authSlice.actions;
