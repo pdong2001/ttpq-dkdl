@@ -25,7 +25,13 @@ function Address(props: AddressProps) {
   const provinceName = `${name}Province`;
   const districtName = `${name}District`;
   const villageName = `${name}Village`;
-  const { data: provinces } = useAxios({ method: 'get', url: API.GET_PROVINCE });
+  const { data: provinces } = useAxios(
+    {
+      method: 'get',
+      url: API.GET_PROVINCE,
+    },
+    [],
+  );
   const provinceId = values[provinceName];
   const districtId = values[districtName];
   const { data: districts } = useAxios(
@@ -77,15 +83,29 @@ function Address(props: AddressProps) {
   useEffect(() => {
     setAddress((old) => ({ ...old, village }));
   }, [village]);
+  console.log('address eror', !!meta.error && pTouch && dTouch && vTouch);
+
   return (
-    <FormControl as='fieldset' isInvalid={!!meta.error && pTouch && dTouch && vTouch} {...rest}>
-      <FormLabel as='legend' color={formTextColor}>
+    <FormControl isInvalid={!!meta.error && pTouch && dTouch && vTouch} {...rest}>
+      <FormLabel mb={0} color={formTextColor}>
         {label}
       </FormLabel>
       <Stack direction={direction} spacing={spacing}>
         <Select placeholder='Tỉnh' name={provinceName} data={provinces} hiddenErrorMessage />
-        <Select placeholder='Huyện' name={districtName} data={districts} hiddenErrorMessage />
-        <Select placeholder='Xã' name={villageName} data={villages} hiddenErrorMessage />
+        <Select
+          placeholder='Huyện'
+          name={districtName}
+          data={districts}
+          isDisabled={!province}
+          hiddenErrorMessage
+        />
+        <Select
+          placeholder='Xã'
+          name={villageName}
+          data={villages}
+          isDisabled={!district}
+          hiddenErrorMessage
+        />
       </Stack>
       <VisuallyHiddenInput {...field} />
       <FormErrorMessage>{meta?.error}</FormErrorMessage>

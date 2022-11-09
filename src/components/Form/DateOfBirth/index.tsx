@@ -47,11 +47,10 @@ function DateOfBirth(props: DateOfBirthProps) {
   }, [day, month, year, delimiter]);
   return (
     <FormControl
-      as='fieldset'
       isRequired={isRequired}
       isInvalid={!!meta.error && dayTouched && monthTouched && yearTouched}
     >
-      <FormLabel as='legend' color={formTextColor}>
+      <FormLabel mb={0} color={formTextColor}>
         {label}
       </FormLabel>
       <HStack align='flex-end'>
