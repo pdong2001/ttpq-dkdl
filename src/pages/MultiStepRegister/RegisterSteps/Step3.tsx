@@ -1,4 +1,4 @@
-import { Stack, Heading, Button, Box, Text, Radio } from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import Select from '~/components/Form/CustomSelect';
@@ -47,8 +47,8 @@ const provinceList = [
 ];
 
 const Step3 = (props: StepProps) => {
-  const { nextStep } = props;
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const { nextStep, previousStep } = props;
+  const { primaryColor, formTextColor } = useCustomColorMode();
   const [hinhThucDiChuyen, setHinhThucDiChuyen] = useState('0');
 
   const handleHinhThucDiChuyen = (e) => {
@@ -130,14 +130,7 @@ const Step3 = (props: StepProps) => {
   });
 
   return (
-    <Stack
-      bg={bgColor}
-      rounded={'xl'}
-      p={{ base: 4, sm: 6, md: 8 }}
-      spacing={{ base: 8 }}
-      maxW={{ lg: 'lg' }}
-      mx={{ base: 10, md: 20 }}
-    >
+    <>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -231,14 +224,14 @@ const Step3 = (props: StepProps) => {
                   />
                   <FloatingLabel
                     name='idThoiDiemVeChuaTuTuc'
-                    label='Chọn Ngày giờ đi'
+                    label='Chọn ngày giờ đi'
                     color={formTextColor}
                     type='datetime-local'
                     isRequired
                   />
                   <FloatingLabel
                     name='idThoiDiemRoiChuaTuTuc'
-                    label='Chọn Ngày giờ về'
+                    label='Chọn ngày giờ về'
                     color={formTextColor}
                     type='datetime-local'
                     isRequired
@@ -246,13 +239,18 @@ const Step3 = (props: StepProps) => {
                 </>
               )}
             </Stack>
-            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
-              Tiếp theo
-            </Button>
+            <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
+              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+                Trở về
+              </Button>
+              <Button flexGrow={1} type='submit' fontFamily={'heading'}>
+                Tiếp theo
+              </Button>
+            </SimpleGrid>
           </Form>
         </FormikProvider>
       </Box>
-    </Stack>
+    </>
   );
 };
 

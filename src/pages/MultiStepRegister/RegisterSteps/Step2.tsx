@@ -140,7 +140,7 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      // ngaySinhDay: Yup.string().required(),
+      ngaySinhDay: Yup.string().required(),
       ngaySinhMonth: Yup.string().required(),
       ngaySinhYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),

@@ -7,6 +7,8 @@ import {
   Textarea,
   FormControl,
   FormLabel,
+  SimpleGrid,
+  Radio,
 } from '@chakra-ui/react';
 import React from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
@@ -14,16 +16,11 @@ import { StepProps } from '..';
 import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
-import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
-
-// số lần công quả
-const numberOfServingList = [
-  { id: 0, name: 'Chưa có' },
-  { id: 1, name: '1 lần' },
-  { id: 2, name: '2 lần' },
-  { id: 3, name: '3 lần' },
-  { id: 4, name: 'Trên 3 lần' },
-];
+// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
+import UploadFile from '~/components/Form/UploadFile';
+import Radios from '~/components/Form/Radios';
+import useAxios from '~/hooks/useAxios';
+import API from '~/apis/constants';
 
 // danh sách ban
 const departmentList = [
@@ -34,7 +31,7 @@ const departmentList = [
 ];
 
 // kỹ năng
-const skillList = [
+const skillListTemp = [
   { id: 0, code: 'Chưa có', name: 'Chưa có' },
   { id: 1, code: 'Cắm hoa', name: 'Cắm hoa' },
   { id: 2, code: 'Cắt tỉa trang trí món', name: 'Cắt tỉa trang trí món' },
@@ -65,20 +62,31 @@ const receiveCardLocationList = [
 ];
 
 const Step4 = (props: StepProps) => {
-  const { nextStep } = props;
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const { nextStep, previousStep } = props;
+  const { primaryColor, formTextColor } = useCustomColorMode();
+  let { data: skillList } = useAxios(
+    {
+      method: 'get',
+      url: API.GET_SKILL,
+    },
+    [],
+  );
+  // fake data tạm, khi nào có api sẽ xóa
+  skillList = [...skillListTemp];
+
   const formik = useFormik({
     initialValues: {
-      soLanDaVeChua: undefined,
+      soLanDaVeChua: '0',
       kyNangSoTruong: '',
-      dangKyDaiLe: {
-        idBanKinhNghiem: 0,
-        idBanNguyenVong: 0,
-        idNoiNhanThe: 0,
-        ghiChu: '',
-      },
+      // dangKyDaiLe: {
+      idBanKinhNghiem: '',
+      idBanNguyenVong: '',
+      idNoiNhanThe: '',
+      ghiChu: '',
+      // },
       linkAnhDaiDien: '',
-    } as UpSertMemberDto,
+      // } as UpSertMemberDto,
+    },
     validationSchema: Yup.object({
       soLanDaVeChua: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
       kyNangSoTruong: Yup.string().required('Xin hãy chọn kỹ năng, sở trường'),
@@ -96,14 +104,7 @@ const Step4 = (props: StepProps) => {
   });
 
   return (
-    <Stack
-      bg={bgColor}
-      rounded={'xl'}
-      p={{ base: 4, sm: 6, md: 8 }}
-      spacing={{ base: 8 }}
-      maxW={{ lg: 'lg' }}
-      mx={{ base: 10, md: 20 }}
-    >
+    <>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -120,13 +121,11 @@ const Step4 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Select
-                name='soLanDaVeChua'
-                data={numberOfServingList}
-                label='Số lần về chùa công quả'
-                placeholder='Chọn số lần về chùa công quả'
-                isRequired
-              />
+              <Radios isRequired label='Số lần về chùa công quả' name='soLanDaVeChua'>
+                <Radio value='0'>Lần đầu tiên</Radio>
+                <Radio value='1'>Dưới 3 lần</Radio>
+                <Radio value='2'>Trên 3 lần</Radio>
+              </Radios>
               <Select
                 name='kyNangSoTruong'
                 data={skillList}
@@ -155,11 +154,11 @@ const Step4 = (props: StepProps) => {
                 placeholder='Chọn nơi nhận thẻ'
                 isRequired
               />
-              <FormControl name='linkAnhDaiDien' as='fieldset' border={1}>
+              <FormControl name='linkAnhDaiDien' as='fieldset' border={1} isRequired>
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
-                thẻ
+                <UploadFile />
               </FormControl>
               <FormControl name='ghiChu' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
@@ -168,13 +167,18 @@ const Step4 = (props: StepProps) => {
                 <Textarea placeholder='Huynh đệ có thắc mắc gì không ạ?' size='sm' />
               </FormControl>
             </Stack>
-            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
-              Tiếp theo
-            </Button>
+            <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
+              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+                Trở về
+              </Button>
+              <Button flexGrow={1} type='submit' fontFamily={'heading'}>
+                Tiếp theo
+              </Button>
+            </SimpleGrid>
           </Form>
         </FormikProvider>
       </Box>
-    </Stack>
+    </>
   );
 };
 
