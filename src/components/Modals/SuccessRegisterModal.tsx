@@ -42,7 +42,7 @@ export default function SuccessRegisterModal() {
     hoTen: 'Họ Và Tên',
     soDienThoai: 'Số điện thoại',
     cccd: 'Căn cước công dân',
-    diaDiemXuatPhat: 'Địa điểm xuất phát',
+    diaDiemXuatPhat: 'Địa Điểm xuất phát',
     thoiGianXuatPhat: 'Thời gian xuất phát',
     thoiGianTroVe: 'Thời gian trở về',
   }
@@ -107,7 +107,7 @@ export default function SuccessRegisterModal() {
         <ModalHeader>Đăng ký thành công</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
+          <GridItem colSpan={{ base: 2, md: 2, lg: 2 }}>
             <Box
               textAlign={'center'}
             >
@@ -125,10 +125,10 @@ export default function SuccessRegisterModal() {
                   <Tbody>
                     {_.map(infos, (info, key) => {
                       return <Tr>
-                        <Td pr={0} pl={{ base: 5, sm: 7, md: 5 }}>
+                        <Td pl={{ base: 2, sm: 2, md: 2 }}>
                           <Text as='b'>{mapTitles[key]}</Text>
                         </Td>
-                        <Td pl={0} pr={{ base: 5, sm: 7, md: 5 }}>
+                        <Td pr={{ base: 2, sm: 2, md: 2 }}>
                           {info}
                         </Td>
                       </Tr>
