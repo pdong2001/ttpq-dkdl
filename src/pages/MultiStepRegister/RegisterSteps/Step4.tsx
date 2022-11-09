@@ -18,30 +18,30 @@ import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // số lần công quả
 const numberOfServingList = [
-  { id: 0, ten: 'Chưa có' },
-  { id: 1, ten: '1 lần' },
-  { id: 2, ten: '2 lần' },
-  { id: 3, ten: '3 lần' },
-  { id: 4, ten: 'Trên 3 lần' },
+  { id: 0, name: 'Chưa có' },
+  { id: 1, name: '1 lần' },
+  { id: 2, name: '2 lần' },
+  { id: 3, name: '3 lần' },
+  { id: 4, name: 'Trên 3 lần' },
 ];
 
 // danh sách ban
 const departmentList = [
-  { id: 0, code: 'chuaco', ten: 'Chưa có' },
-  { id: 1, code: 'BV', ten: 'bảo vệ' },
-  { id: 2, code: 'HD1', ten: 'hanh duong 1' },
-  { id: 3, code: 'HD2', ten: 'hanh duong 2' },
+  { id: 0, code: 'chuaco', name: 'Chưa có' },
+  { id: 1, code: 'BV', name: 'bảo vệ' },
+  { id: 2, code: 'HD1', name: 'hanh duong 1' },
+  { id: 3, code: 'HD2', name: 'hanh duong 2' },
 ];
 
 // kỹ năng
 const skillList = [
-  { id: 0, code: 'Chưa có', ten: 'Chưa có' },
-  { id: 1, code: 'Cắm hoa', ten: 'Cắm hoa' },
-  { id: 2, code: 'Cắt tỉa trang trí món', ten: 'Cắt tỉa trang trí món' },
-  { id: 3, code: 'Chưng trái cây nghệ thuật', ten: 'Chưng trái cây nghệ thuật' },
-  { id: 4, code: 'Cơ khí', ten: 'Cơ khí' },
-  { id: 5, code: 'Cắt may cơ bản', ten: 'Cắt may cơ bản' },
-  { id: 6, code: 'Ngoại ngữ', ten: 'Ngoại ngữ' },
+  { id: 0, code: 'Chưa có', name: 'Chưa có' },
+  { id: 1, code: 'Cắm hoa', name: 'Cắm hoa' },
+  { id: 2, code: 'Cắt tỉa trang trí món', name: 'Cắt tỉa trang trí món' },
+  { id: 3, code: 'Chưng trái cây nghệ thuật', name: 'Chưng trái cây nghệ thuật' },
+  { id: 4, code: 'Cơ khí', name: 'Cơ khí' },
+  { id: 5, code: 'Cắt may cơ bản', name: 'Cắt may cơ bản' },
+  { id: 6, code: 'Ngoại ngữ', name: 'Ngoại ngữ' },
 ];
 
 // nơi nhận thẻ
@@ -49,19 +49,19 @@ const receiveCardLocationList = [
   {
     id: 1,
     code: 'HCMXL',
-    ten: '18h00 - 19h30, Thứ Tư (03/08/2022), Chùa Xá Lợi, 89 Bà Huyện Thanh Quan, P.7, Q.3',
+    name: '18h00 - 19h30, Thứ Tư (03/08/2022), Chùa Xá Lợi, 89 Bà Huyện Thanh Quan, P.7, Q.3',
   },
   {
     id: 2,
     code: 'HCMNL',
-    ten: '18h00 - 19h30, Thứ Năm (04/08/2021), Chùa Định Phước Di Đà, Gần khu chợ nhỏ ĐH. Nông Lâm, Q.Thủ Đức',
+    name: '18h00 - 19h30, Thứ Năm (04/08/2021), Chùa Định Phước Di Đà, Gần khu chợ nhỏ ĐH. Nông Lâm, Q.Thủ Đức',
   },
   {
     id: 3,
     code: 'HCMBDT',
-    ten: '9h00 – 19h00, Thứ Sáu, Thứ Bảy, Chủ Nhật, Thứ Hai (05/08 - 08/08/2022) tại 47/96 Bùi Đình Túy - Q.Bình Thạnh',
+    name: '9h00 – 19h00, Thứ Sáu, Thứ Bảy, Chủ Nhật, Thứ Hai (05/08 - 08/08/2022) tại 47/96 Bùi Đình Túy - Q.Bình Thạnh',
   },
-  { id: 999, code: 'BD', ten: 'Gửi bưu điện' },
+  { id: 999, code: 'BD', name: 'Gửi bưu điện' },
 ];
 
 const Step4 = (props: StepProps) => {

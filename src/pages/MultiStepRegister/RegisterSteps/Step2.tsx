@@ -20,7 +20,7 @@ import { convertDateStringToObject } from '~/utils/date';
 const youthAssociationList = [
   {
     id: 1,
-    ten: 'CTN Hà Nội',
+    name: 'CTN Hà Nội',
     ParentId: 0,
     Status: 1,
     Sort: 0,
@@ -32,7 +32,7 @@ const youthAssociationList = [
   },
   {
     id: 2,
-    ten: 'Tổ 1',
+    name: 'Tổ 1',
     ParentId: 1398,
     Status: 1,
     Sort: 0,
@@ -47,7 +47,7 @@ const youthAssociationList = [
 const groupOfYouthAssociationList = [
   {
     id: 1,
-    ten: 'CTN Hà Nội',
+    name: 'CTN Hà Nội',
     ParentId: 0,
     Status: 1,
     Sort: 0,
@@ -59,7 +59,7 @@ const groupOfYouthAssociationList = [
   },
   {
     id: 1403,
-    ten: 'Thứ 2 Chùa Đồng',
+    name: 'Thứ 2 Chùa Đồng',
     ParentId: 1,
     Status: 1,
     Sort: 20,
@@ -82,7 +82,7 @@ const Step2 = (props: StepProps) => {
     ngaySinh,
   } = useAppSelector((state) => state.register.data) || {};
   const {
-    day: ngaySinhDay = '',
+    // day: ngaySinhDay = '',
     month: ngaySinhMonth = '',
     year: ngaySinhYear = '',
   } = ngaySinh ? convertDateStringToObject(ngaySinh) || {} : {};
@@ -99,7 +99,7 @@ const Step2 = (props: StepProps) => {
       citizenIdOfLeader: '', //chưa có trong DTO
       phapDanh,
       ngaySinh: '',
-      ngaySinhDay,
+      ngaySinhDay: undefined,
       ngaySinhMonth,
       ngaySinhYear,
       email: '',
@@ -139,7 +139,7 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      ngaySinhDay: Yup.string().required(),
+      // ngaySinhDay: Yup.string().required(),
       ngaySinhMonth: Yup.string().required(),
       ngaySinhYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),

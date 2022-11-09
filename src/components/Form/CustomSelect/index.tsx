@@ -4,7 +4,7 @@ import useCustomColorMode from '~/hooks/useColorMode';
 
 export type SelectData = {
   id: number | string;
-  ten: string;
+  name: string;
 };
 
 type CustomSelectProps = {
@@ -29,7 +29,7 @@ const CustomSelect = (props: CustomSelectProps) => {
       <Select {...field} {...props} name={name} focusBorderColor={primaryColor}>
         {data?.map((item) => (
           <option key={item.id} value={item.id}>
-            {item.ten}
+            {item.name}
           </option>
         ))}
       </Select>
