@@ -10,7 +10,6 @@ import {
   SimpleGrid,
   Radio,
 } from '@chakra-ui/react';
-import React from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import * as Yup from 'yup';
@@ -22,14 +21,15 @@ import Radios from '~/components/Form/Radios';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import MultiSelect from '~/components/Form/MultiSelect';
+import { formatUrl } from '~/utils/functions';
 
 // danh sách ban
-const departmentList = [
-  { id: 0, code: 'chuaco', name: 'Chưa có' },
-  { id: 1, code: 'BV', name: 'bảo vệ' },
-  { id: 2, code: 'HD1', name: 'hanh duong 1' },
-  { id: 3, code: 'HD2', name: 'hanh duong 2' },
-];
+// const departmentList = [
+//   { id: 0, code: 'chuaco', name: 'Chưa có' },
+//   { id: 1, code: 'BV', name: 'bảo vệ' },
+//   { id: 2, code: 'HD1', name: 'hanh duong 1' },
+//   { id: 3, code: 'HD2', name: 'hanh duong 2' },
+// ];
 
 // kỹ năng
 const skillListTemp = [
@@ -43,28 +43,29 @@ const skillListTemp = [
 ];
 
 // nơi nhận thẻ
-const receiveCardLocationList = [
-  {
-    id: 1,
-    code: 'HCMXL',
-    name: '18h00 - 19h30, Thứ Tư (03/08/2022), Chùa Xá Lợi, 89 Bà Huyện Thanh Quan, P.7, Q.3',
-  },
-  {
-    id: 2,
-    code: 'HCMNL',
-    name: '18h00 - 19h30, Thứ Năm (04/08/2021), Chùa Định Phước Di Đà, Gần khu chợ nhỏ ĐH. Nông Lâm, Q.Thủ Đức',
-  },
-  {
-    id: 3,
-    code: 'HCMBDT',
-    name: '9h00 – 19h00, Thứ Sáu, Thứ Bảy, Chủ Nhật, Thứ Hai (05/08 - 08/08/2022) tại 47/96 Bùi Đình Túy - Q.Bình Thạnh',
-  },
-  { id: 999, code: 'BD', name: 'Gửi bưu điện' },
-];
+// const receiveCardLocationList = [
+//   {
+//     id: 1,
+//     code: 'HCMXL',
+//     name: '18h00 - 19h30, Thứ Tư (03/08/2022), Chùa Xá Lợi, 89 Bà Huyện Thanh Quan, P.7, Q.3',
+//   },
+//   {
+//     id: 2,
+//     code: 'HCMNL',
+//     name: '18h00 - 19h30, Thứ Năm (04/08/2021), Chùa Định Phước Di Đà, Gần khu chợ nhỏ ĐH. Nông Lâm, Q.Thủ Đức',
+//   },
+//   {
+//     id: 3,
+//     code: 'HCMBDT',
+//     name: '9h00 – 19h00, Thứ Sáu, Thứ Bảy, Chủ Nhật, Thứ Hai (05/08 - 08/08/2022) tại 47/96 Bùi Đình Túy - Q.Bình Thạnh',
+//   },
+//   { id: 999, code: 'BD', name: 'Gửi bưu điện' },
+// ];
 
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
+  // lấy kĩ năng sở trường
   let { data: skillList } = useAxios(
     {
       method: 'get',
@@ -74,6 +75,26 @@ const Step4 = (props: StepProps) => {
   );
   // fake data tạm, khi nào có api sẽ xóa
   skillList = [...skillListTemp];
+  console.log('ky nang so truong', skillList);
+
+  // lấy danh sách ban
+  let { data: departmentList } = useAxios(
+    {
+      method: 'post',
+      url: API.GET_DEPARTMENT_BY_EVENT,
+      transformResponse: ({ data }) => data,
+    },
+    [],
+  );
+  console.log('danh sach ban', departmentList);
+
+  // lấy nơi nhận thẻ
+  let { data: receiveCardLocationList } = useAxios({
+    method: 'get',
+    url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: 1 }),
+    transformResponse: ({ data }) => data,
+  });
+  console.log('noi nhan the', receiveCardLocationList);
 
   const formik = useFormik({
     initialValues: {
@@ -103,16 +124,16 @@ const Step4 = (props: StepProps) => {
         }),
       // không validate được 3 field trong dangKyDaiLe start
       idBanKinhNghiem: Yup.array()
-      .nullable()
-      .test({
-        name: 'skills',
-        test: (value, context) => {
-          if (!value?.length) {
-            return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
-          }
-          return true;
-        },
-      }),
+        .nullable()
+        .test({
+          name: 'skills',
+          test: (value, context) => {
+            if (!value?.length) {
+              return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
+            }
+            return true;
+          },
+        }),
       idBanNguyenVong: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
       idNoiNhanThe: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
       // không validate được 3 field trong dangKyDaiLe end

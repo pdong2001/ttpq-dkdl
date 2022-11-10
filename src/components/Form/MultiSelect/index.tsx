@@ -18,6 +18,7 @@ type Props = ({} & InputProps & FormControlProps & { options: Object[] }) & {
   tagColorScheme?: string;
   valueField?: string;
   labelField?: string;
+  closeMenuOnSelect?: boolean;
 };
 
 const MultiSelect = (props: Props) => {
@@ -27,17 +28,20 @@ const MultiSelect = (props: Props) => {
     options,
     label,
     isRequired,
+    closeMenuOnSelect,
     valueField = 'value',
     labelField = 'label',
   } = props;
   const { primaryColor } = useCustomColorMode();
-  const validOptions: MultiSelectOption[] = options.map((option) => ({
-    value: option[valueField],
-    label: option[labelField],
-  }));
+  const validOptions: MultiSelectOption[] =
+    options?.map((option) => ({
+      value: option[valueField],
+      label: option[labelField],
+    })) || [];
   //@ts-ignore
   const [field, { error, touched }, helpers] = useField(name);
   const isInvalid = !!error && touched;
+
   return (
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
@@ -47,6 +51,7 @@ const MultiSelect = (props: Props) => {
         colorScheme={tagColorScheme}
         options={validOptions}
         name={field.name}
+        closeMenuOnSelect={closeMenuOnSelect || true}
         onChange={(e) => {
           helpers.setValue(e.map((e) => e.value));
         }}
