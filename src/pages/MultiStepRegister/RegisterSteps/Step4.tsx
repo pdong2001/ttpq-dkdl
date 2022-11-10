@@ -21,6 +21,7 @@ import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
+import MultiSelect from '~/components/Form/MultiSelect';
 
 // danh sách ban
 // const departmentList = [
@@ -98,7 +99,7 @@ const Step4 = (props: StepProps) => {
   const formik = useFormik({
     initialValues: {
       soLanDaVeChua: '0',
-      kyNangSoTruong: '',
+      kyNangSoTruong: [],
       // dangKyDaiLe: {
       idBanKinhNghiem: '',
       idBanNguyenVong: '',
@@ -110,9 +111,29 @@ const Step4 = (props: StepProps) => {
     },
     validationSchema: Yup.object({
       soLanDaVeChua: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
-      kyNangSoTruong: Yup.string().required('Xin hãy chọn kỹ năng, sở trường'),
+      kyNangSoTruong: Yup.array()
+        .nullable()
+        .test({
+          name: 'skills',
+          test: (value, context) => {
+            if (!value?.length) {
+              return context.createError({ message: 'Xin hãy chọn kỹ năng, sở trường' });
+            }
+            return true;
+          },
+        }),
       // không validate được 3 field trong dangKyDaiLe start
-      idBanKinhNghiem: Yup.string().required('Xin hãy chọn ban có kinh nghiệm'),
+      idBanKinhNghiem: Yup.array()
+      .nullable()
+      .test({
+        name: 'skills',
+        test: (value, context) => {
+          if (!value?.length) {
+            return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
+          }
+          return true;
+        },
+      }),
       idBanNguyenVong: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
       idNoiNhanThe: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
       // không validate được 3 field trong dangKyDaiLe end
@@ -123,6 +144,8 @@ const Step4 = (props: StepProps) => {
       nextStep();
     },
   });
+
+  console.log('formiks', formik.values, formik.errors, formik.touched);
 
   return (
     <>
@@ -147,19 +170,19 @@ const Step4 = (props: StepProps) => {
                 <Radio value='1'>Dưới 3 lần</Radio>
                 <Radio value='2'>Trên 3 lần</Radio>
               </Radios>
-              <Select
+              <MultiSelect
                 name='kyNangSoTruong'
-                data={skillList}
+                options={skillList}
                 label='Kỹ năng, sở trường'
-                placeholder='Chọn kỹ năng, sở trường'
-                isRequired
+                valueField='id'
+                labelField='name'
               />
-              <Select
+              <MultiSelect
                 name='idBanKinhNghiem'
-                data={departmentList}
+                options={departmentList}
                 label='Kinh nghiệm ở ban'
-                placeholder='Chọn ban'
-                isRequired
+                valueField='id'
+                labelField='name'
               />
               <Select
                 name='idBanNguyenVong'
