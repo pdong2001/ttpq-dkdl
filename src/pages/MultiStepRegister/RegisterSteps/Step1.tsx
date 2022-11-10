@@ -16,7 +16,7 @@ const Step1 = (props: StepProps) => {
   const dispatch = useAppDispatch();
   // const { name, phone, citizenId, registerType } =
   //   useAppSelector((state) => state.register.data) || {};
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+  const { primaryColor, formTextColor } = useCustomColorMode();
   const {
     hoTen = '',
     soDienThoai = '',
@@ -48,14 +48,7 @@ const Step1 = (props: StepProps) => {
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
 
   return (
-    <Stack
-      bg={bgColor}
-      rounded={'xl'}
-      p={{ base: 4, sm: 6, md: 8 }}
-      spacing={{ base: 8 }}
-      maxW={{ lg: 'lg' }}
-      mx={{ base: 10, md: 20 }}
-    >
+    <>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -97,7 +90,7 @@ const Step1 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </Stack>
+    </>
   );
 };
 

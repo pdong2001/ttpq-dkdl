@@ -35,6 +35,16 @@ export default function Home() {
   if (reduxLoaded) {
     console.log('redux data', reduxData, 'redux error', reduxError);
   }
+
+  useAxios({
+    method: 'post',
+    url: `https://ctnpq.com/images/home/upload`,
+    data: {
+      fileImage: new File([""], "filename", { type: 'text/html' }),
+      folder: "avatar"
+    }
+  },
+  [], true)
   return (
     <Box position={'relative'} w='full'>
       <MultiStepRegister />

@@ -1,4 +1,4 @@
-import { Box, Container, SimpleGrid } from '@chakra-ui/react';
+import { Box, Container, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import CoverImage from '~/assets/festival_cover.jpg';
@@ -9,6 +9,7 @@ import Step4 from './RegisterSteps/Step4';
 import FinalStep from './RegisterSteps/FinalStep';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAppSelector } from '~/hooks/reduxHook';
+import useCustomColorMode from '~/hooks/useColorMode';
 
 // type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
@@ -22,7 +23,7 @@ const registerPath = '/register';
 
 const MultiStepRegister = () => {
   const { cccd, soDienThoai } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(3);
   const { pathname } = useLocation<Location>();
   const history = useHistory();
   const Step: Step = registerSteps[step];
@@ -46,12 +47,13 @@ const MultiStepRegister = () => {
       return currentStep - 1;
     });
   };
+  const { bgColor } = useCustomColorMode();
   return (
     <Box bgImage={CoverImage} bgSize={'cover'} backgroundAttachment='fixed'>
       <Container
         as={SimpleGrid}
         maxW={'full'}
-        columns={{ base: 1, lg: 2 }}
+        columns={{ base: 1, lg: step === 1 ? 1 : 2 }}
         gap={{ base: 1 }}
         spacing={{ base: 10, lg: 32 }}
         py={{ base: 32 }}
@@ -59,7 +61,16 @@ const MultiStepRegister = () => {
         alignItems={'center'}
       >
         <FadeInUp>
-          <Step nextStep={nextStep} previousStep={previousStep} />
+          <Stack
+            bg={bgColor}
+            rounded={'xl'}
+            p={{ base: 4, sm: 6, md: 8 }}
+            spacing={{ lg: 1 }}
+            // maxW={{ lg: 'lg' }}
+            mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
+          >
+            <Step nextStep={nextStep} previousStep={previousStep} />
+          </Stack>
         </FadeInUp>
       </Container>
     </Box>

@@ -22,13 +22,28 @@ const useAxios = <Data = any>(
   const dispatch = useAppDispatch();
 
   const makeRequest = async (params: AxiosRequestConfig) => {
+    const { transformResponse } = params;
     try {
       !hideSpinner && dispatch(setGlobalLoading(true));
       const ourAxios = useOriginAxios ? axios : publicRequest;
       const res = await ourAxios.request({
-        ...params,
         signal: controllerRef.current.signal,
+        ...params,
+        transformResponse: (res) => {
+          let response;
+          try {
+            response = JSON.parse(res);
+            if (transformResponse) {
+              //@ts-ignore
+              return transformResponse(response);
+            }
+          } catch (error) {
+            throw Error(`[requestClient] Error parsingJSON data - ${JSON.stringify(error)}`);
+          }
+          return response;
+        },
       });
+
       setData(res.data);
     } catch (err: unknown) {
       setError(getExceptionPayload(err));
