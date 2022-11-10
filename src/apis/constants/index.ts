@@ -6,8 +6,7 @@ const GET_DISTRICT = '/api/address/District';
 const GET_VILLAGE = '/api/address/Ward';
 const GET_SKILL = '/api/v1/Skill/getall';
 const GET_DEPARTMENT_BY_EVENT = 'api/v1/Department/get-all';
-const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = (eventId) =>
-  `/api/v1/ReceiveCardAddresses/Event/${eventId}`;
+const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = '/api/v1/ReceiveCardAddresses/Event/:id';
 const GET_CTN = '/api/ctn/list';
 
 const API = {

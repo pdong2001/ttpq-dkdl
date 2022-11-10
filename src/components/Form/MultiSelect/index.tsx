@@ -31,10 +31,11 @@ const MultiSelect = (props: Props) => {
     labelField = 'label',
   } = props;
   const { primaryColor } = useCustomColorMode();
-  const validOptions: MultiSelectOption[] = options.map((option) => ({
-    value: option[valueField],
-    label: option[labelField],
-  }));
+  const validOptions: MultiSelectOption[] =
+    options?.map((option) => ({
+      value: option[valueField],
+      label: option[labelField],
+    })) || [];
   //@ts-ignore
   const [field, { error, touched }, helpers] = useField(name);
   const isInvalid = !!error && touched;

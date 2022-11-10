@@ -10,7 +10,6 @@ import {
   SimpleGrid,
   Radio,
 } from '@chakra-ui/react';
-import React from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import * as Yup from 'yup';
@@ -22,6 +21,7 @@ import Radios from '~/components/Form/Radios';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import MultiSelect from '~/components/Form/MultiSelect';
+import { formatUrl } from '~/utils/functions';
 
 // danh sách ban
 // const departmentList = [
@@ -91,7 +91,7 @@ const Step4 = (props: StepProps) => {
   // lấy nơi nhận thẻ
   let { data: receiveCardLocationList } = useAxios({
     method: 'get',
-    url: API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT(1),
+    url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: 1 }),
     transformResponse: ({ data }) => data,
   });
   console.log('noi nhan the', receiveCardLocationList);
@@ -124,16 +124,16 @@ const Step4 = (props: StepProps) => {
         }),
       // không validate được 3 field trong dangKyDaiLe start
       idBanKinhNghiem: Yup.array()
-      .nullable()
-      .test({
-        name: 'skills',
-        test: (value, context) => {
-          if (!value?.length) {
-            return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
-          }
-          return true;
-        },
-      }),
+        .nullable()
+        .test({
+          name: 'skills',
+          test: (value, context) => {
+            if (!value?.length) {
+              return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
+            }
+            return true;
+          },
+        }),
       idBanNguyenVong: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
       idNoiNhanThe: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
       // không validate được 3 field trong dangKyDaiLe end

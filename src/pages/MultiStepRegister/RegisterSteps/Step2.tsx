@@ -1,6 +1,5 @@
 import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
-import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import * as Yup from 'yup';
@@ -11,7 +10,6 @@ import Validator from '~/utils/common/validator';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { RegisterType } from '~/pages/MultiStepRegister/constants';
 import { convertDateStringToObject } from '~/utils/date';
 import FormInput from '~/components/Form/FormInput';
 import CultivationPlace from '~/components/Form/CultivationPlace';
@@ -76,7 +74,6 @@ const Step2 = (props: StepProps) => {
   const dispatch = useAppDispatch();
   const {
     hoTen,
-    hinhThucDangKy,
     soDienThoai,
     cccd,
     phapDanh = '',
@@ -90,7 +87,6 @@ const Step2 = (props: StepProps) => {
 
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
-  const isRegisterFollowGroup = hinhThucDangKy === RegisterType.GROUP.toString();
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -115,9 +111,6 @@ const Step2 = (props: StepProps) => {
       youthAssociationGroup: '',
     },
     validationSchema: Yup.object({
-      citizenIdOfLeader: isRegisterFollowGroup
-        ? Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm')
-        : Yup.string(),
       ngaySinh: Yup.object()
         .shape({
           day: Yup.string(),
@@ -144,42 +137,16 @@ const Step2 = (props: StepProps) => {
       ngaySinhMonth: Yup.string().required(),
       ngaySinhYear: Yup.string().required(),
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddressCode: Yup.object()
-        .shape({
-          province: Yup.number(),
-          district: Yup.number(),
-          village: Yup.number(),
-        })
-        .test({
-          name: 'valiAddress1',
-          test: (value, context) => {
-            const { province, district, village } = value;
-            console.log('address', province, district, village);
-
-            if (!(province && district && village)) {
-              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
-            }
-            return true;
-          },
-        }),
-      temporaryAddress: Yup.object()
-        .shape({
-          province: Yup.number(),
-          district: Yup.number(),
-          village: Yup.number(),
-        })
-        .test({
-          name: 'valiAddress2',
-          test: (value, context) => {
-            const { province, district, village } = value;
-            console.log(province, district, village);
-
-            if (!(province && district && village)) {
-              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
-            }
-            return true;
-          },
-        }),
+      permanentAddressCode: Yup.object().shape({
+        provinceId: Yup.number(),
+        districtId: Yup.number(),
+        villageId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+      }),
+      temporaryAddress: Yup.object().shape({
+        provinceId: Yup.number(),
+        districtId: Yup.number(),
+        villageId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+      }),
       permanentAddressCodeProvince: Yup.string().required(),
       permanentAddressCodeDistrict: Yup.string().required(),
       permanentAddressCodeVillage: Yup.string().required(),
@@ -187,10 +154,9 @@ const Step2 = (props: StepProps) => {
       temporaryAddressDistrict: Yup.string().required(),
       temporaryAddressVillage: Yup.string().required(),
       youthAssociation: Yup.object().shape({
-        groupId: Yup.string(),
-        teamId: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
+        groupId: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
+        teamId: Yup.string(),
       }),
-      youthAssociationTeam: Yup.string().required(),
       youthAssociationGroup: Yup.string().required(),
     }),
     onSubmit: (values) => {
@@ -198,9 +164,6 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
-
-  console.log('formiks', formik.values, formik.errors);
-  console.log('CTN', formik.values.youthAssociation);
 
   return (
     <>
@@ -226,22 +189,7 @@ const Step2 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              {isRegisterFollowGroup && (
-                <>
-                  {' '}
-                  <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
-                    <Radio value='0'>Trưởng nhóm</Radio>
-                    <Radio value='1'>Phó nhóm</Radio>
-                    <Radio value='2'>Thành viên</Radio>
-                  </Radios>
-                  <FloatingLabel
-                    name='citizenIdOfLeader'
-                    label='Số CCCD / Hộ chiếu của trưởng nhóm'
-                    color={formTextColor}
-                    isRequired
-                  />
-                </>
-              )}
+              
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 2, lg: 8 }}>
                 <Stack spacing={3}>
                   <Radios spacing={8} label='Giới tính' name='gender' defaultValue='0' isRequired>
