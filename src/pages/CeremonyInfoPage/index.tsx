@@ -28,12 +28,15 @@ import React, { useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
 import Slider from 'react-slick';
-// import API from '~/apis/constants';
-// import useAxios from '~/hooks/useAxios';
+import API from '~/apis/constants';
+import useAxios from '~/hooks/useAxios';
 
 import Ceremonys from './Ceremonys';
 
-// type Props = {};
+type Props = {
+  id: number;
+};
+
 const data = {
   header:
     'Thiêng liêng, xúc động buổi lễ chính thức Đại lễ Phật Thành Đạo PL.2565 – DL.2022 tại Thiền Tôn Phật Quang',
@@ -88,12 +91,23 @@ const listCeremony = [
   },
 ];
 
-const CeremonyInfoPage = () => {
-  // const { data: data_test, error } = useAxios({
-  //   url: API.LOGIN,
-  //   data: { username: 'test', password: '123' },
-  //   method: 'POST',
-  // });
+const CeremonyInfoPage = ({ id }: Props) => {
+  // Get data event detail
+  const { data: dataDetailEvent, error } = useAxios({
+    url: `${API.GET_CEREMONY}/${id}`,
+    method: 'POST',
+  });
+
+  // Get data all event
+  const { data: dataAllEvent, error: errorGetAllEvent } = useAxios({
+    url: API.GET_EVENT_ALL,
+    method: 'POST',
+  });
+
+  console.log('request data item: ', dataDetailEvent);
+  console.log('request data all: ', dataAllEvent);
+  console.log('request error: ', error);
+  console.log('request error: ', errorGetAllEvent);
 
   const [initSlide, setInitSlide] = useState(0);
 
@@ -118,6 +132,7 @@ const CeremonyInfoPage = () => {
   const side = useBreakpointValue({ base: '30%', md: '10px' });
 
   const handleViewDetail = (item: any, index: number) => {
+    console.log(item);
     setInitSlide(index);
     onOpen();
   };
@@ -186,16 +201,18 @@ const CeremonyInfoPage = () => {
       </Heading>
       <Divider />
       <HStack>
-        {listCeremony.map((item, index) => (
-          <Ceremonys
-            key={index}
-            name={item.name}
-            startDate={item.startDate}
-            endDate={item.endDate}
-            shortContent={item.shortContent}
-            linkImg={item.linkImg}
-          />
-        ))}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+          {listCeremony.map((item, index) => (
+            <Ceremonys
+              key={index}
+              name={item.name}
+              startDate={item.startDate}
+              endDate={item.endDate}
+              shortContent={item.shortContent}
+              linkImg={item.linkImg}
+            />
+          ))}
+        </SimpleGrid>
       </HStack>
       <Modal isOpen={isOpen} size='6xl' onClose={onClose} isCentered scrollBehavior='inside'>
         <ModalOverlay />
