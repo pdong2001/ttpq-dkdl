@@ -51,7 +51,7 @@ const MultiSelect = (props: Props) => {
         colorScheme={tagColorScheme}
         options={validOptions}
         name={field.name}
-        closeMenuOnSelect={closeMenuOnSelect || false}
+        closeMenuOnSelect={closeMenuOnSelect || true}
         onChange={(e) => {
           helpers.setValue(e.map((e) => e.value));
         }}
