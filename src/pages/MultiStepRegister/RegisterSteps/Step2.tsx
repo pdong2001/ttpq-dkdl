@@ -71,47 +71,54 @@ import CultivationPlace from '~/components/Form/CultivationPlace';
 // ];
 
 const Step2 = (props: StepProps) => {
-  const dispatch = useAppDispatch();
-  const {
-    hoTen,
-    soDienThoai,
-    cccd,
-    phapDanh = '',
-    ngaySinh,
-  } = useAppSelector((state) => state.register.data) || {};
-  const {
-    // day: ngaySinhDay = '',
-    month: ngaySinhMonth = '',
-    year: ngaySinhYear = '',
-  } = ngaySinh ? convertDateStringToObject(ngaySinh) || {} : {};
-
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
+  const dispatch = useAppDispatch();
+
+  const {
+    fullName,
+    phoneNumber,
+    identityCard,
+    religiousName = '',
+    dateOfBirth,
+  } = useAppSelector((state) => state.register.data) || {};
+
+  const {
+    // day: dateOfBirthDay = '',
+    month: dateOfBirthMonth = '',
+    year: dateOfBirthYear = '',
+  } = dateOfBirth ? convertDateStringToObject(dateOfBirth) || {} : {};
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      dangKyDaiLe: {
-        roleInGroup: 2,
-      },
-      citizenIdOfLeader: '', //chưa có trong DTO
-      phapDanh,
-      ngaySinh: '',
-      ngaySinhDay: undefined,
-      ngaySinhMonth,
-      ngaySinhYear,
+      registerRole: '2',
+      identityCardOfLeader: '', //chưa có trong DTO
+      religiousName,
+
+      dateOfBirth,
+      dateOfBirthDay: undefined,
+      dateOfBirthMonth,
+      dateOfBirthYear,
+
       email: '',
-      permanentAddressCodeProvince: '',
-      permanentAddressCodeDistrict: '',
-      permanentAddressCodeVillage: '',
+
+      permanentAddress: '',
+      permanentAddressProvince: '',
+      permanentAddressDistrict: '',
+      permanentAddressWard: '',
+
+      temporaryAddress: '',
       temporaryAddressProvince: '',
       temporaryAddressDistrict: '',
-      temporaryAddressVillage: '',
-      youthAssociation: '',
-      groupOfYouthAssociation: '',
-      youthAssociationGroup: '',
+      temporaryAddressWard: '',
+
+      organzationStucture: '',
+      // groupOfYouthAssociation: '',
+      // youthAssociationGroup: '',
     },
     validationSchema: Yup.object({
-      ngaySinh: Yup.object()
+      dateOfBirth: Yup.object()
         .shape({
           day: Yup.string(),
           month: Yup.string(),
@@ -133,33 +140,39 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      ngaySinhDay: Yup.string().required(),
-      ngaySinhMonth: Yup.string().required(),
-      ngaySinhYear: Yup.string().required(),
+      dateOfBirthDay: Yup.string().required(),
+      dateOfBirthMonth: Yup.string().required(),
+      dateOfBirthYear: Yup.string().required(),
+
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddressCode: Yup.object().shape({
-        provinceId: Yup.number(),
-        districtId: Yup.number(),
-        villageId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+
+      permanentAddress: Yup.object().shape({
+        province: Yup.number(),
+        district: Yup.number(),
+        ward: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
       }),
+      permanentAddressProvince: Yup.string().required(),
+      permanentAddressDistrict: Yup.string().required(),
+      permanentAddressWard: Yup.string().required(),
+
       temporaryAddress: Yup.object().shape({
-        provinceId: Yup.number(),
-        districtId: Yup.number(),
-        villageId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+        province: Yup.number(),
+        district: Yup.number(),
+        ward: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
       }),
-      permanentAddressCodeProvince: Yup.string().required(),
-      permanentAddressCodeDistrict: Yup.string().required(),
-      permanentAddressCodeVillage: Yup.string().required(),
       temporaryAddressProvince: Yup.string().required(),
       temporaryAddressDistrict: Yup.string().required(),
-      temporaryAddressVillage: Yup.string().required(),
-      youthAssociation: Yup.object().shape({
+      temporaryAddressWard: Yup.string().required(),
+
+      organzationStuctureId: Yup.object().shape({
         groupId: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
         teamId: Yup.string(),
       }),
-      youthAssociationGroup: Yup.string().required(),
+      // youthAssociationGroup: Yup.string().required(),
     }),
     onSubmit: (values) => {
+      console.log('input step 2', values);
+
       dispatch(fillForm(values));
       nextStep();
     },
@@ -178,10 +191,10 @@ const Step2 = (props: StepProps) => {
         </Heading>
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            Xin chào bạn <Text as='b'>{hoTen}</Text>
+            Xin chào bạn <Text as='b'>{fullName}</Text>
           </Text>
           <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            {`SĐT: ${soDienThoai} - CCCD: ${cccd}`}
+            {`SĐT: ${phoneNumber} - CCCD: ${identityCard}`}
           </Text>
         </Stack>
       </Stack>
@@ -189,22 +202,24 @@ const Step2 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 2, lg: 8 }}>
                 <Stack spacing={3}>
                   <Radios spacing={8} label='Giới tính' name='gender' defaultValue='0' isRequired>
                     <Radio value='0'>Nam</Radio>
                     <Radio value='1'>Nữ</Radio>
                   </Radios>
-                  <FormInput name='phapDanh' label='Pháp danh' color={formTextColor} />
-                  <DateOfBirth name='ngaySinh' label='Ngày sinh' isRequired />
-
+                  <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
+                  <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
                   <FormInput name='email' label='Email' color={formTextColor} isRequired />
                 </Stack>
                 <Stack spacing={3}>
-                  <Address name='permanentAddressCode' label='Địa chỉ thường trú' isRequired />
+                  <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
                   <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
-                  <CultivationPlace name='youthAssociation' label='Địa điểm tu tập' isRequired />
+                  <CultivationPlace
+                    name='organzationStuctureId'
+                    label='Địa điểm tu tập'
+                    isRequired
+                  />
                 </Stack>
               </SimpleGrid>
             </Stack>

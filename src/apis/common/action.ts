@@ -3,48 +3,38 @@ import { APIError } from './type';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import publicRequest from './axios';
 import { getExceptionPayload } from './utils';
-import { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const hasParamsMethod = ['get', 'GET', 'put', 'PUT'];
 export const createAsyncRequest = <Request = any, Response = any>(
   type: string,
-  config: AxiosRequestConfig,
-  convertResponse?: (response: AxiosResponse) => Response,
+  initConfig: AxiosRequestConfig,
+  convertResponse?: (response: AxiosResponse<Response, Request>['data']) => Response,
 ) =>
-  createAsyncThunk<Response, Request, { rejectValue: APIError }>(type, async (data, ThunkAPI) => {
-    try {
-      ThunkAPI.dispatch(setGlobalLoading(true));
-      let response;
-      if (!data) {
-        response = await publicRequest.request({ ...config });
-        return convertResponse ? convertResponse(response) : response.data;
+  createAsyncThunk<Response, AxiosRequestConfig<Request>, { rejectValue: APIError }>(
+    type,
+    async (requestConfig, ThunkAPI) => {
+      try {
+        ThunkAPI.dispatch(setGlobalLoading(true));
+        const { transformResponse } = requestConfig;
+        const response = await publicRequest.request({
+          transformResponse: [
+            axios.defaults.transformResponse?.[0],
+            (res) => {
+              if (transformResponse) {
+                // @ts-ignore
+                return transformResponse(res);
+              }
+              return res;
+            },
+          ],
+          ...initConfig,
+          ...requestConfig,
+        });
+        return convertResponse ? convertResponse(response.data) : response.data;
+      } catch (ex) {
+        return ThunkAPI.rejectWithValue(getExceptionPayload(ex));
+      } finally {
+        ThunkAPI.dispatch(setGlobalLoading(false));
       }
-      const isParamsMethod = hasParamsMethod.includes(config.method?.toLocaleLowerCase() as string);
-      const paramsOrData = isParamsMethod ? { params: data } : { data };
-
-      response = await publicRequest.request({ ...config, ...paramsOrData });
-      return convertResponse ? convertResponse(response) : response.data;
-    } catch (ex) {
-      return ThunkAPI.rejectWithValue(getExceptionPayload(ex));
-    } finally {
-      ThunkAPI.dispatch(setGlobalLoading(false));
-    }
-  });
-
-export const makeHttp = (method: Method) =>
-  createAsyncThunk<
-    { name: string; data: AxiosResponse['data'] },
-    { name: string; config: AxiosRequestConfig },
-    { rejectValue: { name: string; error: APIError } }
-  >(`request/${method}`, async ({ name, config }, ThunkAPI) => {
-    try {
-      // const finalName = `${method}/${name}`;
-      const response = await publicRequest.request({ ...config, method });
-      return { name, data: response.data };
-    } catch (ex) {
-      return ThunkAPI.rejectWithValue({
-        error: getExceptionPayload(ex),
-        name,
-      });
-    }
-  });
+    },
+  );

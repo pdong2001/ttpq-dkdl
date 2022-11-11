@@ -49,45 +49,48 @@ const provinceList = [
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
-  const [hinhThucDiChuyen, setHinhThucDiChuyen] = useState('0');
+  const [moveType, setMoveType] = useState('0');
 
-  const handleHinhThucDiChuyen = (e) => {
-    setHinhThucDiChuyen(e.target.value);
+  const handleMoveType = (e) => {
+    setMoveType(e.target.value);
   };
 
   const formik = useFormik({
     initialValues: {
       enableReinitialize: true,
-      hinhThucDiChuyen: '0',
-      departLocationHCM: '',
-      idThoiDiemVeChuaHCM: '',
-      idThoiDiemRoiChuaHCM: '',
+      moveType: '0',
+      startPlaneCode: '',
+      startTimeId: '',
+      leaveTimeId: '',
+
       departLocationTinhKhac: '',
       idThoiDiemVeChuaTinhKhac: '',
       idThoiDiemRoiChuaTinhKhac: '',
+
       departLocationTuTuc: '',
       idThoiDiemVeChuaTuTuc: '',
       idThoiDiemRoiChuaTuTuc: '',
       // } as UpSertMemberDto,
     },
     validationSchema: Yup.object({
-      hinhThucDiChuyen: Yup.string().required(),
+      moveType: Yup.string().required(),
       // HCM
-      departLocationHCM: Yup.string().when('hinhThucDiChuyen', {
+      startPlaneCode: Yup.string().when('hinhThucDiChuyen', {
         is: '0',
         then: Yup.string().required('Nơi đi HCM'),
         otherwise: Yup.string().notRequired(),
       }),
-      idThoiDiemVeChuaHCM: Yup.string().when('hinhThucDiChuyen', {
+      startTimeId: Yup.string().when('hinhThucDiChuyen', {
         is: '0',
         then: Yup.string().required('TG đi HCM'),
         otherwise: Yup.string().notRequired(),
       }),
-      idThoiDiemRoiChuaHCM: Yup.string().when('hinhThucDiChuyen', {
+      leaveTimeId: Yup.string().when('hinhThucDiChuyen', {
         is: '0',
         then: Yup.string().required('TG về HCM'),
         otherwise: Yup.string().notRequired(),
       }),
+
       // Tỉnh khác
       departLocationTinhKhac: Yup.string().when('hinhThucDiChuyen', {
         is: '1',
@@ -104,6 +107,7 @@ const Step3 = (props: StepProps) => {
         then: Yup.string().required('TG về TinhKhac'),
         otherwise: Yup.string().notRequired(),
       }),
+
       // Tự túc
       departLocationTuTuc: Yup.string().when('hinhThucDiChuyen', {
         is: '2',
@@ -150,39 +154,39 @@ const Step3 = (props: StepProps) => {
               <Radios
                 isRequired
                 label='Hình thức di chuyển'
-                name='hinhThucDiChuyen'
-                onChange={handleHinhThucDiChuyen}
+                name='moveType'
+                onChange={handleMoveType}
               >
                 <Radio value='0'>Đi cùng CTN HCM</Radio>
                 <Radio value='1'>Đi từ tỉnh khác</Radio>
                 <Radio value='2'>Tự túc</Radio>
               </Radios>
-              {hinhThucDiChuyen == DepartureType.HCM.toString() ? (
+              {moveType == DepartureType.HCM.toString() ? (
                 // HCM
                 <>
                   <Select
-                    name='departLocationHCM'
+                    name='startPlaneCode'
                     data={departLocationList}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
                   />
                   <Select
-                    name='idThoiDiemVeChuaHCM'
+                    name='startTimeId'
                     data={timeToStartList}
                     label='Thời gian khởi hành'
                     placeholder='Thời gian khởi hành'
                     isRequired
                   />
                   <Select
-                    name='idThoiDiemRoiChuaHCM'
+                    name='leaveTimeId'
                     data={timeToReturnList}
                     label='Thời gian trở về'
                     placeholder='Thời gian trở về'
                     isRequired
                   />
                 </>
-              ) : hinhThucDiChuyen == DepartureType.TINH_KHAC.toString() ? (
+              ) : moveType == DepartureType.TINH_KHAC.toString() ? (
                 // tỉnh khác
                 <>
                   <Select
@@ -193,14 +197,14 @@ const Step3 = (props: StepProps) => {
                     isRequired
                   />
                   <FloatingLabel
-                    name='idThoiDiemVeChuaTinhKhac'
+                    name='otherStartTime'
                     label='Chọn ngày giờ đi'
                     color={formTextColor}
                     type='datetime-local'
                     isRequired
                   />
                   <FloatingLabel
-                    name='idThoiDiemRoiChuaTinhKhac'
+                    name='otherLeaveTime'
                     label='Chọn ngày giờ về'
                     color={formTextColor}
                     type='datetime-local'

@@ -25,7 +25,7 @@ export type RouteType = {
 const ROUTES: RouteType[] = [
   {
     key: 'HOME',
-    path: '/',
+    path: ['/','/:shortUri'],
     exact: true,
     component: Home,
     layout: MainLayout,
