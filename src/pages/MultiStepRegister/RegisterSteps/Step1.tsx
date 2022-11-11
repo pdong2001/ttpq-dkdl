@@ -8,40 +8,45 @@ import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
-import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
 import { searchMember } from '~/pages/MultiStepRegister/services';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
-  const dispatch = useAppDispatch();
-  // const { name, phone, citizenId, registerType } =
-  //   useAppSelector((state) => state.register.data) || {};
   const { primaryColor, formTextColor } = useCustomColorMode();
+  const dispatch = useAppDispatch();
+
   const {
-    hoTen = '',
-    soDienThoai = '',
-    cccd = '',
-    hinhThucDangKy = '0',
+    fullName = '',
+    phoneNumber = '',
+    identityCard = '',
+    registerType = '0',
   } = useAppSelector((state) => state.register.data) || {};
+
   const formik = useFormik({
     initialValues: {
-      hoTen,
-      soDienThoai,
-      cccd,
-      hinhThucDangKy,
-    } as MemberResponseDto,
+      fullName,
+      phoneNumber,
+      identityCard,
+      registerType,
+    },
     validationSchema: Yup.object({
-      hoTen: Yup.string().required('Xin hãy nhập họ và tên'),
-      soDienThoai: Yup.string()
+      fullName: Yup.string().required('Xin hãy nhập họ và tên'),
+      phoneNumber: Yup.string()
         .required('Xin hãy nhập số điện thoại')
         .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
-      cccd: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
+      identityCard: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
     }),
     onSubmit: (values) => {
+      console.log('input step 1', values);
+
       dispatch(fillForm(values));
       dispatch(
-        searchMember({ hoTen: values.hoTen, soDienThoai: values.soDienThoai, cccd: values.cccd }),
-      ); /**/
+        searchMember({
+          fullName: values.fullName,
+          phoneNumber: values.phoneNumber,
+          identityCard: values.identityCard,
+        }),
+      );
       nextStep();
     },
   });
@@ -65,20 +70,20 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <FloatingLabel name='hoTen' label='Họ và tên' color={formTextColor} isRequired />
+              <FloatingLabel name='fullName' label='Họ và tên' color={formTextColor} isRequired />
               <FloatingLabel
-                name='soDienThoai'
+                name='phoneNumber'
                 label='Số điện thoại'
                 color={formTextColor}
                 isRequired
               />
               <FloatingLabel
-                name='cccd'
+                name='identityCard'
                 label='Số CCCD / Hộ chiếu'
                 color={formTextColor}
                 isRequired
               />
-              <Radios isRequired label='Hình thức đăng ký' name='hinhThucDangKy'>
+              <Radios isRequired label='Hình thức đăng ký' name='registerType'>
                 <Radio value='0'>Cá nhân</Radio>
                 <Radio value='1'>Nhóm</Radio>
               </Radios>

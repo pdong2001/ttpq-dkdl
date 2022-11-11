@@ -22,14 +22,14 @@ const registerSteps = [Step1, Step2, Step3, Step4, FinalStep];
 const registerPath = '/register';
 
 const MultiStepRegister = () => {
-  const { cccd, soDienThoai } = useAppSelector((state) => state.register.data);
+  const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(3);
   const { pathname } = useLocation<Location>();
   const history = useHistory();
   const Step: Step = registerSteps[step];
 
   useEffect(() => {
-    if (pathname === registerPath && step === 0 && cccd && soDienThoai) {
+    if (pathname === registerPath && step === 0 && identityCard && phoneNumber) {
       setStep(1);
     }
   }, []);

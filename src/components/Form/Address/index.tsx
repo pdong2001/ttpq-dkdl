@@ -22,7 +22,7 @@ function Address(props: AddressProps) {
   const { name, label, direction, spacing, ...rest } = props;
   const provinceName = `${name}Province`;
   const districtName = `${name}District`;
-  const villageName = `${name}Village`;
+  const wardName = `${name}Ward`;
 
   //@ts-ignore
   const [field, { error }, { setValue: setAddressValue }] = useField(name);
@@ -32,11 +32,8 @@ function Address(props: AddressProps) {
     { touched: dTouch },
     { setTouched: setDTouched, setValue: setDistrict },
   ] = useField(districtName);
-  const [
-    { value: villageId },
-    { touched: vTouch },
-    { setTouched: setVTouched, setValue: setVillage },
-  ] = useField(villageName);
+  const [{ value: wardId }, { touched: vTouch }, { setTouched: setVTouched, setValue: setWard }] =
+    useField(wardName);
 
   const { data: provinces } = useAxios(
     {
@@ -58,10 +55,10 @@ function Address(props: AddressProps) {
     },
     [provinceId],
   );
-  const { data: villages } = useAxios(
+  const { data: wards } = useAxios(
     {
       method: 'get',
-      url: API.GET_VILLAGE,
+      url: API.GET_WARD,
       params: {
         Status: 1,
         DistrictId: districtId,
@@ -80,18 +77,18 @@ function Address(props: AddressProps) {
     setAddress({ provinceId });
     setDTouched(false);
     setDistrict('');
-    setVillage('');
+    setWard('');
   }, [provinceId]);
 
   useEffect(() => {
-    setAddress((old) => ({ ...old, districtId, villageId: '' }));
-    setVillage('');
+    setAddress((old) => ({ ...old, districtId, wardId: '' }));
+    setWard('');
     setVTouched(false);
   }, [districtId]);
 
   useEffect(() => {
-    setAddress((old) => ({ ...old, villageId }));
-  }, [villageId]);
+    setAddress((old) => ({ ...old, wardId }));
+  }, [wardId]);
 
   const errorMessage = error && Object.values(error)[0];
 
@@ -122,8 +119,8 @@ function Address(props: AddressProps) {
           valueField='Id'
           labelField='Name'
           placeholder='Xã'
-          name={villageName}
-          data={villages}
+          name={wardName}
+          data={wards}
           isDisabled={!districtId}
           hiddenErrorMessage
         />

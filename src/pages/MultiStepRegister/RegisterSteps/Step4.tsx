@@ -32,7 +32,7 @@ import { formatUrl } from '~/utils/functions';
 // ];
 
 // kỹ năng
-const skillListTemp = [
+const strongPointListTemp = [
   { id: 0, code: 'Chưa có', name: 'Chưa có' },
   { id: 1, code: 'Cắm hoa', name: 'Cắm hoa' },
   { id: 2, code: 'Cắt tỉa trang trí món', name: 'Cắt tỉa trang trí món' },
@@ -66,16 +66,16 @@ const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
   // lấy kĩ năng sở trường
-  let { data: skillList } = useAxios(
+  let { data: strongPointList } = useAxios(
     {
       method: 'get',
-      url: API.GET_SKILL,
+      url: API.GET_STRONG_POINT,
     },
     [],
   );
   // fake data tạm, khi nào có api sẽ xóa
-  skillList = [...skillListTemp];
-  console.log('ky nang so truong', skillList);
+  strongPointList = [...strongPointListTemp];
+  console.log('ky nang so truong', strongPointList);
 
   // lấy danh sách ban
   let { data: departmentList } = useAxios(
@@ -98,23 +98,20 @@ const Step4 = (props: StepProps) => {
 
   const formik = useFormik({
     initialValues: {
-      soLanDaVeChua: '0',
-      kyNangSoTruong: [],
-      // dangKyDaiLe: {
-      idBanKinhNghiem: '',
-      idBanNguyenVong: '',
-      idNoiNhanThe: '',
-      ghiChu: '',
-      // },
-      linkAnhDaiDien: '',
-      // } as UpSertMemberDto,
+      exps: '0',
+      strongPointIds: [],
+      expDepartmentIds: [],
+      wishDepartmentIds: '',
+      receiveCardAddressId: '',
+      avatarPath: '',
+      note: '',
     },
     validationSchema: Yup.object({
-      soLanDaVeChua: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
-      kyNangSoTruong: Yup.array()
+      // exps: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
+      strongPointIds: Yup.array()
         .nullable()
         .test({
-          name: 'skills',
+          name: 'strongPoint',
           test: (value, context) => {
             if (!value?.length) {
               return context.createError({ message: 'Xin hãy chọn kỹ năng, sở trường' });
@@ -122,11 +119,10 @@ const Step4 = (props: StepProps) => {
             return true;
           },
         }),
-      // không validate được 3 field trong dangKyDaiLe start
-      idBanKinhNghiem: Yup.array()
+      expDepartmentIds: Yup.array()
         .nullable()
         .test({
-          name: 'skills',
+          name: 'expDepartment',
           test: (value, context) => {
             if (!value?.length) {
               return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
@@ -134,10 +130,9 @@ const Step4 = (props: StepProps) => {
             return true;
           },
         }),
-      idBanNguyenVong: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
-      idNoiNhanThe: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
-      // không validate được 3 field trong dangKyDaiLe end
-      linkAnhDaiDien: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
+      wishDepartmentIds: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
+      receiveCardAddressId: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
+      avatarPath: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
     }),
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -165,46 +160,46 @@ const Step4 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios isRequired label='Số lần về chùa công quả' name='soLanDaVeChua'>
+              <Radios name='exps' label='Số lần về chùa công quả' isRequired>
                 <Radio value='0'>Lần đầu tiên</Radio>
                 <Radio value='1'>Dưới 3 lần</Radio>
                 <Radio value='2'>Trên 3 lần</Radio>
               </Radios>
               <MultiSelect
-                name='kyNangSoTruong'
-                options={skillList}
+                name='strongPointIds'
+                options={strongPointList}
                 label='Kỹ năng, sở trường'
                 valueField='id'
                 labelField='name'
               />
               <MultiSelect
-                name='idBanKinhNghiem'
+                name='expDepartmentIds'
                 options={departmentList}
                 label='Kinh nghiệm ở ban'
                 valueField='id'
                 labelField='name'
               />
               <Select
-                name='idBanNguyenVong'
+                name='wishDepartmentIds'
                 data={departmentList}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'
                 isRequired
               />
               <Select
-                name='idNoiNhanThe'
+                name='receiveCardAddressId'
                 data={receiveCardLocationList}
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
                 isRequired
               />
-              <FormControl name='linkAnhDaiDien' as='fieldset' border={1} isRequired>
+              <FormControl name='avatarPath' as='fieldset' border={1} isRequired>
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
                 <UploadFile />
               </FormControl>
-              <FormControl name='ghiChu' as='fieldset' border={1}>
+              <FormControl name='note' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
                   Ghi chú
                 </FormLabel>

@@ -1,25 +1,29 @@
 import createAppSlice from '~/apis/common/slice';
-import { ReduxState, ResponseData } from '~/apis/common/type';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
+// import { ReduxState, ResponseData } from '~/apis/common/type';
+// import { PayloadAction } from '@reduxjs/toolkit';
+// import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
 import { register, searchMember } from '~/pages/MultiStepRegister/services/index';
 
-const initialState: ReduxState<MemberResponseDto> = {
+// const initialState: ReduxState<MemberResponseDto> = {
+const initialState = {
   data: {
     hoTen: '',
     soDienThoai: '',
     cccd: '',
-  } as MemberResponseDto,
+    // } as MemberResponseDto,
+  },
 };
 
-const slide = createAppSlice<typeof initialState, ResponseData<MemberResponseDto>>(
+// const slide = createAppSlice<typeof initialState, ResponseData<MemberResponseDto>>(
+const slide = createAppSlice(
   'register',
   initialState,
   {
     /* non-async action */
     /* ở đây vừa tạo ra reducer vừa tạo ra action với type là sliceName/fillForm */
     /* khi dùng action fillForm thì mình sẽ dispatch(fillForm(payload))*/
-    fillForm: (state, action: PayloadAction<MemberResponseDto>) => {
+    // fillForm: (state, action: PayloadAction<MemberResponseDto>) => {
+    fillForm: (state, action) => {
       state.data = { ...state.data, ...action.payload };
     },
   },
