@@ -24,13 +24,6 @@ export type RouteType = {
 
 const ROUTES: RouteType[] = [
   {
-    key: 'HOME',
-    path: ['/','/:shortUri'],
-    exact: true,
-    component: Home,
-    layout: MainLayout,
-  },
-  {
     key: 'MULTI_STEP_REGISTER',
     path: '/register',
     component: MultiStepRegister,
@@ -72,6 +65,13 @@ const ROUTES: RouteType[] = [
     path: '/register-success',
     component: FinalStep,
     layout: BlankLayout,
+  },
+  {
+    key: 'HOME',
+    path: ['/','/:shortUri'],
+    exact: true,
+    component: Home,
+    layout: MainLayout,
   },
   {
     key: 'NOT_FOUND',
