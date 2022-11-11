@@ -1,8 +1,6 @@
 const REGISTER = '/api/v1/member/add';
 const LOGIN = 'api/v1/Auth/login';
 const SEARCH_MEMBER = '/api/v1/member/search';
-const GET_CEREMONY = '/api/v1/Event/get-by-id';
-const GET_EVENT_ALL = '/api/v1/Event/get-all';
 const GET_PROVINCE = '/api/address/Province';
 const GET_DISTRICT = '/api/address/District';
 const GET_WARD = '/api/address/Ward';
@@ -19,8 +17,6 @@ const API = {
   SEARCH_MEMBER,
   GET_PROVINCE,
   GET_DISTRICT,
-  GET_CEREMONY,
-  GET_EVENT_ALL,
   GET_WARD,
   GET_STRONG_POINT,
   GET_DEPARTMENT_BY_EVENT,
