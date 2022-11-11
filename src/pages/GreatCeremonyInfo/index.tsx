@@ -9,15 +9,40 @@ import {
   VStack,
 } from '@chakra-ui/layout';
 import { Button, Text, Image } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import AboutImage from '~/assets/about.jpg';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 // type Props = {};
+const startTime = 'December 19, 2022 00:00:00';
+const times = [{ id: 'days', title: 'Ngày' }, { id: 'hours', title: 'Giờ' }, { id: 'minutes', title: 'Phút' }, { id: 'seconds', title: 'Giây' }];
+
+const coundown = () => {
+  const targetDate: any = new Date(startTime);
+  setInterval(() => {
+    const today = new Date().getTime();
+    const diff = targetDate - today;
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const timeParse = [days, hours, minutes, seconds];
+    for (let i = 0; i < times.length; i++) {
+      const timesRuner = times[i];
+      const element: any = document.getElementById(`countdown-${timesRuner.id}`);
+      element.innerHTML = JSON.stringify(timeParse[i]);
+    }
+  }, 1000);
+}
 
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
+
+  useEffect(() => {
+    coundown();
+  });
+
   return (
     <Box bgColor={'darkBlue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}>
       <FadeInUp>
@@ -97,14 +122,13 @@ const GreatCeremonyInfo = () => {
           </VStack>
           <HStack spacing={5} justifyContent='center'>
             {new Array(4).fill('00').map((time, i) => {
-              const times = ['Ngày', 'Giờ', 'Phút', 'Giây'];
               return (
                 <Square key={i} border='1px' size={['14', '10', '32']} p={6}>
                   <VStack spacing={[1, 2, 3, 4]}>
-                    <Text fontWeight={'bold'} fontSize={['xl', '2xl', '3xl', '4xl']}>
+                    <Text id={`countdown-${times[i].id}`} fontWeight={'bold'} fontSize={['xl', '2xl', '3xl', '4xl']}>
                       {time}
                     </Text>
-                    <Text>{times[i]}</Text>
+                    <Text>{times[i].title}</Text>
                   </VStack>
                 </Square>
               );
