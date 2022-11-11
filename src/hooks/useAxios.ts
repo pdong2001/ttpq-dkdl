@@ -20,15 +20,30 @@ const useAxios = <Data = any>(
     controllerRef.current.abort();
   };
   const dispatch = useAppDispatch();
+  let cancelToken;
 
-  const makeRequest = async (params: AxiosRequestConfig) => {
+  const makeRequest = async (axiosParams: AxiosRequestConfig) => {
+    const { transformResponse } = axiosParams;
+
     try {
       !hideSpinner && dispatch(setGlobalLoading(true));
       const ourAxios = useOriginAxios ? axios : publicRequest;
       const res = await ourAxios.request({
-        ...params,
         signal: controllerRef.current.signal,
+        ...axiosParams,
+        cancelToken: new axios.CancelToken((c) => (cancelToken = c)),
+        transformResponse: [
+          axios.defaults.transformResponse?.[0],
+          (res) => {
+            if (transformResponse) {
+              // @ts-ignore
+              return transformResponse(res);
+            }
+            return res;
+          },
+        ],
       });
+
       setData(res.data);
     } catch (err: unknown) {
       setError(getExceptionPayload(err));
@@ -36,10 +51,13 @@ const useAxios = <Data = any>(
       setLoaded(true);
       !hideSpinner && dispatch(setGlobalLoading(false));
     }
+
+    return cancel;
   };
 
   useEffect(() => {
     makeRequest(axiosParams);
+    return () => cancelToken();
   }, [...dependencies]);
 
   return { data, error, loaded, cancel };

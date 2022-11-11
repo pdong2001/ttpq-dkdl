@@ -4,17 +4,18 @@ import useCustomColorMode from '~/hooks/useColorMode';
 
 export type SelectData = {
   id: number | string;
-  ten: string;
 };
 
 type CustomSelectProps = {
   data: SelectData[];
   label?: string;
   hiddenErrorMessage?: boolean;
+  valueField: string;
+  labelField: string;
 } & SelectProps;
 
 const CustomSelect = (props: CustomSelectProps) => {
-  const { data, label, name, isRequired, hiddenErrorMessage } = props;
+  const { data, label, name, isRequired, hiddenErrorMessage, valueField, labelField } = props;
   const { formTextColor } = useCustomColorMode();
 
   // @ts-ignore
@@ -22,14 +23,12 @@ const CustomSelect = (props: CustomSelectProps) => {
   const { primaryColor } = useCustomColorMode();
 
   return (
-    <FormControl as='fieldset' isRequired={isRequired} isInvalid={!!meta.error && meta.touched}>
-      <FormLabel as='legend' color={formTextColor}>
-        {label}
-      </FormLabel>
+    <FormControl isRequired={isRequired} isInvalid={!!meta.error && meta.touched}>
+      <FormLabel color={formTextColor}>{label}</FormLabel>
       <Select {...field} {...props} name={name} focusBorderColor={primaryColor}>
         {data?.map((item) => (
-          <option key={item.id} value={item.id}>
-            {item.ten}
+          <option key={item.id} value={item[valueField]}>
+            {item[labelField]}
           </option>
         ))}
       </Select>
@@ -37,5 +36,10 @@ const CustomSelect = (props: CustomSelectProps) => {
     </FormControl>
   );
 };
+
+CustomSelect.defaultProps = {
+  labelField: 'name',
+  valueField: 'id',
+} as CustomSelectProps;
 
 export default CustomSelect;

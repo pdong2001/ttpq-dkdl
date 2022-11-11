@@ -16,18 +16,18 @@ import { useField } from 'formik';
 import { useEffect } from 'react';
 
 const monthOfBirth = [
-  { id: '01', ten: '01' },
-  { id: '02', ten: '02' },
-  { id: '03', ten: '03' },
-  { id: '04', ten: '04' },
-  { id: '05', ten: '05' },
-  { id: '06', ten: '06' },
-  { id: '07', ten: '07' },
-  { id: '08', ten: '08' },
-  { id: '09', ten: '09' },
-  { id: '10', ten: '10' },
-  { id: '11', ten: '11' },
-  { id: '12', ten: '12' },
+  { id: '01', name: '01' },
+  { id: '02', name: '02' },
+  { id: '03', name: '03' },
+  { id: '04', name: '04' },
+  { id: '05', name: '05' },
+  { id: '06', name: '06' },
+  { id: '07', name: '07' },
+  { id: '08', name: '08' },
+  { id: '09', name: '09' },
+  { id: '10', name: '10' },
+  { id: '11', name: '11' },
+  { id: '12', name: '12' },
 ];
 
 type DateOfBirthProps = SelectProps & FormControlProps & StackProps & { delimiter?: string };
@@ -47,11 +47,10 @@ function DateOfBirth(props: DateOfBirthProps) {
   }, [day, month, year, delimiter]);
   return (
     <FormControl
-      as='fieldset'
       isRequired={isRequired}
       isInvalid={!!meta.error && dayTouched && monthTouched && yearTouched}
     >
-      <FormLabel as='legend' color={formTextColor}>
+      <FormLabel mb={0} color={formTextColor}>
         {label}
       </FormLabel>
       <HStack align='flex-end'>

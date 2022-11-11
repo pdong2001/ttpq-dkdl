@@ -1,10 +1,8 @@
-import { Box, Button, ButtonGroup, Heading, Radio, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
-import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import * as Yup from 'yup';
-import Select from '~/components/Form/CustomSelect';
 import Address from '~/components/Form/Address';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
@@ -12,98 +10,115 @@ import Validator from '~/utils/common/validator';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { RegisterType } from '~/pages/MultiStepRegister/constants';
+import { convertDateStringToObject } from '~/utils/date';
+import FormInput from '~/components/Form/FormInput';
+import CultivationPlace from '~/components/Form/CultivationPlace';
 // import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
-// nơi sinh hoạt
-const youthAssociationList = [
-  {
-    id: 1,
-    ten: 'CTN Hà Nội',
-    ParentId: 0,
-    Status: 1,
-    Sort: 0,
-    Type: 2,
-    ProvinceId: 2,
-    DistrictIds: null,
-    PerDelId: 0,
-    DeleteReason: null,
-  },
-  {
-    id: 2,
-    ten: 'Tổ 1',
-    ParentId: 1398,
-    Status: 1,
-    Sort: 0,
-    Type: 1,
-    ProvinceId: 2,
-    DistrictIds: '1,4',
-    PerDelId: 0,
-    DeleteReason: null,
-  },
-];
-// tổ
-const groupOfYouthAssociationList = [
-  {
-    id: 1,
-    ten: 'CTN Hà Nội',
-    ParentId: 0,
-    Status: 1,
-    Sort: 0,
-    Type: 2,
-    ProvinceId: 2,
-    DistrictIds: null,
-    PerDelId: 0,
-    DeleteReason: null,
-  },
-  {
-    id: 1403,
-    ten: 'Thứ 2 Chùa Đồng',
-    ParentId: 1,
-    Status: 1,
-    Sort: 20,
-    Type: 1,
-    ProvinceId: 0,
-    DistrictIds: null,
-    PerDelId: 0,
-    DeleteReason: null,
-  },
-];
+// // nơi sinh hoạt
+// const youthAssociationList = [
+//   {
+//     id: 1,
+//     ten: 'CTN Hà Nội',
+//     ParentId: 0,
+//     Status: 1,
+//     Sort: 0,
+//     Type: 2,
+//     ProvinceId: 2,
+//     DistrictIds: null,
+//     PerDelId: 0,
+//     DeleteReason: null,
+//   },
+//   {
+//     id: 2,
+//     ten: 'Tổ 1',
+//     ParentId: 1398,
+//     Status: 1,
+//     Sort: 0,
+//     Type: 1,
+//     ProvinceId: 2,
+//     DistrictIds: '1,4',
+//     PerDelId: 0,
+//     DeleteReason: null,
+//   },
+// ];
+// // tổ
+// const groupOfYouthAssociationList = [
+//   {
+//     id: 1,
+//     ten: 'CTN Hà Nội',
+//     ParentId: 0,
+//     Status: 1,
+//     Sort: 0,
+//     Type: 2,
+//     ProvinceId: 2,
+//     DistrictIds: null,
+//     PerDelId: 0,
+//     DeleteReason: null,
+//   },
+//   {
+//     id: 1403,
+//     ten: 'Thứ 2 Chùa Đồng',
+//     ParentId: 1,
+//     Status: 1,
+//     Sort: 20,
+//     Type: 1,
+//     ProvinceId: 0,
+//     DistrictIds: null,
+//     PerDelId: 0,
+//     DeleteReason: null,
+//   },
+// ];
 
 const Step2 = (props: StepProps) => {
-  const dispatch = useAppDispatch();
-  const { hoTen, hinhThucDangKy, soDienThoai, cccd } =
-    useAppSelector((state) => state.register.data) || {};
   const { nextStep, previousStep } = props;
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-  const isRegisterFollowGroup = hinhThucDangKy === RegisterType.GROUP.toString();
+  const { primaryColor, formTextColor } = useCustomColorMode();
+  const dispatch = useAppDispatch();
+
+  const {
+    fullName,
+    phoneNumber,
+    identityCard,
+    religiousName = '',
+    dateOfBirth,
+  } = useAppSelector((state) => state.register.data) || {};
+
+  const {
+    // day: dateOfBirthDay = '',
+    month: dateOfBirthMonth = '',
+    year: dateOfBirthYear = '',
+  } = dateOfBirth ? convertDateStringToObject(dateOfBirth) || {} : {};
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      dangKyDaiLe: {
-        roleInGroup: 2,
-      },
-      citizenIdOfLeader: '', //chưa có trong DTO
-      phapDanh: '',
-      ngaySinh: '',
-      ngaySinhDay: '',
-      ngaySinhMonth: '',
-      ngaySinhYear: '',
+      registerRole: '2',
+      identityCardOfLeader: '', //chưa có trong DTO
+      religiousName,
+
+      dateOfBirth,
+      dateOfBirthDay: undefined,
+      dateOfBirthMonth,
+      dateOfBirthYear,
+
       email: '',
-      permanentAddressCode: {},
+
+      permanentAddress: '',
       permanentAddressProvince: '',
       permanentAddressDistrict: '',
-      permanentAddressVillage: '',
+      permanentAddressWard: '',
+
+      temporaryAddress: '',
       temporaryAddressProvince: '',
       temporaryAddressDistrict: '',
-      temporaryAddressVillage: '',
-      youthAssociation: '',
-      groupOfYouthAssociation: '',
+      temporaryAddressWard: '',
+
+      organzationStucture: '',
+      // groupOfYouthAssociation: '',
+      // youthAssociationGroup: '',
     },
     validationSchema: Yup.object({
-      citizenIdOfLeader: isRegisterFollowGroup
-        ? Yup.string().required('Xin hãy nhập CCCD / Hộ chiếu của trưởng nhóm')
-        : Yup.string(),
-      ngaySinh: Yup.object()
+      dateOfBirth: Yup.object()
         .shape({
           day: Yup.string(),
           month: Yup.string(),
@@ -125,140 +140,101 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      ngaySinhDay: Yup.string().required(),
-      ngaySinhMonth: Yup.string().required(),
-      ngaySinhYear: Yup.string().required(),
-      email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-      permanentAddressCode: Yup.object()
-        .shape({
-          province: Yup.number(),
-          district: Yup.number(),
-          village: Yup.number(),
-        })
-        .test({
-          name: 'valiAddress',
-          test: (value, context) => {
-            const { province, district, village } = value;
-            if (!(province && district && village)) {
-              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
-            }
-            return true;
-          },
-        }),
-      temporaryAddress: Yup.object()
-        .shape({
-          province: Yup.number(),
-          district: Yup.number(),
-          village: Yup.number(),
-        })
-        .test({
-          name: 'valiAddress',
-          test: (value, context) => {
-            const { province, district, village } = value;
-            console.log(province, district, village);
+      dateOfBirthDay: Yup.string().required(),
+      dateOfBirthMonth: Yup.string().required(),
+      dateOfBirthYear: Yup.string().required(),
 
-            if (!(province && district && village)) {
-              return context.createError({ message: 'Bạn ơi, nhập đủ địa chỉ nha' });
-            }
-            return true;
-          },
-        }),
-      permanentAddressCodeProvince: Yup.string().required(),
-      permanentAddressCodeDistrict: Yup.string().required(),
-      permanentAddressCodeVillage: Yup.string().required(),
+      email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
+
+      permanentAddress: Yup.object().shape({
+        province: Yup.number(),
+        district: Yup.number(),
+        ward: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+      }),
+      permanentAddressProvince: Yup.string().required(),
+      permanentAddressDistrict: Yup.string().required(),
+      permanentAddressWard: Yup.string().required(),
+
+      temporaryAddress: Yup.object().shape({
+        province: Yup.number(),
+        district: Yup.number(),
+        ward: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+      }),
       temporaryAddressProvince: Yup.string().required(),
       temporaryAddressDistrict: Yup.string().required(),
-      temporaryAddressVillage: Yup.string().required(),
-      youthAssociation: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
+      temporaryAddressWard: Yup.string().required(),
+
+      organzationStuctureId: Yup.object().shape({
+        groupId: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
+        teamId: Yup.string(),
+      }),
+      // youthAssociationGroup: Yup.string().required(),
     }),
     onSubmit: (values) => {
+      console.log('input step 2', values);
+
       dispatch(fillForm(values));
       nextStep();
     },
   });
-  console.log('formiks', formik.errors);
 
   return (
-    <Stack
-      bg={bgColor}
-      rounded={'xl'}
-      p={{ base: 4, sm: 6, md: 8 }}
-      spacing={{ base: 8 }}
-      maxW={{ lg: 'lg' }}
-      mx={{ base: 10, md: 20 }}
-    >
-      <Stack spacing={4}>
+    <>
+      <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
         <Heading
           color={primaryColor}
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+          textAlign='center'
         >
           Cập nhật thông tin
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          Xin chào bạn <Text as='b'>{hoTen}</Text>
-        </Text>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          {`SĐT: ${soDienThoai} - CCCD: ${cccd}`}
-        </Text>
+        <Stack direction={{ base: 'column', lg: 'row' }}>
+          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            Xin chào bạn <Text as='b'>{fullName}</Text>
+          </Text>
+          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            {`SĐT: ${phoneNumber} - CCCD: ${identityCard}`}
+          </Text>
+        </Stack>
       </Stack>
-      <Box mt={10}>
+      <Box mt={{ base: 3, lg: 10 }}>
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              {isRegisterFollowGroup && (
-                <>
-                  {' '}
-                  <Radios isRequired label='Vai trò trong nhóm' name='roleInGroup'>
-                    <Radio value='0'>Trưởng nhóm</Radio>
-                    <Radio value='1'>Phó nhóm</Radio>
-                    <Radio value='2'>Thành viên</Radio>
+              <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 2, lg: 8 }}>
+                <Stack spacing={3}>
+                  <Radios spacing={8} label='Giới tính' name='gender' defaultValue='0' isRequired>
+                    <Radio value='0'>Nam</Radio>
+                    <Radio value='1'>Nữ</Radio>
                   </Radios>
-                  <FloatingLabel
-                    name='citizenIdOfLeader'
-                    label='Số CCCD / Hộ chiếu của trưởng nhóm'
-                    color={formTextColor}
+                  <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
+                  <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
+                  <FormInput name='email' label='Email' color={formTextColor} isRequired />
+                </Stack>
+                <Stack spacing={3}>
+                  <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
+                  <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
+                  <CultivationPlace
+                    name='organzationStuctureId'
+                    label='Địa điểm tu tập'
                     isRequired
                   />
-                </>
-              )}
-              <FloatingLabel name='phapDanh' label='Pháp danh' color={formTextColor} />
-              <Radios label='Giới tính' name='gender' defaultValue='0' isRequired>
-                <Radio value='0'>Nam</Radio>
-                <Radio value='1'>Nữ</Radio>
-              </Radios>
-              <DateOfBirth name='ngaySinh' label='Ngày sinh' isRequired />
-
-              {/*<FloatingLabel name='dob' label='Ngày sinh' color={formTextColor} isRequired />*/}
-              <FloatingLabel name='email' label='Email' color={formTextColor} isRequired />
-              <Address name='permanentAddressCode' label='Địa chỉ thường trú' isRequired />
-              <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
-              <Select
-                name='youthAssociation'
-                data={youthAssociationList}
-                label='Nơi sinh hoạt'
-                placeholder='Nơi sinh hoạt'
-                isRequired
-              />
-              <Select
-                name='groupOfYouthAssociation'
-                data={groupOfYouthAssociationList}
-                label='Tổ'
-                placeholder='Tổ'
-              />
+                </Stack>
+              </SimpleGrid>
             </Stack>
-            <ButtonGroup mt={8} w={'full'}>
+            <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
               <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>
                 Tiếp theo
               </Button>
-            </ButtonGroup>
+            </SimpleGrid>
           </Form>
         </FormikProvider>
       </Box>
-    </Stack>
+    </>
   );
 };
 
