@@ -147,18 +147,18 @@ const Step2 = (props: StepProps) => {
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
 
       permanentAddress: Yup.object().shape({
-        province: Yup.number(),
-        district: Yup.number(),
-        ward: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+        provinceId: Yup.number(),
+        districtId: Yup.number(),
+        wardId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
       }),
       permanentAddressProvince: Yup.string().required(),
       permanentAddressDistrict: Yup.string().required(),
       permanentAddressWard: Yup.string().required(),
 
       temporaryAddress: Yup.object().shape({
-        province: Yup.number(),
-        district: Yup.number(),
-        ward: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
+        provinceId: Yup.number(),
+        districtId: Yup.number(),
+        wardId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
       }),
       temporaryAddressProvince: Yup.string().required(),
       temporaryAddressDistrict: Yup.string().required(),
