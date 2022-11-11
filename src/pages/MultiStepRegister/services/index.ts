@@ -1,10 +1,11 @@
 import { createAsyncRequest } from '~/apis/common/action';
 // import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 import API from '~/apis/constants';
+import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 // import { SearchMemberRequestDto } from '~/types/Members/MemberResponse.dto';
 
 // export const register = createAsyncRequest<UpSertMemberDto>(
-export const register = createAsyncRequest(
+export const register = createAsyncRequest<UpSertMemberDto>(
   'register',
   {
     method: 'post',

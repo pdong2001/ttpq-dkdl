@@ -21,9 +21,9 @@ export type ReduxState<Data = any> = {
 
 export type ResponseData<Data = any> = {
   data: Data;
-  code: number;
-  message: string;
-  success: boolean;
+  code?: number;
+  message?: string;
+  success?: boolean;
 };
 
 export type SuccessPayloadAction<Response = any, Request = RequestData> = PayloadAction<

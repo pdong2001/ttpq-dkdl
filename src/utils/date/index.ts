@@ -1,6 +1,5 @@
 export const convertDateStringToObject = (dateString) => {
   const date = new Date(dateString);
-  console.log('date', date);
 
   if (date) {
     const day = date.getDate();

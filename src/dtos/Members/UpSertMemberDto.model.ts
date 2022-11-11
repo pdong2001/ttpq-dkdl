@@ -5,22 +5,22 @@ import { UpSertEventRegistryDto } from "../EventRegistries/UpSertEventRegistryDt
 import { AddressDto } from '~/dtos/Addresses/AddressDto.model';
 
 export type UpSertMemberDto = {
-	work : string | undefined;
-	email : string | undefined;
-	gender : Gender;
-	fullName : string | undefined;
-	avatarPath : string | undefined;
-	phoneNumber : string | undefined;
-	identityCard : string | undefined;
-	religiousName : string | undefined;
-	facebookAddress : string | undefined;
-	identityCardImagePath : string | undefined;
-	exps : EventExp;
-	ctnType : PhanLoaiThanhNien | undefined;
-	dateOfBirth : string | undefined;
-	organizationStructureId : number | undefined;
-	strongPointIds : number[];
-	permanentAddress : AddressDto | undefined;
-	temporaryAddress : AddressDto | undefined;
-	register : UpSertEventRegistryDto | undefined;
+	work?: string;
+	email: string;
+	gender: Gender;
+	fullName: string;
+	avatarPath?: string;
+	phoneNumber: string;
+	identityCard: string;
+	religiousName?: string;
+	facebookAddress?: string;
+	identityCardImagePath?: string;
+	exps?: EventExp;
+	ctnType?: PhanLoaiThanhNien;
+	dateOfBirth?: string;
+	organizationStructureId?: number;
+	strongPointIds?: number[];
+	permanentAddress?: AddressDto;
+	temporaryAddress?: AddressDto;
+	register: UpSertEventRegistryDto;
 }

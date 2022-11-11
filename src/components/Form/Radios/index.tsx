@@ -21,10 +21,15 @@ const Radios = (props: RadiosProps) => {
 
   return (
     <FormControl {...props}>
-      <FormLabel color={formTextColor}>
-        {label}
-      </FormLabel>
-      <RadioGroup color={formTextColor} {...field} {...props} onChange={setValue}>
+      <FormLabel color={formTextColor}>{label}</FormLabel>
+      <RadioGroup
+        color={formTextColor}
+        {...field}
+        {...props}
+        onChange={(value) => {
+          setValue(value);
+        }}
+      >
         <Stack spacing={spacing} direction={direction} p={2}>
           {children}
         </Stack>

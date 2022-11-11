@@ -1,5 +1,5 @@
 export enum MoveType {
-	FromHCM = 0,
-	FromHCMSelfGo = 1,
-	Other = 2,
+	HCM = '0',
+	BY_YOUR_SELF = '1',
+	OTHER = '2',
 }

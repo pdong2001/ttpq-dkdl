@@ -27,8 +27,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
   //@ts-ignore
   const [field, { error }, { setValue }] = useField(name);
   const [{ value: groupId }, { touched: gTouch }] = useField(groupName);
-  const [{ value: teamId }, { touched: tTouch }, { setTouched: setTTouch, setValue: setTeam }] =
-    useField(teamName);
+  const [{ value: teamId }, _, { setTouched: setTTouch, setValue: setTeam }] = useField(teamName);
 
   const { data: groups } = useAxios(
     {
@@ -61,7 +60,6 @@ function CultivationPlace(props: CultivationPlaceProps) {
   useEffect(() => {
     setValue(cultivationPlace);
   }, [cultivationPlace]);
-  console.log('cultivate error', !!error, gTouch, tTouch, groupId);
   const errorMessage = error && Object.values(error)[0];
 
   return (

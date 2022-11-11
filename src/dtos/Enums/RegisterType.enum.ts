@@ -1,4 +1,4 @@
 export enum RegisterType {
-	Single = 0,
-	Group = 1,
+	SINGLE = '0',
+	GROUP = '1',
 }
