@@ -17,7 +17,7 @@ import {
   VisuallyHiddenInput,
   VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import API from '~/apis/constants';
 import useSearch from '~/hooks/useSearch';
@@ -25,8 +25,8 @@ import { ResponseData } from '~/apis/common/type';
 import { useField } from 'formik';
 
 type Props = {
-  //   searchValue: string;
   name: string;
+  label: string;
 };
 type LeaderData = {
   id: string;
@@ -36,8 +36,8 @@ type LeaderData = {
 };
 
 const SearchLeader = (props: Props) => {
-  const { name } = props;
-  const [field, _, { setValue }] = useField(name);
+  const { name, label } = props;
+  const [field, { error, touched }, { setValue, setTouched }] = useField(name);
 
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -57,19 +57,26 @@ const SearchLeader = (props: Props) => {
   const startSkelotonColor = 'gray.600';
   const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.500' : 'gray.600';
 
-  if (loaded) {
-    const { data: leader } = data || {};
-    if (leader) {
-      setValue(leader.id);
+  useEffect(() => {
+    if (loaded) {
+      const { data: leader } = data || {};
+      if (leader) {
+        setValue(leader.id);
+      }
     }
-  }
+  }, [loaded]);
+
+  const isInvalid = (loaded && !data?.data) || (!!error && touched);
 
   return (
-    <FormControl isInvalid={loaded && !data?.data}>
-      <FormLabel color={formTextColor}>Trưởng đoàn</FormLabel>
+    <FormControl isInvalid={isInvalid}>
+      <FormLabel color={formTextColor} mb={0}>
+        {label}
+      </FormLabel>
       <SimpleGrid columns={{ base: 1, md: 2 }} alignItems='center' gap={{ base: 4, md: 6 }}>
         <InputGroup size='md'>
           <Input
+            placeholder='Tìm bằng SĐT hoặc CCCD / CMT'
             focusBorderColor={primaryColor}
             colorScheme={'ttpq'}
             pr='2.5rem'
@@ -81,7 +88,7 @@ const SearchLeader = (props: Props) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
                 setSearchValue(inputValue);
-                return false;
+                setTouched(false);
               }
             }}
           />
@@ -90,8 +97,10 @@ const SearchLeader = (props: Props) => {
           </InputRightElement>
         </InputGroup>
         <HStack spacing={{ base: 4, md: 6, lg: 2 }} justifyContent='center'>
-          {loaded && !data?.data ? (
-            <FormErrorMessage>Không tìm thấy trưởng đoàn</FormErrorMessage>
+          {(loaded && (!data?.data || isInvalid)) || (touched && !data?.data) ? (
+            <FormErrorMessage>
+              {(touched && error) || 'Không tìm thấy trưởng đoàn'}
+            </FormErrorMessage>
           ) : (
             <>
               <SkeletonCircle
