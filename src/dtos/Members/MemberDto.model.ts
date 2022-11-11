@@ -6,21 +6,21 @@ import { AddressDto } from "~/dtos/Addresses/AddressDto.model";
 
 export type MemberDto = {
 	id: string;
-	work?: string | undefined;
-	email?: string | undefined;
+	work?: string;
+	email?: string;
 	gender: Gender;
-	fullName: string | undefined;
-	avatarPath?: string | undefined;
-	phoneNumber: string | undefined;
-	identityCard: string | undefined;
-	religiousName?: string | undefined;
-	facebookAddress?: string | undefined;
-	identityCardImagePath?: string | undefined;
+	fullName: string;
+	avatarPath?: string;
+	phoneNumber: string;
+	identityCard: string;
+	religiousName?: string;
+	facebookAddress?: string;
+	identityCardImagePath?: string;
 	exps?: EventExp;
-	ctnType?: PhanLoaiThanhNien | undefined;
-	dateOfBirth?: Date | undefined;
-	permanentAddress?: AddressDto | undefined;
-	temporaryAddress?: AddressDto | undefined;
-	organizationStructureId?: number | undefined;
-	strongPoints?: SkillForRegisterDto[] | undefined;
+	ctnType?: PhanLoaiThanhNien;
+	dateOfBirth?: Date;
+	permanentAddress?: AddressDto;
+	temporaryAddress?: AddressDto;
+	organizationStructureId?: number;
+	strongPoints?: SkillForRegisterDto[];
 }
