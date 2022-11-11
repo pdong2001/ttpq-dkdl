@@ -1,4 +1,4 @@
-import { UpSertAddressDto } from "../UpSertAddressDto.model";
+import { AddressDto } from "~/dtos/Addresses/AddressDto.model";
 import { MoveType } from "../Enums/MoveType.enum";
 import { PositionType } from "../Enums/PositionType.enum";
 import { RegisterRole } from "../Enums/RegisterRole.enum";
@@ -25,6 +25,6 @@ export type UpSertEventRegistryDto = {
 	registerType : RegisterType;
 	expDepartmentIds : number[];
 	wishDepartmentIds : number;
-	otherStartAddress : UpSertAddressDto | undefined;
-	otherLeaveAddress : UpSertAddressDto | undefined;
+	otherStartAddress : AddressDto | undefined;
+	otherLeaveAddress : AddressDto | undefined;
 }

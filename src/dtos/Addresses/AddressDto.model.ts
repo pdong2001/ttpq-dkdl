@@ -1,5 +1,5 @@
 
-export type UpSertAddressDto = {
+export type AddressDto = {
 	wardId : number;
 	provinceId : number;
 	districtId : number;

@@ -1,11 +1,10 @@
 import { Gender } from "../Enums/Gender.enum";
-import { SkillForRegisterDto } from "../SkillForRegisters/SkillForRegisterDto.model";
 import { EventExp } from "../Enums/EventExp.enum";
 import { PhanLoaiThanhNien } from "../Enums/PhanLoaiThanhNien.enum";
-import { UpSertAddressDto } from "dtos/UpSertAddressDto.model";
+import { UpSertEventRegistryDto } from "../EventRegistries/UpSertEventRegistryDto.model";
+import { AddressDto } from '~/dtos/Addresses/AddressDto.model';
 
-export type MemberDto = {
-	id : string;
+export type UpSertMemberDto = {
 	work : string | undefined;
 	email : string | undefined;
 	gender : Gender;
@@ -18,9 +17,10 @@ export type MemberDto = {
 	identityCardImagePath : string | undefined;
 	exps : EventExp;
 	ctnType : PhanLoaiThanhNien | undefined;
-	dateOfBirth : Date | undefined;
-	permanentAddress : UpSertAddressDto | undefined;
-	temporaryAddress : UpSertAddressDto | undefined;
+	dateOfBirth : string | undefined;
 	organizationStructureId : number | undefined;
-	strongPoints : SkillForRegisterDto[] | undefined;
+	strongPointIds : number[];
+	permanentAddress : AddressDto | undefined;
+	temporaryAddress : AddressDto | undefined;
+	register : UpSertEventRegistryDto | undefined;
 }
