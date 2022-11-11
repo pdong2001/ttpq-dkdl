@@ -7,7 +7,6 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 export const onFullfilledRequest = (response: AxiosResponse) => response;
 export const onRejectedResponse = (error: any): any => {
   if (error instanceof AxiosError) {
-
     return Promise.reject(getExceptionPayload(error.response?.data));
   }
   return Promise.reject(getExceptionPayload(error));

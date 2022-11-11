@@ -1,4 +1,4 @@
-import { Box, Container, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Box, Container, Grid, GridItem, Stack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import CoverImage from '~/assets/festival_cover.jpg';
@@ -51,27 +51,27 @@ const MultiStepRegister = () => {
   return (
     <Box bgImage={CoverImage} bgSize={'cover'} backgroundAttachment='fixed'>
       <Container
-        as={SimpleGrid}
+        as={Grid}
         maxW={'full'}
-        columns={{ base: 1, lg: step === 1 ? 1 : 2 }}
-        gap={{ base: 1 }}
-        spacing={{ base: 10, lg: 32 }}
-        py={{ base: 32 }}
+        gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
+        py={{ base: 20 }}
         minH='100vh'
         alignItems={'center'}
       >
-        <FadeInUp>
-          <Stack
-            bg={bgColor}
-            rounded={'xl'}
-            p={{ base: 4, sm: 6, md: 8 }}
-            spacing={{ lg: 1 }}
-            // maxW={{ lg: 'lg' }}
-            mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
-          >
-            <Step nextStep={nextStep} previousStep={previousStep} />
-          </Stack>
-        </FadeInUp>
+        <GridItem colSpan={{ base: 3, lg: step === 1 ? 3 : 2 }}>
+          <FadeInUp>
+            <Stack
+              bg={bgColor}
+              rounded={'xl'}
+              p={{ base: 4, sm: 6, md: 8 }}
+              spacing={{ lg: 1 }}
+              // maxW={{ lg: 'lg' }}
+              mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
+            >
+              <Step nextStep={nextStep} previousStep={previousStep} />
+            </Stack>
+          </FadeInUp>
+        </GridItem>
       </Container>
     </Box>
   );
