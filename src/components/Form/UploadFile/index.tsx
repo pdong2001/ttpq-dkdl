@@ -119,8 +119,8 @@ export default function UploadFile(props: UploadFileProps) {
     setFile(e.dataTransfer.files[0]);
   };
   return (
-    <Container my='12'>
-      <AspectRatio width='64' ratio={16/9}>
+    <Container my='2'>
+      <AspectRatio width='64' ratio={16 / 9}>
         <Box
           borderColor='gray.300'
           borderStyle='dashed'
@@ -153,7 +153,7 @@ export default function UploadFile(props: UploadFileProps) {
                 display='flex'
                 alignItems='center'
                 justify='center'
-                spacing='4'
+                // spacing='4'
               >
                 {file ? (
                   <Box height='16' width='12' position='relative'>

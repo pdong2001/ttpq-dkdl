@@ -16,11 +16,12 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { DepartureType } from '~/pages/MultiStepRegister/constants';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
-import { useAppSelector } from '~/hooks/reduxHook';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { formatUrl } from '~/utils/functions';
 import { useEffect, useState } from 'react';
+import { fillForm } from '../services/slice';
 
 // nơi xuất phát
 // const departLocationList = [
@@ -76,6 +77,7 @@ const registerPageTemp = {
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
+  const dispatch = useAppDispatch();
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -142,10 +144,9 @@ const Step3 = (props: StepProps) => {
         }),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      if (false) {
-        nextStep();
-      }
+      // alert(JSON.stringify(values, null, 2));
+      dispatch(fillForm({register: values}));
+      nextStep();
     },
   });
 

@@ -9,19 +9,22 @@ import {
   FormLabel,
   SimpleGrid,
   Radio,
+  Image,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
-// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
-import UploadFile from '~/components/Form/UploadFile';
+// import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import MultiSelect from '~/components/Form/MultiSelect';
 import { formatUrl } from '~/utils/functions';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { fillForm } from '../services/slice';
+// import AvatarTemp from '~/assets/avatar_temp.png';
 
 // danh sách ban
 // const departmentList = [
@@ -65,6 +68,8 @@ import { formatUrl } from '~/utils/functions';
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
+  const dispatch = useAppDispatch();
+
   // lấy kĩ năng sở trường
   let { data: strongPointList } = useAxios(
     {
@@ -74,27 +79,16 @@ const Step4 = (props: StepProps) => {
     },
     [],
   );
-  console.log('ky nang so truong', strongPointList);
 
-  // lấy danh sách ban
-  let { data: departmentList } = useAxios(
-    {
-      method: 'post',
-      url: API.GET_DEPARTMENT_BY_EVENT,
-      transformResponse: ({ data }) => data,
-    },
-    [],
-  );
-  console.log('danh sach ban', departmentList);
-  // let { data: registerPage } = useAppSelector((state) => state.registerPage);
+  const { data: registerPage } = useAppSelector((state) => state.registerPage);
+  const { departments } = registerPage;
 
   // lấy nơi nhận thẻ
-  let { data: receiveCardLocationList } = useAxios({
+  const { data: receiveCardLocationList } = useAxios({
     method: 'get',
     url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: 1 }),
     transformResponse: ({ data }) => data,
   });
-  console.log('noi nhan the', receiveCardLocationList);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -104,7 +98,8 @@ const Step4 = (props: StepProps) => {
       expDepartmentIds: [],
       wishDepartmentIds: '',
       receiveCardAddressId: '',
-      avatarPath: '',
+      avatarPath:
+        'https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg',
       note: '',
     },
     validationSchema: Yup.object({
@@ -136,12 +131,13 @@ const Step4 = (props: StepProps) => {
       avatarPath: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
+      dispatch(fillForm({ register: values }));
       nextStep();
     },
   });
 
-  console.log('formiks', formik.values, formik.errors, formik.touched);
+  // console.log('formiks', formik.values, formik.errors, formik.touched);
 
   return (
     <>
@@ -172,17 +168,19 @@ const Step4 = (props: StepProps) => {
                 label='Kỹ năng, sở trường'
                 valueField='id'
                 labelField='name'
+                isRequired
               />
               <MultiSelect
                 name='expDepartmentIds'
-                options={departmentList}
+                options={departments}
                 label='Kinh nghiệm ở ban'
                 valueField='id'
                 labelField='name'
+                isRequired
               />
               <Select
                 name='wishDepartmentIds'
-                data={departmentList}
+                data={departments}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'
                 isRequired
@@ -198,7 +196,9 @@ const Step4 = (props: StepProps) => {
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
-                <UploadFile />
+                {/* <UploadFile /> */}
+                <Image src='https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg' />
+                {/* <Image src={AvatarTemp} alt='Hình thẻ mẫu' /> */}
               </FormControl>
               <FormControl name='note' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
