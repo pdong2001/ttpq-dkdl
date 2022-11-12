@@ -8,7 +8,9 @@ import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
-import { searchMember } from '~/pages/MultiStepRegister/services';
+import SearchLeader from '~/components/Form/SearchLeader';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
+import { searchMember } from '../services';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -16,10 +18,10 @@ const Step1 = (props: StepProps) => {
   const dispatch = useAppDispatch();
 
   const {
-    fullName = '',
-    phoneNumber = '',
-    identityCard = '',
-    registerType = '0',
+    fullName,
+    phoneNumber,
+    identityCard,
+    register: { registerType, leaderId = '' },
   } = useAppSelector((state) => state.register.data) || {};
 
   const formik = useFormik({
@@ -28,6 +30,7 @@ const Step1 = (props: StepProps) => {
       phoneNumber,
       identityCard,
       registerType,
+      leaderId,
     },
     validationSchema: Yup.object({
       fullName: Yup.string().required('Xin hãy nhập họ và tên'),
@@ -35,6 +38,11 @@ const Step1 = (props: StepProps) => {
         .required('Xin hãy nhập số điện thoại')
         .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
       identityCard: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
+      leaderId: Yup.string().when('registerType', {
+        is: RegisterType.GROUP,
+        then: Yup.string().required('Hãy tìm trưởng đoàn của bạn'),
+        otherwise: Yup.string(),
+      }),
     }),
     onSubmit: (values) => {
       console.log('input step 1', values);
@@ -42,15 +50,16 @@ const Step1 = (props: StepProps) => {
       dispatch(fillForm(values));
       dispatch(
         searchMember({
-          fullName: values.fullName,
-          phoneNumber: values.phoneNumber,
-          identityCard: values.identityCard,
+          data: values,
         }),
       );
       nextStep();
     },
   });
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
+  const isRegisterFollowGroup = formik.values.registerType === RegisterType.GROUP;
+
+  console.log('formiks', formik.errors, formik.values);
 
   return (
     <>
@@ -84,11 +93,11 @@ const Step1 = (props: StepProps) => {
                 isRequired
               />
               <Radios isRequired label='Hình thức đăng ký' name='registerType'>
-                <Radio value='0'>Cá nhân</Radio>
-                <Radio value='1'>Nhóm</Radio>
+                <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
+                <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
+              {isRegisterFollowGroup && <SearchLeader name='leaderId' label='Trưởng nhóm' />}
             </Stack>
-
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo
             </Button>

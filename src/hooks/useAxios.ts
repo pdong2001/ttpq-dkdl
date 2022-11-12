@@ -20,28 +20,28 @@ const useAxios = <Data = any>(
     controllerRef.current.abort();
   };
   const dispatch = useAppDispatch();
+  let cancelToken;
 
-  const makeRequest = async (params: AxiosRequestConfig) => {
-    const { transformResponse } = params;
+  const makeRequest = async (axiosParams: AxiosRequestConfig) => {
+    const { transformResponse } = axiosParams;
+
     try {
       !hideSpinner && dispatch(setGlobalLoading(true));
       const ourAxios = useOriginAxios ? axios : publicRequest;
       const res = await ourAxios.request({
         signal: controllerRef.current.signal,
-        ...params,
-        transformResponse: (res) => {
-          let response;
-          try {
-            response = JSON.parse(res);
+        ...axiosParams,
+        cancelToken: new axios.CancelToken((c) => (cancelToken = c)),
+        transformResponse: [
+          axios.defaults.transformResponse?.[0],
+          (res) => {
             if (transformResponse) {
-              //@ts-ignore
-              return transformResponse(response);
+              // @ts-ignore
+              return transformResponse(res);
             }
-          } catch (error) {
-            throw Error(`[requestClient] Error parsingJSON data - ${JSON.stringify(error)}`);
-          }
-          return response;
-        },
+            return res;
+          },
+        ],
       });
 
       setData(res.data);
@@ -51,10 +51,13 @@ const useAxios = <Data = any>(
       setLoaded(true);
       !hideSpinner && dispatch(setGlobalLoading(false));
     }
+
+    return cancel;
   };
 
   useEffect(() => {
     makeRequest(axiosParams);
+    return () => cancelToken();
   }, [...dependencies]);
 
   return { data, error, loaded, cancel };

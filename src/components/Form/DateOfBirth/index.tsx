@@ -9,7 +9,6 @@ import {
   VisuallyHiddenInput,
 } from '@chakra-ui/react';
 import CustomSelect from '~/components/Form/CustomSelect';
-// import Select from '../CustomSelect';
 import useCustomColorMode from '~/hooks/useColorMode';
 import FloatingLabel from '../FloatingLabel/FloatingLabel';
 import { useField } from 'formik';
@@ -30,21 +29,27 @@ const monthOfBirth = [
   { id: '12', name: '12' },
 ];
 
-type DateOfBirthProps = SelectProps & FormControlProps & StackProps & { delimiter?: string };
+type DateOfBirthProps = SelectProps &
+  FormControlProps &
+  StackProps;
 
 function DateOfBirth(props: DateOfBirthProps) {
   const { formTextColor } = useCustomColorMode();
-  const { name, label, isRequired, delimiter = '-' } = props;
+  const { name, label, isRequired } = props;
+
+  const dateName = `${name}Date`;
+  const monthName = `${name}Month`;
+  const yearName = `${name}Year`;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const [field, meta, { setValue }] = useField(name);
-  const [{ value: day }, { touched: dayTouched }] = useField(`${name}Day`);
-  const [{ value: month }, { touched: monthTouched }] = useField(`${name}Month`);
-  const [{ value: year }, { touched: yearTouched }] = useField(`${name}Year`);
+  const [{ value: date }, { touched: dayTouched }] = useField(dateName);
+  const [{ value: month }, { touched: monthTouched }] = useField(monthName);
+  const [{ value: year }, { touched: yearTouched }] = useField(yearName);
   useEffect(() => {
-    setValue({ year, month, day });
-  }, [day, month, year, delimiter]);
+    setValue({ year, month, date });
+  }, [date, month, year]);
   return (
     <FormControl
       isRequired={isRequired}
@@ -54,14 +59,9 @@ function DateOfBirth(props: DateOfBirthProps) {
         {label}
       </FormLabel>
       <HStack align='flex-end'>
-        <FloatingLabel name={`${name}Day`} label='Ngày' color={formTextColor} hiddenErrorMessage />
-        <CustomSelect
-          placeholder='Tháng'
-          data={monthOfBirth}
-          name={`${name}Month`}
-          hiddenErrorMessage
-        />
-        <FloatingLabel name={`${name}Year`} label='Năm' color={formTextColor} hiddenErrorMessage />
+        <FloatingLabel name={dateName} label='Ngày' color={formTextColor} hiddenErrorMessage />
+        <CustomSelect placeholder='Tháng' data={monthOfBirth} name={monthName} hiddenErrorMessage />
+        <FloatingLabel name={yearName} label='Năm' color={formTextColor} hiddenErrorMessage />
         <VisuallyHiddenInput {...field} />
       </HStack>
       <FormErrorMessage>{meta?.error}</FormErrorMessage>

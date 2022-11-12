@@ -112,9 +112,15 @@ export default function UploadFile(props: UploadFileProps) {
   const [label, setLabel] = useState(placeholder);
   const [file, setFile] = useState<File | undefined>();
   console.log(file);
+  const handleChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+  const handleDrop = (e) => {
+    setFile(e.dataTransfer.files[0]);
+  };
   return (
     <Container my='12'>
-      <AspectRatio width='64' ratio={1}>
+      <AspectRatio width='64' ratio={16/9}>
         <Box
           borderColor='gray.300'
           borderStyle='dashed'
@@ -174,15 +180,13 @@ export default function UploadFile(props: UploadFileProps) {
               position='absolute'
               top='0'
               left='0'
-              // opacity='0'
+              opacity='0'
               aria-hidden='true'
               accept='image/*'
               onDragLeave={() => setLabel(placeholder)}
               onDragEnter={() => setLabel(dropLabel)}
-              onDrop={(e) => {
-                console.log('file', e.dataTransfer.files[0]);
-                setFile(e.dataTransfer.files[0]);
-              }}
+              onDrop={handleDrop}
+              onChange={handleChange}
             />
           </Box>
         </Box>

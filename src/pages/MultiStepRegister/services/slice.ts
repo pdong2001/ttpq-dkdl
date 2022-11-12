@@ -1,21 +1,30 @@
 import createAppSlice from '~/apis/common/slice';
+import { ReduxState, ResponseData } from '~/apis/common/type';
+import { Gender } from '~/dtos/Enums/Gender.enum';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
+import { MemberDto } from '~/dtos/Members/MemberDto.model';
+import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 // import { ReduxState, ResponseData } from '~/apis/common/type';
 // import { PayloadAction } from '@reduxjs/toolkit';
 // import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
 import { register, searchMember } from '~/pages/MultiStepRegister/services/index';
 
 // const initialState: ReduxState<MemberResponseDto> = {
-const initialState = {
+const initialState: ReduxState<UpSertMemberDto> = {
   data: {
-    hoTen: '',
-    soDienThoai: '',
-    cccd: '',
-    // } as MemberResponseDto,
+    email: '',
+    fullName: '',
+    gender: Gender.MALE,
+    identityCard: '',
+    phoneNumber: '',
+    register: {
+      eventId: -1,
+      registerType: RegisterType.SINGLE,
+    },
   },
 };
 
-// const slide = createAppSlice<typeof initialState, ResponseData<MemberResponseDto>>(
-const slide = createAppSlice(
+const slide = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
   'register',
   initialState,
   {
@@ -30,6 +39,7 @@ const slide = createAppSlice(
   [
     {
       /* ở đây mình dùng dispatch(register(payload)) ạ */
+      //@ts-ignore
       action: register,
       onFullfilled: (_, action) => {
         // default: state.data = action.payload;
