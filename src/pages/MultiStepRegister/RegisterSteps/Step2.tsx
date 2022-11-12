@@ -81,14 +81,14 @@ const Step2 = (props: StepProps) => {
     identityCard,
     religiousName = '',
     gender,
-    dateOfBirth = { date: '', month: '', year: '' },
+    dob = { date: '', month: '', year: '' },
     email = '',
     permanentAddress = { provinceId: 0, districtId: 0, wardId: 0 },
     temporaryAddress = { provinceId: 0, districtId: 0, wardId: 0 },
     organizationStructureId = '',
   } = useAppSelector((state) => state.register.data) || {};
 
-  const { date: dateOfBirthDate, month: dateOfBirthMonth, year: dateOfBirthYear } = dateOfBirth;
+  const { date: dobDate, month: dobMonth, year: dobYear } = dob;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -97,10 +97,10 @@ const Step2 = (props: StepProps) => {
 
       religiousName,
 
-      dateOfBirth,
-      dateOfBirthDate,
-      dateOfBirthMonth,
-      dateOfBirthYear,
+      dob,
+      dobDate,
+      dobMonth,
+      dobYear,
 
       email,
 
@@ -117,7 +117,7 @@ const Step2 = (props: StepProps) => {
       organizationStructureId,
     },
     validationSchema: Yup.object({
-      dateOfBirth: Yup.object()
+      dob: Yup.object()
         .shape({
           date: Yup.string(),
           month: Yup.string(),
@@ -139,9 +139,9 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      dateOfBirthDate: Yup.string().required(),
-      dateOfBirthMonth: Yup.string().required(),
-      dateOfBirthYear: Yup.string().required(),
+      dobDate: Yup.string().required(),
+      dobMonth: Yup.string().required(),
+      dobYear: Yup.string().required(),
 
       email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
 
@@ -202,7 +202,7 @@ const Step2 = (props: StepProps) => {
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
-                  <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
+                  <DateOfBirth name='dob' label='Ngày sinh' isRequired />
                   <FormInput name='email' label='Email' color={formTextColor} isRequired />
                 </Stack>
                 <Stack spacing={3}>

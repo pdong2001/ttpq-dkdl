@@ -23,7 +23,7 @@ const registerPath = '/register';
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const { pathname } = useLocation<Location>();
   const history = useHistory();
   const Step: Step = registerSteps[step];

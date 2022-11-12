@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Image, Radio, Stack, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -25,6 +25,7 @@ const Step1 = (props: StepProps) => {
   } = useAppSelector((state) => state.register.data) || {};
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       fullName,
       phoneNumber,
@@ -79,6 +80,11 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
+              <Image
+                src={`${
+                  import.meta.env.TTPQ_BASE_URL
+                }/images?key=ImageUpload/temporary/avatar/MjAyMg/MTE/DucPhatngang.jpg&scale=500`}
+              />
               <FloatingLabel name='fullName' label='Họ và tên' color={formTextColor} isRequired />
               <FloatingLabel
                 name='phoneNumber'

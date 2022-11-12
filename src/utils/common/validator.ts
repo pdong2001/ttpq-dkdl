@@ -1,6 +1,7 @@
-import { Date } from "~/dtos/Members/UpSertMemberDto.model";
+import { CustomDate } from "~/dtos/Date/CustomDate";
 
-const validateCalenderDate = ({ year, month, date }: Date) => {
+
+const validateCalenderDate = ({ year, month, date }: CustomDate) => {
   if (date == 31 && (month == 4 || month == 6 || month == 9 || month == 11)) {
     return false; // 31st of a month with 30 days
   } else if (date >= 30 && month == 2) {
