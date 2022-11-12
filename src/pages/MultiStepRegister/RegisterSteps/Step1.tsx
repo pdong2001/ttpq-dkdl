@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Image, Radio, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
