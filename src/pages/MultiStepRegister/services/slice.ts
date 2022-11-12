@@ -3,12 +3,8 @@ import { ReduxState, ResponseData } from '~/apis/common/type';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { MemberDto } from '~/dtos/Members/MemberDto.model';
-// import { ReduxState, ResponseData } from '~/apis/common/type';
-// import { PayloadAction } from '@reduxjs/toolkit';
-// import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
 import { register, searchMember } from '~/pages/MultiStepRegister/services/index';
 
-// const initialState: ReduxState<MemberResponseDto> = {
 const initialState: ReduxState<MemberDto> = {
   data: {
     email: '',
@@ -22,7 +18,7 @@ const initialState: ReduxState<MemberDto> = {
   },
 };
 
-const slide = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
+const slice = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
   'register',
   initialState,
   {
@@ -52,13 +48,13 @@ const slide = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
     },
     {
       action: searchMember,
-      onFullfilled: (state, action) => {
-        return { ...action.payload.data, ...state.data };
+      onFullfilled: (stateData, action) => {
+        return { ...action.payload.data, ...stateData };
       },
     },
   ],
 );
 
-const registerReducer = slide.reducer;
-export const { fillForm } = slide.actions; // các action được defined ở trong reducers sẽ get ra ở đây ạ
-export default registerReducer;
+const registerReducer = slice.reducer;
+export const { fillForm } = slice.actions; // các action được defined ở trong reducers sẽ get ra ở đây ạ
+export default registerReducer

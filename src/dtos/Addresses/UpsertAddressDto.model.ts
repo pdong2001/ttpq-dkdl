@@ -1,7 +1,7 @@
 
 export type UpsertAddressDto = {
-	wardId : number;
-	provinceId : number;
-	districtId : number;
-	address : string | undefined;
+	wardId: number;
+	provinceId: number;
+	districtId: number;
+	address?: string;
 }
