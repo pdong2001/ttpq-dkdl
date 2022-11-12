@@ -5,7 +5,6 @@ import GreatCeremonyInfo from '../GreatCeremonyInfo';
 import MultiStepRegister from '../MultiStepRegister';
 import Timeline from '../Timeline';
 import API from '~/apis/constants';
-import useAxios from '~/hooks/useAxios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -31,17 +30,17 @@ export default function Home() {
     console.log('data, error', data, error);
   }
 
-  useAxios(
-    {
-      method: 'post',
-      url: `/images/home/upload`,
-      data: {
-        fileImage: new File([''], 'filename', { type: 'text/html' }),
-        folder: 'avatar',
-      },
-    },
-    [],
-  );
+  // useAxios(
+  //   {
+  //     method: 'post',
+  //     url: `/images/home/upload`,
+  //     data: {
+  //       fileImage: new File([''], 'filename', { type: 'text/html' }),
+  //       folder: 'avatar',
+  //     },
+  //   },
+  //   [],
+  // );
   return (
     <Box position={'relative'} w='full'>
       <MultiStepRegister />
