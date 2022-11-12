@@ -14,7 +14,7 @@ const initialState: ReduxState<UpSertMemberDto> = {
   data: {
     email: '',
     fullName: '',
-    gender: Gender.FEMALE,
+    gender: Gender.MALE,
     identityCard: '',
     phoneNumber: '',
     register: {
@@ -34,7 +34,7 @@ const slide = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
     // fillForm: (state, action: PayloadAction<MemberResponseDto>) => {
     fillForm: (state, action) => {
       state.data = { ...state.data, ...action.payload };
-    },  
+    },
   },
   [
     {
@@ -62,5 +62,5 @@ const slide = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
 );
 
 const registerReducer = slide.reducer;
-export const { fillForm }   = slide.actions; // các action được defined ở trong reducers sẽ get ra ở đây ạ
+export const { fillForm } = slide.actions; // các action được defined ở trong reducers sẽ get ra ở đây ạ
 export default registerReducer;
