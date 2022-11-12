@@ -80,11 +80,6 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Image
-                src={`${
-                  import.meta.env.TTPQ_BASE_URL
-                }/images?key=ImageUpload/temporary/avatar/MjAyMg/MTE/DucPhatngang.jpg&scale=500`}
-              />
               <FloatingLabel name='fullName' label='Họ và tên' color={formTextColor} isRequired />
               <FloatingLabel
                 name='phoneNumber'
