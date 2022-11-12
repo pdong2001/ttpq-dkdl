@@ -13,6 +13,7 @@ export const getRegisterPage = createAsyncRequest<string>('registerPage/get', {
 
 const registerPage = createAppSlice<RegisterPageState>('auth', initialState, {}, [
   {
+    //@ts-ignore
     action: getRegisterPage,
     onFullfilled: (_, action) => {
       return { ...action.payload.data };
