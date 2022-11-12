@@ -11,6 +11,7 @@ import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { searchMember } from '../services';
+import { useEffect } from 'react';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -70,9 +71,15 @@ const Step1 = (props: StepProps) => {
       nextStep();
     },
   });
-  const greatCeremony = 'Đại lễ Thành Đạo 2022';
-  const isRegisterFollowGroup = formik.values.registerType === RegisterType.GROUP;
+  const { registerType: localRegisterType } = formik.values;
 
+  const greatCeremony = 'Đại lễ Thành Đạo 2022';
+  const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+  useEffect(() => {
+    if (localRegisterType === RegisterType.SINGLE) {
+      formik.setFieldValue('leaderId', '');
+    }
+  }, [localRegisterType]);
   // console.log('formiks', formik.errors, formik.values);
 
   return (
