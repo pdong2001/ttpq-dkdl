@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Input, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -26,19 +26,16 @@ const Step2 = (props: StepProps) => {
     identityCard,
     religiousName = '',
     gender,
-    dob,
     email = '',
+
     permanentAddress = { provinceId: 0, districtId: 0, wardId: 0 },
     temporaryAddress = { provinceId: 0, districtId: 0, wardId: 0 },
+
     organizationStructureId = '',
     dateOfBirth,
   } = useAppSelector((state) => state.register.data) || {};
 
-  const {
-    date: dobDate,
-    month: dobMonth,
-    year: dobYear,
-  } = dob || convertDateStringToObject(dateOfBirth);
+  const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -47,7 +44,7 @@ const Step2 = (props: StepProps) => {
 
       religiousName,
 
-      dob,
+      dob: { date: '', month: '', year: '' },
       dobDate,
       dobMonth,
       dobYear,
@@ -134,7 +131,7 @@ const Step2 = (props: StepProps) => {
           temporaryAddress,
           permanentAddress,
           organizationStructureId,
-          dateOfBirth: new Date(year, +month - 1, date),
+          dateOfBirth: new Date(+year, +month - 1, +date),
         }),
       );
       nextStep();
@@ -174,6 +171,7 @@ const Step2 = (props: StepProps) => {
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
+                  <Input type='date' name='dateOfBirth' />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
                   <FormInput name='email' label='Email' color={formTextColor} isRequired />
                 </Stack>

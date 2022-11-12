@@ -1,41 +1,34 @@
 import { Gender } from '../Enums/Gender.enum';
+import { AddressDto } from '../AddressDto.model';
 import { SkillForRegisterDto } from '../SkillForRegisters/SkillForRegisterDto.model';
 import { EventExp } from '../Enums/EventExp.enum';
 import { PhanLoaiThanhNien } from '../Enums/PhanLoaiThanhNien.enum';
-import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
-import { UpSertEventRegistryDto } from '../EventRegistries/UpSertEventRegistryDto.model';
-import { AddressDto } from '../Addresses/AddressDto.model';
-import { CustomDate } from '../Date/CustomDate';
-
-
+import { EventRegistryDto } from '../EventRegistries/EventRegistryDto.model';
 
 export type MemberDto = {
-  id?: string;
-  work?: string;
-  email?: string;
+  id: string;
+  work: string;
+  email: string;
   gender: Gender;
   fullName: string;
-  avatarPath?: string;
+  avatarPath: string;
   phoneNumber: string;
   identityCard: string;
-  religiousName?: string;
-  facebookAddress?: string;
-  identityCardImagePath?: string;
-  exps?: EventExp;
-  ctnType?: PhanLoaiThanhNien;
-  dateOfBirth?: string;
-  permanentWard?: AddressDto;
-  temporaryWard?: AddressDto;
-  permanentProvince?: AddressDto;
-  permanentDistrict?: AddressDto;
-  temporaryProvince?: AddressDto;
-  temporaryDistrict?: AddressDto;
-  strongPoints?: SkillForRegisterDto[];
-
-  dob?: CustomDate;
-  organizationStructureId?: number;
-  strongPointIds?: number[];
-  permanentAddress?: UpsertAddressDto;
-  temporaryAddress?: UpsertAddressDto;
-  register: UpSertEventRegistryDto;
+  religiousName: string;
+  facebookAddress: string;
+  permanentAddress: string;
+  temporaryAddress: string;
+  identityCardImagePath: string;
+  exps: EventExp;
+  ctnType: PhanLoaiThanhNien;
+  dateOfBirth: string;
+  permanentWard: AddressDto;
+  temporaryWard: AddressDto;
+  permanentProvince: AddressDto;
+  permanentDistrict: AddressDto;
+  temporaryProvince: AddressDto;
+  temporaryDistrict: AddressDto;
+  organizationStructureId: number;
+  strongPoints: SkillForRegisterDto[];
+  register: EventRegistryDto;
 };

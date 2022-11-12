@@ -1,11 +1,11 @@
 import createAppSlice from '~/apis/common/slice';
-import { ReduxState, ResponseData } from '~/apis/common/type';
+import { ReduxState } from '~/apis/common/type';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
-import { MemberDto } from '~/dtos/Members/MemberDto.model';
+import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 import { register, searchMember } from '~/pages/MultiStepRegister/services/index';
 
-const initialState: ReduxState<MemberDto> = {
+const initialState: ReduxState<UpSertMemberDto> = {
   data: {
     email: '',
     fullName: '',
@@ -18,7 +18,7 @@ const initialState: ReduxState<MemberDto> = {
   },
 };
 
-const slice = createAppSlice<typeof initialState, ResponseData<MemberDto>>(
+const slice = createAppSlice<typeof initialState>(
   'register',
   initialState,
   {

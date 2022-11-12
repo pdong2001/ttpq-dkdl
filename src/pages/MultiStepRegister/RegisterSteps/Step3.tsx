@@ -50,8 +50,8 @@ const Step3 = (props: StepProps) => {
   const { primaryColor, formTextColor } = useCustomColorMode();
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      enableReinitialize: true,
       moveType: '0',
       startPlaneCode: '',
       startTimeId: '',
