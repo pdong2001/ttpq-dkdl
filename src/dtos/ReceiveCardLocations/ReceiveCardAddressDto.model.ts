@@ -1,7 +1,7 @@
 export type ReceiveCardAddressDto = {
-	id : number;
-	eventId : number;
-	name : string | undefined;
-	address : string | undefined;
-	description : string | undefined;
-}
+  id: number;
+  eventId: number;
+  name: string | undefined;
+  address: string | undefined;
+  description: string | undefined;
+};

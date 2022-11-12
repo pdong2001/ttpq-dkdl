@@ -1,10 +1,9 @@
-
 export type DepartmentDto = {
-	id?: number;
-	name?: string;
-	code?: string;
-	note?: string;
-	imagePath?: string;
-	description?: string;
-	cardImagePath?: string;
-}
+  id?: number;
+  name?: string;
+  code?: string;
+  note?: string;
+  imagePath?: string;
+  description?: string;
+  cardImagePath?: string;
+};

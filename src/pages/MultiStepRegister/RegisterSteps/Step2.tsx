@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Input, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -171,7 +171,6 @@ const Step2 = (props: StepProps) => {
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
-                  <Input type='date' name='dateOfBirth' />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
                   <FormInput name='email' label='Email' color={formTextColor} isRequired />
                 </Stack>

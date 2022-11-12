@@ -1,5 +1,4 @@
-
 export type MemberLoginRequest = {
-	phoneNumber : string | undefined;
-	identityCard : string | undefined;
-}
+  phoneNumber: string | undefined;
+  identityCard: string | undefined;
+};
