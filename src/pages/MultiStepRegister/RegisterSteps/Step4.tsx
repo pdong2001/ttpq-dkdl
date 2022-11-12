@@ -97,6 +97,7 @@ const Step4 = (props: StepProps) => {
   console.log('noi nhan the', receiveCardLocationList);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       exps: '0',
       strongPointIds: [],

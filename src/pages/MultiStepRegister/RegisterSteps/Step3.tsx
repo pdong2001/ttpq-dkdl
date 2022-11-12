@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { DepartureType } from '~/pages/MultiStepRegister/constants';
-import { useState } from 'react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 
 // nơi xuất phát
@@ -49,11 +48,6 @@ const provinceList = [
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
-  const [moveType, setMoveType] = useState('0');
-
-  const handleMoveType = (e) => {
-    setMoveType(e.target.value);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -133,6 +127,8 @@ const Step3 = (props: StepProps) => {
     },
   });
 
+  const { moveType } = formik.values;
+
   return (
     <>
       <Stack spacing={4}>
@@ -155,7 +151,6 @@ const Step3 = (props: StepProps) => {
                 isRequired
                 label='Hình thức di chuyển'
                 name='moveType'
-                onChange={handleMoveType}
               >
                 <Radio value='0'>Đi cùng CTN HCM</Radio>
                 <Radio value='1'>Đi từ tỉnh khác</Radio>

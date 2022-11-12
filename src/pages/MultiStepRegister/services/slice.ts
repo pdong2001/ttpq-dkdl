@@ -3,14 +3,13 @@ import { ReduxState, ResponseData } from '~/apis/common/type';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { MemberDto } from '~/dtos/Members/MemberDto.model';
-import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 // import { ReduxState, ResponseData } from '~/apis/common/type';
 // import { PayloadAction } from '@reduxjs/toolkit';
 // import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
 import { register, searchMember } from '~/pages/MultiStepRegister/services/index';
 
 // const initialState: ReduxState<MemberResponseDto> = {
-const initialState: ReduxState<UpSertMemberDto> = {
+const initialState: ReduxState<MemberDto> = {
   data: {
     email: '',
     fullName: '',
@@ -18,7 +17,6 @@ const initialState: ReduxState<UpSertMemberDto> = {
     identityCard: '',
     phoneNumber: '',
     register: {
-      eventId: -1,
       registerType: RegisterType.SINGLE,
     },
   },
