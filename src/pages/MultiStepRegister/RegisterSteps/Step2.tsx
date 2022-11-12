@@ -10,9 +10,9 @@ import Validator from '~/utils/common/validator';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { convertDateStringToObject } from '~/utils/date';
 import FormInput from '~/components/Form/FormInput';
 import CultivationPlace from '~/components/Form/CultivationPlace';
+import { Gender } from '~/dtos/Enums/Gender.enum';
 // import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
 
 // // nơi sinh hoạt
@@ -80,59 +80,58 @@ const Step2 = (props: StepProps) => {
     phoneNumber,
     identityCard,
     religiousName = '',
-    dateOfBirth,
+    gender,
+    dateOfBirth = { date: '', month: '', year: '' },
+    email = '',
+    permanentAddress = { provinceId: 0, districtId: 0, wardId: 0 },
+    temporaryAddress = { provinceId: 0, districtId: 0, wardId: 0 },
+    organizationStructureId = '',
   } = useAppSelector((state) => state.register.data) || {};
 
-  const {
-    // day: dateOfBirthDay = '',
-    month: dateOfBirthMonth = '',
-    year: dateOfBirthYear = '',
-  } = dateOfBirth ? convertDateStringToObject(dateOfBirth) || {} : {};
+  const { date: dateOfBirthDate, month: dateOfBirthMonth, year: dateOfBirthYear } = dateOfBirth;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      registerRole: '2',
-      identityCardOfLeader: '', //chưa có trong DTO
+      gender,
+
       religiousName,
 
       dateOfBirth,
-      dateOfBirthDay: undefined,
+      dateOfBirthDate,
       dateOfBirthMonth,
       dateOfBirthYear,
 
-      email: '',
+      email,
 
-      permanentAddress: '',
+      permanentAddress,
       permanentAddressProvince: '',
       permanentAddressDistrict: '',
       permanentAddressWard: '',
 
-      temporaryAddress: '',
+      temporaryAddress,
       temporaryAddressProvince: '',
       temporaryAddressDistrict: '',
       temporaryAddressWard: '',
 
-      organzationStucture: '',
-      // groupOfYouthAssociation: '',
-      // youthAssociationGroup: '',
+      organizationStructureId,
     },
     validationSchema: Yup.object({
       dateOfBirth: Yup.object()
         .shape({
-          day: Yup.string(),
+          date: Yup.string(),
           month: Yup.string(),
           year: Yup.string(),
         })
         .test({
           name: 'validDOB',
           test: (value, context) => {
-            const { year, month, day } = value;
+            const { year, month, date } = value;
 
-            if (!(year || month || day)) {
+            if (!(year || month || date)) {
               return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
             }
-            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, day].join('-'));
+            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, date].join('-'));
             const isValidDateFollowCalender = Validator.validateCalenderDate(value);
             return (
               (isValidDateFormat && isValidDateFollowCalender) ||
@@ -140,7 +139,7 @@ const Step2 = (props: StepProps) => {
             );
           },
         }),
-      dateOfBirthDay: Yup.string().required(),
+      dateOfBirthDate: Yup.string().required(),
       dateOfBirthMonth: Yup.string().required(),
       dateOfBirthYear: Yup.string().required(),
 
@@ -164,15 +163,9 @@ const Step2 = (props: StepProps) => {
       temporaryAddressDistrict: Yup.string().required(),
       temporaryAddressWard: Yup.string().required(),
 
-      organzationStuctureId: Yup.object().shape({
-        groupId: Yup.string().required('Xin hãy chọn nơi sinh hoạt'),
-        teamId: Yup.string(),
-      }),
-      // youthAssociationGroup: Yup.string().required(),
+      organizationStructureId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
     }),
     onSubmit: (values) => {
-      console.log('input step 2', values);
-
       dispatch(fillForm(values));
       nextStep();
     },
@@ -204,9 +197,9 @@ const Step2 = (props: StepProps) => {
             <Stack spacing={4}>
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 2, lg: 8 }}>
                 <Stack spacing={3}>
-                  <Radios spacing={8} label='Giới tính' name='gender' defaultValue='0' isRequired>
-                    <Radio value='0'>Nam</Radio>
-                    <Radio value='1'>Nữ</Radio>
+                  <Radios spacing={8} label='Giới tính' name='gender' isRequired>
+                    <Radio value={Gender.MALE}>Nam</Radio>
+                    <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
                   <DateOfBirth name='dateOfBirth' label='Ngày sinh' isRequired />
@@ -216,7 +209,7 @@ const Step2 = (props: StepProps) => {
                   <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
                   <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
                   <CultivationPlace
-                    name='organzationStuctureId'
+                    name='organizationStructureId'
                     label='Địa điểm tu tập'
                     isRequired
                   />
