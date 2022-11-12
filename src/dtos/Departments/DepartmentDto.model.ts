@@ -1,5 +1,5 @@
 export type DepartmentDto = {
-  id?: number;
+  id: number;
   name?: string;
   code?: string;
   note?: string;
