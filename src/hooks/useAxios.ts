@@ -20,7 +20,6 @@ const useAxios = <Data = any>(
     controllerRef.current.abort();
   };
   const dispatch = useAppDispatch();
-  let cancelToken;
 
   const makeRequest = async (axiosParams: AxiosRequestConfig) => {
     const { transformResponse } = axiosParams;
@@ -31,7 +30,6 @@ const useAxios = <Data = any>(
       const res = await ourAxios.request({
         signal: controllerRef.current.signal,
         ...axiosParams,
-        cancelToken: new axios.CancelToken((c) => (cancelToken = c)),
         transformResponse: [
           axios.defaults.transformResponse?.[0],
           (res) => {
@@ -51,13 +49,10 @@ const useAxios = <Data = any>(
       setLoaded(true);
       !hideSpinner && dispatch(setGlobalLoading(false));
     }
-
-    return cancel;
   };
 
   useEffect(() => {
     makeRequest(axiosParams);
-    return () => cancelToken();
   }, [...dependencies]);
 
   return { data, error, loaded, cancel };

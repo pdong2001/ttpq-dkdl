@@ -23,7 +23,7 @@ export type MemberDto = {
   identityCardImagePath?: string;
   exps?: EventExp;
   ctnType?: PhanLoaiThanhNien;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   permanentWard?: AddressDto;
   temporaryWard?: AddressDto;
   permanentProvince?: AddressDto;

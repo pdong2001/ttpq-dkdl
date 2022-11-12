@@ -13,62 +13,7 @@ import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import FormInput from '~/components/Form/FormInput';
 import CultivationPlace from '~/components/Form/CultivationPlace';
 import { Gender } from '~/dtos/Enums/Gender.enum';
-// import { UpSertMemberDto } from '~/types/Members/UpSertMember.dto';
-
-// // nơi sinh hoạt
-// const youthAssociationList = [
-//   {
-//     id: 1,
-//     ten: 'CTN Hà Nội',
-//     ParentId: 0,
-//     Status: 1,
-//     Sort: 0,
-//     Type: 2,
-//     ProvinceId: 2,
-//     DistrictIds: null,
-//     PerDelId: 0,
-//     DeleteReason: null,
-//   },
-//   {
-//     id: 2,
-//     ten: 'Tổ 1',
-//     ParentId: 1398,
-//     Status: 1,
-//     Sort: 0,
-//     Type: 1,
-//     ProvinceId: 2,
-//     DistrictIds: '1,4',
-//     PerDelId: 0,
-//     DeleteReason: null,
-//   },
-// ];
-// // tổ
-// const groupOfYouthAssociationList = [
-//   {
-//     id: 1,
-//     ten: 'CTN Hà Nội',
-//     ParentId: 0,
-//     Status: 1,
-//     Sort: 0,
-//     Type: 2,
-//     ProvinceId: 2,
-//     DistrictIds: null,
-//     PerDelId: 0,
-//     DeleteReason: null,
-//   },
-//   {
-//     id: 1403,
-//     ten: 'Thứ 2 Chùa Đồng',
-//     ParentId: 1,
-//     Status: 1,
-//     Sort: 20,
-//     Type: 1,
-//     ProvinceId: 0,
-//     DistrictIds: null,
-//     PerDelId: 0,
-//     DeleteReason: null,
-//   },
-// ];
+import { convertDateStringToObject } from '~/utils/date';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -81,14 +26,19 @@ const Step2 = (props: StepProps) => {
     identityCard,
     religiousName = '',
     gender,
-    dob = { date: '', month: '', year: '' },
+    dob,
     email = '',
     permanentAddress = { provinceId: 0, districtId: 0, wardId: 0 },
     temporaryAddress = { provinceId: 0, districtId: 0, wardId: 0 },
     organizationStructureId = '',
+    dateOfBirth,
   } = useAppSelector((state) => state.register.data) || {};
 
-  const { date: dobDate, month: dobMonth, year: dobYear } = dob;
+  const {
+    date: dobDate,
+    month: dobMonth,
+    year: dobYear,
+  } = dob || convertDateStringToObject(dateOfBirth);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -105,14 +55,14 @@ const Step2 = (props: StepProps) => {
       email,
 
       permanentAddress,
-      permanentAddressProvince: '',
-      permanentAddressDistrict: '',
-      permanentAddressWard: '',
+      permanentAddressProvince: permanentAddress.provinceId,
+      permanentAddressDistrict: permanentAddress.districtId,
+      permanentAddressWard: permanentAddress.wardId,
 
       temporaryAddress,
-      temporaryAddressProvince: '',
-      temporaryAddressDistrict: '',
-      temporaryAddressWard: '',
+      temporaryAddressProvince: temporaryAddress.provinceId,
+      temporaryAddressDistrict: temporaryAddress.districtId,
+      temporaryAddressWard: temporaryAddress.wardId,
 
       organizationStructureId,
     },
@@ -166,10 +116,32 @@ const Step2 = (props: StepProps) => {
       organizationStructureId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
     }),
     onSubmit: (values) => {
-      dispatch(fillForm(values));
+      const {
+        gender,
+        religiousName,
+        dob,
+        email,
+        permanentAddress,
+        temporaryAddress,
+        organizationStructureId,
+      } = values;
+      const { year, month, date } = dob || {};
+      dispatch(
+        fillForm({
+          gender,
+          religiousName,
+          email,
+          temporaryAddress,
+          permanentAddress,
+          organizationStructureId,
+          dateOfBirth: new Date(year, +month - 1, date),
+        }),
+      );
       nextStep();
     },
   });
+
+  console.log('formiks', formik.errors, formik.values);
 
   return (
     <>
