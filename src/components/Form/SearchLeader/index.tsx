@@ -23,6 +23,7 @@ import API from '~/apis/constants';
 import useSearch from '~/hooks/useSearch';
 import { ResponseData } from '~/apis/common/type';
 import { useField } from 'formik';
+import { useAppSelector } from '~/hooks/reduxHook';
 
 type Props = {
   name: string;
@@ -36,6 +37,7 @@ type LeaderData = {
 };
 
 const SearchLeader = (props: Props) => {
+  const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { name, label } = props;
   const [field, { error, touched }, { setValue, setTouched }] = useField(name);
 
@@ -47,7 +49,7 @@ const SearchLeader = (props: Props) => {
       method: 'post',
       url: API.SEARCH_LEADER,
       data: {
-        eventId: 1,
+        eventId: registerPage.eventId,
         phoneNumber: searchValue,
         identityCard: searchValue,
       },
