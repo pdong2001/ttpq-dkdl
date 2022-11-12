@@ -14,7 +14,7 @@ type MultiSelectOption = {
   value: any;
   colorScheme?: string;
 };
-type Props = ({} & InputProps & FormControlProps & { options: Object[] }) & {
+type Props = ({} & InputProps & FormControlProps & { options?: Object[] }) & {
   tagColorScheme?: string;
   valueField?: string;
   labelField?: string;

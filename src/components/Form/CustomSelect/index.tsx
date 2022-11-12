@@ -3,11 +3,11 @@ import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 export type SelectData = {
-  id: number | string;
+  id: any;
 };
 
 type CustomSelectProps = {
-  data: SelectData[];
+  data?: SelectData[];
   label?: string;
   hiddenErrorMessage?: boolean;
   valueField: string;
