@@ -4,7 +4,7 @@ export enum RegisterType {
 }
 
 export enum DepartureType {
-  HCM,
-  TINH_KHAC,
-  TU_TUC,
+  HCM = '0',
+  TINH_KHAC = '1',
+  TU_TUC = '2',
 }
