@@ -165,7 +165,7 @@ const Step3 = (props: StepProps) => {
                 // HCM
                 <>
                   <Select
-                    name='startPlaneCode'
+                    name=''
                     data={departLocationList}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
@@ -190,7 +190,7 @@ const Step3 = (props: StepProps) => {
                 // tỉnh khác
                 <>
                   <Select
-                    name='departLocationTinhKhac'
+                    name='otherStartAddress'
                     data={provinceList}
                     label='Nơi xuất phát'
                     placeholder='Chọn tỉnh/thành phố'
@@ -203,6 +203,12 @@ const Step3 = (props: StepProps) => {
                     type='datetime-local'
                     isRequired
                   />
+
+                  <FloatingLabel
+                    name='startPlaneCode'
+                    label='Mã chuyến bay - Giờ bay đi'
+                    color={formTextColor}
+                  />
                   <FloatingLabel
                     name='otherLeaveTime'
                     label='Chọn ngày giờ về'
@@ -211,8 +217,8 @@ const Step3 = (props: StepProps) => {
                     isRequired
                   />
                   <FloatingLabel
-                    name='maChuyenBay'
-                    label='Mã chuyến bay - Giờ bay'
+                    name='returnPlaneCode'
+                    label='Mã chuyến bay - Giờ bay về'
                     color={formTextColor}
                   />
                 </>
@@ -220,7 +226,7 @@ const Step3 = (props: StepProps) => {
                 // tự túc
                 <>
                   <Select
-                    name='departLocationTuTuc'
+                    name='otherStartAddress'
                     data={provinceList}
                     label='Nơi xuất phát'
                     placeholder='Chọn tỉnh/thành phố'
