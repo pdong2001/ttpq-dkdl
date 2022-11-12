@@ -4,12 +4,14 @@ const SEARCH_MEMBER = '/api/v1/member/search';
 const GET_PROVINCE = '/api/address/Province';
 const GET_DISTRICT = '/api/address/District';
 const GET_WARD = '/api/address/Ward';
-const GET_STRONG_POINT = '/api/v1/Skill/getall';
+const GET_STRONG_POINT = '/api/v1/SkillForRegisters/GetAll';
 const GET_DEPARTMENT_BY_EVENT = 'api/v1/Department/get-all';
 const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = '/api/v1/ReceiveCardAddresses/Event/:id';
 const GET_CTN = '/api/ctn/list';
 const SEARCH_LEADER = '/api/v1/EventRegistry/search-leader';
 const GET_REGISTER_PAGE = '/api/v1/EventRegistryPages/GetById/:shortUri';
+const GET_START_ADDRESS_BY_EVENT = '/api/v1/StartAddresses/event/:id';
+const GET_LEAVE_ADDRESS_BY_EVENT = '/api/v1/LeaveAddresses/event/:id';
 
 const API = {
   REGISTER,
@@ -24,6 +26,8 @@ const API = {
   GET_CTN,
   SEARCH_LEADER,
   GET_REGISTER_PAGE,
+  GET_START_ADDRESS_BY_EVENT,
+  GET_LEAVE_ADDRESS_BY_EVENT,
 };
 
 export default API;
