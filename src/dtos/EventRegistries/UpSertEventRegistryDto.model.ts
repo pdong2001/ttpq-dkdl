@@ -1,11 +1,11 @@
-import { AddressDto } from "~/dtos/Addresses/AddressDto.model";
+import { UpsertAddressDto } from "~/dtos/Addresses/UpsertAddressDto.model";
 import { MoveType } from "../Enums/MoveType.enum";
 import { PositionType } from "../Enums/PositionType.enum";
 import { RegisterType } from "../Enums/RegisterType.enum";
 
 export type UpSertEventRegistryDto = {
 	memberId?: string;
-	eventId: number;
+	eventId?: number;
 	note?: string;
 	startPlaneCode?: string;
 	returnPlaneCode?: string;
@@ -20,9 +20,9 @@ export type UpSertEventRegistryDto = {
 	otherStartTime?: string;
 	otherLeaveTime?: string;
 	receiveCardAddressId?: number;
-	registerType: RegisterType;
+	registerType?: RegisterType;
 	expDepartmentIds?: number[];
 	wishDepartmentIds?: number;
-	otherStartAddress?: AddressDto;
-	otherLeaveAddress?: AddressDto;
+	otherStartAddress?: UpsertAddressDto;
+	otherLeaveAddress?: UpsertAddressDto;
 }

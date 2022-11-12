@@ -1,14 +1,14 @@
 import { Gender } from "../Enums/Gender.enum";
+import { UpSertAddressDto } from "../UpSertAddressDto.model";
 import { EventExp } from "../Enums/EventExp.enum";
 import { PhanLoaiThanhNien } from "../Enums/PhanLoaiThanhNien.enum";
 import { UpSertEventRegistryDto } from "../EventRegistries/UpSertEventRegistryDto.model";
-import { AddressDto } from '~/dtos/Addresses/AddressDto.model';
 
 export type UpSertMemberDto = {
 	work?: string;
-	email: string;
+	email?: string;
 	gender: Gender;
-	fullName: string;
+	fullName?: string;
 	avatarPath?: string;
 	phoneNumber: string;
 	identityCard: string;
@@ -20,7 +20,7 @@ export type UpSertMemberDto = {
 	dateOfBirth?: string;
 	organizationStructureId?: number;
 	strongPointIds?: number[];
-	permanentAddress?: AddressDto;
-	temporaryAddress?: AddressDto;
+	permanentAddress?: UpSertAddressDto;
+	temporaryAddress?: UpSertAddressDto;
 	register: UpSertEventRegistryDto;
 }

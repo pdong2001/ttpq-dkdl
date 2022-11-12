@@ -25,6 +25,7 @@ const Step1 = (props: StepProps) => {
   } = useAppSelector((state) => state.register.data) || {};
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       fullName,
       phoneNumber,
@@ -45,12 +46,25 @@ const Step1 = (props: StepProps) => {
       }),
     }),
     onSubmit: (values) => {
-      console.log('input step 1', values);
+      const { fullName, identityCard, registerType, leaderId, phoneNumber } = values;
 
-      dispatch(fillForm(values));
+      dispatch(
+        fillForm({
+          fullName,
+          identityCard,
+          phoneNumber,
+          register: {
+            registerType,
+            leaderId,
+          },
+        }),
+      );
       dispatch(
         searchMember({
-          data: values,
+          data: {
+            phoneNumber,
+            identityCard,
+          },
         }),
       );
       nextStep();
@@ -59,7 +73,7 @@ const Step1 = (props: StepProps) => {
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
   const isRegisterFollowGroup = formik.values.registerType === RegisterType.GROUP;
 
-  console.log('formiks', formik.errors, formik.values);
+  // console.log('formiks', formik.errors, formik.values);
 
   return (
     <>

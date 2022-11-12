@@ -14,6 +14,7 @@ import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { useField } from 'formik';
 import { useEffect, useState } from 'react';
+import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
 
 type AddressProps = SelectProps & FormControlProps & StackProps;
 
@@ -68,27 +69,28 @@ function Address(props: AddressProps) {
     [districtId],
   );
 
-  const [address, setAddress] = useState({});
+  const [address, setAddress] = useState<UpsertAddressDto>(field.value);
+  useEffect(() => {
+    setAddress(field.value);
+  }, []);
   useEffect(() => {
     setAddressValue(address);
   }, [address]);
 
   useEffect(() => {
-    setAddress({ provinceId });
-    setDTouched(false);
-    setDistrict('');
-    setWard('');
-  }, [provinceId]);
-
-  useEffect(() => {
-    setAddress((old) => ({ ...old, districtId, wardId: '' }));
-    setWard('');
-    setVTouched(false);
-  }, [districtId]);
-
-  useEffect(() => {
-    setAddress((old) => ({ ...old, wardId }));
-  }, [wardId]);
+    setAddress((old) => {
+      if (old.provinceId !== provinceId) {
+        setDTouched(false);
+        setDistrict('');
+        setWard('');
+      }
+      if (old.districtId !== districtId) {
+        setVTouched(false);
+        setWard('');
+      }
+      return { provinceId, districtId, wardId };
+    });
+  }, [provinceId, districtId, wardId]);
 
   const errorMessage = error && Object.values(error)[0];
 

@@ -1,10 +1,18 @@
-export const convertDateStringToObject = (dateString) => {
-  const date = new Date(dateString);
+import { CustomDate } from '~/dtos/Date/CustomDate';
 
-  if (date) {
+export const convertDateStringToObject = (dateString): CustomDate => {
+  const date = new Date(dateString);
+  console.log('date == ', date);
+
+  //@ts-ignore
+  if (date && !isNaN(date)) {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    return { day, month, year };
+    const formatedDate = day < 10 ? `0${day}` : day;
+    const formatedMonth = month < 10 ? `0${month}` : month;
+
+    return { date: formatedDate, month: formatedMonth, year };
   }
+  return { date: '', month: '', year: '' };
 };

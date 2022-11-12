@@ -32,15 +32,15 @@ import { formatUrl } from '~/utils/functions';
 // ];
 
 // kỹ năng
-const strongPointListTemp = [
-  { id: 0, code: 'Chưa có', name: 'Chưa có' },
-  { id: 1, code: 'Cắm hoa', name: 'Cắm hoa' },
-  { id: 2, code: 'Cắt tỉa trang trí món', name: 'Cắt tỉa trang trí món' },
-  { id: 3, code: 'Chưng trái cây nghệ thuật', name: 'Chưng trái cây nghệ thuật' },
-  { id: 4, code: 'Cơ khí', name: 'Cơ khí' },
-  { id: 5, code: 'Cắt may cơ bản', name: 'Cắt may cơ bản' },
-  { id: 6, code: 'Ngoại ngữ', name: 'Ngoại ngữ' },
-];
+// const strongPointListTemp = [
+//   { id: 0, code: 'Chưa có', name: 'Chưa có' },
+//   { id: 1, code: 'Cắm hoa', name: 'Cắm hoa' },
+//   { id: 2, code: 'Cắt tỉa trang trí món', name: 'Cắt tỉa trang trí món' },
+//   { id: 3, code: 'Chưng trái cây nghệ thuật', name: 'Chưng trái cây nghệ thuật' },
+//   { id: 4, code: 'Cơ khí', name: 'Cơ khí' },
+//   { id: 5, code: 'Cắt may cơ bản', name: 'Cắt may cơ bản' },
+//   { id: 6, code: 'Ngoại ngữ', name: 'Ngoại ngữ' },
+// ];
 
 // nơi nhận thẻ
 // const receiveCardLocationList = [
@@ -70,11 +70,10 @@ const Step4 = (props: StepProps) => {
     {
       method: 'get',
       url: API.GET_STRONG_POINT,
+      transformResponse: ({ data }) => data,
     },
     [],
   );
-  // fake data tạm, khi nào có api sẽ xóa
-  strongPointList = [...strongPointListTemp];
   console.log('ky nang so truong', strongPointList);
 
   // lấy danh sách ban
@@ -87,6 +86,7 @@ const Step4 = (props: StepProps) => {
     [],
   );
   console.log('danh sach ban', departmentList);
+  // let { data: registerPage } = useAppSelector((state) => state.registerPage);
 
   // lấy nơi nhận thẻ
   let { data: receiveCardLocationList } = useAxios({
@@ -97,6 +97,7 @@ const Step4 = (props: StepProps) => {
   console.log('noi nhan the', receiveCardLocationList);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       exps: '0',
       strongPointIds: [],

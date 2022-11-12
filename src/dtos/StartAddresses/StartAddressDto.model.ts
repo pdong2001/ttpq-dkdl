@@ -1,4 +1,4 @@
-import { StartTimeDto } from "../StartTimes/StartTimeDto.model";
+import { AddressDto } from "../AddressDto.model";
 
 export type StartAddressDto = {
 	id : number;
@@ -9,5 +9,7 @@ export type StartAddressDto = {
 	name : string | undefined;
 	address : string | undefined;
 	description : string | undefined;
-	times : StartTimeDto[] | undefined;
+	ward : AddressDto | undefined;
+	province : AddressDto | undefined;
+	district : AddressDto | undefined;
 }

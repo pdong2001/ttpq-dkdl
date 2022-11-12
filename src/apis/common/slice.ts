@@ -1,4 +1,4 @@
-import { ActionReducerMapBuilder, createSlice, Draft } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import {
   APIError,
   AsyncAction,
@@ -13,11 +13,11 @@ import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit/d
 type AsyncReducers<Response extends ResponseData, Request = any> = {
   action: AsyncAction<Response, Request>;
   onFullfilled?: (
-    state: Draft<NoInfer<ReduxState<Response['data']>>>,
+    stateData: Response['data'],
     action: SuccessPayloadAction<Response>,
   ) => Response['data'];
   onRejected?: (
-    state: Draft<NoInfer<ReduxState<Response>>>,
+    stateError: APIError | undefined,
     action: ErrorPayloadAction,
   ) => APIError | undefined;
 };
@@ -47,13 +47,13 @@ const createAppSlice = <State extends ReduxState, Response extends ResponseData 
         .addCase(action.fulfilled, (state, action) => {
           state.loaded = true;
           if (onFullfilled) {
-            state.data = onFullfilled(state, action);
+            state.data = onFullfilled(state.data, action);
           }
         })
         .addCase(action.rejected, (state, action) => {
           state.loaded = true;
           if (onRejected) {
-            state.error = onRejected(state, action);
+            state.error = onRejected(state.error, action);
           }
         });
     }, builder);
