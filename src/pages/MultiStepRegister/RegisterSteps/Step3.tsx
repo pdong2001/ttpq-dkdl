@@ -16,11 +16,12 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { DepartureType } from '~/pages/MultiStepRegister/constants';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
-import { useAppSelector } from '~/hooks/reduxHook';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { formatUrl } from '~/utils/functions';
 import { useEffect, useState } from 'react';
+import { fillForm } from '../services/slice';
 
 // nơi xuất phát
 // const departLocationList = [
@@ -76,22 +77,34 @@ const registerPageTemp = {
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
-
+  const dispatch = useAppDispatch();
+  const {
+    register: {
+      moveType: moveTypeInStore = DepartureType.HCM,
+      startTimeId = '',
+      leaveTimeId: leaveTimeIdInStore = '',
+      startPlaneCode = '',
+      returnPlaneCode = '',
+      otherLeaveTime = '',
+      otherStartTime = '',
+      otherStartAddress = '',
+    },
+  } = useAppSelector((state) => state.register.data);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      moveType: '0',
+      moveType: moveTypeInStore,
 
       startAddress: '',
-      startTimeId: '',
+      startTimeId,
       leaveAddress: '2',
-      leaveTimeId: '',
+      leaveTimeId: leaveTimeIdInStore,
 
-      otherStartAddress: '',
-      otherStartTime: '',
-      startPlaneCode: '',
-      otherLeaveTime: '',
-      returnPlaneCode: '',
+      otherStartAddress,
+      otherStartTime,
+      otherLeaveTime,
+      startPlaneCode,
+      returnPlaneCode,
     },
     validationSchema: Yup.object({
       moveType: Yup.string().nullable().required(),
@@ -142,10 +155,12 @@ const Step3 = (props: StepProps) => {
         }),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      if (false) {
-        nextStep();
-      }
+      dispatch(
+        fillForm({
+          register: values,
+        }),
+      );
+      nextStep();
     },
   });
 
@@ -168,7 +183,6 @@ const Step3 = (props: StepProps) => {
   );
 
   const HCMAddressList = startAddressList?.filter((item) => item.provinceId === 1);
-  const OtherAddressList = startAddressList?.filter((item) => item.provinceId !== 1);
 
   // thời gian khởi hành theo địa điểm xuất phát
   const [HCMStartTimes, setHCMStartTimes] = useState([]);
@@ -239,7 +253,7 @@ const Step3 = (props: StepProps) => {
                 <Radio value='1'>Đi từ tỉnh khác</Radio>
                 <Radio value='2'>Tự túc</Radio>
               </Radios>
-              {moveType == DepartureType.HCM ? (
+              {moveType == DepartureType.HCM && (
                 // HCM
                 <>
                   <Select
@@ -271,14 +285,14 @@ const Step3 = (props: StepProps) => {
                     isRequired
                   />
                 </>
-              ) : moveType == DepartureType.TINH_KHAC ? (
-                // tỉnh khác
+              )}
+              {moveType !== DepartureType.HCM && (
+                // tỉnh khác and tự túc
                 <>
-                  <Select
+                  <FloatingLabel
                     name='otherStartAddress'
-                    data={OtherAddressList}
                     label='Nơi xuất phát'
-                    placeholder='Chọn tỉnh/thành phố'
+                    color={formTextColor}
                     isRequired
                   />
                   <FloatingLabel
@@ -289,41 +303,13 @@ const Step3 = (props: StepProps) => {
                     isRequired
                   />
 
-                  <FloatingLabel
-                    name='startPlaneCode'
-                    label='Mã chuyến bay - Giờ bay đi'
-                    color={formTextColor}
-                  />
-                  <FloatingLabel
-                    name='otherLeaveTime'
-                    label='Chọn ngày giờ về'
-                    color={formTextColor}
-                    type='datetime-local'
-                    isRequired
-                  />
-                  <FloatingLabel
-                    name='returnPlaneCode'
-                    label='Mã chuyến bay - Giờ bay về'
-                    color={formTextColor}
-                  />
-                </>
-              ) : (
-                // tự túc
-                <>
-                  <Select
-                    name='otherStartAddress'
-                    data={OtherAddressList}
-                    label='Nơi xuất phát'
-                    placeholder='Chọn tỉnh/thành phố'
-                    isRequired
-                  />
-                  <FloatingLabel
-                    name='otherStartTime'
-                    label='Chọn ngày giờ đi'
-                    color={formTextColor}
-                    type='datetime-local'
-                    isRequired
-                  />
+                  {moveType === DepartureType.TINH_KHAC && (
+                    <FloatingLabel
+                      name='startPlaneCode'
+                      label='Mã chuyến bay - Giờ bay đi'
+                      color={formTextColor}
+                    />
+                  )}
                   <FloatingLabel
                     name='otherLeaveTime'
                     label='Chọn ngày giờ về'
@@ -331,6 +317,13 @@ const Step3 = (props: StepProps) => {
                     type='datetime-local'
                     isRequired
                   />
+                  {moveType === DepartureType.TINH_KHAC && (
+                    <FloatingLabel
+                      name='returnPlaneCode'
+                      label='Mã chuyến bay - Giờ bay về'
+                      color={formTextColor}
+                    />
+                  )}
                 </>
               )}
             </Stack>
