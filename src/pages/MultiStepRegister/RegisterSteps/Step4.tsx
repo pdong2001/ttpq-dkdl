@@ -16,14 +16,15 @@ import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
-import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
-import MultiSelect from '~/components/Form/MultiSelect';
 import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import UploadFile from '~/components/Form/UploadFile';
 import { register } from '../services';
+import MultiSelect from '~/components/Form/MultiSelect';
+import useAxios from '~/hooks/useAxios';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
 // danh sách ban
@@ -92,10 +93,12 @@ const Step4 = (props: StepProps) => {
 
   const previousStepData = useAppSelector((state) => state.register.data);
 
+  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      exps: '0',
+      exps: EventExp.ChuaTungThamGia,
       strongPointIds: [],
       expDepartmentIds: [],
       wishDepartmentIds: 0,
@@ -106,10 +109,27 @@ const Step4 = (props: StepProps) => {
     validationSchema: step4Schema,
     onSubmit: (values) => {
       console.log('submitting.........');
-      
-      const data = { ...previousStepData, register: { ...previousStepData.register, ...values } };
-      dispatch(register({ data }));
-      nextStep();
+
+      const data = {
+        ...previousStepData,
+        register: {
+          ...previousStepData.register,
+          ...values,
+          wishDepartmentIds: [values.wishDepartmentIds],
+          eventId,
+          eventRegistryPageId: id,
+          ctnId,
+          type,
+        },
+      };
+      dispatch(register({ data }))
+        .then(() => {
+          nextStep();
+        })
+        .catch((e) => {
+          alert(' Lỗi rồi hihi');
+          console.log(e);
+        });
     },
   });
 
@@ -133,10 +153,10 @@ const Step4 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios name='exps' label='Số lần về chùa công quả' isRequired>
-                <Radio value='0'>Lần đầu tiên</Radio>
-                <Radio value='1'>Dưới 3 lần</Radio>
-                <Radio value='2'>Trên 3 lần</Radio>
+              <Radios name='exps' label='Số lần về chùa công quả'>
+                <Radio value={EventExp.ChuaTungThamGia}>Lần đầu tiên</Radio>
+                <Radio value={EventExp.Duoi3Lan}>Dưới 3 lần</Radio>
+                <Radio value={EventExp.Tren3Lan}>Trên 3 lần</Radio>
               </Radios>
               <MultiSelect
                 name='strongPointIds'
@@ -144,7 +164,6 @@ const Step4 = (props: StepProps) => {
                 label='Kỹ năng, sở trường'
                 valueField='id'
                 labelField='name'
-                isRequired
               />
               <MultiSelect
                 name='expDepartmentIds'
@@ -168,7 +187,7 @@ const Step4 = (props: StepProps) => {
                 placeholder='Chọn nơi nhận thẻ'
                 isRequired
               />
-              <FormControl name='avatarPath' as='fieldset' border={1} isRequired>
+              <FormControl name='avatarPath' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>

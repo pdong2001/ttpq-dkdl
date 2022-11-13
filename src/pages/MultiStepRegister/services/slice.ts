@@ -38,6 +38,8 @@ const slice = createAppSlice<typeof initialState>(
       onFullfilled: (_, action) => {
         // default: state.data = action.payload;
         /*TODO: handle success response*/
+        console.log('onFullfilled', action.payload);
+
         return action.payload.data;
       },
       onRejected: (_, action) => {
@@ -57,4 +59,4 @@ const slice = createAppSlice<typeof initialState>(
 
 const registerReducer = slice.reducer;
 export const { fillForm } = slice.actions; // các action được defined ở trong reducers sẽ get ra ở đây ạ
-export default registerReducer
+export default registerReducer;

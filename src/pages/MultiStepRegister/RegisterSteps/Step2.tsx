@@ -6,12 +6,12 @@ import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import FormInput from '~/components/Form/FormInput';
-import CultivationPlace from '~/components/Form/CultivationPlace';
-import { Gender } from '~/dtos/Enums/Gender.enum';
 import { convertDateStringToObject } from '~/utils/date';
 import Address from '~/components/Form/Address';
 import step2Schema from '../validationSchema/step2';
+import { Gender } from '~/dtos/Enums/Gender.enum';
+import CultivationPlace from '~/components/Form/CultivationPlace';
+import FormInput from '~/components/Form/FormInput';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -33,6 +33,17 @@ const Step2 = (props: StepProps) => {
     dateOfBirth,
   } = useAppSelector((state) => state.register.data) || {};
 
+  const {
+    provinceId: permanentAddressProvince = '',
+    districtId: permanentAddressDistrict = '',
+    wardId: permanentAddressWard = '',
+  } = permanentAddress || {};
+  const {
+    provinceId: temporaryAddressProvince = '',
+    districtId: temporaryAddressDistrict = '',
+    wardId: temporaryAddressWard = '',
+  } = temporaryAddress || {};
+
   const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);
 
   const formik = useFormik({
@@ -50,14 +61,14 @@ const Step2 = (props: StepProps) => {
       email,
 
       permanentAddress,
-      permanentAddressProvince: permanentAddress.provinceId,
-      permanentAddressDistrict: permanentAddress.districtId,
-      permanentAddressWard: permanentAddress.wardId,
+      permanentAddressProvince,
+      permanentAddressDistrict,
+      permanentAddressWard,
 
       temporaryAddress,
-      temporaryAddressProvince: temporaryAddress.provinceId,
-      temporaryAddressDistrict: temporaryAddress.districtId,
-      temporaryAddressWard: temporaryAddress.wardId,
+      temporaryAddressProvince,
+      temporaryAddressDistrict,
+      temporaryAddressWard,
 
       organizationStructureId,
     },
@@ -78,10 +89,12 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
-          temporaryAddress,
-          permanentAddress,
           organizationStructureId,
-          dateOfBirth: new Date(+year, +month - 1, +date),
+          dateOfBirth: [year, month, date].join('-'),
+          register: {
+            temporaryAddress,
+            permanentAddress,
+          },
         }),
       );
       nextStep();

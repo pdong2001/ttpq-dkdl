@@ -6,10 +6,10 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
-import SearchLeader from '~/components/Form/SearchLeader';
-import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { searchMember } from '../services';
 import step1Schema from '../validationSchema/step1';
+import SearchLeader from '~/components/Form/SearchLeader';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -57,6 +57,7 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
+      alert('kiểu đănge  ký' + registerType);
       nextStep();
     },
   });

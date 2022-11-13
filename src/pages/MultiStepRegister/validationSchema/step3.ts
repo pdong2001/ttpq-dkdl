@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 const step3Schema = Yup.object({
   moveType: Yup.string().nullable().required(),
   // HCM
-  startAddress: Yup.string()
+  startAddressId: Yup.string()
     .nullable()
     .when('moveType', {
       is: DepartureType.HCM,
