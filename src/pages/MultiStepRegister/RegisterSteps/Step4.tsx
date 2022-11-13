@@ -24,7 +24,6 @@ import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '../services/slice';
 import step4Schema from '../validationSchema/step4';
-import UploadFile from '~/components/Form/UploadFile';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
 // danh sách ban
