@@ -3,15 +3,13 @@ import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
-import * as Yup from 'yup';
-import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { searchMember } from '../services';
-import { useEffect } from 'react';
+import step1Schema from '../validationSchema/step1';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -34,21 +32,12 @@ const Step1 = (props: StepProps) => {
       registerType,
       leaderId,
     },
-    validationSchema: Yup.object({
-      fullName: Yup.string().required('Xin hãy nhập họ và tên'),
-      phoneNumber: Yup.string()
-        .required('Xin hãy nhập số điện thoại')
-        .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
-      identityCard: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
-      leaderId: Yup.string().when('registerType', {
-        is: RegisterType.GROUP,
-        then: Yup.string().required('Hãy tìm trưởng đoàn của bạn'),
-        otherwise: Yup.string(),
-      }),
-    }),
+    validationSchema: step1Schema,
     onSubmit: (values) => {
-      const { fullName, identityCard, registerType, leaderId, phoneNumber } = values;
-
+      let { fullName, identityCard, registerType, leaderId, phoneNumber } = values;
+      if (registerType === RegisterType.SINGLE) {
+        leaderId = '';
+      }
       dispatch(
         fillForm({
           fullName,
@@ -75,11 +64,6 @@ const Step1 = (props: StepProps) => {
 
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  useEffect(() => {
-    if (localRegisterType === RegisterType.SINGLE) {
-      formik.setFieldValue('leaderId', '');
-    }
-  }, [localRegisterType]);
   // console.log('formiks', formik.errors, formik.values);
 
   return (
@@ -113,7 +97,7 @@ const Step1 = (props: StepProps) => {
                 color={formTextColor}
                 isRequired
               />
-              <Radios isRequired label='Hình thức đăng ký' name='registerType'>
+              <Radios label='Hình thức đăng ký' name='registerType'>
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>

@@ -2,7 +2,6 @@ import { CustomDate } from '~/dtos/Date/CustomDate';
 
 export const convertDateStringToObject = (dateString): CustomDate => {
   const date = new Date(dateString);
-  console.log('date == ', date);
 
   //@ts-ignore
   if (date && !isNaN(date)) {

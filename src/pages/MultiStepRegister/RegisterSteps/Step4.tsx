@@ -9,11 +9,9 @@ import {
   FormLabel,
   SimpleGrid,
   Radio,
-  Image,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
@@ -23,7 +21,9 @@ import API from '~/apis/constants';
 import MultiSelect from '~/components/Form/MultiSelect';
 import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm } from '../services/slice';
+import step4Schema from '../validationSchema/step4';
+import UploadFile from '~/components/Form/UploadFile';
+import { register } from '../services';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
 // danh sách ban
@@ -90,54 +90,30 @@ const Step4 = (props: StepProps) => {
     transformResponse: ({ data }) => data,
   });
 
+  const previousStepData = useAppSelector((state) => state.register.data);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       exps: '0',
       strongPointIds: [],
       expDepartmentIds: [],
-      wishDepartmentIds: '',
-      receiveCardAddressId: '',
-      avatarPath:
-        'https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg',
+      wishDepartmentIds: 0,
+      receiveCardAddressId: 0,
+      avatarPath: '',
       note: '',
     },
-    validationSchema: Yup.object({
-      // exps: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
-      strongPointIds: Yup.array()
-        .nullable()
-        .test({
-          name: 'strongPoint',
-          test: (value, context) => {
-            if (!value?.length) {
-              return context.createError({ message: 'Xin hãy chọn kỹ năng, sở trường' });
-            }
-            return true;
-          },
-        }),
-      expDepartmentIds: Yup.array()
-        .nullable()
-        .test({
-          name: 'expDepartment',
-          test: (value, context) => {
-            if (!value?.length) {
-              return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
-            }
-            return true;
-          },
-        }),
-      wishDepartmentIds: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
-      receiveCardAddressId: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
-      avatarPath: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
-    }),
+    validationSchema: step4Schema,
     onSubmit: (values) => {
-      // alert(JSON.stringify(values, null, 2));
-      dispatch(fillForm({ register: values }));
+      console.log('submitting.........');
+      
+      const data = { ...previousStepData, register: { ...previousStepData.register, ...values } };
+      dispatch(register({ data }));
       nextStep();
     },
   });
 
-  // console.log('formiks', formik.values, formik.errors, formik.touched);
+  console.log('formiks', formik.values, formik.errors, formik.touched);
 
   return (
     <>
@@ -196,8 +172,8 @@ const Step4 = (props: StepProps) => {
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
-                {/* <UploadFile /> */}
-                <Image src='https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg' />
+                <UploadFile />
+                {/* <Image src='https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg' /> */}
                 {/* <Image src={AvatarTemp} alt='Hình thẻ mẫu' /> */}
               </FormControl>
               <FormControl name='note' as='fieldset' border={1}>
