@@ -3,7 +3,6 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import * as Yup from 'yup';
-import Address from '~/components/Form/Address';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
 import Validator from '~/utils/common/validator';
@@ -14,6 +13,7 @@ import FormInput from '~/components/Form/FormInput';
 import CultivationPlace from '~/components/Form/CultivationPlace';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { convertDateStringToObject } from '~/utils/date';
+import Address from '~/components/Form/Address';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -28,8 +28,8 @@ const Step2 = (props: StepProps) => {
     gender,
     email = '',
 
-    permanentAddress = { provinceId: 0, districtId: 0, wardId: 0 },
-    temporaryAddress = { provinceId: 0, districtId: 0, wardId: 0 },
+    permanentAddress = { provinceId: '', districtId: '', wardId: '' },
+    temporaryAddress = { provinceId: '', districtId: '', wardId: '' },
 
     organizationStructureId = '',
     dateOfBirth,
@@ -138,7 +138,7 @@ const Step2 = (props: StepProps) => {
     },
   });
 
-  console.log('formiks', formik.errors, formik.values);
+  // console.log('formiks', formik.errors, formik.values);
 
   return (
     <>
@@ -166,7 +166,7 @@ const Step2 = (props: StepProps) => {
             <Stack spacing={4}>
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 2, lg: 8 }}>
                 <Stack spacing={3}>
-                  <Radios spacing={8} label='Giới tính' name='gender' isRequired>
+                  <Radios spacing={8} label='Giới tính' name='gender'>
                     <Radio value={Gender.MALE}>Nam</Radio>
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>

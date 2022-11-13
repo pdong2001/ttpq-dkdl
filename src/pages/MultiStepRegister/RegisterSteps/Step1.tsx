@@ -113,7 +113,7 @@ const Step1 = (props: StepProps) => {
                 color={formTextColor}
                 isRequired
               />
-              <Radios isRequired label='Hình thức đăng ký' name='registerType'>
+              <Radios label='Hình thức đăng ký' name='registerType'>
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
