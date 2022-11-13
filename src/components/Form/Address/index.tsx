@@ -9,12 +9,12 @@ import {
   VisuallyHiddenInput,
 } from '@chakra-ui/react';
 import Select from '../CustomSelect';
-import useCustomColorMode from '~/hooks/useColorMode';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { useField } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
+import useCustomColorMode from '~/hooks/useColorMode';
 
 type AddressProps = SelectProps & FormControlProps & StackProps;
 
@@ -47,7 +47,7 @@ function Address(props: AddressProps) {
     },
     [],
   );
-  const { data: districts } = useAxios(
+  const { data: districts, cancel: cancelDistrict } = useAxios(
     {
       method: 'get',
       url: API.GET_DISTRICT,
@@ -56,7 +56,11 @@ function Address(props: AddressProps) {
     },
     [provinceId],
   );
-  const { data: wards } = useAxios(
+  if (cancelDistrict && !provinceId) {
+    cancelDistrict.cancel();
+  }
+
+  const { data: wards, cancel: cancelWard } = useAxios(
     {
       method: 'get',
       url: API.GET_WARD,
@@ -68,29 +72,29 @@ function Address(props: AddressProps) {
     },
     [districtId],
   );
+  if (cancelWard && !districtId) {
+    cancelWard.cancel();
+  }
 
   const [address, setAddress] = useState<UpsertAddressDto>(field.value);
-  useEffect(() => {
-    setAddress(field.value);
-  }, []);
   useEffect(() => {
     setAddressValue(address);
   }, [address]);
 
   useEffect(() => {
-    setAddress((old) => {
-      if (old.provinceId !== provinceId) {
-        setDTouched(false);
-        setDistrict('');
-        setWard('');
-      }
-      if (old.districtId !== districtId) {
-        setVTouched(false);
-        setWard('');
-      }
-      return { provinceId, districtId, wardId };
-    });
+    setAddress({ provinceId, districtId, wardId });
   }, [provinceId, districtId, wardId]);
+
+  useEffect(() => {
+    setDTouched(false);
+    setDistrict('');
+    setWard('');
+  }, [provinceId]);
+
+  useEffect(() => {
+    setVTouched(false);
+    setWard('');
+  }, []);
 
   const errorMessage = error && Object.values(error)[0];
 
@@ -136,3 +140,4 @@ function Address(props: AddressProps) {
 Address.defaultProps = { direction: 'row' } as AddressProps;
 
 export default Address;
+
