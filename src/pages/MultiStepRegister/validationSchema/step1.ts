@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { REGEX_PHONE } from '~/utils/common';
-import { RegisterType } from '../constants';
 
 const step1Schema = Yup.object({
   fullName: Yup.string().required('Xin hãy nhập họ và tên'),

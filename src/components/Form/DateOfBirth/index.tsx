@@ -29,9 +29,7 @@ const monthOfBirth = [
   { id: '12', name: '12' },
 ];
 
-type DateOfBirthProps = SelectProps &
-  FormControlProps &
-  StackProps;
+type DateOfBirthProps = SelectProps & FormControlProps & StackProps;
 
 function DateOfBirth(props: DateOfBirthProps) {
   const { formTextColor } = useCustomColorMode();
@@ -62,7 +60,7 @@ function DateOfBirth(props: DateOfBirthProps) {
         <FloatingLabel name={dateName} label='Ngày' color={formTextColor} hiddenErrorMessage />
         <CustomSelect placeholder='Tháng' data={monthOfBirth} name={monthName} hiddenErrorMessage />
         <FloatingLabel name={yearName} label='Năm' color={formTextColor} hiddenErrorMessage />
-        <VisuallyHiddenInput {...field} />
+        <VisuallyHiddenInput tabIndex={-1} {...field} />
       </HStack>
       <FormErrorMessage>{meta?.error}</FormErrorMessage>
     </FormControl>
