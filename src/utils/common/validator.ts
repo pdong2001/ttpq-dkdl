@@ -1,5 +1,4 @@
-import { CustomDate } from "~/dtos/Date/CustomDate";
-
+import { CustomDate } from '~/dtos/Date/CustomDate';
 
 const validateCalenderDate = ({ year, month, date }: CustomDate) => {
   if (date == 31 && (month == 4 || month == 6 || month == 9 || month == 11)) {
