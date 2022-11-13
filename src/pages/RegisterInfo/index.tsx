@@ -11,13 +11,20 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Collapse
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useRef, useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import { useHistory } from "react-router-dom";
+
 import {
   MdPhone,
   MdContentCopy,
@@ -39,6 +46,7 @@ import {
 } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { getRegisterInfo } from '~/apis/registerInfo/slice';
+import { getMemberAuth } from '~/apis/memberAuth/slice';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
@@ -46,11 +54,51 @@ import useAxios from '~/hooks/useAxios';
 // type Props = {};
 
 const RegisterInfo = () => {
-  const { id } = useParams<any>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const initialRef = useRef(null);
-
+  const isSubmit = useRef<boolean>(false);
+  const history = useHistory();
   const dispatch = useAppDispatch();
+
+  const { id } = useParams<any>();
+  const {
+    isOpen: isOpenLoginModal,
+    onOpen: onOpenLoginModal,
+    onClose: onCloseLoginModal
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpenLoginAlert,
+    onOpen: onOpenLoginAlert,
+  } = useDisclosure();
+
+  const [login_phone, setLoginPhone] = useState<string>('');
+  const [login_id_card, setLoginIdCard] = useState<string>('');
+  const handleLoginPhoneChange = (e) => setLoginPhone(e.target.value);
+  const handleLoginIdCardChange = (e) => setLoginIdCard(e.target.value);
+  const loginMember = () => {
+    isSubmit.current = true;
+    dispatch(
+      getMemberAuth({
+        method: 'post',
+        url: API.LOGIN_MEMBER,
+        data: {
+          "phoneNumber": login_phone,
+          "identityCard": login_id_card
+        }
+      }),
+    );
+  }
+
+  const { data: memberAuthdata, error: memberAuthError } = useAppSelector((state) => state.memberAuth);
+  useEffect(() => {
+    console.log(memberAuthdata.token)
+    if (memberAuthdata.token && isSubmit.current) {
+      history.push('/register');
+    }
+    if (memberAuthError) onOpenLoginAlert();
+  }, [memberAuthdata.token,memberAuthError]);
+
+  console.log(memberAuthdata)
+
   useEffect(() => {
     dispatch(
       getRegisterInfo({
@@ -74,7 +122,7 @@ const RegisterInfo = () => {
   const permanent = [member?.permanentAddress, member?.permanentWard, member?.permanentDistrict, member?.permanentProvince].join(", ");
   const temporary = [member?.temporaryAddress, member?.temporaryWard, member?.temporaryDistrict, member?.temporaryProvince].join(", ");
 
-  const groupData = useAxios({
+  const { data: groupData } = useAxios({
     method: 'post',
     url: formatUrl(API.GET_MEMBER_IN_GROUP, { leaderId }),
   }, [leaderId]);
@@ -82,7 +130,7 @@ const RegisterInfo = () => {
   //   groupData.cancel();
   // }
 
-  const ctnInfo = useAxios({
+  const {data: ctnInfo} = useAxios({
     method: 'get',
     url: API.GET_CTN,
     params: { ctnId: organizationStructureId }
@@ -101,7 +149,7 @@ const RegisterInfo = () => {
 
   const tableInfoRight = [
     { title: 'Pháp Danh', value: member?.religiousName },
-    { title: 'Nơi sinh hoạt', value: ctnInfo?.data?.Data[0].Name },
+    { title: 'Nơi sinh hoạt', value: ctnInfo?.Data[0].Name },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },
     { title: 'Kỹ năng', value: member?.strongPoints ? member?.strongPoints : [] },
@@ -130,7 +178,7 @@ const RegisterInfo = () => {
     }
   }
 
-  const groupMembers = groupData?.data?.data ? groupData.data.data : [];
+  const groupMembers = groupData?.data ? groupData.data : [];
 
   return (
     <Box
@@ -221,28 +269,36 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={'var(--chakra-colors-ttpq-600)'} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button onClick={onOpen} size='sm'>
+                <Button display={memberAuthdata.token && 'none'} onClick={onOpenLoginModal} size='sm'>
                   Cập nhật
                 </Button>
-                <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
+                <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Xác nhận thông tin</ModalHeader>
+
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                      <FormControl>
+                    <Collapse in={isOpenLoginAlert} animateOpacity>
+                      <Alert status='error' variant='subtle' mb={2}>
+                        <AlertIcon />
+                        <AlertTitle>Lỗi đăng nhập!</AlertTitle>
+                        <AlertDescription>Tài khoản nhập vào không đúng.</AlertDescription>
+                      </Alert>
+                      </Collapse>
+                      <FormControl isRequired>
                         <FormLabel>Số điện thoại</FormLabel>
-                        <Input ref={initialRef} placeholder='Số điện thoại' />
+                        <Input placeholder='Số điện thoại' value={login_phone} onChange={handleLoginPhoneChange} />
                       </FormControl>
 
-                      <FormControl mt={4}>
+                      <FormControl mt={4} isRequired>
                         <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
-                        <Input placeholder='Số CCCD/CMT' />
+                        <Input placeholder='Số CCCD/CMT' value={login_id_card} onChange={handleLoginIdCardChange} />
                       </FormControl>
                     </ModalBody>
 
                     <ModalFooter>
-                      <Button>Gửi</Button>
+                      <Button onClick={loginMember}>Gửi</Button>
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
@@ -317,7 +373,7 @@ const RegisterInfo = () => {
                         <MdLocationCity />
                         <Text as='b'>Nơi xuất phát</Text>
                       </HStack>
-                      <Text>{ schedule && schedule?.departure_address }</Text>
+                      <Text>{schedule && schedule?.departure_address}</Text>
                     </Box>
                     <Box>
                       <HStack>
@@ -325,9 +381,9 @@ const RegisterInfo = () => {
                         <Text as='b'>Thời gian xuất phát</Text>
                       </HStack>
                       <Box mt={2}>
-                        <Tag mr={2} mb={1} colorScheme={'blue'}>{ schedule && schedule?.departure_time }</Tag>
-                        {moveType == 1 && schedule && schedule.departure_flight_code && 
-                        <Tag mr={2} mb={1} colorScheme={'blue'}>Mã chuyến bay: { schedule?.departure_flight_code }</Tag>}
+                        <Tag mr={2} mb={1} colorScheme={'blue'}>{schedule && schedule?.departure_time}</Tag>
+                        {moveType == 1 && schedule && schedule.departure_flight_code &&
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>Mã chuyến bay: {schedule?.departure_flight_code}</Tag>}
                       </Box>
                     </Box>
                     <Box>
@@ -336,9 +392,9 @@ const RegisterInfo = () => {
                         <Text as='b'>Thời gian trở về</Text>
                       </HStack>
                       <Box mt={2}>
-                        <Tag mr={2} mb={1} colorScheme={'pink'}>{ schedule && schedule?.return_time }</Tag>
-                        {moveType == 1 && schedule && schedule.return_flight_code && 
-                        <Tag mr={2} mb={1} colorScheme={'pink'}>Mã chuyến bay: { schedule?.return_flight_code }</Tag>}
+                        <Tag mr={2} mb={1} colorScheme={'pink'}>{schedule && schedule?.return_time}</Tag>
+                        {moveType == 1 && schedule && schedule.return_flight_code &&
+                          <Tag mr={2} mb={1} colorScheme={'pink'}>Mã chuyến bay: {schedule?.return_flight_code}</Tag>}
                       </Box>
                     </Box>
                     {moveType == 0 && <Box>
@@ -346,7 +402,7 @@ const RegisterInfo = () => {
                         <MdLocationCity />
                         <Text as='b'>Nơi trở về</Text>
                       </HStack>
-                      <Text>{ schedule && schedule?.return_address }</Text>
+                      <Text>{schedule && schedule?.return_address}</Text>
                     </Box>}
                   </Stack>
                 </TabPanel>
