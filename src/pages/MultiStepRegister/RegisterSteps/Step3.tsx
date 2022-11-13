@@ -11,7 +11,6 @@ import {
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import Select from '~/components/Form/CustomSelect';
-import * as Yup from 'yup';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { DepartureType } from '~/pages/MultiStepRegister/constants';
@@ -22,6 +21,7 @@ import API from '~/apis/constants';
 import { formatUrl } from '~/utils/functions';
 import { useEffect, useState } from 'react';
 import { fillForm } from '../services/slice';
+import step3Schema from '../validationSchema/step3';
 
 // nơi xuất phát
 // const departLocationList = [
@@ -106,54 +106,7 @@ const Step3 = (props: StepProps) => {
       startPlaneCode,
       returnPlaneCode,
     },
-    validationSchema: Yup.object({
-      moveType: Yup.string().nullable().required(),
-      // HCM
-      startAddress: Yup.string()
-        .nullable()
-        .when('moveType', {
-          is: '0',
-          then: Yup.string().required('Xin hãy chọn nơi xuất phát HCM'),
-          otherwise: Yup.string().notRequired(),
-        }),
-      startTimeId: Yup.string()
-        .nullable()
-        .when('moveType', {
-          is: '0',
-          then: Yup.string().required('Xin hãy chọn ngày giờ đi HCM'),
-          otherwise: Yup.string().notRequired(),
-        }),
-      leaveTimeId: Yup.string()
-        .nullable()
-        .when('moveType', {
-          is: '0',
-          then: Yup.string().required('Xin hãy chọn ngày giờ về HCM'),
-          otherwise: Yup.string().notRequired(),
-        }),
-
-      // Tỉnh khác / Tự túc
-      otherStartAddress: Yup.string()
-        .nullable()
-        .when('moveType', {
-          is: '1' || '2',
-          then: Yup.string().required('Xin hãy chọn nơi xuất phát TinhKhac / Tự túc'),
-          otherwise: Yup.string().notRequired(),
-        }),
-      otherStartTime: Yup.string()
-        .nullable()
-        .when('moveType', {
-          is: '1' || '2',
-          then: Yup.string().required('Xin hãy chọn ngày giờ đi TinhKhac / Tự túc'),
-          otherwise: Yup.string().notRequired(),
-        }),
-      otherLeaveTime: Yup.string()
-        .nullable()
-        .when('moveType', {
-          is: '1' || '2',
-          then: Yup.string().required('Xin hãy chọn ngày giờ về TinhKhac / Tự túc'),
-          otherwise: Yup.string().notRequired(),
-        }),
-    }),
+    validationSchema: step3Schema,
     onSubmit: (values) => {
       dispatch(
         fillForm({
