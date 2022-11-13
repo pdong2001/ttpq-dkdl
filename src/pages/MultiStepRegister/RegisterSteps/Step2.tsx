@@ -91,10 +91,10 @@ const Step2 = (props: StepProps) => {
           email,
           organizationStructureId,
           dateOfBirth: [year, month, date].join('-'),
-          register: {
-            temporaryAddress,
-            permanentAddress,
-          },
+          // register: {
+          temporaryAddress,
+          permanentAddress,
+          // },
         }),
       );
       nextStep();
