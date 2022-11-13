@@ -1,9 +1,10 @@
 import { FormControl, FormErrorMessage, FormLabel, Select, SelectProps } from '@chakra-ui/react';
+import { nanoid } from '@reduxjs/toolkit';
 import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 export type SelectData = {
-  id: any;
+  id: string | number;
 };
 
 type CustomSelectProps = {
@@ -15,7 +16,8 @@ type CustomSelectProps = {
 } & SelectProps;
 
 const CustomSelect = (props: CustomSelectProps) => {
-  const { data, label, name, isRequired, hiddenErrorMessage, valueField, labelField } = props;
+  const { data, hiddenErrorMessage, valueField, labelField, label, name, isRequired, ...rest } =
+    props;
   const { formTextColor } = useCustomColorMode();
 
   // @ts-ignore
@@ -25,9 +27,9 @@ const CustomSelect = (props: CustomSelectProps) => {
   return (
     <FormControl isRequired={isRequired} isInvalid={!!meta.error && meta.touched}>
       <FormLabel color={formTextColor}>{label}</FormLabel>
-      <Select {...field} {...props} name={name} focusBorderColor={primaryColor}>
+      <Select {...field} {...rest} name={name} focusBorderColor={primaryColor}>
         {data?.map((item) => (
-          <option key={item.id} value={item[valueField]}>
+          <option key={nanoid()} value={item[valueField]}>
             {item[labelField]}
           </option>
         ))}
