@@ -183,6 +183,10 @@ const Step3 = (props: StepProps) => {
     }
   }, [moveType]);
 
+  useEffect(() => {
+    formik.setTouched({});
+  }, [moveType]);
+
   return (
     <>
       <Stack spacing={4}>
