@@ -9,7 +9,7 @@ import { Center, Container } from '@chakra-ui/react';
 
 const department_names = [
   {
-    name: 'BAN MÔI TRƯỜNG',
+    name: 'Ban môi trường',
     image: environmentDepartment,
     desc: (
       <>
@@ -43,9 +43,9 @@ const department_names = [
       </>
     ),
   },
-  { name: 'BAN HÀNH ĐƯỜNG 1', image: issue_road_1 },
+  { name: 'Ban hành đường 1', image: issue_road_1 },
   {
-    name: 'BAN HÀNH ĐƯỜNG 2',
+    name: 'Ban hành đường 2',
     image: issue_road_2,
     desc: (
       <>
@@ -84,7 +84,7 @@ const department_names = [
     ),
   },
   {
-    name: 'BAN BỒI DƯỠNG',
+    name: 'Ban bồi dưỡng',
     image: fostering,
     desc: (
       <>
@@ -111,7 +111,7 @@ const department_names = [
     ),
   },
   {
-    name: 'BAN HƯỚNG DẪN',
+    name: 'Ban hướng dẫn',
     image: guide,
     desc: (
       <>
@@ -136,10 +136,10 @@ const department_names = [
       </>
     ),
   },
-  { name: 'BAN TRI KHÁCH', image: environmentDepartment },
-  { name: 'BAN CƠ ĐỘNG', image: codong },
+  { name: 'Ban tri khách', image: environmentDepartment },
+  { name: 'Ban cơ động', image: codong },
   {
-    name: 'BAN CĂN TIN',
+    name: 'Ban căn tin',
     image: canteen,
     desc: (
       <>
