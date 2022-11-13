@@ -38,6 +38,7 @@ const MultiStepRegister = () => {
     if (step === 0) {
       history.push(registerPath);
     }
+    window.scrollTo(0, 0);
   };
   const previousStep = () => {
     setStep((currentStep) => {
@@ -46,6 +47,7 @@ const MultiStepRegister = () => {
       }
       return currentStep - 1;
     });
+    window.scrollTo(0, 0);
   };
   const { bgColor } = useCustomColorMode();
   return (
