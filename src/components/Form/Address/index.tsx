@@ -86,15 +86,19 @@ function Address(props: AddressProps) {
   }, [provinceId, districtId, wardId]);
 
   useEffect(() => {
-    setDTouched(false);
-    setDistrict('');
-    setWard('');
+    return () => {
+      setDTouched(false);
+      setDistrict('');
+      setWard('');
+    };
   }, [provinceId]);
 
   useEffect(() => {
-    setVTouched(false);
-    setWard('');
-  }, []);
+    return () => {
+      setVTouched(false);
+      setWard('');
+    };
+  }, [districtId]);
 
   const errorMessage = error && Object.values(error)[0];
 
@@ -140,4 +144,3 @@ function Address(props: AddressProps) {
 Address.defaultProps = { direction: 'row' } as AddressProps;
 
 export default Address;
-
