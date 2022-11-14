@@ -142,7 +142,7 @@ const Step3 = (props: StepProps) => {
 
   // fake data, khi nào gọi được api sẽ xóa start
   registerPage = { ...registerPageTemp };
-  console.log('register page', registerPage);
+
   // fake data, khi nào gọi được api sẽ xóa end
 
   // địa điểm xuất phát
@@ -180,7 +180,6 @@ const Step3 = (props: StepProps) => {
 
   const [leaveTimes, setLeaveTimes] = useState([]);
   const { leaveAddress, leaveTimeId } = formik.values;
-  console.log('leaveAddress', leaveAddress, leaveTimeId);
 
   useEffect(() => {
     const address = leaveAddressList?.find((item) => item.id == leaveAddress);
@@ -192,8 +191,6 @@ const Step3 = (props: StepProps) => {
   useEffect(() => {
     formik.setTouched({});
   }, [moveType]);
-
-  console.log(formik.errors);
 
   return (
     <>

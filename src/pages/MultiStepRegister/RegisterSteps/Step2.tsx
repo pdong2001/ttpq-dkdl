@@ -91,17 +91,14 @@ const Step2 = (props: StepProps) => {
           email,
           organizationStructureId,
           dateOfBirth: [year, month, date].join('-'),
-          // register: {
           temporaryAddress,
           permanentAddress,
-          // },
         }),
       );
       nextStep();
     },
   });
 
-  // console.log('formiks', formik.errors, formik.values);
 
   return (
     <>

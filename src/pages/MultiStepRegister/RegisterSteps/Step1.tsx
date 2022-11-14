@@ -65,7 +65,6 @@ const Step1 = (props: StepProps) => {
 
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  // console.log('formiks', formik.errors, formik.values);
 
   return (
     <>

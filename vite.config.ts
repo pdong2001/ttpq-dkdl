@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
     checker({
-      typescript: true,
+      typescript: false,
     }),
   ],
   server: { port: 3000 },

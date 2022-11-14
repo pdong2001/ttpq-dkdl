@@ -108,8 +108,6 @@ const Step4 = (props: StepProps) => {
     },
     validationSchema: step4Schema,
     onSubmit: (values) => {
-      console.log('submitting.........');
-
       const data = {
         ...previousStepData,
         register: {
@@ -127,13 +125,11 @@ const Step4 = (props: StepProps) => {
           nextStep();
         })
         .catch((e) => {
-          alert(' Lỗi rồi hihi');
-          console.log(e);
+          alert('Đã có lỗi xảy ra');
+          console.log('Đã có lỗi xảy ra', e);
         });
     },
   });
-
-  console.log('formiks', formik.values, formik.errors, formik.touched);
 
   return (
     <>
@@ -192,8 +188,6 @@ const Step4 = (props: StepProps) => {
                   Hình thẻ
                 </FormLabel>
                 <UploadFile />
-                {/* <Image src='https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg' /> */}
-                {/* <Image src={AvatarTemp} alt='Hình thẻ mẫu' /> */}
               </FormControl>
               <FormControl name='note' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>

@@ -38,7 +38,6 @@ const slice = createAppSlice<typeof initialState>(
       onFullfilled: (_, action) => {
         // default: state.data = action.payload;
         /*TODO: handle success response*/
-        console.log('onFullfilled', action.payload);
 
         return action.payload.data;
       },
