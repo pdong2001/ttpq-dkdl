@@ -15,6 +15,8 @@ const GET_LEAVE_ADDRESS_BY_EVENT = '/api/v1/LeaveAddresses/event/:id';
 const GET_REGISTER_INFO = '/api/v1/EventRegistry/GetById/:id';
 const GET_MEMBER_IN_GROUP = '/api/v1/EventRegistry/group/:leaderId';
 const LOGIN_MEMBER = '/api/v1/Auth/login-member';
+const UPLOAD_FILE = '/api/v1/BlobStorage/Upload';
+const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/api/v1/BlobStorage/GetOne/:id`;
 
 const API = {
   REGISTER,
@@ -34,6 +36,8 @@ const API = {
   GET_REGISTER_INFO,
   GET_MEMBER_IN_GROUP,
   LOGIN_MEMBER,
+  UPLOAD_FILE,
+  GET_FILE,
 };
 
 export default API;

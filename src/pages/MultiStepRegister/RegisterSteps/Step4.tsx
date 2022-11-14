@@ -201,7 +201,7 @@ const Step4 = (props: StepProps) => {
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
-                <UploadFile />
+                <UploadFile name='avatarPath' />
               </FormControl>
               <FormControl name='note' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
