@@ -2,23 +2,23 @@ import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui
 import { Form, FormikProvider, useFormik } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import * as Yup from 'yup';
-import Address from '~/components/Form/Address';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
-import Validator from '~/utils/common/validator';
-import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import FormInput from '~/components/Form/FormInput';
-import CultivationPlace from '~/components/Form/CultivationPlace';
-import { Gender } from '~/dtos/Enums/Gender.enum';
 import { convertDateStringToObject } from '~/utils/date';
+import Address from '~/components/Form/Address';
+import step2Schema from '../validationSchema/step2';
+import { Gender } from '~/dtos/Enums/Gender.enum';
+import CultivationPlace from '~/components/Form/CultivationPlace';
+import FormInput from '~/components/Form/FormInput';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+
+  const { data: registerPage } = useAppSelector((state) => state.registerPage);
 
   const {
     fullName,
@@ -28,15 +28,26 @@ const Step2 = (props: StepProps) => {
     gender,
     email = '',
 
-    permanentAddress = { provinceId: 0, districtId: 0, wardId: 0 },
-    temporaryAddress = { provinceId: 0, districtId: 0, wardId: 0 },
+    permanentAddress = { provinceId: '', districtId: '', wardId: '' },
+    temporaryAddress = { provinceId: '', districtId: '', wardId: '' },
 
     organizationStructureId = '',
     dateOfBirth,
+    register,
   } = useAppSelector((state) => state.register.data) || {};
 
-  const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);
+  const {
+    provinceId: permanentAddressProvince = '',
+    districtId: permanentAddressDistrict = '',
+    wardId: permanentAddressWard = '',
+  } = permanentAddress || {};
+  const {
+    provinceId: temporaryAddressProvince = '',
+    districtId: temporaryAddressDistrict = '',
+    wardId: temporaryAddressWard = '',
+  } = temporaryAddress || {};
 
+  const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -52,66 +63,18 @@ const Step2 = (props: StepProps) => {
       email,
 
       permanentAddress,
-      permanentAddressProvince: permanentAddress.provinceId,
-      permanentAddressDistrict: permanentAddress.districtId,
-      permanentAddressWard: permanentAddress.wardId,
+      permanentAddressProvince,
+      permanentAddressDistrict,
+      permanentAddressWard,
 
       temporaryAddress,
-      temporaryAddressProvince: temporaryAddress.provinceId,
-      temporaryAddressDistrict: temporaryAddress.districtId,
-      temporaryAddressWard: temporaryAddress.wardId,
+      temporaryAddressProvince,
+      temporaryAddressDistrict,
+      temporaryAddressWard,
 
       organizationStructureId,
     },
-    validationSchema: Yup.object({
-      dob: Yup.object()
-        .shape({
-          date: Yup.string(),
-          month: Yup.string(),
-          year: Yup.string(),
-        })
-        .test({
-          name: 'validDOB',
-          test: (value, context) => {
-            const { year, month, date } = value;
-
-            if (!(year || month || date)) {
-              return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
-            }
-            const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, date].join('-'));
-            const isValidDateFollowCalender = Validator.validateCalenderDate(value);
-            return (
-              (isValidDateFormat && isValidDateFollowCalender) ||
-              context.createError({ message: 'Bạn ơi, Ngày không hợp lệ rồi' })
-            );
-          },
-        }),
-      dobDate: Yup.string().required(),
-      dobMonth: Yup.string().required(),
-      dobYear: Yup.string().required(),
-
-      email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
-
-      permanentAddress: Yup.object().shape({
-        provinceId: Yup.number(),
-        districtId: Yup.number(),
-        wardId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
-      }),
-      permanentAddressProvince: Yup.string().required(),
-      permanentAddressDistrict: Yup.string().required(),
-      permanentAddressWard: Yup.string().required(),
-
-      temporaryAddress: Yup.object().shape({
-        provinceId: Yup.number(),
-        districtId: Yup.number(),
-        wardId: Yup.number().required('Bạn ơi, nhập đủ địa chỉ nha'),
-      }),
-      temporaryAddressProvince: Yup.string().required(),
-      temporaryAddressDistrict: Yup.string().required(),
-      temporaryAddressWard: Yup.string().required(),
-
-      organizationStructureId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
-    }),
+    validationSchema: step2Schema,
     onSubmit: (values) => {
       const {
         gender,
@@ -128,17 +91,16 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
+          organizationStructureId,
+          dateOfBirth: [year, month, date].join('-'),
           temporaryAddress,
           permanentAddress,
-          organizationStructureId,
-          dateOfBirth: new Date(+year, +month - 1, +date),
+          register,
         }),
       );
       nextStep();
     },
   });
-
-  console.log('formiks', formik.errors, formik.values);
 
   return (
     <>
@@ -166,22 +128,20 @@ const Step2 = (props: StepProps) => {
             <Stack spacing={4}>
               <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 2, lg: 8 }}>
                 <Stack spacing={3}>
-                  <Radios spacing={8} label='Giới tính' name='gender' isRequired>
+                  <Radios spacing={8} label='Giới tính' name='gender'>
                     <Radio value={Gender.MALE}>Nam</Radio>
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
-                  <FormInput name='email' label='Email' color={formTextColor} isRequired />
+                  {registerPage.ctnId == 0 && (
+                    <CultivationPlace name='organizationStructureId' label='Địa điểm tu tập' />
+                  )}
                 </Stack>
                 <Stack spacing={3}>
+                  <FormInput name='email' label='Email' color={formTextColor} isRequired />
                   <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
                   <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
-                  <CultivationPlace
-                    name='organizationStructureId'
-                    label='Địa điểm tu tập'
-                    isRequired
-                  />
                 </Stack>
               </SimpleGrid>
             </Stack>

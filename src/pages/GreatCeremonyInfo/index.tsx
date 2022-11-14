@@ -13,13 +13,20 @@ import React from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import AboutImage from '~/assets/about.jpg';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { useParams } from 'react-router-dom';
 
 // type Props = {};
 
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
+  const { shortUri } = useParams();
   return (
-    <Box bgColor={'darkBlue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}>
+    <Box
+      bgColor={'darkBlue.800'}
+      bgSize={'cover'}
+      px={{ base: 10, md: 20, lg: 28 }}
+      py={shortUri ? 10 : 20}
+    >
       <FadeInUp>
         <Heading
           as={'h6'}

@@ -14,7 +14,7 @@ type MultiSelectOption = {
   value: any;
   colorScheme?: string;
 };
-type Props = ({} & InputProps & FormControlProps & { options?: Object[] }) & {
+type Props = (InputProps & FormControlProps & { options?: Object[] }) & {
   tagColorScheme?: string;
   valueField?: string;
   labelField?: string;
@@ -41,7 +41,7 @@ const MultiSelect = (props: Props) => {
   //@ts-ignore
   const [field, { error, touched }, helpers] = useField(name);
   const isInvalid = !!error && touched;
-
+  const value = field.value?.map((id) => validOptions[id]) || [];
   return (
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
@@ -51,6 +51,7 @@ const MultiSelect = (props: Props) => {
         colorScheme={tagColorScheme}
         options={validOptions}
         name={field.name}
+        value={value}
         closeMenuOnSelect={closeMenuOnSelect || true}
         onChange={(e) => {
           helpers.setValue(e.map((e) => e.value));

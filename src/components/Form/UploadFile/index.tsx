@@ -5,13 +5,14 @@ import {
   Container,
   forwardRef,
   Heading,
+  Image,
   Input,
   InputProps,
   Stack,
   Text,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /*const first = {
   rest: {
@@ -111,7 +112,6 @@ export default function UploadFile(props: UploadFileProps) {
   const { name, placeholder, dropLabel } = props;
   const [label, setLabel] = useState(placeholder);
   const [file, setFile] = useState<File | undefined>();
-  console.log(file);
   const handleChange = (e) => {
     setFile(e.target.files[0]);
   };

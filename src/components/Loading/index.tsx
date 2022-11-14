@@ -8,15 +8,7 @@ const Loading = () => {
   const { primaryColor } = useCustomColorMode();
   return (
     <>
-      {/* <Button onClick={onOpen}>Open Modal</Button> */}
-
-      <Modal
-        closeOnOverlayClick={false}
-        isOpen={isLoading}
-        onClose={() => {
-          console.log('closed');
-        }}
-      >
+      <Modal closeOnOverlayClick={false} isOpen={isLoading} onClose={() => {}}>
         <ModalOverlay />
         <ModalContent
           bgColor='transparent'
@@ -27,7 +19,6 @@ const Loading = () => {
           h='100vh'
           m='0'
         >
-          {/* <ModalBody bgColor='transparent' pb={6}> */}
           <Spinner
             thickness='4px'
             speed='0.65s'
@@ -35,7 +26,6 @@ const Loading = () => {
             color={primaryColor}
             size='xl'
           />
-          {/* </ModalBody> */}
         </ModalContent>
       </Modal>
     </>

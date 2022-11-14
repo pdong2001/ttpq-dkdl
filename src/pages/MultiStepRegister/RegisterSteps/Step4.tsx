@@ -9,20 +9,23 @@ import {
   FormLabel,
   SimpleGrid,
   Radio,
-  Image,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import * as Yup from 'yup';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
-import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
-import MultiSelect from '~/components/Form/MultiSelect';
 import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import step4Schema from '../validationSchema/step4';
+import UploadFile from '~/components/Form/UploadFile';
+import { register } from '../services';
+import MultiSelect from '~/components/Form/MultiSelect';
+import useAxios from '~/hooks/useAxios';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { fillForm } from '../services/slice';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
@@ -90,54 +93,57 @@ const Step4 = (props: StepProps) => {
     transformResponse: ({ data }) => data,
   });
 
+  const previousStepData = useAppSelector((state) => state.register.data);
+
+  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
+  const { strongPointIds, avatarPath, exps } = previousStepData;
+  const { expDepartmentIds, wishDepartmentIds, receiveCardAddressId, note } =
+    previousStepData.register;
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      exps: '0',
-      strongPointIds: [],
-      expDepartmentIds: [],
-      wishDepartmentIds: '',
-      receiveCardAddressId: '',
-      avatarPath:
-        'https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg',
-      note: '',
+      exps: exps || EventExp.ChuaTungThamGia,
+      strongPointIds: strongPointIds || [],
+      expDepartmentIds: expDepartmentIds || [],
+      wishDepartmentIds: wishDepartmentIds?.[0] || '',
+      receiveCardAddressId: receiveCardAddressId || '',
+      avatarPath: avatarPath || '',
+      note: note || '',
     },
-    validationSchema: Yup.object({
-      // exps: Yup.string().required('Xin hãy chọn số lần về chùa công quả'),
-      strongPointIds: Yup.array()
-        .nullable()
-        .test({
-          name: 'strongPoint',
-          test: (value, context) => {
-            if (!value?.length) {
-              return context.createError({ message: 'Xin hãy chọn kỹ năng, sở trường' });
-            }
-            return true;
-          },
-        }),
-      expDepartmentIds: Yup.array()
-        .nullable()
-        .test({
-          name: 'expDepartment',
-          test: (value, context) => {
-            if (!value?.length) {
-              return context.createError({ message: 'Xin hãy chọn ban kinh nghiệm' });
-            }
-            return true;
-          },
-        }),
-      wishDepartmentIds: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
-      receiveCardAddressId: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
-      avatarPath: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
-    }),
+    validationSchema: step4Schema,
     onSubmit: (values) => {
-      // alert(JSON.stringify(values, null, 2));
-      dispatch(fillForm({ register: values }));
+      const {
+        strongPointIds,
+        expDepartmentIds,
+        avatarPath,
+        exps,
+        wishDepartmentIds,
+        receiveCardAddressId,
+        note,
+      } = values;
+      dispatch(
+        fillForm({
+          strongPointIds,
+          exps,
+          register: {
+            ...previousStepData.register,
+            expDepartmentIds,
+            avatarPath,
+            note,
+            receiveCardAddressId,
+            wishDepartmentIds: [wishDepartmentIds],
+            eventId,
+            eventRegistryPageId: id,
+            ctnId,
+            type,
+          },
+        }),
+      );
       nextStep();
     },
   });
 
-  // console.log('formiks', formik.values, formik.errors, formik.touched);
+  console.log('formiks', formik.values, formik.errors);
 
   return (
     <>
@@ -157,10 +163,10 @@ const Step4 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios name='exps' label='Số lần về chùa công quả' isRequired>
-                <Radio value='0'>Lần đầu tiên</Radio>
-                <Radio value='1'>Dưới 3 lần</Radio>
-                <Radio value='2'>Trên 3 lần</Radio>
+              <Radios name='exps' label='Số lần về chùa công quả'>
+                <Radio value={EventExp.ChuaTungThamGia}>Lần đầu tiên</Radio>
+                <Radio value={EventExp.Duoi3Lan}>Dưới 3 lần</Radio>
+                <Radio value={EventExp.Tren3Lan}>Trên 3 lần</Radio>
               </Radios>
               <MultiSelect
                 name='strongPointIds'
@@ -168,7 +174,6 @@ const Step4 = (props: StepProps) => {
                 label='Kỹ năng, sở trường'
                 valueField='id'
                 labelField='name'
-                isRequired
               />
               <MultiSelect
                 name='expDepartmentIds'
@@ -192,13 +197,11 @@ const Step4 = (props: StepProps) => {
                 placeholder='Chọn nơi nhận thẻ'
                 isRequired
               />
-              <FormControl name='avatarPath' as='fieldset' border={1} isRequired>
+              <FormControl name='avatarPath' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>
                   Hình thẻ
                 </FormLabel>
-                {/* <UploadFile /> */}
-                <Image src='https://c4.wallpaperflare.com/wallpaper/286/307/690/asphalt-road-near-mountains-covered-by-snow-wallpaper-preview.jpg' />
-                {/* <Image src={AvatarTemp} alt='Hình thẻ mẫu' /> */}
+                <UploadFile />
               </FormControl>
               <FormControl name='note' as='fieldset' border={1}>
                 <FormLabel as='legend' color={formTextColor}>

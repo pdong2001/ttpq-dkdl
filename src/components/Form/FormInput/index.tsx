@@ -25,8 +25,10 @@ const FormInput = (props: FormInputProps) => {
   field.value ??= defaultValue; // set default value on props
 
   return (
-    <FormControl isInvalid={!!meta.error && meta.touched} {...rest} >
-      <FormLabel color={formTextColor}>{label}</FormLabel>
+    <FormControl isInvalid={!!meta.error && meta.touched} {...rest}>
+      <FormLabel color={formTextColor} tabIndex={-1}>
+        {label}
+      </FormLabel>
       <Input focusBorderColor={primaryColor} placeholder=' ' {...field} {...props} />
       {!hiddenErrorMessage && meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>

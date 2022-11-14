@@ -26,7 +26,7 @@ const FloatingLabel = (props: FloatingLabelProps) => {
 
   return (
     <FormControl variant='floating' isInvalid={!!meta.error && meta.touched} {...rest}>
-      <Input focusBorderColor={primaryColor} placeholder=' ' {...field} {...props} />
+      <Input focusBorderColor={primaryColor} placeholder=' ' {...field} {...rest} />
       {/* It is important that the Label comes after the Control due to css selectors */}
       <FormLabel bgColor={bgColor}>{label}</FormLabel>
       {!hiddenErrorMessage && meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
