@@ -17,10 +17,10 @@ const Step1 = (props: StepProps) => {
   const dispatch = useAppDispatch();
 
   const {
-    fullName,
+    fullName = '',
     phoneNumber,
     identityCard,
-    register: { registerType, leaderId = '' },
+    register,
   } = useAppSelector((state) => state.register.data) || {};
 
   const formik = useFormik({
@@ -29,8 +29,8 @@ const Step1 = (props: StepProps) => {
       fullName,
       phoneNumber,
       identityCard,
-      registerType,
-      leaderId,
+      registerType: register.registerType || RegisterType.SINGLE,
+      leaderId: register.leaderId || '',
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {
@@ -44,6 +44,7 @@ const Step1 = (props: StepProps) => {
           identityCard,
           phoneNumber,
           register: {
+            ...register,
             registerType,
             leaderId,
           },
@@ -57,7 +58,6 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
-      alert('kiểu đănge  ký' + registerType);
       nextStep();
     },
   });

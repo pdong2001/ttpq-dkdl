@@ -50,7 +50,7 @@ const step2Schema = Yup.object({
   temporaryAddressDistrict: Yup.string().required(),
   temporaryAddressWard: Yup.string().required(),
 
-  organizationStructureId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
+  // organizationStructureId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
 });
 
 export default step2Schema;

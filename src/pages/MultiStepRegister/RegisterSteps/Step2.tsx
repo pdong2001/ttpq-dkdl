@@ -18,6 +18,8 @@ const Step2 = (props: StepProps) => {
   const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
+  const { data: registerPage } = useAppSelector((state) => state.registerPage);
+
   const {
     fullName,
     phoneNumber,
@@ -31,6 +33,7 @@ const Step2 = (props: StepProps) => {
 
     organizationStructureId = '',
     dateOfBirth,
+    register,
   } = useAppSelector((state) => state.register.data) || {};
 
   const {
@@ -45,7 +48,6 @@ const Step2 = (props: StepProps) => {
   } = temporaryAddress || {};
 
   const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -93,12 +95,12 @@ const Step2 = (props: StepProps) => {
           dateOfBirth: [year, month, date].join('-'),
           temporaryAddress,
           permanentAddress,
+          register,
         }),
       );
       nextStep();
     },
   });
-
 
   return (
     <>
@@ -132,16 +134,14 @@ const Step2 = (props: StepProps) => {
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
-                  <FormInput name='email' label='Email' color={formTextColor} isRequired />
+                  {registerPage.ctnId == 0 && (
+                    <CultivationPlace name='organizationStructureId' label='Địa điểm tu tập' />
+                  )}
                 </Stack>
                 <Stack spacing={3}>
+                  <FormInput name='email' label='Email' color={formTextColor} isRequired />
                   <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
                   <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
-                  <CultivationPlace
-                    name='organizationStructureId'
-                    label='Địa điểm tu tập'
-                    isRequired
-                  />
                 </Stack>
               </SimpleGrid>
             </Stack>

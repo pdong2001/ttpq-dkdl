@@ -35,9 +35,10 @@ import _ from 'lodash';
 import { MdContentCopy, MdDepartureBoard, MdLocationCity } from 'react-icons/md';
 
 import QRCode from 'react-qr-code';
+import { useAppSelector } from '~/hooks/reduxHook';
 
 export default function SuccessRegisterModal() {
-
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
   const mapTitles = {
     hoTen: 'Họ Và Tên',
     soDienThoai: 'Số điện thoại',
@@ -45,7 +46,7 @@ export default function SuccessRegisterModal() {
     diaDiemXuatPhat: 'Địa điểm xuất phát',
     thoiGianXuatPhat: 'Thời gian xuất phát',
     thoiGianTroVe: 'Thời gian trở về',
-  }
+  };
 
   const dataSuccess = {
     infos: {
@@ -59,12 +60,13 @@ export default function SuccessRegisterModal() {
       cccdNhomTruong: '00109342343432',
       tenNhomTruong: 'Lương Thai Tam',
     },
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
     hinhThucDangKy: '1',
     LinkQrCode: 'https://dangkydaile.vn/user/1',
     isOpen: true,
     hoTen: 'Đăng Duy Thanh',
-  }
+  };
 
   const { infos, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;
   const { onClose } = useDisclosure();
@@ -108,30 +110,25 @@ export default function SuccessRegisterModal() {
         <ModalCloseButton />
         <ModalBody>
           <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
-            <Box
-              textAlign={'center'}
-            >
-              <Avatar
-                size={'2xl'}
-                src={avatar}
-                mb={4}
-                pos={'relative'}
-              />
+            <Box textAlign={'center'}>
+              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
               <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
                 {hoTen}
               </Heading>
-              <TableContainer >
+              <TableContainer>
                 <Table variant='simple' colorScheme={'gray'}>
                   <Tbody>
                     {_.map(infos, (info, key) => {
-                      return <Tr>
-                        <Td pr={0} pl={{ base: 5, sm: 7, md: 5 }}>
-                          <Text as='b'>{mapTitles[key]}</Text>
-                        </Td>
-                        <Td pl={0} pr={{ base: 5, sm: 7, md: 5 }}>
-                          {info}
-                        </Td>
-                      </Tr>
+                      return (
+                        <Tr>
+                          <Td pr={0} pl={{ base: 5, sm: 7, md: 5 }}>
+                            <Text as='b'>{mapTitles[key]}</Text>
+                          </Td>
+                          <Td pl={0} pr={{ base: 5, sm: 7, md: 5 }}>
+                            {info}
+                          </Td>
+                        </Tr>
+                      );
                     })}
                   </Tbody>
                 </Table>
@@ -155,7 +152,7 @@ export default function SuccessRegisterModal() {
                   </Box>
                 </Box>
               </Stack>
-              <Box >
+              <Box>
                 <Box w='100%' p={3} textAlign={'center'}>
                   <QRCode
                     id='QRCode'
@@ -176,7 +173,12 @@ export default function SuccessRegisterModal() {
                       value={LinkQrCode}
                     />
                     <InputRightElement width='2.5rem'>
-                      <IconButton onClick={copyLinkQR} size='sm' aria-label='Copy Link' icon={<MdContentCopy />} />
+                      <IconButton
+                        onClick={copyLinkQR}
+                        size='sm'
+                        aria-label='Copy Link'
+                        icon={<MdContentCopy />}
+                      />
                     </InputRightElement>
                   </InputGroup>
                 </Stack>

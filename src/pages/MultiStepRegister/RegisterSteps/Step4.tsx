@@ -25,6 +25,8 @@ import { register } from '../services';
 import MultiSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { fillForm } from '../services/slice';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
 // danh sách ban
@@ -94,42 +96,40 @@ const Step4 = (props: StepProps) => {
   const previousStepData = useAppSelector((state) => state.register.data);
 
   const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
-
+  const { strongPointIds, avatarPath, exps } = previousStepData;
+  const { expDepartmentIds, wishDepartmentIds, receiveCardAddressId, note } =
+    previousStepData.register;
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      exps: EventExp.ChuaTungThamGia,
-      strongPointIds: [],
-      expDepartmentIds: [],
-      wishDepartmentIds: 0,
-      receiveCardAddressId: 0,
-      avatarPath: '',
-      note: '',
+      exps: exps || EventExp.ChuaTungThamGia,
+      strongPointIds: strongPointIds || [],
+      expDepartmentIds: expDepartmentIds || [],
+      wishDepartmentIds: wishDepartmentIds?.[0] || '',
+      receiveCardAddressId: receiveCardAddressId || '',
+      avatarPath: avatarPath || '',
+      note: note || '',
     },
     validationSchema: step4Schema,
     onSubmit: (values) => {
-      const data = {
-        ...previousStepData,
-        register: {
-          ...previousStepData.register,
-          ...values,
-          wishDepartmentIds: [values.wishDepartmentIds],
-          eventId,
-          eventRegistryPageId: id,
-          ctnId,
-          type,
-        },
-      };
-      dispatch(register({ data }))
-        .then(() => {
-          nextStep();
-        })
-        .catch((e) => {
-          alert('Đã có lỗi xảy ra');
-          console.log('Đã có lỗi xảy ra', e);
-        });
+      dispatch(
+        fillForm({
+          register: {
+            ...previousStepData.register,
+            ...values,
+            wishDepartmentIds: [values.wishDepartmentIds],
+            eventId,
+            eventRegistryPageId: id,
+            ctnId,
+            type,
+          },
+        }),
+      );
+      nextStep();
     },
   });
+
+  console.log('formiks', formik.values, formik.errors);
 
   return (
     <>

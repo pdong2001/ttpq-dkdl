@@ -135,7 +135,7 @@ function Address(props: AddressProps) {
           hiddenErrorMessage
         />
       </Stack>
-      <VisuallyHiddenInput {...field} />
+      <VisuallyHiddenInput tabIndex={-1} {...field} value={field.value || ''} />
       <FormErrorMessage>{errorMessage}</FormErrorMessage>
     </FormControl>
   );

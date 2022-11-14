@@ -24,74 +24,22 @@ import { fillForm } from '../services/slice';
 import step3Schema from '../validationSchema/step3';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 
-// nơi xuất phát
-// const departLocationList = [
-//   { id: 1, name: 'Bến xe buýt Trường Đại học Nông Lâm', maTinh: 'HoChiMinh' },
-//   {
-//     id: 2,
-//     name: 'Cầu Bùi Đình Túy, số 47 Bùi Đình Túy, P.24, Q. Bình Thạnh, Tp.HCM',
-//     maTinh: 'HoChiMinh',
-//   },
-//   {
-//     id: 3,
-//     name: 'ĐH Tôn Đức Thắng, Quận 7',
-//     maTinh: 'HoChiMinh',
-//   },
-// ];
-
-// thời điểm khởi hành
-// const timeToStartList = [
-//   { id: 1, name: 'Đợt 1: 19h45 Thứ hai, ngày 08/08/2022' },
-//   { id: 2, name: 'Đợt 2: 19h45 Thứ ba, ngày 09/08/2022 (Đợt chính thức)' },
-//   { id: 3, name: 'Đợt 3: 06h00 Thứ tư, ngày 10/08/2022' },
-// ];
-
-// // thời điểm về lại nơi xuất phát
-// const timeToReturnList = [
-//   { id: 1, name: 'Đợt 1: 18h00 Thứ sáu, ngày 12/08/2022' },
-//   { id: 2, name: 'Đợt 2: 18h00 Chủ nhật, ngày 14/08/2022' },
-//   { id: 3, name: 'Đợt 3: 18h00 Thứ 2, ngày 15/08/2022' },
-// ];
-
-// danh sách tỉnh
-// const provinceList = [
-//   { id: 0, name: 'Ho Chi Minh' },
-//   { id: 1, name: 'Ha Noi' },
-//   { id: 2, name: 'Can Tho' },
-//   { id: 3, name: 'Binh Duong' },
-// ];
-
-// register page
-const registerPageTemp = {
-  id: 'string',
-  type: 0,
-  pageContentId: 0,
-  pageContent: {},
-  ctnId: 0,
-  start: '2022-11-10T04:56:04.526Z',
-  end: '2022-11-10T04:56:04.526Z',
-  name: 'string',
-  event: {},
-  eventId: 0,
-};
-
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+  const { register } = useAppSelector((state) => state.register.data);
   const {
-    register: {
-      moveType: moveTypeInStore = MoveType.HCM,
-      startAddressId: startAddressIdInStore = '',
-      startTimeId = '',
-      leaveTimeId: leaveTimeIdInStore = '',
-      startPlaneCode = '',
-      returnPlaneCode = '',
-      otherLeaveTime = '',
-      otherStartTime = '',
-      otherStartAddress = '',
-    },
-  } = useAppSelector((state) => state.register.data);
+    moveType: moveTypeInStore = MoveType.HCM,
+    startAddressId: startAddressIdInStore = '',
+    startTimeId = '',
+    leaveTimeId: leaveTimeIdInStore = '',
+    startPlaneCode = '',
+    returnPlaneCode = '',
+    otherLeaveTime = '',
+    otherStartTime = '',
+    otherStartAddress = '',
+  } = register;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -127,10 +75,9 @@ const Step3 = (props: StepProps) => {
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
       }
-      alert(JSON.stringify(values, null, 2));
       dispatch(
         fillForm({
-          register: values,
+          register: { ...register, ...values },
         }),
       );
       nextStep();
@@ -139,11 +86,6 @@ const Step3 = (props: StepProps) => {
 
   const { moveType } = formik.values;
   let { data: registerPage } = useAppSelector((state) => state.registerPage);
-
-  // fake data, khi nào gọi được api sẽ xóa start
-  registerPage = { ...registerPageTemp };
-
-  // fake data, khi nào gọi được api sẽ xóa end
 
   // địa điểm xuất phát
   const { data: startAddressList } = useAxios(
@@ -179,7 +121,7 @@ const Step3 = (props: StepProps) => {
   );
 
   const [leaveTimes, setLeaveTimes] = useState([]);
-  const { leaveAddress, leaveTimeId } = formik.values;
+  const { leaveAddress } = formik.values;
 
   useEffect(() => {
     const address = leaveAddressList?.find((item) => item.id == leaveAddress);

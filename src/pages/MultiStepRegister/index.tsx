@@ -6,10 +6,15 @@ import Step1 from './RegisterSteps/Step1';
 import Step2 from './RegisterSteps/Step2';
 import Step3 from './RegisterSteps/Step3';
 import Step4 from './RegisterSteps/Step4';
-import FinalStep from './RegisterSteps/FinalStep';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useAppSelector } from '~/hooks/reduxHook';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { HOME_WITH_SHORT_URI, MULTI_STEP_REGISTER_PATH } from '~/routes';
+import { formatUrl } from '~/utils/functions';
+import { getRegisterPage } from '~/apis/registerPage/slice';
+import API from '~/apis/constants';
+import Step5 from './RegisterSteps/Step5';
+import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 
 // type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
@@ -18,25 +23,38 @@ export type StepProps = {
   previousStep: () => void;
 };
 
-const registerSteps = [Step1, Step2, Step3, Step4, FinalStep];
-const registerPath = '/register';
+const registerSteps = [Step1, Step2, Step3, Step4, Step5, SuccessRegisterModal];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(0);
-  const { pathname } = useLocation<Location>();
+  const { shortUri } = useParams();
+  const { path } = useRouteMatch();
   const history = useHistory();
   const Step: Step = registerSteps[step];
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    if (pathname === registerPath && step === 0 && identityCard && phoneNumber) {
+    if (shortUri) {
+      dispatch(
+        getRegisterPage({
+          method: 'get',
+          url: formatUrl(API.GET_REGISTER_PAGE, { shortUri }),
+        }),
+      );
+    }
+  }, [shortUri]);
+
+  useEffect(() => {
+    if (path === MULTI_STEP_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {
       setStep(1);
     }
   }, []);
   const nextStep = () => {
     setStep((currentStep) => currentStep + 1);
-    if (step === 0) {
-      history.push(registerPath);
+    if (step === 0 && path === HOME_WITH_SHORT_URI) {
+      history.push(formatUrl(MULTI_STEP_REGISTER_PATH, { shortUri }));
     }
     window.scrollTo(0, 0);
   };
