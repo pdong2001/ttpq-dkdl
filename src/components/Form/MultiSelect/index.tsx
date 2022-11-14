@@ -41,7 +41,8 @@ const MultiSelect = (props: Props) => {
   //@ts-ignore
   const [field, { error, touched }, helpers] = useField(name);
   const isInvalid = !!error && touched;
-  const value = field.value?.map((id) => validOptions[id]) || [];
+  const value = validOptions.filter((item) => field.value?.includes(item.value));
+
   return (
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
