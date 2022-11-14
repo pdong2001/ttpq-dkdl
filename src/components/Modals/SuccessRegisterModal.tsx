@@ -39,6 +39,8 @@ import { useAppSelector } from '~/hooks/reduxHook';
 
 export default function SuccessRegisterModal() {
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
+  console.log(registerInfo);
+
   const mapTitles = {
     hoTen: 'Họ Và Tên',
     soDienThoai: 'Số điện thoại',
@@ -50,8 +52,8 @@ export default function SuccessRegisterModal() {
 
   const dataSuccess = {
     infos: {
-      soDienThoai: '0994324224',
-      cccd: '001093442424',
+      soDienThoai: registerInfo.register?.member?.phoneNumber,
+      cccd: registerInfo.register.member?.identityCard,
       diaDiemXuatPhat: 'Bến xe buýt Trường ĐH Nông Lâm TP. HCM',
       thoiGianXuatPhat: '08:00 01-12-2022',
       thoiGianTroVe: '15:00 05-12-2022',
@@ -60,12 +62,11 @@ export default function SuccessRegisterModal() {
       cccdNhomTruong: '00109342343432',
       tenNhomTruong: 'Lương Thai Tam',
     },
-    avatar:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    avatar: registerInfo.avatarPath,
     hinhThucDangKy: '1',
     LinkQrCode: 'https://dangkydaile.vn/user/1',
     isOpen: true,
-    hoTen: 'Đăng Duy Thanh',
+    hoTen: registerInfo.register.member?.fullName,
   };
 
   const { infos, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;
