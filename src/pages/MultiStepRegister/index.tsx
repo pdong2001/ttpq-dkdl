@@ -15,6 +15,7 @@ import { getRegisterPage } from '~/apis/registerPage/slice';
 import API from '~/apis/constants';
 import Step5 from './RegisterSteps/Step5';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 // type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
@@ -42,7 +43,11 @@ const MultiStepRegister = () => {
           method: 'get',
           url: formatUrl(API.GET_REGISTER_PAGE, { shortUri }),
         }),
-      );
+      )
+        .then(unwrapResult)
+        .catch(() => {
+          history.push('/not-found');
+        });
     }
   }, [shortUri]);
 
