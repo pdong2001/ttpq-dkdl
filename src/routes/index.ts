@@ -63,6 +63,13 @@ const ROUTES: RouteType[] = [
     layout: BlankLayout,
   },
   {
+    path: '/not-found',
+    exact: true,
+    key: 'NOT_FOUND',
+    component: NotFound,
+    layout: MainLayout,
+  },
+  {
     key: 'HOME',
     path: ['/', HOME_WITH_SHORT_URI],
     exact: true,
