@@ -112,12 +112,26 @@ const Step4 = (props: StepProps) => {
     },
     validationSchema: step4Schema,
     onSubmit: (values) => {
+      const {
+        strongPointIds,
+        expDepartmentIds,
+        avatarPath,
+        exps,
+        wishDepartmentIds,
+        receiveCardAddressId,
+        note,
+      } = values;
       dispatch(
         fillForm({
+          strongPointIds,
+          exps,
           register: {
             ...previousStepData.register,
-            ...values,
-            wishDepartmentIds: [values.wishDepartmentIds],
+            expDepartmentIds,
+            avatarPath,
+            note,
+            receiveCardAddressId,
+            wishDepartmentIds: [wishDepartmentIds],
             eventId,
             eventRegistryPageId: id,
             ctnId,

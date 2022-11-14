@@ -33,7 +33,7 @@ const Step5 = (props: StepProps) => {
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
         >
-          Công việc
+          Xác nhận đăng ký
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           PL.2565 - DL.2022
