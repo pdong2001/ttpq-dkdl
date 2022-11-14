@@ -10,6 +10,7 @@ import { AppRoute } from './AppRoute';
 import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 import FinalStep from '~/pages/MultiStepRegister/RegisterSteps/FinalStep';
 import BlankLayout from '~/components/containers/layouts/BlankLayout';
+import NoFooterLayout from '~/components/containers/layouts/NoFooterLayout';
 
 export type RouteType = {
   key: string;
@@ -21,21 +22,9 @@ export type RouteType = {
   strict?: boolean;
   sensitive?: boolean;
 };
-
+export const MULTI_STEP_REGISTER_PATH = '/:shortUri/register';
+export const HOME_WITH_SHORT_URI = '/:shortUri';
 const ROUTES: RouteType[] = [
-  {
-    key: 'HOME',
-    path: '/',
-    exact: true,
-    component: Home,
-    layout: MainLayout,
-  },
-  {
-    key: 'MULTI_STEP_REGISTER',
-    path: '/register',
-    component: MultiStepRegister,
-    layout: MainLayout,
-  },
   {
     key: 'GREAT_CEREMORY_INFO',
     path: '/great-ceremony-info',
@@ -72,6 +61,26 @@ const ROUTES: RouteType[] = [
     path: '/register-success',
     component: FinalStep,
     layout: BlankLayout,
+  },
+  {
+    path: '/not-found',
+    exact: true,
+    key: 'NOT_FOUND',
+    component: NotFound,
+    layout: MainLayout,
+  },
+  {
+    key: 'HOME',
+    path: ['/', HOME_WITH_SHORT_URI],
+    exact: true,
+    component: Home,
+    layout: MainLayout,
+  },
+  {
+    key: 'MULTI_STEP_REGISTER',
+    path: [MULTI_STEP_REGISTER_PATH],
+    component: MultiStepRegister,
+    layout: NoFooterLayout,
   },
   {
     key: 'NOT_FOUND',

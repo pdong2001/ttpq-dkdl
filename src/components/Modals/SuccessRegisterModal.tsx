@@ -35,8 +35,11 @@ import _ from 'lodash';
 import { MdContentCopy, MdDepartureBoard, MdLocationCity } from 'react-icons/md';
 
 import QRCode from 'react-qr-code';
+import { useAppSelector } from '~/hooks/reduxHook';
 
 export default function SuccessRegisterModal() {
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
+  console.log(registerInfo);
 
   const mapTitles = {
     hoTen: 'Họ Và Tên',
@@ -45,12 +48,12 @@ export default function SuccessRegisterModal() {
     diaDiemXuatPhat: 'Địa Điểm xuất phát',
     thoiGianXuatPhat: 'Thời gian xuất phát',
     thoiGianTroVe: 'Thời gian trở về',
-  }
+  };
 
   const dataSuccess = {
     infos: {
-      soDienThoai: '0994324224',
-      cccd: '001093442424',
+      soDienThoai: registerInfo.register?.member?.phoneNumber,
+      cccd: registerInfo.register.member?.identityCard,
       diaDiemXuatPhat: 'Bến xe buýt Trường ĐH Nông Lâm TP. HCM',
       thoiGianXuatPhat: '08:00 01-12-2022',
       thoiGianTroVe: '15:00 05-12-2022',
@@ -59,12 +62,12 @@ export default function SuccessRegisterModal() {
       cccdNhomTruong: '00109342343432',
       tenNhomTruong: 'Lương Thai Tam',
     },
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
+    avatar: registerInfo.avatarPath,
     hinhThucDangKy: '1',
     LinkQrCode: 'https://dangkydaile.vn/user/1',
     isOpen: true,
-    hoTen: 'Đăng Duy Thanh',
-  }
+    hoTen: registerInfo.register.member?.fullName,
+  };
 
   const { infos, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;
   const { onClose } = useDisclosure();
@@ -120,7 +123,7 @@ export default function SuccessRegisterModal() {
               <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
                 {hoTen}
               </Heading>
-              <TableContainer >
+              <TableContainer>
                 <Table variant='simple' colorScheme={'gray'}>
                   <Tbody>
                     {_.map(infos, (info, key) => {
@@ -155,7 +158,7 @@ export default function SuccessRegisterModal() {
                   </Box>
                 </Box>
               </Stack>
-              <Box >
+              <Box>
                 <Box w='100%' p={3} textAlign={'center'}>
                   <QRCode
                     id='QRCode'
@@ -176,7 +179,12 @@ export default function SuccessRegisterModal() {
                       value={LinkQrCode}
                     />
                     <InputRightElement width='2.5rem'>
-                      <IconButton onClick={copyLinkQR} size='sm' aria-label='Copy Link' icon={<MdContentCopy />} />
+                      <IconButton
+                        onClick={copyLinkQR}
+                        size='sm'
+                        aria-label='Copy Link'
+                        icon={<MdContentCopy />}
+                      />
                     </InputRightElement>
                   </InputGroup>
                 </Stack>

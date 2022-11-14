@@ -5,13 +5,18 @@ import {
   Container,
   forwardRef,
   Heading,
+  Image,
   Input,
   InputProps,
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { useField } from 'formik';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import API from '~/apis/constants';
+import useAxios from '~/hooks/useAxios';
+import { formatUrl } from '~/utils/functions';
 
 /*const first = {
   rest: {
@@ -111,9 +116,44 @@ export default function UploadFile(props: UploadFileProps) {
   const { name, placeholder, dropLabel } = props;
   const [label, setLabel] = useState(placeholder);
   const [file, setFile] = useState<File | undefined>();
-  console.log(file);
+  const [data, setData] = useState<any>();
+  const [field, _, helpers] = useField(name);
+
+  const handleChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+  const handleDrop = (e) => {
+    setFile(e.dataTransfer.files[0]);
+  };
+  useEffect(() => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      setData(formData);
+    }
+  }, [file]);
+
+  /* Upload file */
+  const { cancel, data: uploadResponse } = useAxios(
+    {
+      url: API.UPLOAD_FILE,
+      method: 'post',
+      data,
+    },
+    [data],
+  );
+  if (!file && cancel) {
+    cancel.cancel();
+  }
+
+  useEffect(() => {
+    if (uploadResponse?.data) {
+      helpers.setValue(formatUrl(API.GET_FILE, { id: uploadResponse.data }));
+    }
+  }, [uploadResponse]);
+
   return (
-    <Container my='12'>
+    <Container my='2' centerContent>
       <AspectRatio width='64' ratio={1}>
         <Box
           borderColor='gray.300'
@@ -147,25 +187,24 @@ export default function UploadFile(props: UploadFileProps) {
                 display='flex'
                 alignItems='center'
                 justify='center'
-                spacing='4'
+                // spacing='4'
               >
-                {file ? (
-                  <Box height='16' width='12' position='relative'>
-                    <PreviewImage variants={third} />
+                {field.value ? (
+                  <Box position='relative'>
+                    <Image src={field.value} />
                   </Box>
                 ) : (
                   <Stack p='8' textAlign='center' spacing='1'>
                     <Heading fontSize='lg' color='gray.700' fontWeight='bold'>
                       {label}
                     </Heading>
-                    <Text fontWeight='light'>or click to upload</Text>
+                    <Text fontWeight='light'>hoặc click để chọn ảnh</Text>
                   </Stack>
                 )}
               </Stack>
             </Box>
             <Input
               {...props}
-              name={name}
               // @ts-ignore
               // value={file}
               type='file'
@@ -174,15 +213,13 @@ export default function UploadFile(props: UploadFileProps) {
               position='absolute'
               top='0'
               left='0'
-              // opacity='0'
+              opacity='0'
               aria-hidden='true'
               accept='image/*'
               onDragLeave={() => setLabel(placeholder)}
               onDragEnter={() => setLabel(dropLabel)}
-              onDrop={(e) => {
-                console.log('file', e.dataTransfer.files[0]);
-                setFile(e.dataTransfer.files[0]);
-              }}
+              onDrop={handleDrop}
+              onChange={handleChange}
             />
           </Box>
         </Box>
@@ -192,6 +229,6 @@ export default function UploadFile(props: UploadFileProps) {
 }
 
 UploadFile.defaultProps = {
-  placeholder: 'Drop images here or click to upload',
-  dropLabel: 'Drop here',
+  placeholder: 'Kéo ảnh vào hoặc bấm để chọn ảnh',
+  dropLabel: 'Thả vào đây ạ',
 } as UploadFileProps;

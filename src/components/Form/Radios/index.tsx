@@ -20,12 +20,17 @@ const Radios = (props: RadiosProps) => {
   const { setValue } = helpers;
 
   return (
-    <FormControl as='fieldset' {...props}>
-      <FormLabel as='legend' color={formTextColor}>
-        {label}
-      </FormLabel>
-      <RadioGroup color={formTextColor} {...field} {...props} onChange={setValue}>
-        <Stack spacing={spacing} direction={direction}>
+    <FormControl {...props}>
+      <FormLabel color={formTextColor}>{label}</FormLabel>
+      <RadioGroup
+        color={formTextColor}
+        {...field}
+        {...props}
+        onChange={(value) => {
+          setValue(value);
+        }}
+      >
+        <Stack spacing={spacing} direction={direction} p={2}>
           {children}
         </Stack>
       </RadioGroup>

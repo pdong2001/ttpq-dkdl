@@ -3,59 +3,71 @@ import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
-import * as Yup from 'yup';
-import { REGEX_PHONE } from '~/utils/common';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/pages/MultiStepRegister/services/slice';
-import { MemberResponseDto } from '~/types/Members/MemberResponse.dto';
-import { searchMember } from '~/pages/MultiStepRegister/services';
+import { searchMember } from '../services';
+import step1Schema from '../validationSchema/step1';
+import SearchLeader from '~/components/Form/SearchLeader';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
+  const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
-  // const { name, phone, citizenId, registerType } =
-  //   useAppSelector((state) => state.register.data) || {};
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
+
   const {
-    hoTen = '',
-    soDienThoai = '',
-    cccd = '',
-    hinhThucDangKy = '0',
+    fullName = '',
+    phoneNumber,
+    identityCard,
+    register,
   } = useAppSelector((state) => state.register.data) || {};
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      hoTen,
-      soDienThoai,
-      cccd,
-      hinhThucDangKy,
-    } as MemberResponseDto,
-    validationSchema: Yup.object({
-      hoTen: Yup.string().required('Xin hãy nhập họ và tên'),
-      soDienThoai: Yup.string()
-        .required('Xin hãy nhập số điện thoại')
-        .matches(REGEX_PHONE, 'Số điện thoại không hợp lệ'),
-      cccd: Yup.string().required('Xin hãy nhập số CCCD / Hộ chiếu'),
-    }),
+      fullName,
+      phoneNumber,
+      identityCard,
+      registerType: register.registerType || RegisterType.SINGLE,
+      leaderId: register.leaderId || '',
+    },
+    validationSchema: step1Schema,
     onSubmit: (values) => {
-      dispatch(fillForm(values));
+      let { fullName, identityCard, registerType, leaderId, phoneNumber } = values;
+      if (registerType === RegisterType.SINGLE) {
+        leaderId = '';
+      }
       dispatch(
-        searchMember({ hoTen: values.hoTen, soDienThoai: values.soDienThoai, cccd: values.cccd }),
-      ); /**/
+        fillForm({
+          fullName,
+          identityCard,
+          phoneNumber,
+          register: {
+            ...register,
+            registerType,
+            leaderId,
+          },
+        }),
+      );
+      dispatch(
+        searchMember({
+          data: {
+            phoneNumber,
+            identityCard,
+          },
+        }),
+      );
       nextStep();
     },
   });
+  const { registerType: localRegisterType } = formik.values;
+
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
+  const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
   return (
-    <Stack
-      bg={bgColor}
-      rounded={'xl'}
-      p={{ base: 4, sm: 6, md: 8 }}
-      spacing={{ base: 8 }}
-      maxW={{ lg: 'lg' }}
-      mx={{ base: 10, md: 20 }}
-    >
+    <>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -72,32 +84,32 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <FloatingLabel name='hoTen' label='Họ và tên' color={formTextColor} isRequired />
+              <FloatingLabel name='fullName' label='Họ và tên' color={formTextColor} isRequired />
               <FloatingLabel
-                name='soDienThoai'
+                name='phoneNumber'
                 label='Số điện thoại'
                 color={formTextColor}
                 isRequired
               />
               <FloatingLabel
-                name='cccd'
+                name='identityCard'
                 label='Số CCCD / Hộ chiếu'
                 color={formTextColor}
                 isRequired
               />
-              <Radios isRequired label='Hình thức đăng ký' name='hinhThucDangKy'>
-                <Radio value='0'>Cá nhân</Radio>
-                <Radio value='1'>Nhóm</Radio>
+              <Radios label='Hình thức đăng ký' name='registerType'>
+                <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
+                <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
+              {isRegisterFollowGroup && <SearchLeader name='leaderId' label='Trưởng nhóm' />}
             </Stack>
-
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo
             </Button>
           </Form>
         </FormikProvider>
       </Box>
-    </Stack>
+    </>
   );
 };
 

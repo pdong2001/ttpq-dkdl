@@ -33,9 +33,9 @@ function DepartmentInfos({ }: Props) {
   const handleViewDetail = (item: any) => {
     // departmentSelected = item;
     setDepartmentSelected(item);
-    console.log('departmentSelected', departmentSelected);
+    
 
-    console.log('item', item);
+    
     onOpen();
   };
   return (
