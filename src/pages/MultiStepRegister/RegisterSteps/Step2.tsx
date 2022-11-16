@@ -28,24 +28,32 @@ const Step2 = (props: StepProps) => {
     gender,
     email = '',
 
-    permanentAddress = { provinceId: '', districtId: '', wardId: '' },
-    temporaryAddress = { provinceId: '', districtId: '', wardId: '' },
+    permanentAddress,
+    permanentProvince,
+    permanentDistrict,
+    permanentWard,
+
+    temporaryAddress,
+    temporaryProvince,
+    temporaryDistrict,
+    temporaryWard,
 
     organizationStructureId = '',
     dateOfBirth,
     register,
   } = useAppSelector((state) => state.register.data) || {};
 
-  const {
-    provinceId: permanentAddressProvince = '',
-    districtId: permanentAddressDistrict = '',
-    wardId: permanentAddressWard = '',
-  } = permanentAddress || {};
-  const {
-    provinceId: temporaryAddressProvince = '',
-    districtId: temporaryAddressDistrict = '',
-    wardId: temporaryAddressWard = '',
-  } = temporaryAddress || {};
+  const [permanentAddressProvince, permanentAddressDistrict, permanentAddressWard] = [
+    permanentProvince?.id,
+    permanentDistrict?.id,
+    permanentWard?.id,
+  ];
+
+  const [temporaryAddressProvince, temporaryAddressDistrict, temporaryAddressWard] = [
+    temporaryProvince?.id,
+    temporaryDistrict?.id,
+    temporaryWard?.id,
+  ];
 
   const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);
   const formik = useFormik({
@@ -101,6 +109,7 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
+  console.log('formiks', formik.values);
 
   return (
     <>
