@@ -21,7 +21,6 @@ type Data = MemberDto & UpSertMemberDto;
 
 const initialState: ReduxState<Data> = {
   data: {
-    email: '',
     fullName: '',
     gender: Gender.MALE,
     identityCard: '',
