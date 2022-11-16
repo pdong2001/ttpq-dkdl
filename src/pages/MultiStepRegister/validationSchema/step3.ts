@@ -34,20 +34,16 @@ const step3Schema = Yup.object({
       then: Yup.string().notRequired(),
       otherwise: Yup.string().required('Xin hãy chọn nơi xuất phát'),
     }),
-  otherStartTime: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: DepartureType.HCM,
-      then: Yup.string().notRequired(),
-      otherwise: Yup.string().required('Xin hãy chọn ngày giờ đi'),
-    }),
-  otherLeaveTime: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: DepartureType.HCM,
-      then: Yup.string().notRequired(),
-      otherwise: Yup.string().required('Xin hãy chọn ngày giờ về'),
-    }),
+  otherStartTime: Yup.string().when('moveType', {
+    is: DepartureType.HCM,
+    then: Yup.string().notRequired(),
+    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ đi'),
+  }),
+  otherLeaveTime: Yup.string().when('moveType', {
+    is: DepartureType.HCM,
+    then: Yup.string().notRequired(),
+    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
+  }),
 });
 
 export default step3Schema;
