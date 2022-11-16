@@ -1,4 +1,4 @@
-import { Box, Container, Grid, GridItem, Stack } from '@chakra-ui/react';
+import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import CoverImage from '~/assets/festival_cover.jpg';
@@ -17,7 +17,6 @@ import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getRegisterPage } from '~/slices/registerPage';
 
-// type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
 export type StepProps = {
   nextStep: () => void;
