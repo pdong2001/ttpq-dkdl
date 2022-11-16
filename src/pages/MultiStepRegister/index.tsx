@@ -17,7 +17,6 @@ import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getRegisterPage } from '~/slices/registerPage';
 
-// type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
 export type StepProps = {
   nextStep: () => void;
