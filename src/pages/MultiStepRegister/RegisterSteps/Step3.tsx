@@ -204,14 +204,6 @@ const Step3 = (props: StepProps) => {
                     color={formTextColor}
                     isRequired
                   />
-                  {/* <FloatingLabel
-                    name='otherStartTime'
-                    label='Chọn ngày giờ đi'
-                    color={formTextColor}
-                    type='datetime-local'
-                    isRequired
-                  /> */}
-
                   <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
                   {moveType === MoveType.OTHER && (
                     <FloatingLabel
