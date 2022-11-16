@@ -15,7 +15,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Collapse
+  Collapse,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
 import { useEffect, useState, useRef } from 'react';
@@ -23,7 +23,7 @@ import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 import {
   MdPhone,
@@ -45,12 +45,16 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { getRegisterInfo } from '~/apis/registerInfo/slice';
-import { getMemberAuth } from '~/apis/memberAuth/slice';
+import { getMemberAuth } from '~/slices/memberAuth';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
 import useAxios from '~/hooks/useAxios';
+import { getRegisterInfo } from '~/slices/registerInfo';
+import { Gender } from '~/dtos/Enums/Gender.enum';
+import { MoveType } from '~/dtos/Enums/MoveType.enum';
+import { convertToAppDateTime } from '~/utils/date';
+import { MULTI_STEP_REGISTER_PATH } from '~/routes';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -62,13 +66,10 @@ const RegisterInfo = () => {
   const {
     isOpen: isOpenLoginModal,
     onOpen: onOpenLoginModal,
-    onClose: onCloseLoginModal
+    onClose: onCloseLoginModal,
   } = useDisclosure();
 
-  const {
-    isOpen: isOpenLoginAlert,
-    onOpen: onOpenLoginAlert,
-  } = useDisclosure();
+  const { isOpen: isOpenLoginAlert, onOpen: onOpenLoginAlert } = useDisclosure();
 
   const [login_phone, setLoginPhone] = useState<string>('');
   const [login_id_card, setLoginIdCard] = useState<string>('');
@@ -81,23 +82,25 @@ const RegisterInfo = () => {
         method: 'post',
         url: API.LOGIN_MEMBER,
         data: {
-          "phoneNumber": login_phone,
-          "identityCard": login_id_card
-        }
+          phoneNumber: login_phone,
+          identityCard: login_id_card,
+        },
       }),
     );
-  }
+  };
 
-  const { data: memberAuthdata, error: memberAuthError } = useAppSelector((state) => state.memberAuth);
+  const { data: memberAuthdata, error: memberAuthError } = useAppSelector(
+    (state) => state.memberAuth,
+  );
+  const { data, loaded, error } = useAppSelector((state) => state.registerInfo);
+
   useEffect(() => {
-    console.log(memberAuthdata.token)
+    console.log(memberAuthdata.token);
     if (memberAuthdata.token && isSubmit.current) {
-      history.push('/register');
+      history.push(formatUrl(MULTI_STEP_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
     }
     if (memberAuthError) onOpenLoginAlert();
-  }, [memberAuthdata.token,memberAuthError]);
-
-  console.log(memberAuthdata)
+  }, [memberAuthdata.token, memberAuthError]);
 
   useEffect(() => {
     dispatch(
@@ -107,7 +110,6 @@ const RegisterInfo = () => {
       }),
     );
   }, []);
-  const { data, loaded, error } = useAppSelector((state) => state.registerInfo);
   if (loaded) {
     console.log('data, error', data, error);
   }
@@ -117,34 +119,50 @@ const RegisterInfo = () => {
   const moveType = data?.moveType;
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = data?.receiveCardAddress;
-  const expDepartments = data?.expDepartments ? data.expDepartments : [];
-  const wishDepartments = data?.wishDepartments ? data.wishDepartments : [];
-  const permanent = [member?.permanentAddress, member?.permanentWard, member?.permanentDistrict, member?.permanentProvince].join(", ");
-  const temporary = [member?.temporaryAddress, member?.temporaryWard, member?.temporaryDistrict, member?.temporaryProvince].join(", ");
+  const expDepartments = data?.expDepartments || [];
+  const wishDepartments = data?.wishDepartments;
+  const permanent = [
+    member?.permanentWard?.name,
+    member?.permanentDistrict?.name,
+    member?.permanentProvince?.name,
+  ].join(', ');
+  const temporary = [
+    member?.temporaryWard?.name,
+    member?.temporaryDistrict?.name,
+    member?.temporaryProvince?.name,
+  ].join(', ');
 
-  const { data: groupData } = useAxios({
-    method: 'post',
-    url: formatUrl(API.GET_MEMBER_IN_GROUP, { leaderId }),
-  }, [leaderId]);
-  // if (!leaderId) {
-  //   groupData.cancel();
-  // }
+  const { data: groupData, cancel: groupToken } = useAxios(
+    {
+      method: 'post',
+      url: formatUrl(API.GET_MEMBER_IN_GROUP, { leaderId }),
+    },
+    [leaderId],
+  );
+  if (!leaderId) {
+    groupToken?.cancel();
+  }
 
-  const {data: ctnInfo} = useAxios({
-    method: 'get',
-    url: API.GET_CTN,
-    params: { ctnId: organizationStructureId }
-  }, [organizationStructureId]);
+  const { data: ctnInfo } = useAxios(
+    {
+      method: 'get',
+      url: API.GET_CTN,
+      params: { ctnId: organizationStructureId },
+    },
+    [organizationStructureId],
+  );
   // if (organizationStructureId) {
   // }
 
-
   const tableInfo = [
-    { title: 'Giới tính', value: member?.gender == 1 ? "Nữ" : "Nam" },
-    { title: 'Năm sinh', value: member?.dateOfBirth.split("-").length ? member?.dateOfBirth.split("-")[0] : "" },
+    { title: 'Giới tính', value: member?.gender == Gender.FEMALE ? 'Nữ' : 'Nam' },
+    {
+      title: 'Năm sinh',
+      value: member?.dateOfBirth?.split('-').length ? member?.dateOfBirth.split('-')[0] : '',
+    },
     { title: 'Căn cước', value: member?.identityCard },
     { title: 'Điện thoại', value: member?.phoneNumber },
-    { title: 'Thư điện tử', value: member?.email }
+    { title: 'Thư điện tử', value: member?.email },
   ];
 
   const tableInfoRight = [
@@ -163,22 +181,22 @@ const RegisterInfo = () => {
     departure_flight_code: '',
     return_flight_code: '',
   };
-  if (moveType == 0) {
-    schedule.departure_address = data.startTime?.address?.address ? data.startTime.address.address : '';
-    schedule.departure_time = data.startTime.time;
-    schedule.return_time = data.leaveTime.time;
-    schedule.return_address = data.leaveTime?.address?.address ? data.leaveTime.address.address : ''
+  if (moveType == MoveType.HCM) {
+    schedule.departure_address = data.startTime?.address?.address || '';
+    schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
+    schedule.return_time = convertToAppDateTime(data.leaveTime?.time) || '';
+    schedule.return_address = data.leaveTime?.address?.address || '';
   } else {
-    schedule.departure_address = data.otherStartAddress ? data.otherStartAddress : '';
-    schedule.departure_time = data.otherStartTime ? data.otherStartTime : '';
-    schedule.return_time = data.otherLeaveTime ? data.otherLeaveTime : '';
-    if (moveType == 1) {
-      schedule.departure_flight_code = data.startPlaneCode;
-      schedule.return_flight_code = data.returnPlaneCode;
+    schedule.departure_address = data.otherStartAddress || '';
+    schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
+    schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
+    if (moveType == MoveType.OTHER) {
+      schedule.departure_flight_code = data.startPlaneCode || '';
+      schedule.return_flight_code = data.returnPlaneCode || '';
     }
   }
 
-  const groupMembers = groupData?.data ? groupData.data : [];
+  const groupMembers = groupData?.data || [];
 
   return (
     <Box
@@ -204,19 +222,24 @@ const RegisterInfo = () => {
             rounded={'lg'}
             textAlign={'center'}
           >
-            <Avatar
-              size={'2xl'}
-              src={member?.avatarPath}
-              mb={4}
-              pos={'relative'}
-            />
+            <Avatar size={'2xl'} src={member?.avatarPath} mb={4} pos={'relative'} />
             <Heading fontSize={'2xl'} fontFamily={'body'}>
               {member?.fullName}
             </Heading>
             <Text fontWeight={600} color={'gray.500'} mt={2} mb={5}>
-              {member?.facebookAddress && <Button size='sm' onClick={() => { window.open(member?.facebookAddress, '_blank') }} leftIcon={<MdFacebook />} colorScheme='facebook' variant='solid'>
-                Facebook
-              </Button>}
+              {member?.facebookAddress && (
+                <Button
+                  size='sm'
+                  onClick={() => {
+                    window.open(member?.facebookAddress, '_blank');
+                  }}
+                  leftIcon={<MdFacebook />}
+                  colorScheme='facebook'
+                  variant='solid'
+                >
+                  Facebook
+                </Button>
+              )}
             </Text>
             <TableContainer>
               <Table variant='simple' colorScheme={'gray'}>
@@ -269,7 +292,11 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={'var(--chakra-colors-ttpq-600)'} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button display={memberAuthdata.token && 'none'} onClick={onOpenLoginModal} size='sm'>
+                <Button
+                  display={memberAuthdata.token && 'none'}
+                  onClick={onOpenLoginModal}
+                  size='sm'
+                >
                   Cập nhật
                 </Button>
                 <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
@@ -279,21 +306,29 @@ const RegisterInfo = () => {
 
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                    <Collapse in={isOpenLoginAlert} animateOpacity>
-                      <Alert status='error' variant='subtle' mb={2}>
-                        <AlertIcon />
-                        <AlertTitle>Lỗi đăng nhập!</AlertTitle>
-                        <AlertDescription>Tài khoản nhập vào không đúng.</AlertDescription>
-                      </Alert>
+                      <Collapse in={isOpenLoginAlert} animateOpacity>
+                        <Alert status='error' variant='subtle' mb={2}>
+                          <AlertIcon />
+                          <AlertTitle>Lỗi đăng nhập!</AlertTitle>
+                          <AlertDescription>Tài khoản nhập vào không đúng.</AlertDescription>
+                        </Alert>
                       </Collapse>
                       <FormControl isRequired>
                         <FormLabel>Số điện thoại</FormLabel>
-                        <Input placeholder='Số điện thoại' value={login_phone} onChange={handleLoginPhoneChange} />
+                        <Input
+                          placeholder='Số điện thoại'
+                          value={login_phone}
+                          onChange={handleLoginPhoneChange}
+                        />
                       </FormControl>
 
                       <FormControl mt={4} isRequired>
                         <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
-                        <Input placeholder='Số CCCD/CMT' value={login_id_card} onChange={handleLoginIdCardChange} />
+                        <Input
+                          placeholder='Số CCCD/CMT'
+                          value={login_id_card}
+                          onChange={handleLoginIdCardChange}
+                        />
                       </FormControl>
                     </ModalBody>
 
@@ -314,13 +349,23 @@ const RegisterInfo = () => {
                         <Td minW={'120px'} px={0}>
                           <Text as='b'>{ele.title}</Text>
                         </Td>
-                        <Td px={0}>{
-                          Array.isArray(ele.value) ? ele.value.map((item, idx2) => {
-                            return <Tag key={idx2} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
-                              {item.name}
-                            </Tag>
-                          }) : ele.value
-                        }</Td>
+                        <Td px={0}>
+                          {Array.isArray(ele.value)
+                            ? ele.value.map((item, idx2) => {
+                                return (
+                                  <Tag
+                                    key={idx2}
+                                    colorScheme={'blue'}
+                                    mr={2}
+                                    mb={1}
+                                    borderRadius='full'
+                                  >
+                                    {item.name}
+                                  </Tag>
+                                );
+                              })
+                            : ele.value}
+                        </Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -354,15 +399,16 @@ const RegisterInfo = () => {
                     <Box>
                       <Text as='b'>Nguyện vọng làm việc tại ban</Text>
                       <Box mt={2}>
-                        {wishDepartments.map((ele, idx) => (
-                          <Tag key={idx} colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
-                            {ele.name}
+                        {wishDepartments && (
+                          <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                            {wishDepartments.name}
                           </Tag>
-                        ))}
+                        )}
                       </Box>
                     </Box>
                     <Box>
-                      <Text as='b'>Nơi nhận thẻ:</Text> {receiveCardAddress}
+                      <Text as='b'>Nơi nhận thẻ:</Text>{' '}
+                      {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
                     </Box>
                   </Stack>
                 </TabPanel>
@@ -381,9 +427,14 @@ const RegisterInfo = () => {
                         <Text as='b'>Thời gian xuất phát</Text>
                       </HStack>
                       <Box mt={2}>
-                        <Tag mr={2} mb={1} colorScheme={'blue'}>{schedule && schedule?.departure_time}</Tag>
-                        {moveType == 1 && schedule && schedule.departure_flight_code &&
-                          <Tag mr={2} mb={1} colorScheme={'blue'}>Mã chuyến bay: {schedule?.departure_flight_code}</Tag>}
+                        <Tag mr={2} mb={1} colorScheme={'blue'}>
+                          {schedule && schedule?.departure_time}
+                        </Tag>
+                        {moveType == MoveType.OTHER && schedule && schedule.departure_flight_code && (
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>
+                            Mã chuyến bay: {schedule?.departure_flight_code}
+                          </Tag>
+                        )}
                       </Box>
                     </Box>
                     <Box>
@@ -392,18 +443,25 @@ const RegisterInfo = () => {
                         <Text as='b'>Thời gian trở về</Text>
                       </HStack>
                       <Box mt={2}>
-                        <Tag mr={2} mb={1} colorScheme={'pink'}>{schedule && schedule?.return_time}</Tag>
-                        {moveType == 1 && schedule && schedule.return_flight_code &&
-                          <Tag mr={2} mb={1} colorScheme={'pink'}>Mã chuyến bay: {schedule?.return_flight_code}</Tag>}
+                        <Tag mr={2} mb={1} colorScheme={'pink'}>
+                          {schedule && schedule?.return_time}
+                        </Tag>
+                        {moveType == MoveType.OTHER && schedule && schedule.return_flight_code && (
+                          <Tag mr={2} mb={1} colorScheme={'pink'}>
+                            Mã chuyến bay: {schedule?.return_flight_code}
+                          </Tag>
+                        )}
                       </Box>
                     </Box>
-                    {moveType == 0 && <Box>
-                      <HStack>
-                        <MdLocationCity />
-                        <Text as='b'>Nơi trở về</Text>
-                      </HStack>
-                      <Text>{schedule && schedule?.return_address}</Text>
-                    </Box>}
+                    {moveType == MoveType.HCM && (
+                      <Box>
+                        <HStack>
+                          <MdLocationCity />
+                          <Text as='b'>Nơi trở về</Text>
+                        </HStack>
+                        <Text>{schedule && schedule?.return_address}</Text>
+                      </Box>
+                    )}
                   </Stack>
                 </TabPanel>
                 <TabPanel px={0}>
@@ -413,35 +471,37 @@ const RegisterInfo = () => {
                       <TableContainer whiteSpace={'break-spaces'} maxW={'400px'}>
                         <Table variant='unstyled' size='sm'>
                           <Tbody>
-                            {groupMembers && groupMembers.length && groupMembers.map((ele, idx) => (
-                              <Tr key={idx}>
-                                <Td py={1} px={0}>
-                                  <Text>{ele.fullName}</Text>
-                                </Td>
-                                <Td>
-                                  {ele.role == 1 && (
-                                    <Tooltip label='Trưởng nhóm'>
-                                      <span>
-                                        <FaUserSecret />
-                                      </span>
-                                    </Tooltip>
-                                  )}
-                                  {ele.role == 2 && (
-                                    <Tooltip label='Phó nhóm'>
-                                      <span>
-                                        <FaUserTie />
-                                      </span>
-                                    </Tooltip>
-                                  )}
-                                </Td>
-                                <Td py={1} px={0}>
-                                  <Tag colorScheme={'blue'}>
-                                    <TagLeftIcon boxSize='12px' as={MdPhone} />
-                                    <TagLabel>{ele.phoneNumber}</TagLabel>
-                                  </Tag>
-                                </Td>
-                              </Tr>
-                            ))}
+                            {groupMembers &&
+                              groupMembers.length &&
+                              groupMembers.map((ele, idx) => (
+                                <Tr key={idx}>
+                                  <Td py={1} px={0}>
+                                    <Text>{ele.fullName}</Text>
+                                  </Td>
+                                  <Td>
+                                    {ele.role == 1 && (
+                                      <Tooltip label='Trưởng nhóm'>
+                                        <span>
+                                          <FaUserSecret />
+                                        </span>
+                                      </Tooltip>
+                                    )}
+                                    {ele.role == 2 && (
+                                      <Tooltip label='Phó nhóm'>
+                                        <span>
+                                          <FaUserTie />
+                                        </span>
+                                      </Tooltip>
+                                    )}
+                                  </Td>
+                                  <Td py={1} px={0}>
+                                    <Tag colorScheme={'blue'}>
+                                      <TagLeftIcon boxSize='12px' as={MdPhone} />
+                                      <TagLabel>{ele.phoneNumber}</TagLabel>
+                                    </Tag>
+                                  </Td>
+                                </Tr>
+                              ))}
                           </Tbody>
                         </Table>
                       </TableContainer>

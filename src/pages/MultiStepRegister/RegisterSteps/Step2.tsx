@@ -4,7 +4,7 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
-import { fillForm } from '~/pages/MultiStepRegister/services/slice';
+import { fillForm } from '~/slices/register';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { convertDateStringToObject } from '~/utils/date';
 import Address from '~/components/Form/Address';

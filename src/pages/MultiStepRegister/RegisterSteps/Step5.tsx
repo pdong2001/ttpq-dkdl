@@ -2,7 +2,7 @@ import { Stack, Heading, Button, Box, Text, SimpleGrid } from '@chakra-ui/react'
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { register } from '../services';
+import { register } from '../../../slices/register';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 const Step5 = (props: StepProps) => {

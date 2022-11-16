@@ -1,13 +1,11 @@
-import registerReducer from '~/pages/MultiStepRegister/services/slice';
-import authReducer from '~/apis/auth/slice';
+import registerReducer from '~/slices/register';
 import loadingReducer from '~/components/Loading/slice';
-import registerPageReducer from '~/apis/registerPage/slice';
-import registerInfoReducer from '~/apis/registerInfo/slice';
-import memberAuthReducer from '~/apis/memberAuth/slice';
+import memberAuthReducer from '~/slices/memberAuth';
+import registerPageReducer from '~/slices/registerPage';
+import registerInfoReducer from '~/slices/registerInfo';
 
 const rootReducer = {
   register: registerReducer,
-  auth: authReducer,
   loading: loadingReducer,
   registerPage: registerPageReducer,
   registerInfo: registerInfoReducer,

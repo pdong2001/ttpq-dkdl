@@ -38,8 +38,7 @@ import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
 export default function SuccessRegisterModal() {
-  const registerInfo = useAppSelector((state) => state.registerInfo.data);
-  console.log(registerInfo);
+  const registerResult = useAppSelector((state) => state.register.data);
 
   const mapTitles = {
     hoTen: 'Họ Và Tên',
@@ -52,8 +51,8 @@ export default function SuccessRegisterModal() {
 
   const dataSuccess = {
     infos: {
-      soDienThoai: registerInfo.register?.member?.phoneNumber,
-      cccd: registerInfo.register.member?.identityCard,
+      soDienThoai: registerResult.phoneNumber,
+      cccd: registerResult.identityCard,
       diaDiemXuatPhat: 'Bến xe buýt Trường ĐH Nông Lâm TP. HCM',
       thoiGianXuatPhat: '08:00 01-12-2022',
       thoiGianTroVe: '15:00 05-12-2022',
@@ -62,11 +61,11 @@ export default function SuccessRegisterModal() {
       cccdNhomTruong: '00109342343432',
       tenNhomTruong: 'Lương Thai Tam',
     },
-    avatar: registerInfo.avatarPath,
+    avatar: registerResult.avatarPath,
     hinhThucDangKy: '1',
-    LinkQrCode: 'https://dangkydaile.vn/user/1',
+    LinkQrCode: `/register-info/${registerResult.register.id}`,
     isOpen: true,
-    hoTen: registerInfo.register.member?.fullName,
+    hoTen: registerResult.fullName,
   };
 
   const { infos, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;

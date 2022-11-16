@@ -6,7 +6,7 @@ import { PhanLoaiThanhNien } from '../Enums/PhanLoaiThanhNien.enum';
 import { EventRegistryDto } from '../EventRegistries/EventRegistryDto.model';
 
 export type MemberDto = {
-  id: string;
+  id?: string;
   work?: string;
   email?: string;
   gender?: Gender;

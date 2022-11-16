@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { CustomDate } from '~/dtos/Date/CustomDate';
 
 export const convertDateStringToObject = (dateString): CustomDate => {
@@ -14,4 +15,9 @@ export const convertDateStringToObject = (dateString): CustomDate => {
     return { date: formatedDate, month: formatedMonth, year };
   }
   return { date: '', month: '', year: '' };
+};
+
+export const convertToAppDateTime = (dateTime) => {
+  if (!dateTime) return null;
+  return moment(dateTime).format('DD/MM/YYYY HH:mm');
 };

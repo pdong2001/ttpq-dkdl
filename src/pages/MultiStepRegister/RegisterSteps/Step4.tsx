@@ -21,12 +21,12 @@ import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import UploadFile from '~/components/Form/UploadFile';
-import { register } from '../services';
+import { register } from '../../../slices/register';
 import MultiSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { fillForm } from '../services/slice';
+import { fillForm } from '../../../slices/register';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
 // danh sách ban
@@ -125,10 +125,10 @@ const Step4 = (props: StepProps) => {
         fillForm({
           strongPointIds,
           exps,
+          avatarPath,
           register: {
             ...previousStepData.register,
             expDepartmentIds,
-            avatarPath,
             note,
             receiveCardAddressId,
             wishDepartmentIds: [wishDepartmentIds],

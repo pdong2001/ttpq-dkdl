@@ -1,5 +1,5 @@
-import { DepartureType } from '~/pages/MultiStepRegister/constants';
 import * as Yup from 'yup';
+import { MoveType } from '~/dtos/Enums/MoveType.enum';
 
 const step3Schema = Yup.object({
   moveType: Yup.string().nullable().required(),
@@ -7,21 +7,21 @@ const step3Schema = Yup.object({
   startAddressId: Yup.string()
     .nullable()
     .when('moveType', {
-      is: DepartureType.HCM,
+      is: MoveType.HCM,
       then: Yup.string().required('Xin hãy chọn nơi xuất phát HCM'),
       otherwise: Yup.string().notRequired(),
     }),
   startTimeId: Yup.string()
     .nullable()
     .when('moveType', {
-      is: DepartureType.HCM,
+      is: MoveType.HCM,
       then: Yup.string().required('Xin hãy chọn ngày giờ đi HCM'),
       otherwise: Yup.string().notRequired(),
     }),
   leaveTimeId: Yup.string()
     .nullable()
     .when('moveType', {
-      is: DepartureType.HCM,
+      is: MoveType.HCM,
       then: Yup.string().required('Xin hãy chọn ngày giờ về HCM'),
       otherwise: Yup.string().notRequired(),
     }),
@@ -30,24 +30,20 @@ const step3Schema = Yup.object({
   otherStartAddress: Yup.string()
     .nullable()
     .when('moveType', {
-      is: DepartureType.HCM,
+      is: MoveType.HCM,
       then: Yup.string().notRequired(),
       otherwise: Yup.string().required('Xin hãy chọn nơi xuất phát'),
     }),
-  otherStartTime: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: DepartureType.HCM,
-      then: Yup.string().notRequired(),
-      otherwise: Yup.string().required('Xin hãy chọn ngày giờ đi'),
-    }),
-  otherLeaveTime: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: DepartureType.HCM,
-      then: Yup.string().notRequired(),
-      otherwise: Yup.string().required('Xin hãy chọn ngày giờ về'),
-    }),
+  otherStartTime: Yup.string().when('moveType', {
+    is: MoveType.HCM,
+    then: Yup.string().notRequired(),
+    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ đi'),
+  }),
+  otherLeaveTime: Yup.string().when('moveType', {
+    is: MoveType.HCM,
+    then: Yup.string().notRequired(),
+    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
+  }),
 });
 
 export default step3Schema;

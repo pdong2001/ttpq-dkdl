@@ -20,9 +20,10 @@ import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { formatUrl } from '~/utils/functions';
 import { useEffect, useState } from 'react';
-import { fillForm } from '../services/slice';
+import { fillForm } from '../../../slices/register';
 import step3Schema from '../validationSchema/step3';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
+import DateTimePicker from '~/components/Form/DatePicker';
 
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -134,6 +135,8 @@ const Step3 = (props: StepProps) => {
     formik.setTouched({});
   }, [moveType]);
 
+  console.log('formiks', formik.values);
+
   return (
     <>
       <Stack spacing={4}>
@@ -201,14 +204,7 @@ const Step3 = (props: StepProps) => {
                     color={formTextColor}
                     isRequired
                   />
-                  <FloatingLabel
-                    name='otherStartTime'
-                    label='Chọn ngày giờ đi'
-                    color={formTextColor}
-                    type='datetime-local'
-                    isRequired
-                  />
-
+                  <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
                   {moveType === MoveType.OTHER && (
                     <FloatingLabel
                       name='startPlaneCode'
@@ -216,13 +212,7 @@ const Step3 = (props: StepProps) => {
                       color={formTextColor}
                     />
                   )}
-                  <FloatingLabel
-                    name='otherLeaveTime'
-                    label='Chọn ngày giờ về'
-                    color={formTextColor}
-                    type='datetime-local'
-                    isRequired
-                  />
+                  <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
                   {moveType === MoveType.OTHER && (
                     <FloatingLabel
                       name='returnPlaneCode'

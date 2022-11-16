@@ -1,9 +1,7 @@
 import {
   AspectRatio,
   Box,
-  BoxProps,
   Container,
-  forwardRef,
   Heading,
   Image,
   Input,
@@ -18,99 +16,6 @@ import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import { formatUrl } from '~/utils/functions';
 
-/*const first = {
-  rest: {
-    rotate: '-15deg',
-    scale: 0.95,
-    x: '-50%',
-    filter: 'grayscale(80%)',
-    transition: {
-      duration: 0.5,
-      type: 'tween',
-      ease: 'easeIn',
-    },
-  },
-  hover: {
-    x: '-70%',
-    scale: 1.1,
-    rotate: '-20deg',
-    filter: 'grayscale(0%)',
-    transition: {
-      duration: 0.4,
-      type: 'tween',
-      ease: 'easeOut',
-    },
-  },
-};*/
-
-/*const second = {
-  rest: {
-    rotate: '15deg',
-    scale: 0.95,
-    x: '50%',
-    filter: 'grayscale(80%)',
-    transition: {
-      duration: 0.5,
-      type: 'tween',
-      ease: 'easeIn',
-    },
-  },
-  hover: {
-    x: '70%',
-    scale: 1.1,
-    rotate: '20deg',
-    filter: 'grayscale(0%)',
-    transition: {
-      duration: 0.4,
-      type: 'tween',
-      ease: 'easeOut',
-    },
-  },
-};*/
-
-const third = {
-  rest: {
-    scale: 1.1,
-    filter: 'grayscale(80%)',
-    transition: {
-      duration: 0.5,
-      type: 'tween',
-      ease: 'easeIn',
-    },
-  },
-  hover: {
-    scale: 1.3,
-    filter: 'grayscale(0%)',
-    transition: {
-      duration: 0.4,
-      type: 'tween',
-      ease: 'easeOut',
-    },
-  },
-};
-
-const PreviewImage = forwardRef<BoxProps, typeof Box>((props, ref) => {
-  return (
-    <Box
-      bg='white'
-      top='0'
-      height='100%'
-      width='100%'
-      position='absolute'
-      borderWidth='1px'
-      borderStyle='solid'
-      rounded='sm'
-      borderColor='gray.400'
-      as={motion.div}
-      backgroundSize='cover'
-      backgroundRepeat='no-repeat'
-      backgroundPosition='center'
-      backgroundImage={`url("https://image.shutterstock.com/image-photo/paella-traditional-classic-spanish-seafood-600w-1662253543.jpg")`}
-      {...props}
-      ref={ref}
-    />
-  );
-});
 type UploadFileProps = InputProps & { dropLabel?: string };
 export default function UploadFile(props: UploadFileProps) {
   const { name, placeholder, dropLabel } = props;
@@ -198,15 +103,12 @@ export default function UploadFile(props: UploadFileProps) {
                     <Heading fontSize='lg' color='gray.700' fontWeight='bold'>
                       {label}
                     </Heading>
-                    <Text fontWeight='light'>hoặc click để chọn ảnh</Text>
+                    <Text fontWeight='light'>hoặc bấm để chọn ảnh</Text>
                   </Stack>
                 )}
               </Stack>
             </Box>
             <Input
-              {...props}
-              // @ts-ignore
-              // value={file}
               type='file'
               height='100%'
               width='100%'
@@ -229,6 +131,6 @@ export default function UploadFile(props: UploadFileProps) {
 }
 
 UploadFile.defaultProps = {
-  placeholder: 'Kéo ảnh vào hoặc bấm để chọn ảnh',
+  placeholder: 'Kéo ảnh vào',
   dropLabel: 'Thả vào đây ạ',
 } as UploadFileProps;
