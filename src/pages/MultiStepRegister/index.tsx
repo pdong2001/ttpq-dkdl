@@ -1,4 +1,4 @@
-import { Box, Container, Grid, GridItem, Stack } from '@chakra-ui/react';
+import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import CoverImage from '~/assets/festival_cover.jpg';
