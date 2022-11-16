@@ -19,5 +19,5 @@ export const convertDateStringToObject = (dateString): CustomDate => {
 
 export const convertToAppDateTime = (dateTime) => {
   if (!dateTime) return null;
-  return moment(dateTime).format('DD/MM/YYYY HH:mm');
+  return moment(dateTime).format('HH:mm DD-MM-YYYY');
 };

@@ -30,6 +30,7 @@ const customDateInput = ({ value, onClick, onChange, label }: any, ref) => {
         value={value}
         onChange={onChange}
         onClick={onClick}
+        onFocus={onClick}
         ref={ref}
         autoComplete='off'
       />

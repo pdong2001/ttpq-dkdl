@@ -55,11 +55,13 @@ import { Gender } from '~/dtos/Enums/Gender.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { MULTI_STEP_REGISTER_PATH } from '~/routes';
+import useCustomColorMode from '~/hooks/useColorMode';
 // type Props = {};
 
 const RegisterInfo = () => {
   const isSubmit = useRef<boolean>(false);
   const history = useHistory();
+  const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
   const { id } = useParams<any>();
@@ -97,7 +99,14 @@ const RegisterInfo = () => {
   useEffect(() => {
     console.log(memberAuthdata.token);
     if (memberAuthdata.token && isSubmit.current) {
-      history.push(formatUrl(MULTI_STEP_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
+      dispatch(
+        getRegisterInfo({
+          method: 'get',
+          url: formatUrl(API.GET_REGISTER_INFO, { id }),
+        }),
+      ).then(() => {
+        history.push(formatUrl(MULTI_STEP_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
+      });
     }
     if (memberAuthError) onOpenLoginAlert();
   }, [memberAuthdata.token, memberAuthError]);
@@ -125,12 +134,16 @@ const RegisterInfo = () => {
     member?.permanentWard?.name,
     member?.permanentDistrict?.name,
     member?.permanentProvince?.name,
-  ].join(', ');
+  ]
+    .filter((e) => !!e)
+    .join(', ');
   const temporary = [
     member?.temporaryWard?.name,
     member?.temporaryDistrict?.name,
     member?.temporaryProvince?.name,
-  ].join(', ');
+  ]
+    .filter((e) => !!e)
+    .join(', ');
 
   const { data: groupData, cancel: groupToken } = useAxios(
     {
@@ -140,10 +153,10 @@ const RegisterInfo = () => {
     [leaderId],
   );
   if (!leaderId) {
-    groupToken?.cancel();
+    groupToken.cancel();
   }
 
-  const { data: ctnInfo } = useAxios(
+  const { data: ctnInfo, cancel: ctnToken } = useAxios(
     {
       method: 'get',
       url: API.GET_CTN,
@@ -151,8 +164,9 @@ const RegisterInfo = () => {
     },
     [organizationStructureId],
   );
-  // if (organizationStructureId) {
-  // }
+  if (organizationStructureId) {
+    ctnToken.cancel();
+  }
 
   const tableInfo = [
     { title: 'Giới tính', value: member?.gender == Gender.FEMALE ? 'Nữ' : 'Nam' },
@@ -170,7 +184,7 @@ const RegisterInfo = () => {
     { title: 'Nơi sinh hoạt', value: ctnInfo?.Data[0].Name },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },
-    { title: 'Kỹ năng', value: member?.strongPoints ? member?.strongPoints : [] },
+    { title: 'Kỹ năng', value: member?.strongPoints || [] },
   ];
 
   let schedule = {
@@ -259,7 +273,7 @@ const RegisterInfo = () => {
             </TableContainer>
 
             <Stack px={6} pt={5} textAlign={'center'} spacing={2} direction='column'>
-              <Text as='b' color={'var(--chakra-colors-ttpq-600)'}>
+              <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
               </Text>
               <InputGroup size='md'>
@@ -289,7 +303,7 @@ const RegisterInfo = () => {
           >
             <Stack pb={6}>
               <HStack>
-                <Text w={'full'} as='b' color={'var(--chakra-colors-ttpq-600)'} fontSize='xl'>
+                <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
                 <Button
