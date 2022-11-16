@@ -1,4 +1,4 @@
-import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
+import ReactDatePicker from 'react-datepicker';
 import {
   Input,
   InputGroup,
@@ -16,7 +16,8 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.css';
 
-type Props = InputProps & FormControlProps & ReactDatePickerProps;
+type Props = InputProps &
+  FormControlProps & { dateFormat?: string; showTimeSelect?: boolean; timeIntervals?: number };
 
 const customDateInput = ({ value, onClick, onChange, label }: any, ref) => {
   const { primaryColor, bgColor } = useCustomColorMode();
@@ -71,7 +72,7 @@ const DateTimePicker = ({
 DateTimePicker.defaultProps = {
   dateFormat: 'dd/MM/yyyy HH:mm',
   showTimeSelect: true,
-  timeIntervals: 10,
+  timeIntervals: 5,
 };
 
 export default DateTimePicker;
