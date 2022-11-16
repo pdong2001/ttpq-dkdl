@@ -29,10 +29,11 @@ const registerSteps = [Step1, Step2, Step3, Step4, Step5, SuccessRegisterModal];
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(0);
-  const { shortUri } = useParams();
+  const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const history = useHistory();
   const Step: Step = registerSteps[step];
+  const { loaded } = useAppSelector((state) => state.registerPage);
 
   const dispatch = useAppDispatch();
 
@@ -74,31 +75,34 @@ const MultiStepRegister = () => {
   };
   const { bgColor } = useCustomColorMode();
   return (
-    <Box bgImage={CoverImage} bgSize={'cover'} backgroundAttachment='fixed'>
-      <Container
-        as={Grid}
-        maxW={'full'}
-        gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
-        py={{ base: 20 }}
-        minH='100vh'
-        alignItems={'center'}
-      >
-        <GridItem colSpan={{ base: 3, lg: step === 1 ? 3 : 2 }}>
-          <FadeInUp>
-            <Stack
-              bg={bgColor}
-              rounded={'xl'}
-              p={{ base: 4, sm: 6, md: 8 }}
-              spacing={{ lg: 1 }}
-              // maxW={{ lg: 'lg' }}
-              mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
-            >
-              <Step nextStep={nextStep} previousStep={previousStep} />
-            </Stack>
-          </FadeInUp>
-        </GridItem>
-      </Container>
-    </Box>
+    <>
+      {loaded && (
+        <Box bgImage={CoverImage} bgSize={'cover'} backgroundAttachment='fixed'>
+          <Container
+            as={Grid}
+            maxW={'full'}
+            gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
+            py={{ base: 20 }}
+            minH='100vh'
+            alignItems={'center'}
+          >
+            <GridItem colSpan={{ base: 3, lg: step === 1 ? 3 : 2 }}>
+              <FadeInUp>
+                <Stack
+                  bg={bgColor}
+                  rounded={'xl'}
+                  p={{ base: 4, sm: 6, md: 8 }}
+                  spacing={{ lg: 1 }}
+                  mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
+                >
+                  <Step nextStep={nextStep} previousStep={previousStep} />
+                </Stack>
+              </FadeInUp>
+            </GridItem>
+          </Container>
+        </Box>
+      )}
+    </>
   );
 };
 
