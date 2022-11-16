@@ -1,9 +1,9 @@
 import { setGlobalLoading } from '~/components/Loading/slice';
-import { APIError } from './type';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import publicRequest from './axios';
-import { getExceptionPayload } from './utils';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { APIError } from '~/apis/common/type';
+import publicRequest from '~/apis/common/axios';
+import { getExceptionPayload } from '~/apis/common/utils';
 
 export const createAsyncRequest = <Request = any, Response = any>(
   type: string,

@@ -5,6 +5,6 @@ export type LeaveTimeDto = {
   addressId: number;
   note: string | undefined;
   name: string | undefined;
-  time: Date;
+  time: string;
   address: LeaveAddressDto | undefined;
 };

@@ -5,8 +5,8 @@ import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm } from '~/pages/MultiStepRegister/services/slice';
-import { searchMember } from '../services';
+import { fillForm } from '~/slices/register';
+import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
@@ -80,7 +80,7 @@ const Step1 = (props: StepProps) => {
           {`${greatCeremony} PL.2565 - DL.2022`}
         </Text>
       </Stack>
-      <Box mt={10}>
+      <Box mt={{ base: 4, sm: 10 }}>
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>

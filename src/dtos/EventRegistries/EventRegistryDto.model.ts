@@ -15,7 +15,7 @@ import { DepartmentDetailDto } from '../DepartmentDetails/DepartmentDetailDto.mo
 import { AreaDto } from '../Areas/AreaDto.model';
 
 export type EventRegistryDto = {
-  id: string;
+  id?: string;
   memberId?: string;
   eventId?: number;
   code?: string;

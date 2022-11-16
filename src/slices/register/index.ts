@@ -1,11 +1,25 @@
-import createAppSlice from '~/apis/common/slice';
+import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
-import { searchMember } from '~/pages/MultiStepRegister/services/index';
+import API from '~/apis/constants';
+import { MemberDto } from '~/dtos/Members/MemberDto.model';
+import { createAsyncRequest } from '~/slices/common/action';
 
-const initialState: ReduxState<UpSertMemberDto> = {
+export const register = createAsyncRequest('register', {
+  method: 'post',
+  url: API.REGISTER,
+});
+/* Khi HD tạo 1 service (action) cần tạo thêm 1 handler (reducer) ở trong slice */
+export const searchMember = createAsyncRequest('searchMember', {
+  method: 'post',
+  url: API.SEARCH_MEMBER,
+});
+
+type Data = MemberDto & UpSertMemberDto;
+
+const initialState: ReduxState<Data> = {
   data: {
     email: '',
     fullName: '',
@@ -32,6 +46,16 @@ const slice = createAppSlice<typeof initialState>(
       action: searchMember,
       onFullfilled: (stateData, action) => {
         return { ...action.payload.data, ...stateData };
+      },
+    },
+    {
+      //@ts-ignore
+      action: register,
+      onFullfilled: (_, action) => {
+        return action.payload.data;
+      },
+      onRejected: (_, action) => {
+        return action.payload;
       },
     },
   ],

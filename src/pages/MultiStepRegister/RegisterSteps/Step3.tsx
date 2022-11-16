@@ -20,7 +20,7 @@ import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { formatUrl } from '~/utils/functions';
 import { useEffect, useState } from 'react';
-import { fillForm } from '../services/slice';
+import { fillForm } from '../../../slices/register';
 import step3Schema from '../validationSchema/step3';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';

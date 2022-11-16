@@ -7,7 +7,7 @@ import MultiStepRegister from '../MultiStepRegister';
 import Timeline from '../Timeline';
 
 export default function Home() {
-  const { shortUri } = useParams();
+  const { shortUri } = useParams<any>();
   return (
     <Box position={'relative'} w='full'>
       {shortUri && <MultiStepRegister />}

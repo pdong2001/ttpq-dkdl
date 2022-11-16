@@ -1,4 +1,6 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
+import { NoInfer } from '@reduxjs/toolkit/dist/tsHelpers';
+import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
 import {
   APIError,
   AsyncAction,
@@ -6,9 +8,7 @@ import {
   ReduxState,
   ResponseData,
   SuccessPayloadAction,
-} from './type';
-import { NoInfer } from '@reduxjs/toolkit/dist/tsHelpers';
-import { SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit/dist/createSlice';
+} from '~/apis/common/type';
 
 type AsyncReducers<Response extends ResponseData, Request = any> = {
   action: AsyncAction<Response, Request>;

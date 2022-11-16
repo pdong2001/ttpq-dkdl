@@ -1,7 +1,7 @@
+import { createAsyncRequest } from '~/slices/common/action';
+import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
 import { EventRegistryPageDto } from '~/dtos/EventRegistryPages/EventRegistryPageDto.model';
-import { createAsyncRequest } from '../common/action';
-import createAppSlice from '../common/slice';
 
 type RegisterPageState = ReduxState<EventRegistryPageDto>;
 const initialState: RegisterPageState = {

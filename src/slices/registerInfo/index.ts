@@ -1,8 +1,7 @@
+import { createAsyncRequest } from '~/slices/common/action';
+import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
-import { createAsyncRequest } from '../common/action';
-import createAppSlice from '../common/slice';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
-import { register } from '~/pages/MultiStepRegister/services';
 
 type RegisterInfoState = ReduxState<EventRegistryDto>;
 const initialState: RegisterInfoState = {
@@ -18,16 +17,6 @@ const registerInfo = createAppSlice<RegisterInfoState>('register_info', initialS
     action: getRegisterInfo,
     onFullfilled: (_, action) => {
       return { ...action.payload.data };
-    },
-  },
-  {
-    //@ts-ignore
-    action: register,
-    onFullfilled: (_, action) => {
-      return action.payload.data;
-    },
-    onRejected: (_, action) => {
-      return action.payload;
     },
   },
 ]);

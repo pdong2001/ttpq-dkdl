@@ -11,11 +11,11 @@ import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { HOME_WITH_SHORT_URI, MULTI_STEP_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
-import { getRegisterPage } from '~/apis/registerPage/slice';
 import API from '~/apis/constants';
 import Step5 from './RegisterSteps/Step5';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { getRegisterPage } from '~/slices/registerPage';
 
 // type MultiStepProps = {};
 type Step = (props: StepProps) => JSX.Element;
@@ -88,15 +88,14 @@ const MultiStepRegister = () => {
           >
             <GridItem colSpan={{ base: 3, lg: step === 1 ? 3 : 2 }}>
               <FadeInUp>
-                <Stack
+                <Box
                   bg={bgColor}
                   rounded={'xl'}
                   p={{ base: 4, sm: 6, md: 8 }}
-                  spacing={{ lg: 1 }}
                   mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
                 >
                   <Step nextStep={nextStep} previousStep={previousStep} />
-                </Stack>
+                </Box>
               </FadeInUp>
             </GridItem>
           </Container>
