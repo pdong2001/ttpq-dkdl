@@ -13,6 +13,7 @@ import {
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import Select from '~/components/Form/CustomSelect';
+import _ from 'lodash';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
@@ -20,6 +21,7 @@ import API from '~/apis/constants';
 import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
+import { fillDataPreview } from '~/slices/previewInfo';
 import UploadFile from '~/components/Form/UploadFile';
 import { register } from '../../../slices/register';
 import MultiSelect from '~/components/Form/MultiSelect';
@@ -121,29 +123,44 @@ const Step4 = (props: StepProps) => {
         receiveCardAddressId,
         note,
       } = values;
-      dispatch(
-        fillForm({
-          strongPointIds,
-          exps,
-          avatarPath,
-          register: {
-            ...previousStepData.register,
-            expDepartmentIds,
-            note,
-            receiveCardAddressId,
-            wishDepartmentIds: [wishDepartmentIds],
-            eventId,
-            eventRegistryPageId: id,
-            ctnId,
-            type,
-          },
-        }),
-      );
+      let fillData = {
+        strongPointIds,
+        exps,
+        avatarPath,
+        register: {
+          ...previousStepData.register,
+          expDepartmentIds,
+          note,
+          receiveCardAddressId,
+          wishDepartmentIds: [wishDepartmentIds],
+          eventId,
+          eventRegistryPageId: id,
+          ctnId,
+          type,
+        },
+      };
+      dispatch(fillForm(fillData));
+      mapMultiTitle({ avatarPath, note, type, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId});
       nextStep();
     },
   });
 
-  console.log('formiks', formik.values, formik.errors);
+  const mapMultiTitle = ({ avatarPath, note, type, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId}) => {
+    function mapName(array, ids) {
+      return _.map(_.filter(array, function(p){
+        return _.includes(ids, p.id);
+    }), a => a.name).join(', ');
+    }
+    dispatch(fillDataPreview({
+      jobs: {
+        note, type, avatarPath,
+        strongPointIds: mapName(strongPointList, strongPointIds),
+        expDepartmentIds: mapName(departments, expDepartmentIds),
+        wishDepartmentIds: mapName(departments, wishDepartmentIds),
+        receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
+      }
+    }));
+   }
 
   return (
     <>

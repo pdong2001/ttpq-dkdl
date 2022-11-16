@@ -1,11 +1,13 @@
 import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
+import _ from 'lodash';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/slices/register';
+import { fillDataPreview } from '~/slices/previewInfo';
 import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
@@ -38,17 +40,18 @@ const Step1 = (props: StepProps) => {
       if (registerType === RegisterType.SINGLE) {
         leaderId = '';
       }
+      let dataFillForm = {
+        fullName,
+        identityCard,
+        phoneNumber,
+        register: {
+          ...register,
+          registerType,
+          leaderId,
+        },
+      }
       dispatch(
-        fillForm({
-          fullName,
-          identityCard,
-          phoneNumber,
-          register: {
-            ...register,
-            registerType,
-            leaderId,
-          },
-        }),
+        fillForm(dataFillForm),
       );
       dispatch(
         searchMember({
@@ -58,9 +61,16 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
+      dispatch(fillDataPreview(dataFillForm));
       nextStep();
     },
   });
+
+  const setLeaderPreview = (dataLeader) => {
+    if (_.get(dataLeader, 'success', false)) {
+      dispatch(fillDataPreview({dataLeader}));
+    }
+  }
   const { registerType: localRegisterType } = formik.values;
 
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
@@ -101,7 +111,7 @@ const Step1 = (props: StepProps) => {
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
-              {isRegisterFollowGroup && <SearchLeader name='leaderId' label='Trưởng nhóm' />}
+              {isRegisterFollowGroup && <SearchLeader name='leaderId' getLeader={setLeaderPreview} label='Trưởng nhóm' />}
             </Stack>
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo

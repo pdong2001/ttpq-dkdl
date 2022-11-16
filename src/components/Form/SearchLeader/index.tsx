@@ -28,6 +28,7 @@ import { useAppSelector } from '~/hooks/reduxHook';
 type Props = {
   name: string;
   label: string;
+  getLeader: Function;
 };
 type LeaderData = {
   id: string;
@@ -38,7 +39,7 @@ type LeaderData = {
 
 const SearchLeader = (props: Props) => {
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { name, label } = props;
+  const { name, label, getLeader } = props;
   const [field, { error, touched }, { setValue, setTouched }] = useField(name);
 
   const [searchValue, setSearchValue] = useState('');
@@ -56,6 +57,7 @@ const SearchLeader = (props: Props) => {
     },
     searchValue,
   );
+  getLeader(data)
   const startSkelotonColor = 'gray.600';
   const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.500' : 'gray.600';
 

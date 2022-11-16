@@ -5,6 +5,7 @@ import { StepProps } from '..';
 import Radios from '~/components/Form/Radios';
 import DateOfBirth from '~/components/Form/DateOfBirth';
 import { fillForm } from '~/slices/register';
+import { fillDataPreview } from '~/slices/previewInfo';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { convertDateStringToObject } from '~/utils/date';
 import Address from '~/components/Form/Address';
@@ -86,21 +87,30 @@ const Step2 = (props: StepProps) => {
         organizationStructureId,
       } = values;
       const { year, month, date } = dob || {};
-      dispatch(
-        fillForm({
-          gender,
-          religiousName,
-          email,
-          organizationStructureId,
-          dateOfBirth: [year, month, date].join('-'),
-          temporaryAddress,
-          permanentAddress,
-          register,
-        }),
-      );
+      dispatch(fillForm({
+        gender,
+        religiousName,
+        email,
+        organizationStructureId,
+        dateOfBirth: [year, month, date].join('-'),
+        temporaryAddress,
+        permanentAddress,
+        register,
+      }));
+      dispatch(fillDataPreview({
+        gender,
+        religiousName,
+        email,
+        dateOfBirth: [year, month, date].join('-'),
+      }));
       nextStep();
     },
   });
+
+
+  const setDataPreview = (dataFillForm) => {
+    dispatch(fillDataPreview(dataFillForm));
+  }
 
   return (
     <>
@@ -135,13 +145,13 @@ const Step2 = (props: StepProps) => {
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
                   {registerPage.ctnId == 0 && (
-                    <CultivationPlace name='organizationStructureId' label='Địa điểm tu tập' />
+                    <CultivationPlace name='organizationStructureId' setDataPreview={setDataPreview} className='organizationStructureId' label='Địa điểm tu tập' />
                   )}
                 </Stack>
                 <Stack spacing={3}>
                   <FormInput name='email' label='Email' color={formTextColor} isRequired />
-                  <Address name='permanentAddress' label='Địa chỉ thường trú' isRequired />
-                  <Address name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
+                  <Address setDataPreview={setDataPreview} name='permanentAddress' label='Địa chỉ thường trú' isRequired />
+                  <Address setDataPreview={setDataPreview} name='temporaryAddress' label='Địa chỉ tạm trú' isRequired />
                 </Stack>
               </SimpleGrid>
             </Stack>

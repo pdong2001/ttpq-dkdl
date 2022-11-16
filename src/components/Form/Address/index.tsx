@@ -10,17 +10,20 @@ import {
 } from '@chakra-ui/react';
 import Select from '../CustomSelect';
 import useAxios from '~/hooks/useAxios';
+import _ from 'lodash';
 import API from '~/apis/constants';
 import { useField } from 'formik';
 import { useState, useEffect } from 'react';
 import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
 import useCustomColorMode from '~/hooks/useColorMode';
 
-type AddressProps = SelectProps & FormControlProps & StackProps;
+type AddressProps = SelectProps & FormControlProps & StackProps & {
+  setDataPreview: Function
+};
 
 function Address(props: AddressProps) {
   const { formTextColor } = useCustomColorMode();
-  const { name, label, direction, spacing, ...rest } = props;
+  const { name, label, direction, spacing, setDataPreview, ...rest } = props;
   const provinceName = `${name}Province`;
   const districtName = `${name}District`;
   const wardName = `${name}Ward`;
@@ -83,6 +86,7 @@ function Address(props: AddressProps) {
 
   useEffect(() => {
     setAddress({ provinceId, districtId, wardId });
+    mapTitle({provinceId, districtId, wardId})
   }, [provinceId, districtId, wardId]);
 
   useEffect(() => {
@@ -99,6 +103,18 @@ function Address(props: AddressProps) {
       setWard('');
     };
   }, [districtId]);
+  
+
+  const mapTitle = ({ provinceId, districtId, wardId }) => {
+    function filterTitle(array, id) {
+      return _.get(
+        _.filter(array, (a) => a.Id == id)[0], 'Name', '',
+      );
+    }
+    setDataPreview({
+      [`${name}`]: `${filterTitle(wards, wardId)}, ${filterTitle(provinces, provinceId)}, ${filterTitle(districts, districtId)}`,
+    });
+  }
 
   const errorMessage = error && Object.values(error)[0];
 
