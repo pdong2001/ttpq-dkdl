@@ -22,15 +22,17 @@ const Step1 = (props: StepProps) => {
     identityCard,
     register,
   } = useAppSelector((state) => state.register.data) || {};
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
+  const { member } = registerInfo || {};
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      fullName,
-      phoneNumber,
-      identityCard,
-      registerType: register.registerType || RegisterType.SINGLE,
-      leaderId: register.leaderId || '',
+      fullName: member?.fullName || fullName,
+      phoneNumber: member?.phoneNumber || phoneNumber,
+      identityCard: member?.identityCard || identityCard,
+      registerType: registerInfo.registerType || register.registerType || RegisterType.SINGLE,
+      leaderId: registerInfo.leaderId || register.leaderId || '',
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {
