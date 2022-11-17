@@ -3,6 +3,7 @@ import loadingReducer from '~/components/Loading/slice';
 import memberAuthReducer from '~/slices/memberAuth';
 import registerPageReducer from '~/slices/registerPage';
 import registerInfoReducer from '~/slices/registerInfo';
+import previewReducer from '~/slices/previewInfo';
 
 const rootReducer = {
   register: registerReducer,
@@ -10,6 +11,7 @@ const rootReducer = {
   registerPage: registerPageReducer,
   registerInfo: registerInfoReducer,
   memberAuth: memberAuthReducer,
+  previewInfo: previewReducer,
 };
 
 export default rootReducer;

@@ -7,19 +7,23 @@ import {
   StackProps,
 } from '@chakra-ui/react';
 import CustomSelect from '~/components/Form/CustomSelect';
+import _ from 'lodash';
+import { useEffect } from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { useField } from 'formik';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 
-type CultivationPlaceProps = InputProps & FormControlProps & StackProps;
+type CultivationPlaceProps = InputProps & FormControlProps & StackProps & {
+  setDataPreview: Function
+};
 
 function CultivationPlace(props: CultivationPlaceProps) {
   const { formTextColor } = useCustomColorMode();
-  const { name, label, isRequired } = props;
+  const { name, label, isRequired, setDataPreview } = props;
 
   //@ts-ignore
-  const [field, { error, touched }, { setValue }] = useField(name);
+  const [field, { value: id }, { error, touched }] = useField(name);
 
   const { data: groups } = useAxios(
     {
@@ -29,6 +33,13 @@ function CultivationPlace(props: CultivationPlaceProps) {
     },
     [],
   );
+
+  useEffect(() => {
+    const placeName = _.get(
+      _.filter(groups, (g) => g.Id == id)[0], 'Name', '',
+    );
+    setDataPreview({[`${name}`]: placeName});
+  })
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>

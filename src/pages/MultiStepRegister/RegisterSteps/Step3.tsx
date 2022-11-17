@@ -9,11 +9,13 @@ import {
   VisuallyHidden,
   // VisuallyHiddenInput,
 } from '@chakra-ui/react';
+import _ from 'lodash';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
+import { fillDataPreview } from '~/slices/previewInfo';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useAxios from '~/hooks/useAxios';
@@ -76,11 +78,13 @@ const Step3 = (props: StepProps) => {
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
       }
+      dispatch(fillDataPreview({...values}));
       dispatch(
         fillForm({
           register: { ...register, ...values },
         }),
       );
+      mapTitle();
       nextStep();
     },
   });
@@ -135,7 +139,20 @@ const Step3 = (props: StepProps) => {
     formik.setTouched({});
   }, [moveType]);
 
-  console.log('formiks', formik.values);
+ const mapTitle = () => {
+  function filterTitle(array, id) {
+    return _.get(
+      _.filter(array, (a) => a.id == id)[0], 'name', '',
+    );
+  }
+  dispatch(fillDataPreview({
+    time: {
+      startAddressId: `${filterTitle(HCMAddressList, startAddressId)}`,
+    startTimeId: `${filterTitle(HCMStartTimes, startTimeId)}`,
+    leaveTimeId: `${filterTitle(leaveTimes, leaveTimeIdInStore)}`,
+    }
+  }));
+ }
 
   return (
     <>
