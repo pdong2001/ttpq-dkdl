@@ -39,7 +39,9 @@ const coundown = (startTime) => {
     for (let i = 0; i < times.length; i++) {
       const timesRuner = times[i];
       const element: any = document.getElementById(`countdown-${timesRuner.id}`);
-      element.innerHTML = JSON.stringify(timeParse[i]);
+      if (element) {
+        element.innerHTML = JSON.stringify(timeParse[i]);
+      }
     }
   }, 1000);
 };
@@ -47,7 +49,7 @@ const coundown = (startTime) => {
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
   const { event } = useAppSelector((state) => state.registerPage.data);
-  const { startDate: startTime, name } = event || { startDate: BuddhaEnlightenmentStartTime };
+  const { startDate: startTime } = event || { startDate: BuddhaEnlightenmentStartTime };
   const { shortUri } = useParams<any>();
 
   useEffect(() => {
