@@ -152,13 +152,11 @@ const Step4 = (props: StepProps) => {
     }), a => a.name).join(', ');
     }
     dispatch(fillDataPreview({
-      jobs: {
-        note, type, avatarPath,
-        strongPointIds: mapName(strongPointList, strongPointIds),
-        expDepartmentIds: mapName(departments, expDepartmentIds),
-        wishDepartmentIds: mapName(departments, wishDepartmentIds),
-        receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
-      }
+      note, type, avatarPath,
+      strongPointIds: mapName(strongPointList, strongPointIds),
+      expDepartmentIds: mapName(departments, expDepartmentIds),
+      wishDepartmentIds: mapName(departments, wishDepartmentIds),
+      receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
     }));
    }
 

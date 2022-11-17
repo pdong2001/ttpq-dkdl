@@ -1,4 +1,7 @@
 import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
+import {
+  useSelector,
+  } from 'react-redux'
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
@@ -13,6 +16,9 @@ import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
+
+// const previewInfo = useSelector((state) => state.previewInfo.data);
+
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
@@ -25,6 +31,7 @@ const Step1 = (props: StepProps) => {
     register,
   } = useAppSelector((state) => state.register.data) || {};
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
+
   const { member } = registerInfo || {};
 
   const formik = useFormik({
@@ -42,7 +49,7 @@ const Step1 = (props: StepProps) => {
       if (registerType === RegisterType.SINGLE) {
         leaderId = '';
       }
-      let dataFillForm = {
+      dispatch(fillForm({
         fullName,
         identityCard,
         phoneNumber,
@@ -51,10 +58,7 @@ const Step1 = (props: StepProps) => {
           registerType,
           leaderId,
         },
-      }
-      dispatch(
-        fillForm(dataFillForm),
-      );
+      }));
       dispatch(
         searchMember({
           data: {
@@ -63,14 +67,21 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
-      dispatch(fillDataPreview(dataFillForm));
+      dispatch(fillDataPreview({
+        fullName,
+        identityCard,
+        phoneNumber,
+      }));
       nextStep();
     },
   });
 
-  const setLeaderPreview = (dataLeader) => {
-    if (_.get(dataLeader, 'success', false)) {
-      dispatch(fillDataPreview({dataLeader}));
+  const setLeaderPreview = (leader) => {
+    if (_.get(leader, 'success', false)) {
+      dispatch(fillDataPreview({
+        leader: _.get(leader, 'data', {}),
+      }));
+      
     }
   }
   const { registerType: localRegisterType } = formik.values;
@@ -113,7 +124,7 @@ const Step1 = (props: StepProps) => {
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
-              {isRegisterFollowGroup && <SearchLeader name='leaderId' getLeader={setLeaderPreview} label='Trưởng nhóm' />}
+              {isRegisterFollowGroup && <SearchLeader name='leaderId' getLeader={(leader) => setLeaderPreview(leader)} label='Trưởng nhóm' />}
             </Stack>
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo
