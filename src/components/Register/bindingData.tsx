@@ -24,7 +24,9 @@ const mapSuccessData = (previewInfo) => {
       identityCard: _.get(previewInfo, 'identityCard', ''),
       dateOfBirth: _.get(previewInfo, 'dateOfBirth', ''),
       email: _.get(previewInfo, 'email', ''),
-      organizationStructureId: _.get(previewInfo, 'organizationStructureId', ''),
+      organizationStructureId: _.get(previewInfo, 'organizationStructureId') == '' && 'Chưa nhập',
+      permanentAddress: _.get(previewInfo, 'permanentAddress', ''),
+      temporaryAddress: _.get(previewInfo, 'temporaryAddress', ''),
       gender: _.get(previewInfo, 'gender') == 0 ? 'Nam' : 'Nữ',
     },
     schedules: {
@@ -50,7 +52,7 @@ const mapSuccessData = (previewInfo) => {
       }
     },
     jobs: {
-      type: eventExp[_.get(previewInfo, 'type', '')],
+      exps: eventExp[_.get(previewInfo, 'exps', 0)],
       strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
       wishDepartmentIds: _.get(previewInfo, 'wishDepartmentIds', ''),

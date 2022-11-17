@@ -23,11 +23,9 @@ import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import { fillDataPreview } from '~/slices/previewInfo';
 import UploadFile from '~/components/Form/UploadFile';
-import { register } from '../../../slices/register';
 import MultiSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { fillForm } from '../../../slices/register';
 // import AvatarTemp from '~/assets/avatar_temp.png';
 
@@ -140,25 +138,25 @@ const Step4 = (props: StepProps) => {
         },
       };
       dispatch(fillForm(fillData));
-      mapMultiTitle({ avatarPath, note, type, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId});
+      mapMultiTitle({ avatarPath, note, type, exps, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId });
       nextStep();
     },
   });
 
-  const mapMultiTitle = ({ avatarPath, note, type, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId}) => {
+  const mapMultiTitle = ({ avatarPath, note, type, exps, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId }) => {
     function mapName(array, ids) {
-      return _.map(_.filter(array, function(p){
+      return _.map(_.filter(array, function (p) {
         return _.includes(ids, p.id);
-    }), a => a.name).join(', ');
+      }), a => a.name).join(', ');
     }
     dispatch(fillDataPreview({
-      note, type, avatarPath,
+      note, type, avatarPath, exps,
       strongPointIds: mapName(strongPointList, strongPointIds),
       expDepartmentIds: mapName(departments, expDepartmentIds),
       wishDepartmentIds: mapName(departments, wishDepartmentIds),
       receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
     }));
-   }
+  }
 
   return (
     <>

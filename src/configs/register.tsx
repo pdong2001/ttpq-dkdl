@@ -9,7 +9,7 @@ const moveType = {
 }
 
 const eventExp = {
-  [EventExp.ChuaTungThamGia]: 'Chưa từng tham gia',
+  [EventExp.ChuaTungThamGia]: 'Lần đầu tiên',
   [EventExp.Duoi3Lan]: 'Dưới 3 lần',
   [EventExp.Tren3Lan]: 'Trên 3 lần',
 }
@@ -23,6 +23,8 @@ const mapTitlesRegister = {
   email: 'Email',
   identityCard: 'Căn cước',
   organizationStructureId: 'Địa điểm tu tập',
+  permanentAddress: 'Địa chỉ thưởng trú',
+  temporaryAddress: 'Địa chỉ tạm trú',
   // schedules
   moveType: 'Hình thức di chuyển',
   startAddressId: 'Nơi xuất phát',
@@ -34,7 +36,7 @@ const mapTitlesRegister = {
   startPlaneCode: 'Mã chuyến bay đi',
   returnPlaneCode: 'Mã chuyến bay về',
   // jobs
-  type: 'Số lần về chùa',
+  exps: 'Số lần về chùa',
   strongPointIds: 'Kỹ năng, sở trường',
   expDepartmentIds: 'Kinh nghiệm ở ban',
   wishDepartmentIds: 'Nguyện vọng vào ban',
