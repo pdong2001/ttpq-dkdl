@@ -14,9 +14,11 @@ import { useField } from 'formik';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 
-type CultivationPlaceProps = InputProps & FormControlProps & StackProps & {
-  setDataPreview: Function
-};
+type CultivationPlaceProps = InputProps &
+  FormControlProps &
+  StackProps & {
+    setDataPreview: Function;
+  };
 
 function CultivationPlace(props: CultivationPlaceProps) {
   const { formTextColor } = useCustomColorMode();
@@ -35,11 +37,11 @@ function CultivationPlace(props: CultivationPlaceProps) {
   );
 
   useEffect(() => {
-    const placeName = _.get(
-      _.filter(groups, (g) => g.Id == id)[0], 'Name', '',
-    );
-    setDataPreview({[`${name}`]: placeName});
-  })
+    const placeName = _.get(_.filter(groups, (g) => g.Id == id)[0], 'Name', '');
+    console.log('set preview cultivation', placeName);
+
+    setDataPreview({ [`${name}`]: placeName });
+  }, [id]);
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>

@@ -17,9 +17,11 @@ import { useState, useEffect } from 'react';
 import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
 import useCustomColorMode from '~/hooks/useColorMode';
 
-type AddressProps = SelectProps & FormControlProps & StackProps & {
-  setDataPreview: Function
-};
+type AddressProps = SelectProps &
+  FormControlProps &
+  StackProps & {
+    setDataPreview: Function;
+  };
 
 function Address(props: AddressProps) {
   const { formTextColor } = useCustomColorMode();
@@ -86,35 +88,20 @@ function Address(props: AddressProps) {
 
   useEffect(() => {
     setAddress({ provinceId, districtId, wardId });
-    mapTitle({provinceId, districtId, wardId})
+    mapTitle({ provinceId, districtId, wardId });
   }, [provinceId, districtId, wardId]);
-
-  useEffect(() => {
-    return () => {
-      setDTouched(false);
-      setDistrict('');
-      setWard('');
-    };
-  }, [provinceId]);
-
-  useEffect(() => {
-    return () => {
-      setVTouched(false);
-      setWard('');
-    };
-  }, [districtId]);
-  
 
   const mapTitle = ({ provinceId, districtId, wardId }) => {
     function filterTitle(array, id) {
-      return _.get(
-        _.filter(array, (a) => a.Id == id)[0], 'Name', '',
-      );
+      return _.get(_.filter(array, (a) => a.Id == id)[0], 'Name', '');
     }
     setDataPreview({
-      [`${name}`]: `${filterTitle(wards, wardId)}, ${filterTitle(provinces, provinceId)}, ${filterTitle(districts, districtId)}`,
+      [`${name}`]: `${filterTitle(wards, wardId)}, ${filterTitle(
+        provinces,
+        provinceId,
+      )}, ${filterTitle(districts, districtId)}`,
     });
-  }
+  };
 
   const errorMessage = error && Object.values(error)[0];
 
@@ -131,6 +118,11 @@ function Address(props: AddressProps) {
           name={provinceName}
           data={provinces}
           hiddenErrorMessage
+          onChange={() => {
+            setDTouched(false);
+            setDistrict('');
+            setWard('');
+          }}
         />
         <Select
           valueField='Id'
@@ -140,6 +132,10 @@ function Address(props: AddressProps) {
           data={districts}
           isDisabled={!provinceId}
           hiddenErrorMessage
+          onChange={(e) => {
+            setVTouched(false);
+            setWard('');
+          }}
         />
         <Select
           valueField='Id'
