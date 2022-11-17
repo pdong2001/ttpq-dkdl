@@ -16,18 +16,37 @@ type CustomSelectProps = {
 } & SelectProps;
 
 const CustomSelect = (props: CustomSelectProps) => {
-  const { data, hiddenErrorMessage, valueField, labelField, label, name, isRequired, ...rest } =
-    props;
+  const {
+    data,
+    hiddenErrorMessage,
+    valueField,
+    labelField,
+    label,
+    name,
+    isRequired,
+    onChange,
+    ...rest
+  } = props;
   const { formTextColor } = useCustomColorMode();
 
   // @ts-ignore
-  const [field, meta] = useField(props.name);
+  const [{ onChange: fieldChange, ...restField }, meta] = useField(props.name);
   const { primaryColor } = useCustomColorMode();
+  const customChange = (e) => {
+    fieldChange(e);
+    onChange && onChange(e);
+  };
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!meta.error && meta.touched}>
       <FormLabel color={formTextColor}>{label}</FormLabel>
-      <Select {...field} {...rest} name={name} focusBorderColor={primaryColor}>
+      <Select
+        onChange={customChange}
+        {...restField}
+        {...rest}
+        name={name}
+        focusBorderColor={primaryColor}
+      >
         {data?.map((item) => (
           <option key={nanoid()} value={item[valueField]}>
             {item[labelField]}
