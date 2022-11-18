@@ -24,6 +24,9 @@ import useSearch from '~/hooks/useSearch';
 import { ResponseData } from '~/apis/common/type';
 import { useField } from 'formik';
 import { useAppSelector } from '~/hooks/reduxHook';
+import useAxios from '~/hooks/useAxios';
+import { formatUrl } from '~/utils/functions';
+import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 
 type Props = {
   name: string;
@@ -45,6 +48,21 @@ const SearchLeader = (props: Props) => {
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { primaryColor, formTextColor } = useCustomColorMode();
+  const { leaderId } = useAppSelector((state) => state.registerInfo.data);
+  const {
+    data: editLeader,
+    cancel: editToken,
+    loaded: editLoaded,
+  } = useAxios<EventRegistryDto>(
+    {
+      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
+      transformResponse: ({ data }) => data,
+    },
+    [leaderId],
+  );
+  if (!leaderId) {
+    editToken.cancel();
+  }
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
     {
       method: 'post',
@@ -57,7 +75,10 @@ const SearchLeader = (props: Props) => {
     },
     searchValue,
   );
-  getLeader(data)
+  useEffect(() => {
+    getLeader(data);
+  }, [searchValue]);
+
   const startSkelotonColor = 'gray.600';
   const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.500' : 'gray.600';
 
@@ -101,44 +122,44 @@ const SearchLeader = (props: Props) => {
           </InputRightElement>
         </InputGroup>
         <HStack spacing={{ base: 4, md: 6, lg: 2 }} justifyContent='center'>
-          {(loaded && (!data?.data || isInvalid)) || (touched && !data?.data) ? (
+          {loaded && (!data?.data || isInvalid) ? (
             <FormErrorMessage>
-              {(touched && error) || 'Không tìm thấy trưởng đoàn'}
+              {(touched ? error : '') || (!data?.data && 'Không tìm thấy trưởng đoàn')}
             </FormErrorMessage>
           ) : (
             <>
               <SkeletonCircle
-                isLoaded={loaded}
+                isLoaded={loaded || !!leaderId}
                 startColor={startSkelotonColor}
                 endColor={endSkeletonColor}
                 size='16'
                 as={Flex}
                 alignItems='center'
               >
-                <Avatar src={data?.data?.avatarPath} />
+                <Avatar src={data?.data?.avatarPath || editLeader?.member?.avatarPath} />
               </SkeletonCircle>
               <VStack alignItems='start' color={formTextColor}>
                 <Skeleton
                   as={Flex}
                   justifyItems='center'
-                  isLoaded={loaded}
+                  isLoaded={loaded || !!leaderId}
                   startColor={startSkelotonColor}
                   endColor={endSkeletonColor}
                   height={8}
                   minWidth={32}
                 >
                   <Text color={primaryColor} fontWeight='bold'>
-                    {data?.data?.fullName}
+                    {data?.data?.fullName || editLeader?.member?.fullName}
                   </Text>
                 </Skeleton>
                 <Skeleton
-                  isLoaded={loaded}
+                  isLoaded={loaded || !!leaderId}
                   startColor={startSkelotonColor}
                   endColor={endSkeletonColor}
                   height={8}
                   minWidth={40}
                 >
-                  <Text>{data?.data?.religiousName}</Text>
+                  <Text>{data?.data?.religiousName || editLeader?.member?.religiousName}</Text>
                 </Skeleton>
               </VStack>
             </>

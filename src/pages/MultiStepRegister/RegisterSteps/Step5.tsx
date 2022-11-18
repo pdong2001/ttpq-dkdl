@@ -1,10 +1,26 @@
-import { Stack, Heading, Button, Box, Text, SimpleGrid, Avatar, Divider, GridItem, HStack, Table, TableContainer, Tag, Tbody, Td, Tr, Flex, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react';
+import {
+  Stack,
+  Heading,
+  Button,
+  Box,
+  Text,
+  SimpleGrid,
+  Avatar,
+  GridItem,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tr,
+  Skeleton,
+  SkeletonCircle,
+  VStack,
+} from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { register } from '../../../slices/register';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { MdDepartureBoard, MdLocationCity } from 'react-icons/md';
 import _ from 'lodash';
 
 const mapTitlesStep1 = {
@@ -70,14 +86,13 @@ const Step5 = (props: StepProps) => {
           PL.2565 - DL.2022
         </Text>
 
-
         <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
-            <Box textAlign={'center'}>
-              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
-              <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                {hoTen}
-              </Heading>
-              <Box>
+          <Box textAlign={'center'}>
+            <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
+            <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
+              {hoTen}
+            </Heading>
+            <Box>
               <TableContainer>
                 <Table variant='simple' colorScheme={'gray'}>
                   <Tbody>
@@ -96,9 +111,8 @@ const Step5 = (props: StepProps) => {
                   </Tbody>
                 </Table>
               </TableContainer>
-              
-              </Box>
-              <Box>
+            </Box>
+            <Box>
               <Heading p={2} as='h5' size='md'>
                 Thông tin bước 1
               </Heading>
@@ -120,9 +134,8 @@ const Step5 = (props: StepProps) => {
                   </Tbody>
                 </Table>
               </TableContainer>
-              
-              </Box>
-              <Box>
+            </Box>
+            <Box>
               <Heading p={2} as='h5' size='md'>
                 Thông tin bước 1
               </Heading>
@@ -144,9 +157,8 @@ const Step5 = (props: StepProps) => {
                   </Tbody>
                 </Table>
               </TableContainer>
-              
-              </Box>
-              <Box>
+            </Box>
+            <Box>
               <Heading p={2} as='h5' size='md'>
                 Thông tin bước 1
               </Heading>
@@ -168,39 +180,24 @@ const Step5 = (props: StepProps) => {
                   </Tbody>
                 </Table>
               </TableContainer>
-              
-              </Box>
-              <Stack spacing='30px' p={5}>
-              <SkeletonCircle
-                size='16'
-                alignItems='center'
-              >
+            </Box>
+            <Stack spacing='30px' p={5}>
+              <SkeletonCircle size='16' alignItems='center'>
                 <Avatar src={'sdsdsd'} />
               </SkeletonCircle>
               <VStack alignItems='start'>
-                <Skeleton
-                  justifyItems='center'
-
-                  height={8}
-                  minWidth={32}
-                >
+                <Skeleton justifyItems='center' height={8} minWidth={32}>
                   <Text color={primaryColor} fontWeight='bold'>
-                     Phạm Văn Duy
+                    Phạm Văn Duy
                   </Text>
                 </Skeleton>
-                <Skeleton
-                  height={8}
-                  minWidth={40}
-                >
+                <Skeleton height={8} minWidth={40}>
                   <Text>sdsds dsdsdsd</Text>
                 </Skeleton>
               </VStack>
-              </Stack>
-            </Box>
-          </GridItem>
-
-
-
+            </Stack>
+          </Box>
+        </GridItem>
       </Stack>
       <Box mt={10}>
         <Stack spacing={4}></Stack>

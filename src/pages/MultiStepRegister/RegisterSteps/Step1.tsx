@@ -33,7 +33,10 @@ const Step1 = (props: StepProps) => {
       fullName: member?.fullName || fullName,
       phoneNumber: member?.phoneNumber || phoneNumber,
       identityCard: member?.identityCard || identityCard,
-      registerType: registerInfo.registerType || register.registerType || RegisterType.SINGLE,
+      registerType:
+        (registerInfo?.registerType && registerInfo.registerType + '') ||
+        register.registerType ||
+        RegisterType.SINGLE,
       leaderId: registerInfo.leaderId || register.leaderId || '',
     },
     validationSchema: step1Schema,
@@ -51,10 +54,8 @@ const Step1 = (props: StepProps) => {
           registerType,
           leaderId,
         },
-      }
-      dispatch(
-        fillForm(dataFillForm),
-      );
+      };
+      dispatch(fillForm(dataFillForm));
       dispatch(
         searchMember({
           data: {
@@ -70,13 +71,15 @@ const Step1 = (props: StepProps) => {
 
   const setLeaderPreview = (dataLeader) => {
     if (_.get(dataLeader, 'success', false)) {
-      dispatch(fillDataPreview({dataLeader}));
+      dispatch(fillDataPreview({ dataLeader }));
     }
-  }
+  };
   const { registerType: localRegisterType } = formik.values;
 
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+
+  console.log('___', formik.values);
 
   return (
     <>
@@ -113,7 +116,9 @@ const Step1 = (props: StepProps) => {
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
-              {isRegisterFollowGroup && <SearchLeader name='leaderId' getLeader={setLeaderPreview} label='Trưởng nhóm' />}
+              {isRegisterFollowGroup && (
+                <SearchLeader name='leaderId' getLeader={setLeaderPreview} label='Trưởng nhóm' />
+              )}
             </Stack>
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo

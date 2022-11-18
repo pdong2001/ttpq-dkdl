@@ -1,14 +1,4 @@
-import {
-  Stack,
-  Heading,
-  Button,
-  Box,
-  Text,
-  Radio,
-  SimpleGrid,
-  VisuallyHidden,
-  // VisuallyHiddenInput,
-} from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid } from '@chakra-ui/react';
 import _ from 'lodash';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -26,12 +16,25 @@ import { fillForm } from '../../../slices/register';
 import step3Schema from '../validationSchema/step3';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';
+import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
+import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
 
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const { register } = useAppSelector((state) => state.register.data);
+  const {
+    moveType: editMoveType,
+    startTimeId: editStartTimeId,
+    leaveTimeId: editLeaveTimeId,
+    otherStartAddress: editOtherStartAddress,
+    otherStartTime: editOtherStartTime,
+    otherLeaveTime: editOtherLeaveTime,
+    startPlaneCode: editStartPlaneCode,
+    returnPlaneCode: editReturnPlaneCode,
+  } = useAppSelector((state) => state.registerInfo.data);
+  const { eventId } = useAppSelector((state) => state.registerPage.data);
   const {
     moveType: moveTypeInStore = MoveType.HCM,
     startAddressId: startAddressIdInStore = '',
@@ -42,31 +45,32 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
+    leaveAddressId: leaveAddressIdInStore = '',
   } = register;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      moveType: moveTypeInStore,
+      moveType: moveTypeInStore || editMoveType + '',
 
-      startAddressId: startAddressIdInStore,
-      startTimeId,
-      leaveAddress: '2',
-      leaveTimeId: leaveTimeIdInStore,
+      startAddressId: startAddressIdInStore || editStartTimeId,
+      startTimeId: startTimeId || editStartTimeId,
+      leaveAddressId: leaveAddressIdInStore || editLeaveTimeId,
+      leaveTimeId: leaveTimeIdInStore || editLeaveTimeId,
 
-      otherStartAddress,
-      otherStartTime,
-      otherLeaveTime,
-      startPlaneCode,
-      returnPlaneCode,
+      otherStartAddress: otherStartAddress || editOtherStartAddress,
+      otherStartTime: otherStartTime || (editOtherStartTime && new Date(editOtherStartTime)),
+      otherLeaveTime: otherLeaveTime || (editOtherLeaveTime && new Date(editOtherLeaveTime)),
+      startPlaneCode: startPlaneCode || editStartPlaneCode,
+      returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
       if (moveType != MoveType.HCM) {
-        values.startAddressId = '';
-        values.startTimeId = '';
-        values.leaveAddress = '';
-        values.leaveTimeId = '';
+        values.startAddressId = undefined;
+        values.startTimeId = undefined;
+        values.leaveAddressId = undefined;
+        values.leaveTimeId = undefined;
         if (moveType == MoveType.BY_YOUR_SELF) {
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
@@ -78,7 +82,7 @@ const Step3 = (props: StepProps) => {
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
       }
-      dispatch(fillDataPreview({...values}));
+      dispatch(fillDataPreview({ ...values }));
       dispatch(
         fillForm({
           register: { ...register, ...values },
@@ -91,12 +95,13 @@ const Step3 = (props: StepProps) => {
 
   const { moveType } = formik.values;
   let { data: registerPage } = useAppSelector((state) => state.registerPage);
+  const { leaveAddresses, startAddresses } = registerPage;
 
   // địa điểm xuất phát
   const { data: startAddressList } = useAxios(
     {
       method: 'get',
-      url: formatUrl(API.GET_START_ADDRESS_BY_EVENT, { id: 1 }),
+      url: formatUrl(API.GET_START_ADDRESS_BY_EVENT, { id: eventId }),
       transformResponse: ({ data }) => data,
     },
     [],
@@ -105,54 +110,42 @@ const Step3 = (props: StepProps) => {
   const HCMAddressList = startAddressList?.filter((item) => item.provinceId === 1);
 
   // thời gian khởi hành theo địa điểm xuất phát
-  const [HCMStartTimes, setHCMStartTimes] = useState([]);
-  const { startAddressId } = formik.values;
-  useEffect(() => {
-    const address = HCMAddressList?.find((item) => item.id == startAddressId);
+  const { startAddressId, leaveAddressId } = formik.values;
 
-    if (address) {
-      setHCMStartTimes(address.times);
-    }
-  }, [startAddressId, HCMAddressList]);
-
-  // địa điểm trở về
-  const { data: leaveAddressList } = useAxios(
-    {
-      method: 'get',
-      url: formatUrl(API.GET_LEAVE_ADDRESS_BY_EVENT, { id: 1 }),
-      transformResponse: ({ data }) => data,
-    },
-    [],
-  );
-
-  const [leaveTimes, setLeaveTimes] = useState([]);
-  const { leaveAddress } = formik.values;
+  const [leaveTimes, setLeaveTimes] = useState<LeaveTimeDto[] | never[]>();
+  const [startTimes, setStartTimes] = useState<StartTimeDto[] | never[]>();
 
   useEffect(() => {
-    const address = leaveAddressList?.find((item) => item.id == leaveAddress);
-    if (address) {
-      setLeaveTimes(address.times);
-    }
-  }, [leaveAddressList]);
+    const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
+    setLeaveTimes(times);
+  }, [leaveAddresses, leaveAddressId]);
+
+  useEffect(() => {
+    const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
+    console.log('times', times, startAddresses, startAddressId);
+
+    setStartTimes(times);
+  }, [startAddresses, startAddressId]);
 
   useEffect(() => {
     formik.setTouched({});
   }, [moveType]);
 
- const mapTitle = () => {
-  function filterTitle(array, id) {
-    return _.get(
-      _.filter(array, (a) => a.id == id)[0], 'name', '',
-    );
-  }
-  dispatch(fillDataPreview({
-    time: {
-      startAddressId: `${filterTitle(HCMAddressList, startAddressId)}`,
-    startTimeId: `${filterTitle(HCMStartTimes, startTimeId)}`,
-    leaveTimeId: `${filterTitle(leaveTimes, leaveTimeIdInStore)}`,
+  const mapTitle = () => {
+    function filterTitle(array, id) {
+      return _.get(_.filter(array, (a) => a.id == id)[0], 'name', '');
     }
-  }));
- }
+    dispatch(
+      fillDataPreview({
+        time: {
+          startAddress: `${filterTitle(HCMAddressList, startAddressId)}`,
+          startTime: `${filterTitle(startTimes, startTimeId)}`,
+          leaveTime: `${filterTitle(leaveTimes, leaveTimeIdInStore)}`,
+        },
+      }),
+    );
+  };
+  console.log('___', formik.values);
 
   return (
     <>
@@ -173,36 +166,34 @@ const Step3 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <Radios isRequired label='Hình thức di chuyển' name='moveType'>
-                {registerPage?.ctnId == 0 && <Radio value={MoveType.HCM}>Đi cùng CTN HCM</Radio>}
+                {startAddresses?.length && <Radio value={MoveType.HCM}>Đi cùng xe CTN</Radio>}
+                <Radio value={MoveType.OTHER}>Máy bay</Radio>
                 <Radio value={MoveType.BY_YOUR_SELF}>Tự túc</Radio>
-                <Radio value={MoveType.OTHER}>Đi từ tỉnh khác</Radio>
               </Radios>
               {moveType == MoveType.HCM && (
                 // HCM
                 <>
                   <Select
                     name='startAddressId'
-                    data={HCMAddressList}
+                    data={startAddresses}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
                   />
                   <Select
                     name='startTimeId'
-                    data={HCMStartTimes}
+                    data={startTimes}
                     label='Thời gian khởi hành'
                     placeholder='Thời gian khởi hành'
                     isRequired
                   />
-                  <VisuallyHidden>
-                    <Select
-                      name='leaveAddress'
-                      data={leaveAddressList}
-                      label='Địa điểm trở về'
-                      placeholder='Địa điểm trở về'
-                      isRequired
-                    />
-                  </VisuallyHidden>
+                  <Select
+                    name='leaveAddressId'
+                    data={leaveAddresses}
+                    label='Địa điểm trở về'
+                    placeholder='Địa điểm trở về'
+                    isRequired
+                  />
                   <Select
                     name='leaveTimeId'
                     data={leaveTimes}

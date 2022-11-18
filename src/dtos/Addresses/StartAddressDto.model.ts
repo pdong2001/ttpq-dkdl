@@ -6,8 +6,8 @@ export type StartAddressDto = {
   eventId: number;
   provinceId: number;
   districtId: number;
-  name: string | undefined;
-  address: string | undefined;
-  description: string | undefined;
-  times: StartTimeDto[] | undefined;
+  name?: string;
+  address?: string;
+  description?: string;
+  times?: StartTimeDto[];
 };
