@@ -57,7 +57,7 @@ const SearchLeader = (props: Props) => {
     },
     searchValue,
   );
-  getLeader(data)
+  getLeader(data);
   const startSkelotonColor = 'gray.600';
   const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.500' : 'gray.600';
 

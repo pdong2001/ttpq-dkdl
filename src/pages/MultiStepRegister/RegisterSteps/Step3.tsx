@@ -78,13 +78,13 @@ const Step3 = (props: StepProps) => {
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
       }
-      dispatch(fillDataPreview({...values}));
+
       dispatch(
         fillForm({
           register: { ...register, ...values },
         }),
       );
-      mapTitle();
+      mapTitle(values);
       nextStep();
     },
   });
@@ -139,20 +139,19 @@ const Step3 = (props: StepProps) => {
     formik.setTouched({});
   }, [moveType]);
 
- const mapTitle = () => {
-  function filterTitle(array, id) {
-    return _.get(
-      _.filter(array, (a) => a.id == id)[0], 'name', '',
-    );
-  }
-  dispatch(fillDataPreview({
-    time: {
-      startAddressId: `${filterTitle(HCMAddressList, startAddressId)}`,
-    startTimeId: `${filterTitle(HCMStartTimes, startTimeId)}`,
-    leaveTimeId: `${filterTitle(leaveTimes, leaveTimeIdInStore)}`,
+  const mapTitle = (values) => {
+    function filterTitle(array, id) {
+      return _.get(
+        _.filter(array, (a) => a.id == id)[0], 'name', '',
+      );
     }
-  }));
- }
+    dispatch(fillDataPreview({
+      ...values,
+      startAddressId: `${filterTitle(HCMAddressList, values.startAddressId)}`,
+      startTimeId: `${filterTitle(HCMStartTimes, values.startTimeId)}`,
+      leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
+    }));
+  }
 
   return (
     <>
