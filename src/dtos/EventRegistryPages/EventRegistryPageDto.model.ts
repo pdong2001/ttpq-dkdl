@@ -6,17 +6,19 @@ import { DepartmentDto } from '../Departments/DepartmentDto.model';
 import { EventDto } from '../EventDto.model';
 
 export type EventRegistryPageDto = {
-  eventId: number;
+  eventId?: number;
   id?: string;
   name?: string;
-  end: string;
-  start: string;
+  end?: string;
+  start?: string;
   event?: EventDto;
-  type: ScopeType;
+  type?: ScopeType;
   ctnId?: number;
+  ctnName?: string;
+  provinceId?: number;
   pageContentId?: number;
   departments?: DepartmentDto[];
-  departmentIds: number[];
+  departmentIds?: number[];
   startAddresses?: StartAddressDto[];
   leaveAddresses?: LeaveAddressDto[];
   pageContent?: EventRegistryPageContentDto;

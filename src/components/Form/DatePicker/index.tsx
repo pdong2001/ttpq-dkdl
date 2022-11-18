@@ -41,7 +41,7 @@ const customDateInput = ({ value, onClick, onChange, label }: any, ref) => {
 const CustomInput = forwardRef(customDateInput);
 
 const DateTimePicker = ({
-  name,
+  name = 'datePicker',
   label,
   dateFormat,
   showTimeSelect,

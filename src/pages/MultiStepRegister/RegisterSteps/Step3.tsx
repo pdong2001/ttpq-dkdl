@@ -15,11 +15,14 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
+import { MOVE_TYPE_TITLE } from '~/configs/register';
 
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+  const { data: registerPage } = useAppSelector((state) => state.registerPage);
+  const { leaveAddresses, startAddresses } = registerPage;
   const { register } = useAppSelector((state) => state.register.data);
   const {
     moveType: editMoveType,
@@ -30,28 +33,37 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime: editOtherLeaveTime,
     startPlaneCode: editStartPlaneCode,
     returnPlaneCode: editReturnPlaneCode,
+    leaveTime,
+    startTime,
   } = useAppSelector((state) => state.registerInfo.data);
+  const { addressId: editStartAddressId } = startTime || {};
+  const { addressId: editLeaveAddressId } = leaveTime || {};
   const {
-    moveType: moveTypeInStore = MoveType.HCM,
+    moveType: moveTypeInStore,
     startAddressId: startAddressIdInStore = '',
+    leaveAddressId: leaveAddressIdInStore = '',
+
     startTimeId = '',
     leaveTimeId: leaveTimeIdInStore = '',
+
     startPlaneCode = '',
     returnPlaneCode = '',
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
-    leaveAddressId: leaveAddressIdInStore = '',
   } = register;
+
+  const hasStartAddress = !!startAddresses?.length;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      moveType: moveTypeInStore || editMoveType + '',
+      moveType:
+        moveTypeInStore || editMoveType + '' || hasStartAddress ? MoveType.HCM : MoveType.OTHER,
 
-      startAddressId: startAddressIdInStore || editStartTimeId,
+      startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
-      leaveAddressId: leaveAddressIdInStore || editLeaveTimeId,
+      leaveAddressId: leaveAddressIdInStore || editLeaveAddressId,
       leaveTimeId: leaveTimeIdInStore || editLeaveTimeId,
 
       otherStartAddress: otherStartAddress || editOtherStartAddress,
@@ -89,8 +101,6 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
-  let { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { leaveAddresses, startAddresses } = registerPage;
 
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
@@ -150,9 +160,14 @@ const Step3 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <Radios isRequired label='Hình thức di chuyển' name='moveType'>
-                {startAddresses?.length && <Radio value={MoveType.HCM}>Đi cùng xe CTN</Radio>}
-                <Radio value={MoveType.OTHER}>Máy bay</Radio>
-                <Radio value={MoveType.BY_YOUR_SELF}>Tự túc</Radio>
+                {startAddresses?.length && (
+                  <Radio value={MoveType.HCM}>{MOVE_TYPE_TITLE[MoveType.HCM]}</Radio>
+                )}
+                []
+                <Radio value={MoveType.OTHER}>{MOVE_TYPE_TITLE[MoveType.OTHER]}</Radio>
+                <Radio value={MoveType.BY_YOUR_SELF}>
+                  {MOVE_TYPE_TITLE[MoveType.BY_YOUR_SELF]}
+                </Radio>
               </Radios>
               {moveType == MoveType.HCM && (
                 // HCM
@@ -176,14 +191,12 @@ const Step3 = (props: StepProps) => {
                     data={leaveAddresses}
                     label='Địa điểm trở về'
                     placeholder='Địa điểm trở về'
-                    isRequired
                   />
                   <Select
                     name='leaveTimeId'
                     data={leaveTimes}
                     label='Thời gian trở về'
                     placeholder='Thời gian trở về'
-                    isRequired
                   />
                 </>
               )}
