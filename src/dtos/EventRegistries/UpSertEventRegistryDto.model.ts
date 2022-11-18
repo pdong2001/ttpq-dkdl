@@ -16,6 +16,7 @@ export type UpSertEventRegistryDto = {
   startDate?: string;
   startAddressId?: number;
   startTimeId?: number;
+  leaveAddressId?: number;
   leaveTimeId?: number;
   otherStartTime?: string;
   otherLeaveTime?: string;

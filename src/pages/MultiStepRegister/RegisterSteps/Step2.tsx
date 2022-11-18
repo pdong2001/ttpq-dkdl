@@ -45,15 +45,15 @@ const Step2 = (props: StepProps) => {
   } = useAppSelector((state) => state.register.data) || {};
 
   const [permanentAddressProvince, permanentAddressDistrict, permanentAddressWard] = [
-    permanentProvince?.id,
-    permanentDistrict?.id,
-    permanentWard?.id,
+    permanentAddress?.provinceId || permanentProvince?.id,
+    permanentAddress?.districtId || permanentDistrict?.id,
+    permanentAddress?.wardId || permanentWard?.id,
   ];
 
   const [temporaryAddressProvince, temporaryAddressDistrict, temporaryAddressWard] = [
-    temporaryProvince?.id,
-    temporaryDistrict?.id,
-    temporaryWard?.id,
+    temporaryAddress?.provinceId || temporaryProvince?.id,
+    temporaryAddress?.districtId || temporaryDistrict?.id,
+    temporaryAddress?.wardId || temporaryWard?.id,
   ];
 
   const { date: dobDate, month: dobMonth, year: dobYear } = convertDateStringToObject(dateOfBirth);

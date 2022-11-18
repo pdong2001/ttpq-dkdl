@@ -2,19 +2,19 @@ import _ from 'lodash';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 
-const moveType = {
+const MOVE_TYPE_TITLE = {
   [MoveType.HCM]: 'Đi cùng CTN HCM',
   [MoveType.BY_YOUR_SELF]: 'Tự túc',
   [MoveType.OTHER]: 'Đi từ tỉnh khách',
-}
+};
 
-const eventExp = {
+const EVENT_EXP_TITLE = {
   [EventExp.ChuaTungThamGia]: 'Lần đầu tiên',
   [EventExp.Duoi3Lan]: 'Dưới 3 lần',
   [EventExp.Tren3Lan]: 'Trên 3 lần',
-}
+};
 
-const mapTitlesRegister = {
+const REGISTER_INFO_TITLE = {
   fullName: 'Họ Và Tên',
   religiousName: 'Pháp danh',
   gender: 'Giới tính',
@@ -26,7 +26,7 @@ const mapTitlesRegister = {
   permanentAddress: 'Địa chỉ thưởng trú',
   temporaryAddress: 'Địa chỉ tạm trú',
   // schedules
-  moveType: 'Hình thức di chuyển',
+  MOVE_TYPE_TITLE: 'Hình thức di chuyển',
   startAddressId: 'Nơi xuất phát',
   startTimeId: 'Nơi xuất phát',
   leaveTimeId: 'Thời gian trở về',
@@ -44,4 +44,4 @@ const mapTitlesRegister = {
   note: 'Ghi chú',
 };
 
-export { mapTitlesRegister, moveType, eventExp };
+export { REGISTER_INFO_TITLE, MOVE_TYPE_TITLE, EVENT_EXP_TITLE };

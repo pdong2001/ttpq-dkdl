@@ -1,4 +1,14 @@
-import { Stack, Heading, Button, Box, Text, SimpleGrid, Avatar, GridItem, Tag, AlertIcon, Alert } from '@chakra-ui/react';
+import {
+  Stack,
+  Heading,
+  Button,
+  Box,
+  Text,
+  SimpleGrid,
+  Avatar,
+  GridItem,
+  Alert,
+} from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
@@ -7,7 +17,7 @@ import { register } from '../../../slices/register';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
-import { mapTitlesRegister } from '~/configs/register';
+import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 const Step5 = (props: StepProps) => {
@@ -52,27 +62,31 @@ const Step5 = (props: StepProps) => {
             <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
               {fullName}
             </Heading>
-            <Box>
-              {TableComponent(infos, mapTitlesRegister)}
-            </Box>
+            <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
             <Box>
               <Alert status='success'>
                 <CalendarIcon />
-                <Heading p={2} as='h5' size='md'>Lịch trình di chuyển</Heading>
+                <Heading p={2} as='h5' size='md'>
+                  Lịch trình di chuyển
+                </Heading>
               </Alert>
-              {TableComponent(_.get(schedules, _.get(previewInfo, 'moveType', 0)), mapTitlesRegister)}
+              {TableComponent(
+                _.get(schedules, _.get(previewInfo, 'moveType', 0)),
+                REGISTER_INFO_TITLE,
+              )}
             </Box>
             <Box>
               <Alert status='warning'>
                 <HamburgerIcon />
-                <Heading p={2} as='h5' size='md'>Công việc</Heading>
+                <Heading p={2} as='h5' size='md'>
+                  Công việc
+                </Heading>
               </Alert>
-              {TableComponent(jobs, mapTitlesRegister)}
+              {TableComponent(jobs, REGISTER_INFO_TITLE)}
             </Box>
             {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
           </Box>
         </GridItem>
-
       </Stack>
       <Box mt={10}>
         <Stack spacing={4}></Stack>

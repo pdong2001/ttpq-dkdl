@@ -131,14 +131,14 @@ const RegisterInfo = () => {
   const expDepartments = data?.expDepartments || [];
   const wishDepartments = data?.wishDepartments;
   const permanent = [
-    member?.permanentWard?.name,
+    [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
     member?.permanentProvince?.name,
   ]
     .filter((e) => !!e)
     .join(', ');
   const temporary = [
-    member?.temporaryWard?.name,
+    [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
     member?.temporaryDistrict?.name,
     member?.temporaryProvince?.name,
   ]

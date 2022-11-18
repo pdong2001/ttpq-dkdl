@@ -21,31 +21,27 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tr,
-  Text,
-  HStack,
-  Tag,
   Divider,
 } from '@chakra-ui/react';
 import _ from 'lodash';
-import { MdContentCopy, MdDepartureBoard, MdLocationCity } from 'react-icons/md';
+import { MdContentCopy } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
 import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
-import { mapTitlesRegister } from '~/configs/register';
+import { REGISTER_INFO_TITLE } from '~/configs/register';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-const PATH_URL = 'http://localhost:3000';
+const PATH_URL = window.location.origin;
 
 export default function SuccessRegisterModal() {
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const { avatar, fullName, infos } = mapSuccessData(previewInfo);
+  const [open, setOpen] = useState(true);
+  const history = useHistory();
   const dataSuccess = {
     infosSuccess: {
       phoneNumber: _.get(infos, 'phoneNumber', ''),
@@ -54,12 +50,10 @@ export default function SuccessRegisterModal() {
     },
     avatar: registerResult.avatarPath,
     LinkQrCode: `${PATH_URL}/register-info/${registerResult.register.id}`,
-    isOpen: true,
     fullName: registerResult.fullName,
   };
 
-  const { infosSuccess, LinkQrCode, isOpen } = dataSuccess;
-  const { onClose } = useDisclosure();
+  const { infosSuccess, LinkQrCode } = dataSuccess;
 
   const onImageDownload = () => {
     const svg: any = document.getElementById('QRCode');
@@ -92,13 +86,22 @@ export default function SuccessRegisterModal() {
       eleAlert.style.display = 'none';
     }, 1000);
   };
+  const onClose = () => {
+    setOpen(false);
+    history.push('/');
+    history.go(0);
+  };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+    <Modal isOpen={open} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Heading mb={3} as='h5' size='md'>Cảm ơn huynh đệ đã đăng ký!</Heading>
-          <Heading mb={3} as='h5' size='sm'>Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ!</Heading>
+          <Heading mb={3} as='h5' size='md'>
+            Cảm ơn huynh đệ đã đăng ký!
+          </Heading>
+          <Heading mb={3} as='h5' size='sm'>
+            Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ!
+          </Heading>
           <Divider />
         </ModalHeader>
         <ModalCloseButton />
@@ -109,9 +112,7 @@ export default function SuccessRegisterModal() {
               <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
                 {fullName}
               </Heading>
-              <Box>
-                {TableComponent(infosSuccess, mapTitlesRegister)}
-              </Box>
+              <Box>{TableComponent(infosSuccess, REGISTER_INFO_TITLE)}</Box>
               {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
               <Box>
                 <Divider />

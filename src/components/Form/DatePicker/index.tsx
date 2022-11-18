@@ -71,7 +71,7 @@ const DateTimePicker = ({
 };
 
 DateTimePicker.defaultProps = {
-  dateFormat: 'dd/MM/yyyy HH:mm',
+  dateFormat: 'dd-MM-yyyy HH:mm',
   showTimeSelect: true,
   timeIntervals: 5,
 };

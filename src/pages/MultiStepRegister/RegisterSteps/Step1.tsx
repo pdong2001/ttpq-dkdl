@@ -1,7 +1,4 @@
 import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
-import {
-  useSelector,
-  } from 'react-redux'
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
@@ -16,8 +13,6 @@ import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
-
-// const previewInfo = useSelector((state) => state.previewInfo.data);
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -40,7 +35,10 @@ const Step1 = (props: StepProps) => {
       fullName: member?.fullName || fullName,
       phoneNumber: member?.phoneNumber || phoneNumber,
       identityCard: member?.identityCard || identityCard,
-      registerType: registerInfo.registerType || register.registerType || RegisterType.SINGLE,
+      registerType:
+        (registerInfo?.registerType && registerInfo.registerType + '') ||
+        register.registerType ||
+        RegisterType.SINGLE,
       leaderId: registerInfo.leaderId || register.leaderId || '',
     },
     validationSchema: step1Schema,
@@ -83,11 +81,13 @@ const Step1 = (props: StepProps) => {
       }));
       
     }
-  }
+  };
   const { registerType: localRegisterType } = formik.values;
 
   const greatCeremony = 'Đại lễ Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+
+  console.log('___', formik.values);
 
   return (
     <>

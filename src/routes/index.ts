@@ -24,10 +24,21 @@ export type RouteType = {
 };
 export const MULTI_STEP_REGISTER_PATH = '/:shortUri/register';
 export const HOME_WITH_SHORT_URI = '/:shortUri';
+export const EVENT_INFO = '/great-ceremony-info';
+export const TIMELINE = '/timeline';
+export const DEPARTMENT_INFO = '/department-info';
+
+export const NavBarLink = [
+  { title: 'Trang chủ', to: '/' },
+  { title: 'Giới thiệu đại lễ', to: EVENT_INFO },
+  { title: 'Các ban Đại lễ', to: DEPARTMENT_INFO },
+  { title: 'Thời khóa', to: TIMELINE },
+];
+
 const ROUTES: RouteType[] = [
   {
     key: 'GREAT_CEREMORY_INFO',
-    path: '/great-ceremony-info',
+    path: EVENT_INFO,
     exact: true,
     component: GreatCeremonyInfo,
     layout: MainLayout,
