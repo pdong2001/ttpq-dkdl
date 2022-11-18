@@ -20,12 +20,11 @@ type Props = InputProps &
   FormControlProps & { dateFormat?: string; showTimeSelect?: boolean; timeIntervals?: number };
 
 const customDateInput = ({ value, onClick, onChange, label }: any, ref) => {
-  const { primaryColor, bgColor } = useCustomColorMode();
+  const { bgColor } = useCustomColorMode();
   return (
     <>
       <Input
         readOnly
-        focusBorderColor={primaryColor}
         placeholder=' '
         value={value}
         onChange={onChange}

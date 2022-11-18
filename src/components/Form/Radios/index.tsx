@@ -8,11 +8,9 @@ import {
   FormControlProps,
 } from '@chakra-ui/react';
 import { useField } from 'formik';
-import useCustomColorMode from '~/hooks/useColorMode';
 
 type RadiosProps = { label: string } & RadioGroupProps & StackProps & FormControlProps;
 const Radios = (props: RadiosProps) => {
-  const { formTextColor } = useCustomColorMode();
   const { spacing, direction, name, children, label, defaultValue } = props;
   // @ts-ignore
   const [field, , helpers] = useField(name); //[field, meta, helpers]
@@ -21,9 +19,8 @@ const Radios = (props: RadiosProps) => {
 
   return (
     <FormControl {...props}>
-      <FormLabel color={formTextColor}>{label}</FormLabel>
+      <FormLabel>{label}</FormLabel>
       <RadioGroup
-        color={formTextColor}
         {...field}
         {...props}
         onChange={(value) => {

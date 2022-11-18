@@ -39,14 +39,14 @@ function DepartmentInfos({ }: Props) {
     onOpen();
   };
   return (
-    <Box bgGradient={'linear(to-r, blue.300, ttpq.700)'}
+    <Box bgGradient={'linear(to-r, blue.300, blue.700)'}
       py={12}
       px={{ base: 10, md: 16, lg: 28, xl: 28 }}
     >
       <Box w='100%' textAlign='center'>
         <Heading
           as={'h6'}
-          color='ttpq.500'
+          color='blue.500'
           lineHeight={1.6}
           fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
           textTransform='uppercase'
@@ -65,7 +65,6 @@ function DepartmentInfos({ }: Props) {
       <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
-          {/* <ModalHeader color='ttpq.500'>{departmentSelected && departmentSelected.name}</ModalHeader> */}
           <ModalCloseButton />
           <ModalBody p={0}>
             <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>

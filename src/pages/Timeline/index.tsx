@@ -118,7 +118,7 @@ const Timeline = () => {
       <Box w='100%' textAlign='center'>
         <Heading
           as={'h6'}
-          color='ttpq.500'
+          color='blue.500'
           lineHeight={1.6}
           fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
           textTransform='uppercase'
@@ -168,7 +168,7 @@ const Timeline = () => {
                   borderTopRadius='2xl'
                   w='100%'
                   h='25%'
-                  bg='ttpq.500'
+                  bg='blue.500'
                   color='white'
                   display='flex'
                   justifyContent='center'
@@ -221,7 +221,7 @@ const Timeline = () => {
                 <Box
                   w='100%'
                   h='25%'
-                  bg='ttpq.500'
+                  bg='blue.500'
                   color='white'
                   display='flex'
                   justifyContent='center'

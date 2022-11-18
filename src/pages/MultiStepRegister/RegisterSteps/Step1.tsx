@@ -15,7 +15,7 @@ import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
-  const { primaryColor, formTextColor } = useCustomColorMode();
+  const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
   const {
@@ -96,11 +96,7 @@ const Step1 = (props: StepProps) => {
   return (
     <>
       <Stack spacing={4}>
-        <Heading
-          color={primaryColor}
-          lineHeight={1.1}
-          fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
-        >
+        <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.500'>
           {`Đăng Ký Công Quả`}
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
@@ -111,19 +107,9 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <FloatingLabel name='fullName' label='Họ và tên' color={formTextColor} isRequired />
-              <FloatingLabel
-                name='phoneNumber'
-                label='Số điện thoại'
-                color={formTextColor}
-                isRequired
-              />
-              <FloatingLabel
-                name='identityCard'
-                label='Số CCCD / Hộ chiếu'
-                color={formTextColor}
-                isRequired
-              />
+              <FloatingLabel name='fullName' label='Họ và tên' isRequired />
+              <FloatingLabel name='phoneNumber' label='Số điện thoại' isRequired />
+              <FloatingLabel name='identityCard' label='Số CCCD / Hộ chiếu' isRequired />
               <Radios label='Hình thức đăng ký' name='registerType'>
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>

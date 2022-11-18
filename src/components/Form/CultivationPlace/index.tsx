@@ -21,7 +21,6 @@ type CultivationPlaceProps = InputProps &
   };
 
 function CultivationPlace(props: CultivationPlaceProps) {
-  const { formTextColor } = useCustomColorMode();
   const { name, label, isRequired, setDataPreview } = props;
 
   //@ts-ignore
@@ -43,9 +42,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>
-      <FormLabel mb={0} color={formTextColor}>
-        {label}
-      </FormLabel>
+      <FormLabel mb={0}>{label}</FormLabel>
       <CustomSelect
         {...field}
         valueField='Id'

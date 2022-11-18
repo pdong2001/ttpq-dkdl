@@ -61,7 +61,7 @@ const GreatCeremonyInfo = () => {
 
   return (
     <Box
-      bgColor={'darkBlue.800'}
+      bgColor={'Blue.800'}
       bgSize={'cover'}
       px={{ base: 10, md: 20, lg: 28 }}
       py={shortUri ? 10 : 20}
@@ -69,12 +69,12 @@ const GreatCeremonyInfo = () => {
       <FadeInUp>
         <Heading
           as={'h6'}
-          color={primaryColor}
+          color={'blue.500'}
           lineHeight={1.6}
           fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
           textTransform='uppercase'
           borderBottom={'2px'}
-          borderColor='darkBlue.100'
+          borderColor='Blue.100'
           mb={10}
           display='inline-block'
         >

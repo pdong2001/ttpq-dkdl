@@ -104,7 +104,7 @@ export default function Footer() {
             <ListHeader>Stay up to date</ListHeader>
             <Stack direction={'row'}>
               <Input
-                focusBorderColor={'ttpq.400'}
+                // focusBorderColor={'ttpq.400'}
                 placeholder={'Your email address'}
                 bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
                 border={0}

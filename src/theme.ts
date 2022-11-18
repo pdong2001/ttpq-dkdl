@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme, theme } from '@chakra-ui/react';
 
 const activeLabelStyles = {
   transform: 'scale(0.8) translateY(-24px)',
@@ -14,7 +14,7 @@ const floatingLabel = {
             _focusWithin: {
               label: {
                 ...activeLabelStyles,
-                color: 'ttpq.500',
+                color: 'blue.500',
               },
             },
             'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
@@ -39,14 +39,9 @@ const floatingLabel = {
   },
 };
 
-const colorModeConfig = {
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
-};
-
 // generate in https://themera.vercel.app/
 const colors = {
-  ttpq: {
+  blue: {
     50: '#FEF7E6',
     100: '#FDE8BA',
     200: '#FBD98D',
@@ -58,23 +53,12 @@ const colors = {
     800: '#634503',
     900: '#312202',
   },
-  darkBlue: {
-    '50': '#EEECF8',
-    '100': '#CECAEC',
-    '200': '#AFA8E0',
-    '300': '#8F86D4',
-    '400': '#7064C8',
-    '500': '#5143BC',
-    '600': '#413597',
-    '700': '#302871',
-    '800': '#201B4B',
-    '900': '#100D26',
-  },
+  Blue: theme.colors.blue,
 };
 
 const primaryColor = extendTheme({
   colors,
 });
 
-const colorMode = extendTheme({ colorModeConfig });
-export { colorMode, primaryColor, floatingLabel };
+// const colorMode = extendTheme({ colorModeConfig });
+export { primaryColor, floatingLabel };

@@ -47,7 +47,7 @@ const SearchLeader = (props: Props) => {
 
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
-  const { primaryColor, formTextColor } = useCustomColorMode();
+  const { primaryColor } = useCustomColorMode();
   const { leaderId } = useAppSelector((state) => state.registerInfo.data);
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
@@ -91,15 +91,12 @@ const SearchLeader = (props: Props) => {
 
   return (
     <FormControl isInvalid={isInvalid}>
-      <FormLabel color={formTextColor} mb={0}>
-        {label}
-      </FormLabel>
+      <FormLabel mb={0}>{label}</FormLabel>
       <SimpleGrid columns={{ base: 1, md: 2 }} alignItems='center' gap={{ base: 4, md: 6 }}>
         <InputGroup size='md'>
           <Input
             placeholder='Tìm bằng SĐT hoặc CCCD / CMT'
             focusBorderColor={primaryColor}
-            colorScheme={'ttpq'}
             pr='2.5rem'
             value={inputValue}
             onChange={(e) => {
@@ -134,7 +131,7 @@ const SearchLeader = (props: Props) => {
               >
                 <Avatar src={data?.data?.avatarPath || editLeader?.member?.avatarPath} />
               </SkeletonCircle>
-              <VStack alignItems='start' color={formTextColor}>
+              <VStack alignItems='start'>
                 <Skeleton
                   as={Flex}
                   justifyItems='center'
