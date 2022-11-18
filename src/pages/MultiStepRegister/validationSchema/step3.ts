@@ -18,13 +18,13 @@ const step3Schema = Yup.object({
       then: Yup.string().required('Xin hãy chọn ngày giờ đi HCM'),
       otherwise: Yup.string().notRequired(),
     }),
-  leaveTimeId: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: MoveType.HCM,
-      then: Yup.string().required('Xin hãy chọn ngày giờ về HCM'),
-      otherwise: Yup.string().notRequired(),
-    }),
+  // leaveTimeId: Yup.string()
+  //   .nullable()
+  //   .when('moveType', {
+  //     is: MoveType.HCM,
+  //     then: Yup.string().required('Xin hãy chọn ngày giờ về HCM'),
+  //     otherwise: Yup.string().notRequired(),
+  //   }),
 
   // Tỉnh khác / Tự túc
   otherStartAddress: Yup.string()

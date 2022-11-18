@@ -181,7 +181,6 @@ const Step4 = (props: StepProps) => {
                 label='Kinh nghiệm ở ban'
                 valueField='id'
                 labelField='name'
-                isRequired
               />
               <Select
                 name='wishDepartmentIds'

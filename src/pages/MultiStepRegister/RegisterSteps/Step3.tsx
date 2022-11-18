@@ -178,6 +178,9 @@ const Step3 = (props: StepProps) => {
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
+                    onChange={() => {
+                      formik.setFieldValue('startTimeId', '');
+                    }}
                   />
                   <Select
                     name='startTimeId'
@@ -191,6 +194,9 @@ const Step3 = (props: StepProps) => {
                     data={leaveAddresses}
                     label='Địa điểm trở về'
                     placeholder='Địa điểm trở về'
+                    onChange={() => {
+                      formik.setFieldValue('leaveTimeId', '');
+                    }}
                   />
                   <Select
                     name='leaveTimeId'
