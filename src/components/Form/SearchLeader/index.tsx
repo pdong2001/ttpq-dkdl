@@ -49,11 +49,7 @@ const SearchLeader = (props: Props) => {
   const [inputValue, setInputValue] = useState('');
   const { primaryColor, formTextColor } = useCustomColorMode();
   const { leaderId } = useAppSelector((state) => state.registerInfo.data);
-  const {
-    data: editLeader,
-    cancel: editToken,
-    loaded: editLoaded,
-  } = useAxios<EventRegistryDto>(
+  const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
       url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
       transformResponse: ({ data }) => data,

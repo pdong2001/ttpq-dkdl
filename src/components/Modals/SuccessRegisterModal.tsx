@@ -21,55 +21,39 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tr,
-  Text,
-  HStack,
-  Tag,
   Divider,
 } from '@chakra-ui/react';
 import _ from 'lodash';
-import { MdContentCopy, MdDepartureBoard, MdLocationCity } from 'react-icons/md';
-
+import { MdContentCopy } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
+import { TableComponent, LeaderComponent } from '~/components/Register';
+import { mapSuccessData } from '~/components/Register/bindingData';
+import { REGISTER_INFO_TITLE } from '~/configs/register';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+const PATH_URL = window.location.origin;
+
 export default function SuccessRegisterModal() {
   const registerResult = useAppSelector((state) => state.register.data);
-
-  const mapTitles = {
-    hoTen: 'Họ Và Tên',
-    soDienThoai: 'Số điện thoại',
-    cccd: 'Căn cước công dân',
-    diaDiemXuatPhat: 'Địa điểm xuất phát',
-    thoiGianXuatPhat: 'Thời gian xuất phát',
-    thoiGianTroVe: 'Thời gian trở về',
-  };
-
+  const previewInfo = useAppSelector((state) => state.previewInfo.data);
+  const { avatar, fullName, infos } = mapSuccessData(previewInfo);
+  const [open, setOpen] = useState(true);
+  const history = useHistory();
   const dataSuccess = {
-    infos: {
-      soDienThoai: registerResult.phoneNumber,
-      cccd: registerResult.identityCard,
-      diaDiemXuatPhat: 'Bến xe buýt Trường ĐH Nông Lâm TP. HCM',
-      thoiGianXuatPhat: '08:00 01-12-2022',
-      thoiGianTroVe: '15:00 05-12-2022',
-    },
-    group: {
-      cccdNhomTruong: '00109342343432',
-      tenNhomTruong: 'Lương Thai Tam',
+    infosSuccess: {
+      phoneNumber: _.get(infos, 'phoneNumber', ''),
+      identityCard: _.get(infos, 'identityCard', ''),
+      email: _.get(infos, 'email', ''),
     },
     avatar: registerResult.avatarPath,
-    hinhThucDangKy: '1',
-    LinkQrCode: `/register-info/${registerResult.register.id}`,
-    isOpen: true,
-    hoTen: registerResult.fullName,
+    LinkQrCode: `${PATH_URL}/register-info/${registerResult.register.id}`,
+    fullName: registerResult.fullName,
   };
 
-  const { infos, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;
-  const { onClose } = useDisclosure();
+  const { infosSuccess, LinkQrCode } = dataSuccess;
 
   const onImageDownload = () => {
     const svg: any = document.getElementById('QRCode');
@@ -102,57 +86,36 @@ export default function SuccessRegisterModal() {
       eleAlert.style.display = 'none';
     }, 1000);
   };
+  const onClose = () => {
+    setOpen(false);
+    history.push('/');
+    history.go(0);
+  };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+    <Modal isOpen={open} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Đăng ký thành công</ModalHeader>
+        <ModalHeader>
+          <Heading mb={3} as='h5' size='md'>
+            Cảm ơn huynh đệ đã đăng ký!
+          </Heading>
+          <Heading mb={3} as='h5' size='sm'>
+            Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ!
+          </Heading>
+          <Divider />
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
             <Box textAlign={'center'}>
               <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
               <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                {hoTen}
+                {fullName}
               </Heading>
-              <TableContainer>
-                <Table variant='simple' colorScheme={'gray'}>
-                  <Tbody>
-                    {_.map(infos, (info, key) => {
-                      return (
-                        <Tr>
-                          <Td pr={0} pl={{ base: 5, sm: 7, md: 5 }}>
-                            <Text as='b'>{mapTitles[key]}</Text>
-                          </Td>
-                          <Td pl={0} pr={{ base: 5, sm: 7, md: 5 }}>
-                            {info}
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-              <Divider marginTop='5' />
-              <Stack spacing='30px' textAlign={'left'} p={5}>
-                <Box>
-                  <HStack>
-                    <MdLocationCity />
-                    <Text as='b'>Tên nhóm trưởng</Text>
-                  </HStack>
-                  <Tag colorScheme={'pink'}>{group.tenNhomTruong}</Tag>
-                </Box>
-                <Box>
-                  <HStack>
-                    <MdDepartureBoard />
-                    <Text as='b'>CCCD nhóm trưởng</Text>
-                  </HStack>
-                  <Box mt={1}>
-                    <Tag colorScheme={'blue'}>{group.cccdNhomTruong}</Tag>
-                  </Box>
-                </Box>
-              </Stack>
+              <Box>{TableComponent(infosSuccess, REGISTER_INFO_TITLE)}</Box>
+              {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
               <Box>
+                <Divider />
                 <Box w='100%' p={3} textAlign={'center'}>
                   <QRCode
                     id='QRCode'

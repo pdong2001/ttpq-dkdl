@@ -14,6 +14,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
+import useCustomColorMode from '~/hooks/useColorMode';
 import { formatUrl } from '~/utils/functions';
 
 type UploadFileProps = InputProps & { dropLabel?: string };
@@ -23,6 +24,7 @@ export default function UploadFile(props: UploadFileProps) {
   const [file, setFile] = useState<File | undefined>();
   const [data, setData] = useState<any>();
   const [field, _, helpers] = useField(name);
+  const { primaryColor } = useCustomColorMode();
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
@@ -100,7 +102,7 @@ export default function UploadFile(props: UploadFileProps) {
                   </Box>
                 ) : (
                   <Stack p='8' textAlign='center' spacing='1'>
-                    <Heading fontSize='lg' color='gray.700' fontWeight='bold'>
+                    <Heading fontSize='lg' color={primaryColor} fontWeight='bold'>
                       {label}
                     </Heading>
                     <Text fontWeight='light'>hoặc bấm để chọn ảnh</Text>
@@ -109,6 +111,7 @@ export default function UploadFile(props: UploadFileProps) {
               </Stack>
             </Box>
             <Input
+              cursor='pointer'
               type='file'
               height='100%'
               width='100%'

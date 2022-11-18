@@ -7,56 +7,26 @@ import {
   SimpleGrid,
   Avatar,
   GridItem,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tr,
-  Skeleton,
-  SkeletonCircle,
-  VStack,
+  Alert,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
+import _ from 'lodash';
 import { StepProps } from '..';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { register } from '../../../slices/register';
 import { unwrapResult } from '@reduxjs/toolkit';
-import _ from 'lodash';
-
-const mapTitlesStep1 = {
-  hoTen: 'Họ Và Tên',
-  soDienThoai: 'Số điện thoại',
-  cccd: 'Căn cước công dân',
-  diaDiemXuatPhat: 'Địa điểm xuất phát',
-  thoiGianXuatPhat: 'Thời gian xuất phát',
-  thoiGianTroVe: 'Thời gian trở về',
-};
-
-const dataSuccess = {
-  step1: {
-    soDienThoai: '43424242',
-    cccd: '3232323',
-    diaDiemXuatPhat: 'Bến xe buýt Trường ĐH Nông Lâm TP. HCM',
-    thoiGianXuatPhat: '08:00 01-12-2022',
-    thoiGianTroVe: '15:00 05-12-2022',
-  },
-  group: {
-    cccdNhomTruong: '00109342343432',
-    tenNhomTruong: 'Lương Thai Tam',
-  },
-  avatar: '23232323',
-  hinhThucDangKy: '1',
-  LinkQrCode: `/register-info/sdesdsd`,
-  isOpen: true,
-  hoTen: 'sdsdsdsd',
-};
+import { TableComponent, LeaderComponent } from '~/components/Register';
+import { mapSuccessData } from '~/components/Register/bindingData';
+import { REGISTER_INFO_TITLE } from '~/configs/register';
+import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 const Step5 = (props: StepProps) => {
-  const { step1, LinkQrCode, isOpen, avatar, hoTen, group } = dataSuccess;
   const { previousStep, nextStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state) => state.register.data);
+  const previewInfo = useAppSelector((state) => state.previewInfo.data);
+
   const handleRegister = () => {
     dispatch(
       register({
@@ -72,6 +42,7 @@ const Step5 = (props: StepProps) => {
         console.log('Dạ có lỗi xảy ra ạ', e);
       });
   };
+  const { infos, schedules, jobs, avatar, fullName } = mapSuccessData(previewInfo);
   return (
     <>
       <Stack spacing={4}>
@@ -85,117 +56,35 @@ const Step5 = (props: StepProps) => {
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           PL.2565 - DL.2022
         </Text>
-
         <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
           <Box textAlign={'center'}>
             <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
             <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-              {hoTen}
+              {fullName}
             </Heading>
+            <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
             <Box>
-              <TableContainer>
-                <Table variant='simple' colorScheme={'gray'}>
-                  <Tbody>
-                    {_.map(step1, (info, key) => {
-                      return (
-                        <Tr>
-                          <Td pr={0} pl={{ base: 2, sm: 2, md: 2 }}>
-                            <Text as='b'>{mapTitlesStep1[key]}</Text>
-                          </Td>
-                          <Td pl={3} pr={{ base: 5, sm: 7, md: 5 }}>
-                            {info}
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
+              <Alert status='success'>
+                <CalendarIcon />
+                <Heading p={2} as='h5' size='md'>
+                  Lịch trình di chuyển
+                </Heading>
+              </Alert>
+              {TableComponent(
+                _.get(schedules, _.get(previewInfo, 'moveType', 0)),
+                REGISTER_INFO_TITLE,
+              )}
             </Box>
             <Box>
-              <Heading p={2} as='h5' size='md'>
-                Thông tin bước 1
-              </Heading>
-              <TableContainer>
-                <Table variant='simple' colorScheme={'gray'}>
-                  <Tbody>
-                    {_.map(step1, (info, key) => {
-                      return (
-                        <Tr>
-                          <Td pr={0} pl={{ base: 2, sm: 2, md: 2 }}>
-                            <Text as='b'>{mapTitlesStep1[key]}</Text>
-                          </Td>
-                          <Td pl={3} pr={{ base: 5, sm: 7, md: 5 }}>
-                            {info}
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
+              <Alert status='warning'>
+                <HamburgerIcon />
+                <Heading p={2} as='h5' size='md'>
+                  Công việc
+                </Heading>
+              </Alert>
+              {TableComponent(jobs, REGISTER_INFO_TITLE)}
             </Box>
-            <Box>
-              <Heading p={2} as='h5' size='md'>
-                Thông tin bước 1
-              </Heading>
-              <TableContainer>
-                <Table variant='simple' colorScheme={'gray'}>
-                  <Tbody>
-                    {_.map(step1, (info, key) => {
-                      return (
-                        <Tr>
-                          <Td pr={0} pl={{ base: 2, sm: 2, md: 2 }}>
-                            <Text as='b'>{mapTitlesStep1[key]}</Text>
-                          </Td>
-                          <Td pl={3} pr={{ base: 5, sm: 7, md: 5 }}>
-                            {info}
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Box>
-              <Heading p={2} as='h5' size='md'>
-                Thông tin bước 1
-              </Heading>
-              <TableContainer>
-                <Table variant='simple' colorScheme={'gray'}>
-                  <Tbody>
-                    {_.map(step1, (info, key) => {
-                      return (
-                        <Tr>
-                          <Td pr={0} pl={{ base: 2, sm: 2, md: 2 }}>
-                            <Text as='b'>{mapTitlesStep1[key]}</Text>
-                          </Td>
-                          <Td pl={3} pr={{ base: 5, sm: 7, md: 5 }}>
-                            {info}
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            </Box>
-            <Stack spacing='30px' p={5}>
-              <SkeletonCircle size='16' alignItems='center'>
-                <Avatar src={'sdsdsd'} />
-              </SkeletonCircle>
-              <VStack alignItems='start'>
-                <Skeleton justifyItems='center' height={8} minWidth={32}>
-                  <Text color={primaryColor} fontWeight='bold'>
-                    Phạm Văn Duy
-                  </Text>
-                </Skeleton>
-                <Skeleton height={8} minWidth={40}>
-                  <Text>sdsds dsdsdsd</Text>
-                </Skeleton>
-              </VStack>
-            </Stack>
+            {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
           </Box>
         </GridItem>
       </Stack>

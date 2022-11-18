@@ -8,9 +8,6 @@ import Radios from '~/components/Form/Radios';
 import { fillDataPreview } from '~/slices/previewInfo';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import useAxios from '~/hooks/useAxios';
-import API from '~/apis/constants';
-import { formatUrl } from '~/utils/functions';
 import { useEffect, useState } from 'react';
 import { fillForm } from '../../../slices/register';
 import step3Schema from '../validationSchema/step3';
@@ -34,7 +31,6 @@ const Step3 = (props: StepProps) => {
     startPlaneCode: editStartPlaneCode,
     returnPlaneCode: editReturnPlaneCode,
   } = useAppSelector((state) => state.registerInfo.data);
-  const { eventId } = useAppSelector((state) => state.registerPage.data);
   const {
     moveType: moveTypeInStore = MoveType.HCM,
     startAddressId: startAddressIdInStore = '',
@@ -82,13 +78,12 @@ const Step3 = (props: StepProps) => {
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
       }
-      dispatch(fillDataPreview({ ...values }));
       dispatch(
         fillForm({
           register: { ...register, ...values },
         }),
       );
-      mapTitle();
+      mapTitle(values);
       nextStep();
     },
   });
@@ -96,18 +91,6 @@ const Step3 = (props: StepProps) => {
   const { moveType } = formik.values;
   let { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { leaveAddresses, startAddresses } = registerPage;
-
-  // địa điểm xuất phát
-  const { data: startAddressList } = useAxios(
-    {
-      method: 'get',
-      url: formatUrl(API.GET_START_ADDRESS_BY_EVENT, { id: eventId }),
-      transformResponse: ({ data }) => data,
-    },
-    [],
-  );
-
-  const HCMAddressList = startAddressList?.filter((item) => item.provinceId === 1);
 
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
@@ -122,8 +105,6 @@ const Step3 = (props: StepProps) => {
 
   useEffect(() => {
     const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
-    console.log('times', times, startAddresses, startAddressId);
-
     setStartTimes(times);
   }, [startAddresses, startAddressId]);
 
@@ -131,21 +112,24 @@ const Step3 = (props: StepProps) => {
     formik.setTouched({});
   }, [moveType]);
 
-  const mapTitle = () => {
+  const mapTitle = (values) => {
     function filterTitle(array, id) {
-      return _.get(_.filter(array, (a) => a.id == id)[0], 'name', '');
+      return _.get(
+        _.find(array, (a) => a.id == id),
+        'name',
+        '',
+      );
     }
     dispatch(
       fillDataPreview({
-        time: {
-          startAddress: `${filterTitle(HCMAddressList, startAddressId)}`,
-          startTime: `${filterTitle(startTimes, startTimeId)}`,
-          leaveTime: `${filterTitle(leaveTimes, leaveTimeIdInStore)}`,
-        },
+        ...values,
+        startAddressId: `${filterTitle(startAddresses, values.startAddressId)}`,
+        leaveAddressId: `${filterTitle(leaveAddresses, values.leaveAddressId)}`,
+        startTimeId: `${filterTitle(startTimes, values.startTimeId)}`,
+        leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
       }),
     );
   };
-  console.log('___', formik.values);
 
   return (
     <>

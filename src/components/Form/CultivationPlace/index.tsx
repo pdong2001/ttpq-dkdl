@@ -27,7 +27,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
   //@ts-ignore
   const [field, { value: id }, { error, touched }] = useField(name);
 
-  const { data: groups } = useAxios(
+  const { data: groups, loaded } = useAxios(
     {
       method: 'get',
       url: API.GET_CTN,
@@ -38,10 +38,8 @@ function CultivationPlace(props: CultivationPlaceProps) {
 
   useEffect(() => {
     const placeName = _.get(_.filter(groups, (g) => g.Id == id)[0], 'Name', '');
-    console.log('set preview cultivation', placeName);
-
     setDataPreview({ [`${name}`]: placeName });
-  }, [id]);
+  }, [id, loaded]);
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>

@@ -88,8 +88,11 @@ function Address(props: AddressProps) {
 
   useEffect(() => {
     setAddress({ provinceId, districtId, wardId });
-    mapTitle({ provinceId, districtId, wardId });
   }, [provinceId, districtId, wardId]);
+
+  useEffect(() => {
+    mapTitle({ provinceId, districtId, wardId });
+  }, [provinceId, districtId, wardId, provinces, districts, wards]);
 
   const mapTitle = ({ provinceId, districtId, wardId }) => {
     function filterTitle(array, id) {
