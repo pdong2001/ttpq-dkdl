@@ -100,9 +100,9 @@ function Address(props: AddressProps) {
     }
     setDataPreview({
       [`${name}`]: `${filterTitle(wards, wardId)}, ${filterTitle(
-        provinces,
-        provinceId,
-      )}, ${filterTitle(districts, districtId)}`,
+        districts,
+        districtId,
+      )}, ${filterTitle(provinces, provinceId)}`,
     });
   };
 

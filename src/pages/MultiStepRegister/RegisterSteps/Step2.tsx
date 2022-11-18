@@ -20,7 +20,7 @@ const Step2 = (props: StepProps) => {
   const dispatch = useAppDispatch();
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-
+  const { ctnId, ctnName } = registerPage;
   const {
     fullName,
     phoneNumber,
@@ -81,7 +81,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressDistrict,
       temporaryAddressWard,
 
-      organizationStructureId,
+      organizationStructureId: ctnId == 0 ? organizationStructureId : ctnId,
     },
     validationSchema: step2Schema,
     onSubmit: (values) => {
@@ -113,17 +113,16 @@ const Step2 = (props: StepProps) => {
           religiousName,
           email,
           dateOfBirth: [year, month, date].join('-'),
+          ...(ctnId && { organizationStructureId: ctnName }),
         }),
       );
       nextStep();
     },
   });
-  console.log('formiks', formik.values);
 
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));
   };
-  console.log('____', formik.values);
 
   return (
     <>
@@ -157,7 +156,7 @@ const Step2 = (props: StepProps) => {
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
-                  {registerPage.ctnId == 0 && (
+                  {ctnId == 0 && (
                     <CultivationPlace
                       name='organizationStructureId'
                       setDataPreview={setDataPreview}

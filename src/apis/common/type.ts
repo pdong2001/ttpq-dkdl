@@ -1,5 +1,5 @@
 import { PayloadAction, SerializedError } from '@reduxjs/toolkit';
-import { createAsyncRequest } from '~/apis/common/action';
+import { createAsyncRequest } from '~/slices/common/action';
 
 export enum APIStatus {
   IDLE,

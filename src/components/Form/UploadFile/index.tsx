@@ -19,7 +19,7 @@ import { formatUrl } from '~/utils/functions';
 
 type UploadFileProps = InputProps & { dropLabel?: string };
 export default function UploadFile(props: UploadFileProps) {
-  const { name, placeholder, dropLabel } = props;
+  const { name = '', placeholder, dropLabel } = props;
   const [label, setLabel] = useState(placeholder);
   const [file, setFile] = useState<File | undefined>();
   const [data, setData] = useState<any>();

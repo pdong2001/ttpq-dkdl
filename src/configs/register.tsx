@@ -3,9 +3,9 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 
 const MOVE_TYPE_TITLE = {
-  [MoveType.HCM]: 'Đi cùng CTN HCM',
+  [MoveType.HCM]: 'Đi cùng xe CTN',
   [MoveType.BY_YOUR_SELF]: 'Tự túc',
-  [MoveType.OTHER]: 'Đi từ tỉnh khách',
+  [MoveType.OTHER]: 'Máy bay',
 };
 
 const EVENT_EXP_TITLE = {

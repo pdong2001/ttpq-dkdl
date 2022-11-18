@@ -13,7 +13,6 @@ import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
-
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
@@ -32,14 +31,14 @@ const Step1 = (props: StepProps) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      fullName: member?.fullName || fullName,
-      phoneNumber: member?.phoneNumber || phoneNumber,
-      identityCard: member?.identityCard || identityCard,
+      fullName: fullName || member?.fullName,
+      phoneNumber: phoneNumber || member?.phoneNumber,
+      identityCard: identityCard || member?.identityCard,
       registerType:
-        (registerInfo?.registerType && registerInfo.registerType + '') ||
         register.registerType ||
+        (registerInfo?.registerType && registerInfo.registerType + '') ||
         RegisterType.SINGLE,
-      leaderId: registerInfo.leaderId || register.leaderId || '',
+      leaderId: register.leaderId || registerInfo.leaderId || '',
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {
@@ -47,16 +46,18 @@ const Step1 = (props: StepProps) => {
       if (registerType === RegisterType.SINGLE) {
         leaderId = '';
       }
-      dispatch(fillForm({
-        fullName,
-        identityCard,
-        phoneNumber,
-        register: {
-          ...register,
-          registerType,
-          leaderId,
-        },
-      }));
+      dispatch(
+        fillForm({
+          fullName,
+          identityCard,
+          phoneNumber,
+          register: {
+            ...register,
+            registerType,
+            leaderId,
+          },
+        }),
+      );
       dispatch(
         searchMember({
           data: {
@@ -65,21 +66,24 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
-      dispatch(fillDataPreview({
-        fullName,
-        identityCard,
-        phoneNumber,
-      }));
+      dispatch(
+        fillDataPreview({
+          fullName,
+          identityCard,
+          phoneNumber,
+        }),
+      );
       nextStep();
     },
   });
 
   const setLeaderPreview = (leader) => {
     if (_.get(leader, 'success', false)) {
-      dispatch(fillDataPreview({
-        leader: _.get(leader, 'data', {}),
-      }));
-      
+      dispatch(
+        fillDataPreview({
+          leader: _.get(leader, 'data', {}),
+        }),
+      );
     }
   };
   const { registerType: localRegisterType } = formik.values;
@@ -124,7 +128,13 @@ const Step1 = (props: StepProps) => {
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
-              {isRegisterFollowGroup && <SearchLeader name='leaderId' getLeader={(leader) => setLeaderPreview(leader)} label='Trưởng nhóm' />}
+              {isRegisterFollowGroup && (
+                <SearchLeader
+                  name='leaderId'
+                  getLeader={(leader) => setLeaderPreview(leader)}
+                  label='Trưởng nhóm'
+                />
+              )}
             </Stack>
             <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
               Tiếp theo

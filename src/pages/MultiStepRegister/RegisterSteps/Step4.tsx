@@ -26,47 +26,8 @@ import UploadFile from '~/components/Form/UploadFile';
 import MultiSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
-import { fillForm } from '../../../slices/register';
-// import AvatarTemp from '~/assets/avatar_temp.png';
-
-// danh sách ban
-// const departmentList = [
-//   { id: 0, code: 'chuaco', name: 'Chưa có' },
-//   { id: 1, code: 'BV', name: 'bảo vệ' },
-//   { id: 2, code: 'HD1', name: 'hanh duong 1' },
-//   { id: 3, code: 'HD2', name: 'hanh duong 2' },
-// ];
-
-// kỹ năng
-// const strongPointListTemp = [
-//   { id: 0, code: 'Chưa có', name: 'Chưa có' },
-//   { id: 1, code: 'Cắm hoa', name: 'Cắm hoa' },
-//   { id: 2, code: 'Cắt tỉa trang trí món', name: 'Cắt tỉa trang trí món' },
-//   { id: 3, code: 'Chưng trái cây nghệ thuật', name: 'Chưng trái cây nghệ thuật' },
-//   { id: 4, code: 'Cơ khí', name: 'Cơ khí' },
-//   { id: 5, code: 'Cắt may cơ bản', name: 'Cắt may cơ bản' },
-//   { id: 6, code: 'Ngoại ngữ', name: 'Ngoại ngữ' },
-// ];
-
-// nơi nhận thẻ
-// const receiveCardLocationList = [
-//   {
-//     id: 1,
-//     code: 'HCMXL',
-//     name: '18h00 - 19h30, Thứ Tư (03/08/2022), Chùa Xá Lợi, 89 Bà Huyện Thanh Quan, P.7, Q.3',
-//   },
-//   {
-//     id: 2,
-//     code: 'HCMNL',
-//     name: '18h00 - 19h30, Thứ Năm (04/08/2021), Chùa Định Phước Di Đà, Gần khu chợ nhỏ ĐH. Nông Lâm, Q.Thủ Đức',
-//   },
-//   {
-//     id: 3,
-//     code: 'HCMBDT',
-//     name: '9h00 – 19h00, Thứ Sáu, Thứ Bảy, Chủ Nhật, Thứ Hai (05/08 - 08/08/2022) tại 47/96 Bùi Đình Túy - Q.Bình Thạnh',
-//   },
-//   { id: 999, code: 'BD', name: 'Gửi bưu điện' },
-// ];
+import { fillForm } from '~/slices/register';
+import FormInput from '~/components/Form/FormInput';
 
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -138,25 +99,51 @@ const Step4 = (props: StepProps) => {
         },
       };
       dispatch(fillForm(fillData));
-      mapMultiTitle({ avatarPath, note, type, exps, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId });
+      mapMultiTitle({
+        avatarPath,
+        note,
+        type,
+        exps,
+        strongPointIds,
+        expDepartmentIds,
+        wishDepartmentIds,
+        receiveCardAddressId,
+      });
       nextStep();
     },
   });
 
-  const mapMultiTitle = ({ avatarPath, note, type, exps, strongPointIds, expDepartmentIds, wishDepartmentIds, receiveCardAddressId }) => {
+  const mapMultiTitle = ({
+    avatarPath,
+    note,
+    type,
+    exps,
+    strongPointIds,
+    expDepartmentIds,
+    wishDepartmentIds,
+    receiveCardAddressId,
+  }) => {
     function mapName(array, ids) {
-      return _.map(_.filter(array, function (p) {
-        return _.includes(ids, p.id);
-      }), a => a.name).join(', ');
+      return _.map(
+        _.filter(array, function (p) {
+          return _.includes(ids, p.id);
+        }),
+        (a) => a.name,
+      ).join(', ');
     }
-    dispatch(fillDataPreview({
-      note, type, avatarPath, exps,
-      strongPointIds: mapName(strongPointList, strongPointIds),
-      expDepartmentIds: mapName(departments, expDepartmentIds),
-      wishDepartmentIds: mapName(departments, wishDepartmentIds),
-      receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
-    }));
-  }
+    dispatch(
+      fillDataPreview({
+        note,
+        type,
+        avatarPath,
+        exps,
+        strongPointIds: mapName(strongPointList, strongPointIds),
+        expDepartmentIds: mapName(departments, expDepartmentIds),
+        wishDepartmentIds: mapName(departments, wishDepartmentIds),
+        receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
+      }),
+    );
+  };
 
   return (
     <>
@@ -194,7 +181,6 @@ const Step4 = (props: StepProps) => {
                 label='Kinh nghiệm ở ban'
                 valueField='id'
                 labelField='name'
-                isRequired
               />
               <Select
                 name='wishDepartmentIds'
@@ -216,12 +202,12 @@ const Step4 = (props: StepProps) => {
                 </FormLabel>
                 <UploadFile name='avatarPath' />
               </FormControl>
-              <FormControl name='note' as='fieldset' border={1}>
-                <FormLabel as='legend' color={formTextColor}>
-                  Ghi chú
-                </FormLabel>
-                <Textarea placeholder='Huynh đệ có thắc mắc gì không ạ?' size='sm' />
-              </FormControl>
+              <FormInput
+                name='note'
+                label='Ghi chú'
+                as={Textarea}
+                placeholder='Huynh đệ có thắc mắc gì không ạ?'
+              />
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
               <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
