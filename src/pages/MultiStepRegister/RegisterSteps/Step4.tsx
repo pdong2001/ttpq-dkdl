@@ -28,11 +28,26 @@ import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
-
+const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor, formTextColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+
+  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
+  const {
+    expDepartments,
+    wishDepartments,
+    member,
+    receiveCardAddressId: editReceiverCardId,
+    note: editNote,
+  } = useAppSelector((state) => state.registerInfo.data);
+  const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
+  const previousStepData = useAppSelector((state) => state.register.data);
+
+  const { strongPointIds, avatarPath, exps } = previousStepData;
+  const { expDepartmentIds, wishDepartmentIds, receiveCardAddressId, note } =
+    previousStepData.register;
 
   // lấy kĩ năng sở trường
   let { data: strongPointList } = useAxios(
@@ -50,26 +65,20 @@ const Step4 = (props: StepProps) => {
   // lấy nơi nhận thẻ
   const { data: receiveCardLocationList } = useAxios({
     method: 'get',
-    url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: 1 }),
+    url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
     transformResponse: ({ data }) => data,
   });
 
-  const previousStepData = useAppSelector((state) => state.register.data);
-
-  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
-  const { strongPointIds, avatarPath, exps } = previousStepData;
-  const { expDepartmentIds, wishDepartmentIds, receiveCardAddressId, note } =
-    previousStepData.register;
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      exps: exps || EventExp.ChuaTungThamGia,
-      strongPointIds: strongPointIds || [],
-      expDepartmentIds: expDepartmentIds || [],
-      wishDepartmentIds: wishDepartmentIds?.[0] || '',
-      receiveCardAddressId: receiveCardAddressId || '',
-      avatarPath: avatarPath || '',
-      note: note || '',
+      exps: (exps && exps + '') || (editExps && editExps + '') || EventExp.ChuaTungThamGia,
+      strongPointIds: strongPointIds || mapObjectArrayToIds(strongPoints) || [],
+      expDepartmentIds: expDepartmentIds || mapObjectArrayToIds(expDepartments) || [],
+      wishDepartmentIds: wishDepartmentIds?.[0] || mapObjectArrayToIds(wishDepartments)[0] || '',
+      receiveCardAddressId: receiveCardAddressId || editReceiverCardId || '',
+      avatarPath: avatarPath || editAvatarPath || '',
+      note: note || editNote || '',
     },
     validationSchema: step4Schema,
     onSubmit: (values) => {
