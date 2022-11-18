@@ -31,7 +31,7 @@ import FormInput from '~/components/Form/FormInput';
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
-  const { primaryColor, formTextColor } = useCustomColorMode();
+  const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
   const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
@@ -206,9 +206,7 @@ const Step4 = (props: StepProps) => {
                 isRequired
               />
               <FormControl name='avatarPath' as='fieldset' border={1}>
-                <FormLabel as='legend' color={formTextColor}>
-                  Hình thẻ
-                </FormLabel>
+                <FormLabel as='legend'>Hình thẻ</FormLabel>
                 <UploadFile name='avatarPath' />
               </FormControl>
               <FormInput

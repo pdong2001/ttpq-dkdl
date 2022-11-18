@@ -16,7 +16,7 @@ import FormInput from '~/components/Form/FormInput';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
-  const { primaryColor, formTextColor } = useCustomColorMode();
+  const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
@@ -154,7 +154,7 @@ const Step2 = (props: StepProps) => {
                     <Radio value={Gender.MALE}>Nam</Radio>
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
-                  <FormInput name='religiousName' label='Pháp danh' color={formTextColor} />
+                  <FormInput name='religiousName' label='Pháp danh' />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
                   {ctnId == 0 && (
                     <CultivationPlace
@@ -166,7 +166,7 @@ const Step2 = (props: StepProps) => {
                   )}
                 </Stack>
                 <Stack spacing={3}>
-                  <FormInput name='email' label='Email' color={formTextColor} isRequired />
+                  <FormInput name='email' label='Email' isRequired />
                   <Address
                     setDataPreview={setDataPreview}
                     name='permanentAddress'

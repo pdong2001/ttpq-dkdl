@@ -19,14 +19,14 @@ type FormInputProps = {
 
 const FormInput = (props: FormInputProps) => {
   const { label, name, defaultValue, hiddenErrorMessage, as: Component = Input, ...rest } = props;
-  const { formTextColor, primaryColor } = useCustomColorMode();
+  const { primaryColor } = useCustomColorMode();
   // @ts-ignore
   const [field, meta] = useField(name);
   field.value ??= defaultValue; // set default value on props
 
   return (
     <FormControl isInvalid={!!meta.error && meta.touched} {...rest}>
-      <FormLabel color={formTextColor} tabIndex={-1}>
+      <FormLabel tabIndex={-1}>
         {label}
       </FormLabel>
       <Component focusBorderColor={primaryColor} placeholder=' ' {...field} {...props} />

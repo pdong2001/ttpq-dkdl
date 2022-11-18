@@ -24,7 +24,6 @@ type AddressProps = SelectProps &
   };
 
 function Address(props: AddressProps) {
-  const { formTextColor } = useCustomColorMode();
   const { name, label, direction, spacing, setDataPreview, ...rest } = props;
   const provinceName = `${name}Province`;
   const districtName = `${name}District`;
@@ -110,9 +109,7 @@ function Address(props: AddressProps) {
 
   return (
     <FormControl isInvalid={!!errorMessage && pTouch && dTouch && vTouch} {...rest}>
-      <FormLabel mb={0} color={formTextColor}>
-        {label}
-      </FormLabel>
+      <FormLabel mb={0}>{label}</FormLabel>
       <Stack direction={direction} spacing={spacing}>
         <Select
           valueField='Id'

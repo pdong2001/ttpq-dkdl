@@ -19,7 +19,7 @@ import { MOVE_TYPE_TITLE } from '~/configs/register';
 
 const Step3 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
-  const { primaryColor, formTextColor } = useCustomColorMode();
+  const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { leaveAddresses, startAddresses } = registerPage;
@@ -209,27 +209,14 @@ const Step3 = (props: StepProps) => {
               {moveType !== MoveType.HCM && (
                 // tỉnh khác and tự túc
                 <>
-                  <FloatingLabel
-                    name='otherStartAddress'
-                    label='Nơi xuất phát'
-                    color={formTextColor}
-                    isRequired
-                  />
+                  <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
                   <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
                   {moveType === MoveType.OTHER && (
-                    <FloatingLabel
-                      name='startPlaneCode'
-                      label='Mã chuyến bay - Giờ bay đi'
-                      color={formTextColor}
-                    />
+                    <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
                   )}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
                   {moveType === MoveType.OTHER && (
-                    <FloatingLabel
-                      name='returnPlaneCode'
-                      label='Mã chuyến bay - Giờ bay về'
-                      color={formTextColor}
-                    />
+                    <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
                   )}
                 </>
               )}
