@@ -59,7 +59,9 @@ const Step3 = (props: StepProps) => {
     enableReinitialize: true,
     initialValues: {
       moveType:
-        moveTypeInStore || editMoveType + '' || hasStartAddress ? MoveType.HCM : MoveType.OTHER,
+        moveTypeInStore ||
+        (editMoveType && editMoveType + '') ||
+        (hasStartAddress ? MoveType.HCM : MoveType.OTHER),
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
@@ -159,7 +161,7 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios isRequired label='Hình thức di chuyển' name='moveType'>
+              <Radios label='Hình thức di chuyển' name='moveType'>
                 {startAddresses?.length && (
                   <Radio value={MoveType.HCM}>{MOVE_TYPE_TITLE[MoveType.HCM]}</Radio>
                 )}

@@ -148,8 +148,8 @@ const Step4 = (props: StepProps) => {
         exps,
         strongPointIds: mapName(strongPointList, strongPointIds),
         expDepartmentIds: mapName(departments, expDepartmentIds),
-        wishDepartmentId: mapName(departments, [wishDepartmentId]),
-        receiveCardAddressId: mapName(receiveCardLocationList, [receiveCardAddressId]),
+        wishDepartmentId: mapName(departments, [+wishDepartmentId]),
+        receiveCardAddressId: mapName(receiveCardLocationList, [+receiveCardAddressId]),
       }),
     );
   };
