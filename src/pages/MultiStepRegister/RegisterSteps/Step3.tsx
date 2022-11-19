@@ -16,8 +16,11 @@ import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
 import { MOVE_TYPE_TITLE } from '~/configs/register';
+import { useRouteMatch } from 'react-router-dom';
+import { ADD_NEW_REGISTER_PATH } from '~/routes';
 
 const Step3 = (props: StepProps) => {
+  const { path } = useRouteMatch();
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
@@ -54,6 +57,7 @@ const Step3 = (props: StepProps) => {
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
+  const isAddNew = path === ADD_NEW_REGISTER_PATH;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -224,9 +228,16 @@ const Step3 = (props: StepProps) => {
               )}
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
-                Trở về
-              </Button>
+              {isAddNew && (
+                <Button
+                  colorScheme='gray'
+                  flexGrow={1}
+                  fontFamily={'heading'}
+                  onClick={previousStep}
+                >
+                  Trở về
+                </Button>
+              )}
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>
                 Tiếp theo
               </Button>
