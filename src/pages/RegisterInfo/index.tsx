@@ -56,6 +56,7 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { EVENT_EXP_TITLE } from '~/configs/register';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -91,13 +92,14 @@ const RegisterInfo = () => {
     );
   };
 
-  const { data: memberAuthdata, error: memberAuthError } = useAppSelector(
-    (state) => state.memberAuth,
-  );
+  const {
+    data: memberAuthdata,
+    error: memberAuthError,
+    loaded: authenLoaded,
+  } = useAppSelector((state) => state.memberAuth);
   const { data, loaded, error } = useAppSelector((state) => state.registerInfo);
 
   useEffect(() => {
-    console.log(memberAuthdata.token);
     if (memberAuthdata.token && isSubmit.current) {
       dispatch(
         getRegisterInfo({
@@ -108,8 +110,9 @@ const RegisterInfo = () => {
         history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
       });
     }
+
     if (memberAuthError) onOpenLoginAlert();
-  }, [memberAuthdata.token, memberAuthError]);
+  }, [memberAuthdata.token, memberAuthError, authenLoaded]);
 
   useEffect(() => {
     dispatch(
@@ -119,9 +122,6 @@ const RegisterInfo = () => {
       }),
     );
   }, []);
-  if (loaded) {
-    console.log('data, error', data, error);
-  }
   const member = data?.member;
   const note = data?.note;
   const leaderId = data?.leaderId;
@@ -195,11 +195,15 @@ const RegisterInfo = () => {
     departure_flight_code: '',
     return_flight_code: '',
   };
+  const startAddress = data.startTime?.address;
+  const leaveAddress = data.leaveTime?.address;
   if (moveType == MoveType.HCM) {
-    schedule.departure_address = data.startTime?.address?.address || '';
+    schedule.departure_address =
+      [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
     schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
     schedule.return_time = convertToAppDateTime(data.leaveTime?.time) || '';
-    schedule.return_address = data.leaveTime?.address?.address || '';
+    schedule.return_address =
+      [leaveAddress?.name, leaveAddress?.address].filter((e) => !!e).join(', ') || '';
   } else {
     schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
@@ -398,7 +402,7 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {member?.exps} lần
+                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
                     </Box>
                     <Box>
                       <Text as='b'>Kinh nghiệm làm việc tại các ban</Text>
