@@ -19,9 +19,21 @@ import { Image } from '@chakra-ui/react';
 import department_names from '../../configs/departmemt';
 import './style.css';
 import { InfoIcon } from '@chakra-ui/icons';
+import Carousels from '~/components/Carousels';
 
 type Props = {};
 
+const departmemtImages = [
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+];
 function DepartmentInfos({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [departmentSelected, setDepartmentSelected] = useState({
@@ -70,12 +82,8 @@ function DepartmentInfos({}: Props) {
             <ModalCloseButton />
             <ModalBody p={0}>
               <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
-                <Flex flex={1}>
-                  <Image
-                    alt={'Login Image'}
-                    objectFit={'cover'}
-                    src={departmentSelected && departmentSelected.image}
-                  />
+              <Flex flex={1} width={'100vh'} direction={{ base: 'column', md: 'row', sm: 'column' }}>
+                  <Carousels images={departmemtImages} styles={{ height: '100vh', width: '100%' }} settings={{}} />
                 </Flex>
                 <Flex p={8} flex={1} align={'center'} justify={'center'}>
                   <Stack spacing={6} w={'full'} maxW={'lg'}>
