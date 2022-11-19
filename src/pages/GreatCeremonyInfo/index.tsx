@@ -62,7 +62,13 @@ const GreatCeremonyInfo = () => {
   return (
     <>
       <Box id='eventInfo' scrollMarginTop={16} />
-      <Box bgColor={'Blue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}>
+      {/* <Box bgColor={'Blue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}> */}
+      <Box
+        bgGradient={'linear(to-r, #59C173, #a17fe0, #5D26C1)'}
+        bgSize={'cover'}
+        px={{ base: 10, md: 20, lg: 28 }}
+        py={10}
+      >
         <FadeInUp>
           <Heading
             as={'h6'}
@@ -119,45 +125,58 @@ const GreatCeremonyInfo = () => {
         </Container>
 
         {/* CONFERENCE DATE */}
-        <FadeInUp>
-          <Stack
-            direction={['column', 'row']}
-            spacing={[5, 10, 16, 32]}
-            color='white'
-            rounded='md'
-            justifyContent={'center'}
-          >
-            <VStack justifyContent='center' alignItems={['center', 'start']} spacing={5}>
-              <Text
-                textTransform='uppercase'
-                fontWeight='bold'
-                fontSize={['xl', '2xl']}
-                color={primaryColor}
-              >
-                Thời gian diễn ra
-              </Text>
-              <Text textTransform='uppercase'>Số ngày còn lại</Text>
-            </VStack>
-            <HStack spacing={5} justifyContent='center'>
-              {new Array(4).fill('00').map((time, i) => {
-                return (
-                  <Square key={i} border='1px' size={['14', '10', '32']} p={6}>
-                    <VStack spacing={[1, 2, 3, 4]}>
-                      <Text
-                        id={`countdown-${times[i].id}`}
-                        fontWeight={'bold'}
-                        fontSize={['xl', '2xl', '3xl', '4xl']}
-                      >
-                        {time}
-                      </Text>
-                      <Text>{times[i].title}</Text>
-                    </VStack>
-                  </Square>
-                );
-              })}
-            </HStack>
-          </Stack>
-        </FadeInUp>
+        <Container
+          as={SimpleGrid}
+          maxW={'full'}
+          columns={{ base: 1, lg: 2 }}
+          gridGap={{ base: 10 }}
+          alignItems={['start']}
+          px={0}
+          mb={10}
+        >
+          <FadeInUp>
+            <Stack
+              direction={['column', 'row']}
+              spacing={[5, 10, 16, 32]}
+              color='white'
+              rounded='md'
+              justifyContent={['center']}
+            >
+              <VStack justifyContent='center' alignItems={['center', 'start']} spacing={5}>
+                <Text
+                  textTransform='uppercase'
+                  fontWeight='bold'
+                  fontSize={['xl', '2xl']}
+                  color={primaryColor}
+                >
+                  Thời gian diễn ra
+                </Text>
+                <Text textTransform='uppercase'>Số ngày còn lại</Text>
+              </VStack>
+              {/* <HStack spacing={5} justifyContent='center'> */}
+              <HStack spacing={5} justifyContent='space-between'>
+                {new Array(4).fill('00').map((time, i) => {
+                  return (
+                    // <Square key={i} border='1px' size={['14', '10', '32']} p={6}>
+                    <Square key={i} border='1px' size={['16', '16', '32']} p={6}>
+                      <VStack spacing={[1, 2, 3, 4]}>
+                        <Text
+                          id={`countdown-${times[i].id}`}
+                          fontWeight={'bold'}
+                          fontSize={['xl', '2xl', '3xl', '4xl']}
+                        >
+                          {time}
+                        </Text>
+
+                        <Text fontSize={['sm', 'md', 'lg', 'xl', '2xl']}>{times[i].title}</Text>
+                      </VStack>
+                    </Square>
+                  );
+                })}
+              </HStack>
+            </Stack>
+          </FadeInUp>
+        </Container>
       </Box>
     </>
   );
