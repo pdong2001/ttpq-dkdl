@@ -37,78 +37,69 @@ function DepartmentInfos({}: Props) {
     onOpen();
   };
   return (
-    <Box
-      bgGradient={'linear(to-r, Blue.300, blue.700)'}
-      py={20}
-      px={{ base: 10, md: 16, lg: 28, xl: 28 }}
-      id='departmentInfo'
-    >
-      <Box w='100%' textAlign='center'>
-        <Heading
-          as={'h6'}
-          color='blue.500'
-          lineHeight={1.6}
-          fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
-          textTransform='uppercase'
-          borderBottom={'2px'}
-          borderColor='darkBlue.100'
-          mb={10}
-          display='inline-block'
-        >
-          Các ban trong đại lễ
-        </Heading>
-      </Box>
+    <>
+      <Box id='departmentInfo' scrollMarginTop={16} />
+      <Box
+        bgGradient={'linear(to-r, Blue.300, blue.700)'}
+        py={10}
+        px={{ base: 10, md: 16, lg: 28, xl: 28 }}
+        id='departmentInfo'
+      >
+        <Box w='100%' textAlign='center'>
+          <Heading
+            as={'h6'}
+            color='blue.500'
+            lineHeight={1.6}
+            fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
+            textTransform='uppercase'
+            borderBottom={'2px'}
+            borderColor='darkBlue.100'
+            mb={10}
+            display='inline-block'
+          >
+            Các ban trong đại lễ
+          </Heading>
+        </Box>
 
-      <SimpleGrid columns={{ md: 2, xl: 3 }} spacing='10px'>
-        {department_names.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
-      </SimpleGrid>
-      <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody p={0}>
-            <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
-              <Flex flex={1}>
-                <Image
-                  alt={'Login Image'}
-                  objectFit={'cover'}
-                  src={departmentSelected && departmentSelected.image}
-                />
-              </Flex>
-              <Flex p={8} flex={1} align={'center'} justify={'center'}>
-                <Stack spacing={6} w={'full'} maxW={'lg'}>
-                  <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-                    <Text color={'blue.400'} as={'span'}>
-                      {departmentSelected && departmentSelected.name}
-                    </Text>{' '}
-                  </Heading>
-                  {/* <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
+        <SimpleGrid columns={{ md: 2, xl: 3 }} spacing='10px'>
+          {department_names.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
+        </SimpleGrid>
+        <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
+            <ModalBody p={0}>
+              <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+                <Flex flex={1}>
+                  <Image
+                    alt={'Login Image'}
+                    objectFit={'cover'}
+                    src={departmentSelected && departmentSelected.image}
+                  />
+                </Flex>
+                <Flex p={8} flex={1} align={'center'} justify={'center'}>
+                  <Stack spacing={6} w={'full'} maxW={'lg'}>
+                    <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+                      <Text color={'blue.400'} as={'span'}>
+                        {departmentSelected && departmentSelected.name}
+                      </Text>{' '}
+                    </Heading>
+                    {/* <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
                     The project board is an exclusive resource for contract work. It's
                     perfect for freelancers, agencies, and moonlighters.
                   </Text> */}
-                  {departmentSelected && departmentSelected.desc}
-                  <Stack textAlign='center' spacing={4}>
-                    <Button size='lg'>Đăng ký</Button>
+                    {departmentSelected && departmentSelected.desc}
+                    <Stack textAlign='center' spacing={4}>
+                      <Button size='lg'>Đăng ký</Button>
+                    </Stack>
                   </Stack>
-                </Stack>
-              </Flex>
-            </Stack>
-
-            {/* <Container boxSize='lg'>
-              <Image
-                src={departmentSelected && departmentSelected.image}
-                alt='MT'
-                borderRadius={'lg'}
-                _hover={{
-                  scale: '1.2',
-                }}
-              ></Image>
-            </Container>
-            {departmentSelected && departmentSelected.desc} */}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </Box>
+                </Flex>
+              </Stack>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Box>
+    </>
   );
 }
 const DepartmentItem = (index: number, item: any, handleViewDetail: any) => {

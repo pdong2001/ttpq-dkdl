@@ -109,168 +109,171 @@ const Timeline = () => {
   };
 
   return (
-    <Box
-      bgGradient={'linear(to-r, darkBlue.400, darkBlue.600)'}
-      w='full'
-      py={20}
-      px={{ base: 3, md: 10, xl: 28 }}
-      id='timeline'
-    >
-      <Box w='100%' textAlign='center'>
-        <Heading
-          as={'h6'}
-          color='blue.500'
-          lineHeight={1.6}
-          fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
-          textTransform='uppercase'
-          borderBottom={'2px'}
-          borderColor='darkBlue.100'
-          mb={10}
-          display='inline-block'
-        >
-          Chương trình Đại lễ
-        </Heading>
-
-        <Grid templateColumns='repeat(8, 1fr)' boxShadow='2xl'>
-          <GridItem h={{ base: '200px', sm: '100%' }} colSpan={{ base: 8, sm: 3 }}>
-            {mediaQuery == 'large' && (
-              <VStack h='100%' bg='darkBlue.700'>
-                {days_schedule.map((item, index) => (
-                  <Box
-                    onClick={() => handleChooseDay(index)}
-                    cursor='pointer'
-                    w='100%'
-                    h='100px'
-                    key={index}
-                    display='flex'
-                    alignItems='center'
-                    justifyContent='center'
-                    flexDirection='column'
-                    borderBottom='1px solid'
-                    borderBottomColor='#4c4f8d'
-                    bg={current_day == index ? '#5d5e8d' : 'darkBlue.700'}
-                    color={current_day == index ? 'white' : '#9293bc'}
-                    marginTop={'0 !important'}
-                    py={2}
-                  >
-                    <Text textTransform='uppercase' fontWeight='600'>
-                      {item.day.titleDay}
-                    </Text>
-                    <Text fontSize='14px'>
-                      {item.day.titleMonth} {item.day.titleDate}, {item.day.titleYear}
-                    </Text>
-                  </Box>
-                ))}
-              </VStack>
-            )}
-            {mediaQuery == 'small' && (
-              <VStack spacing={0} h='100%'>
-                <Box
-                  borderTopRadius='2xl'
-                  w='100%'
-                  h='25%'
-                  bg='blue.500'
-                  color='white'
-                  display='flex'
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  {days_schedule[current_day].day.titleDay}
-                </Box>
-                <Box
-                  w='100%'
-                  h='70%'
-                  bg='white'
-                  display='flex'
-                  flexDirection='column'
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  <Grid w='100%' templateColumns='repeat(8, 1fr)'>
-                    <GridItem
-                      onClick={handlePrev}
-                      colSpan={1}
-                      cursor={current_day == 0 ? 'inherit' : 'pointer'}
-                      display='flex'
-                      justifyContent='center'
-                      alignItems='center'
-                    >
-                      <MdArrowBackIosNew opacity={current_day == 0 ? 0 : 1} />
-                    </GridItem>
-                    <GridItem colSpan={6}>
-                      <Text fontSize='1.5em' color='gray'>
-                        {days_schedule[current_day].day.titleMonth}
-                      </Text>
-                      <Text fontSize='3em' color='black'>
-                        {days_schedule[current_day].day.titleDate}
-                      </Text>
-                    </GridItem>
-                    <GridItem
-                      onClick={handleNext}
-                      colSpan={1}
-                      cursor={current_day == days_schedule.length - 1 ? 'inherit' : 'pointer'}
-                      display='flex'
-                      justifyContent='center'
-                      alignItems='center'
-                    >
-                      <MdArrowForwardIos
-                        opacity={current_day == days_schedule.length - 1 ? 0 : 1}
-                      />
-                    </GridItem>
-                  </Grid>
-                </Box>
-                <Box
-                  w='100%'
-                  h='25%'
-                  bg='blue.500'
-                  color='white'
-                  display='flex'
-                  justifyContent='center'
-                  alignItems='center'
-                >
-                  {days_schedule[current_day].day.titleYear}
-                </Box>
-              </VStack>
-            )}
-          </GridItem>
-          <GridItem
-            colSpan={{ base: 8, sm: 5 }}
-            bg={mediaQuery == 'small' ? 'white' : '#5d5e8d'}
-            color={mediaQuery == 'small' ? 'gray.500' : 'white'}
-            p={4}
+    <>
+      <Box id='timeline' scrollMarginTop={16} />
+      <Box
+        bgGradient={'linear(to-r, darkBlue.400, darkBlue.600)'}
+        w='full'
+        py={10}
+        px={{ base: 3, md: 10, xl: 28 }}
+        id='timeline'
+      >
+        <Box w='100%' textAlign='center'>
+          <Heading
+            as={'h6'}
+            color='blue.500'
+            lineHeight={1.6}
+            fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
+            textTransform='uppercase'
+            borderBottom={'2px'}
+            borderColor='darkBlue.100'
+            mb={10}
+            display='inline-block'
           >
-            <Accordion defaultIndex={[0]}>
-              {days_schedule[current_day].timelines.map((item, index) => (
-                <AccordionItem
-                  textAlign='left'
-                  borderTopWidth={index == 0 ? 0 : '1px'}
-                  borderBottomWidth='0 !important'
-                  key={nanoid()}
-                >
-                  <Box>
-                    <AccordionButton>
-                      <Box flex='1' textAlign='left' color={item.color && item.color}>
-                        {item.time}: {item.content}
-                      </Box>
-                      {item.sub_content && <AccordionIcon />}
-                    </AccordionButton>
+            Chương trình Đại lễ
+          </Heading>
+
+          <Grid templateColumns='repeat(8, 1fr)' boxShadow='2xl'>
+            <GridItem h={{ base: '200px', sm: '100%' }} colSpan={{ base: 8, sm: 3 }}>
+              {mediaQuery == 'large' && (
+                <VStack h='100%' bg='darkBlue.700'>
+                  {days_schedule.map((item, index) => (
+                    <Box
+                      onClick={() => handleChooseDay(index)}
+                      cursor='pointer'
+                      w='100%'
+                      h='100px'
+                      key={index}
+                      display='flex'
+                      alignItems='center'
+                      justifyContent='center'
+                      flexDirection='column'
+                      borderBottom='1px solid'
+                      borderBottomColor='#4c4f8d'
+                      bg={current_day == index ? '#5d5e8d' : 'darkBlue.700'}
+                      color={current_day == index ? 'white' : '#9293bc'}
+                      marginTop={'0 !important'}
+                      py={2}
+                    >
+                      <Text textTransform='uppercase' fontWeight='600'>
+                        {item.day.titleDay}
+                      </Text>
+                      <Text fontSize='14px'>
+                        {item.day.titleMonth} {item.day.titleDate}, {item.day.titleYear}
+                      </Text>
+                    </Box>
+                  ))}
+                </VStack>
+              )}
+              {mediaQuery == 'small' && (
+                <VStack spacing={0} h='100%'>
+                  <Box
+                    borderTopRadius='2xl'
+                    w='100%'
+                    h='25%'
+                    bg='blue.500'
+                    color='white'
+                    display='flex'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    {days_schedule[current_day].day.titleDay}
                   </Box>
-                  {item.sub_content && (
-                    <AccordionPanel pb={4}>
-                      <UnorderedList>
-                        {item.sub_content.map((subcontent) => (
-                          <ListItem>{subcontent}</ListItem>
-                        ))}
-                      </UnorderedList>
-                    </AccordionPanel>
-                  )}
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </GridItem>
-        </Grid>
+                  <Box
+                    w='100%'
+                    h='70%'
+                    bg='white'
+                    display='flex'
+                    flexDirection='column'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    <Grid w='100%' templateColumns='repeat(8, 1fr)'>
+                      <GridItem
+                        onClick={handlePrev}
+                        colSpan={1}
+                        cursor={current_day == 0 ? 'inherit' : 'pointer'}
+                        display='flex'
+                        justifyContent='center'
+                        alignItems='center'
+                      >
+                        <MdArrowBackIosNew opacity={current_day == 0 ? 0 : 1} />
+                      </GridItem>
+                      <GridItem colSpan={6}>
+                        <Text fontSize='1.5em' color='gray'>
+                          {days_schedule[current_day].day.titleMonth}
+                        </Text>
+                        <Text fontSize='3em' color='black'>
+                          {days_schedule[current_day].day.titleDate}
+                        </Text>
+                      </GridItem>
+                      <GridItem
+                        onClick={handleNext}
+                        colSpan={1}
+                        cursor={current_day == days_schedule.length - 1 ? 'inherit' : 'pointer'}
+                        display='flex'
+                        justifyContent='center'
+                        alignItems='center'
+                      >
+                        <MdArrowForwardIos
+                          opacity={current_day == days_schedule.length - 1 ? 0 : 1}
+                        />
+                      </GridItem>
+                    </Grid>
+                  </Box>
+                  <Box
+                    w='100%'
+                    h='25%'
+                    bg='blue.500'
+                    color='white'
+                    display='flex'
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    {days_schedule[current_day].day.titleYear}
+                  </Box>
+                </VStack>
+              )}
+            </GridItem>
+            <GridItem
+              colSpan={{ base: 8, sm: 5 }}
+              bg={mediaQuery == 'small' ? 'white' : '#5d5e8d'}
+              color={mediaQuery == 'small' ? 'gray.500' : 'white'}
+              p={4}
+            >
+              <Accordion defaultIndex={[0]}>
+                {days_schedule[current_day].timelines.map((item, index) => (
+                  <AccordionItem
+                    textAlign='left'
+                    borderTopWidth={index == 0 ? 0 : '1px'}
+                    borderBottomWidth='0 !important'
+                    key={nanoid()}
+                  >
+                    <Box>
+                      <AccordionButton>
+                        <Box flex='1' textAlign='left' color={item.color && item.color}>
+                          {item.time}: {item.content}
+                        </Box>
+                        {item.sub_content && <AccordionIcon />}
+                      </AccordionButton>
+                    </Box>
+                    {item.sub_content && (
+                      <AccordionPanel pb={4}>
+                        <UnorderedList>
+                          {item.sub_content.map((subcontent) => (
+                            <ListItem>{subcontent}</ListItem>
+                          ))}
+                        </UnorderedList>
+                      </AccordionPanel>
+                    )}
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </GridItem>
+          </Grid>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
