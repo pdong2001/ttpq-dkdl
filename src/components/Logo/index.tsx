@@ -5,7 +5,7 @@ type Props = {};
 
 function Logo({}: Props) {
   return (
-    <Link href='/' w={{ base: 10, md: 14 }}>
+    <Link href='/' w='10'>
       <Image src={Logos} />
     </Link>
   );

@@ -40,7 +40,7 @@ function DepartmentInfos({}: Props) {
     <>
       <Box id='departmentInfo' scrollMarginTop={16} />
       <Box
-        bgGradient={'linear(to-r, Blue.300, blue.700)'}
+        bg="yellow.50"
         py={10}
         px={{ base: 10, md: 16, lg: 28, xl: 28 }}
         id='departmentInfo'
@@ -89,9 +89,9 @@ function DepartmentInfos({}: Props) {
                     perfect for freelancers, agencies, and moonlighters.
                   </Text> */}
                     {departmentSelected && departmentSelected.desc}
-                    <Stack textAlign='center' spacing={4}>
+                    {/* <Stack textAlign='center' spacing={4}>
                       <Button size='lg'>Đăng ký</Button>
-                    </Stack>
+                    </Stack> */}
                   </Stack>
                 </Flex>
               </Stack>

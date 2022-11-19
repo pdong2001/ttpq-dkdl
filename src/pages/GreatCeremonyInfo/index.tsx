@@ -62,7 +62,7 @@ const GreatCeremonyInfo = () => {
   return (
     <>
       <Box id='eventInfo' scrollMarginTop={16} />
-      <Box bgColor={'Blue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}>
+      <Box bgColor={'#f4f4f6'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}>
         <FadeInUp>
           <Heading
             as={'h6'}
@@ -71,7 +71,7 @@ const GreatCeremonyInfo = () => {
             fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
             textTransform='uppercase'
             borderBottom={'2px'}
-            borderColor='Blue.100'
+            borderColor='darkBlue.100'
             mb={10}
             display='inline-block'
           >
@@ -88,10 +88,9 @@ const GreatCeremonyInfo = () => {
           mb={10}
         >
           <VStack align={'start'}>
-            <Box mb={{ base: 4, md: 0 }}>
+            <Box mb={{ base: 4, md: 0 }} color='gray.700'>
               <FadeInUp>
                 <Heading
-                  color={'white'}
                   textTransform={'uppercase'}
                   fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
                   mb={2}
@@ -100,9 +99,9 @@ const GreatCeremonyInfo = () => {
                 </Heading>
               </FadeInUp>
               <FadeInUp>
-                <Text color={'white'} textAlign='justify' mb={2}>
+                <Text textAlign='justify' mb={2}>
                   Theo truyền thống, hằng năm kể từ ngày mồng 6 - 8/12 âm lịch, Thiền Tôn Phật Quang
-                  (Núi Dinh – BRVT) trang nghiêm trọng thể tổ chức kỷ niệm ngày Đức Phật Thích Ca
+                  (Núi Dinh - BRVT) trang nghiêm trọng thể tổ chức kỷ niệm ngày Đức Phật Thích Ca
                   Mâu Ni Thành Đạo, với một chương trình diễn ra bao gồm nhiều hoạt động thiết thực,
                   đã giúp cho Lễ hội trở nên rất ý nghĩa, trong đó, tất cả Hội chúng được dịp hoài
                   niệm ghi nhớ ngày đạo Phật được khai sinh trên toàn cõi năm châu bốn bể này.
@@ -123,7 +122,6 @@ const GreatCeremonyInfo = () => {
           <Stack
             direction={['column', 'row']}
             spacing={[5, 10, 16, 32]}
-            color='white'
             rounded='md'
             justifyContent={'center'}
           >
