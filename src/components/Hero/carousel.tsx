@@ -42,16 +42,10 @@ export default function CaptionCarousel() {
   // change the state
   const [slider, setSlider] = React.useState<Slider | null>(null);
   const [fade_index, setFadeIndex] = React.useState<number>(0);
-  const [yt_url, setYTURL] = React.useState<string>('https://www.youtube.com/watch?v=lYw08DDDFUw');
-  const handleShowVideo = function (url) {
-    console.log(url);
-    setYTURL(url);
-    onOpen();
-  };
 
   // These are the breakpoints which changes the position of the
   // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '90%', md: '50%' });
+  const top = useBreakpointValue({ base: '95%', md: '50%' });
   const side = useBreakpointValue({ base: '30%', md: '40px' });
 
   // Settings for the slider
@@ -102,7 +96,7 @@ export default function CaptionCarousel() {
       overflow={'hidden'}>
       <Box
       pos='absolute' left={{base: '0', md: 'unset'}} right={0} top='80px' zIndex='1'
-      p={'25px'} mx={{base: '80px'}}
+      p={'25px'} mx={{base: '10px', md: '80px'}}
       w={{md: '45%', lg: '35%'}}
       maxW={{md: '600px'}}
       bg='rgba(0,0,0,0.4)'
