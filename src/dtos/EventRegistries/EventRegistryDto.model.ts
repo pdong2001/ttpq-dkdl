@@ -48,7 +48,7 @@ export type EventRegistryDto = {
   leaveTime?: LeaveTimeDto;
   registerType?: RegisterType;
   expDepartments?: DepartmentDto[];
-  wishDepartments?: DepartmentDto;
+  wishDepartment?: DepartmentDto;
   leader?: EventRegistryDto;
   departmentDetail?: DepartmentDetailDto;
   eventRegistryPage?: EventRegistryPageDto;

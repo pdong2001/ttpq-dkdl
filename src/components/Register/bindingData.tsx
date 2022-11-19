@@ -55,7 +55,7 @@ const mapSuccessData = (previewInfo) => {
       exps: EVENT_EXP_TITLE[_.get(previewInfo, 'exps', 0)],
       strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
-      wishDepartmentIds: _.get(previewInfo, 'wishDepartmentIds', ''),
+      wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
       receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
       note: _.get(previewInfo, 'note', ''),
     },

@@ -54,7 +54,7 @@ import { getRegisterInfo } from '~/slices/registerInfo';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
-import { MULTI_STEP_REGISTER_PATH } from '~/routes';
+import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
 // type Props = {};
 
@@ -105,7 +105,7 @@ const RegisterInfo = () => {
           url: formatUrl(API.GET_REGISTER_INFO, { id }),
         }),
       ).then(() => {
-        history.push(formatUrl(MULTI_STEP_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
+        history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
       });
     }
     if (memberAuthError) onOpenLoginAlert();

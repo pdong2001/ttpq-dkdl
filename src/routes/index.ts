@@ -22,7 +22,8 @@ export type RouteType = {
   strict?: boolean;
   sensitive?: boolean;
 };
-export const MULTI_STEP_REGISTER_PATH = '/:shortUri/register';
+export const ADD_NEW_REGISTER_PATH = '/:shortUri/register';
+export const EDIT_REGISTER_PATH = '/:shortUri/edit-register';
 export const HOME_WITH_SHORT_URI = '/:shortUri';
 export const EVENT_INFO = '/great-ceremony-info';
 export const TIMELINE = '/timeline';
@@ -89,7 +90,7 @@ const ROUTES: RouteType[] = [
   },
   {
     key: 'MULTI_STEP_REGISTER',
-    path: [MULTI_STEP_REGISTER_PATH],
+    path: [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH],
     component: MultiStepRegister,
     layout: NoFooterLayout,
   },

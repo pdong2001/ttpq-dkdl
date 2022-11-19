@@ -49,7 +49,7 @@ export default function SuccessRegisterModal() {
       email: _.get(infos, 'email', ''),
     },
     avatar: registerResult.avatarPath,
-    LinkQrCode: `${PATH_URL}/register-info/${registerResult.register.id}`,
+    LinkQrCode: `${PATH_URL}/register-info/${registerResult.register?.id}`,
     fullName: registerResult.fullName,
   };
 

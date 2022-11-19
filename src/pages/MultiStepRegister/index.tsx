@@ -9,7 +9,7 @@ import Step4 from './RegisterSteps/Step4';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { HOME_WITH_SHORT_URI, MULTI_STEP_REGISTER_PATH } from '~/routes';
+import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import Step5 from './RegisterSteps/Step5';
@@ -52,14 +52,17 @@ const MultiStepRegister = () => {
   }, [shortUri]);
 
   useEffect(() => {
-    if (path === MULTI_STEP_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {
+    if (path === ADD_NEW_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {
       setStep(1);
+    }
+    if (path === EDIT_REGISTER_PATH) {
+      setStep(2);
     }
   }, []);
   const nextStep = () => {
     setStep((currentStep) => currentStep + 1);
     if (step === 0 && path === HOME_WITH_SHORT_URI) {
-      history.push(formatUrl(MULTI_STEP_REGISTER_PATH, { shortUri }));
+      history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri }));
     }
     window.scrollTo(0, 0);
   };

@@ -1,3 +1,4 @@
+import { UpSertEventRegistryDto } from './../../dtos/EventRegistries/UpSertEventRegistryDto.model';
 import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
 import { Gender } from '~/dtos/Enums/Gender.enum';
@@ -10,6 +11,10 @@ import { createAsyncRequest } from '~/slices/common/action';
 export const register = createAsyncRequest('register', {
   method: 'post',
   url: API.REGISTER,
+});
+
+export const updateRegister = createAsyncRequest<UpSertEventRegistryDto>('register/update', {
+  method: 'put',
 });
 /* Khi HD tạo 1 service (action) cần tạo thêm 1 handler (reducer) ở trong slice */
 export const searchMember = createAsyncRequest('searchMember', {
@@ -55,6 +60,12 @@ const slice = createAppSlice<typeof initialState>(
       },
       onRejected: (_, action) => {
         return action.payload;
+      },
+    },
+    {
+      action: updateRegister,
+      onFullfilled: (_, action) => {
+        return action.payload.data;
       },
     },
   ],
