@@ -101,8 +101,10 @@ export default function CaptionCarousel() {
       width={'full'}
       overflow={'hidden'}>
       <Box
-      pos='absolute' left={{base: '0', md: '35%'}} right={0} top='80px' zIndex='1'
+      pos='absolute' left={{base: '0', md: 'unset'}} right={0} top='80px' zIndex='1'
       p={'25px'} mx={{base: '80px'}}
+      w={{md: '45%', lg: '35%'}}
+      maxW={{md: '600px'}}
       bg='rgba(0,0,0,0.4)'
       justifyContent={'center'}
       >
@@ -170,7 +172,7 @@ export default function CaptionCarousel() {
                   px={5}
                   color="white"
                   spacing={6}
-                  w={{base: '40%', md: '35%', lg: '30%'}}
+                  w={{base: '40%', md: '35%', lg: '45%'}}
                   maxW={'640px'}
                   position="absolute"
                   top="50%"
