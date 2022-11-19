@@ -37,7 +37,7 @@ const Step4 = (props: StepProps) => {
   const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
   const {
     expDepartments,
-    wishDepartments,
+    wishDepartment,
     member,
     receiveCardAddressId: editReceiverCardId,
     note: editNote,
@@ -46,7 +46,7 @@ const Step4 = (props: StepProps) => {
   const previousStepData = useAppSelector((state) => state.register.data);
 
   const { strongPointIds, avatarPath, exps } = previousStepData;
-  const { expDepartmentIds, wishDepartmentIds, receiveCardAddressId, note } =
+  const { expDepartmentIds, wishDepartmentId, receiveCardAddressId, note } =
     previousStepData.register;
 
   // lấy kĩ năng sở trường
@@ -75,7 +75,7 @@ const Step4 = (props: StepProps) => {
       exps: (exps && exps + '') || (editExps && editExps + '') || EventExp.ChuaTungThamGia,
       strongPointIds: strongPointIds || mapObjectArrayToIds(strongPoints) || [],
       expDepartmentIds: expDepartmentIds || mapObjectArrayToIds(expDepartments) || [],
-      wishDepartmentIds: wishDepartmentIds?.[0] || mapObjectArrayToIds(wishDepartments)[0] || '',
+      wishDepartmentId: wishDepartmentId || wishDepartment?.id || '',
       receiveCardAddressId: receiveCardAddressId || editReceiverCardId || '',
       avatarPath: avatarPath || editAvatarPath || '',
       note: note || editNote || '',
@@ -87,7 +87,7 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds,
         avatarPath,
         exps,
-        wishDepartmentIds,
+        wishDepartmentId,
         receiveCardAddressId,
         note,
       } = values;
@@ -100,7 +100,7 @@ const Step4 = (props: StepProps) => {
           expDepartmentIds,
           note,
           receiveCardAddressId,
-          wishDepartmentIds: [wishDepartmentIds],
+          wishDepartmentId,
           eventId,
           eventRegistryPageId: id,
           ctnId,
@@ -115,7 +115,7 @@ const Step4 = (props: StepProps) => {
         exps,
         strongPointIds,
         expDepartmentIds,
-        wishDepartmentIds,
+        wishDepartmentId,
         receiveCardAddressId,
       });
       nextStep();
@@ -129,9 +129,10 @@ const Step4 = (props: StepProps) => {
     exps,
     strongPointIds,
     expDepartmentIds,
-    wishDepartmentIds,
+    wishDepartmentId,
     receiveCardAddressId,
   }) => {
+    alert(wishDepartmentId);
     function mapName(array, ids) {
       return _.map(
         _.filter(array, function (p) {
@@ -148,11 +149,13 @@ const Step4 = (props: StepProps) => {
         exps,
         strongPointIds: mapName(strongPointList, strongPointIds),
         expDepartmentIds: mapName(departments, expDepartmentIds),
-        wishDepartmentIds: mapName(departments, wishDepartmentIds),
-        receiveCardAddressId: mapName(receiveCardLocationList, receiveCardAddressId),
+        wishDepartmentId: mapName(departments, [wishDepartmentId]),
+        receiveCardAddressId: mapName(receiveCardLocationList, [receiveCardAddressId]),
       }),
     );
   };
+
+  console.log('___', formik.values);
 
   return (
     <>
@@ -192,7 +195,7 @@ const Step4 = (props: StepProps) => {
                 labelField='name'
               />
               <Select
-                name='wishDepartmentIds'
+                name='wishDepartmentId'
                 data={departments}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'

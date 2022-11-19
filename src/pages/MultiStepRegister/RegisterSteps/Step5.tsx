@@ -13,29 +13,60 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { register } from '../../../slices/register';
+import { register, updateRegister } from '~/slices/register';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { ADD_NEW_REGISTER_PATH } from '~/routes';
+import { formatUrl } from '~/utils/functions';
+import API from '~/apis/constants';
 
 const Step5 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
+  const history = useHistory();
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
+  const { path } = useRouteMatch();
+  const isAddNew = path === ADD_NEW_REGISTER_PATH;
+
+  const {
+    id,
+    moveType,
+
+    memberId,
+    leaderId,
+  } = registerInfo;
+
+  const { register: registerData } = formData;
 
   const handleRegister = () => {
-    dispatch(
-      register({
-        data: formData,
-      }),
-    )
+    const request = isAddNew
+      ? register({
+          data: formData,
+        })
+      : updateRegister({
+          url: formatUrl(API.UPDATE_REGISTER, { id }),
+          data: {
+            memberId,
+            leaderId,
+            moveType,
+            ...registerData,
+          },
+        });
+    dispatch(request)
       .then(unwrapResult)
-      .then(() => {
-        nextStep();
+      .then(({ data }) => {
+        if (isAddNew) {
+          nextStep();
+        } else {
+          window.location.replace(`${window.location.origin}/register-info/${data?.id}`);
+        }
       })
       .catch((e) => {
         alert(e.message || 'Dạ có lỗi xảy ra ạ');
@@ -51,18 +82,22 @@ const Step5 = (props: StepProps) => {
           lineHeight={1.1}
           fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
         >
-          Xác nhận đăng ký
+          {`Xác nhận ${isAddNew ? 'đăng ký' : 'chỉnh sửa'}`}
         </Heading>
         <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           PL.2565 - DL.2022
         </Text>
         <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
           <Box textAlign={'center'}>
-            <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
-            <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-              {fullName}
-            </Heading>
-            <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
+            {isAddNew && (
+              <>
+                <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
+                <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
+                  {fullName}
+                </Heading>
+                <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
+              </>
+            )}
             <Box>
               <Alert status='success'>
                 <CalendarIcon />

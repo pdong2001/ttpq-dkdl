@@ -35,10 +35,10 @@ const Step1 = (props: StepProps) => {
       phoneNumber: phoneNumber || member?.phoneNumber,
       identityCard: identityCard || member?.identityCard,
       registerType:
-        register.registerType ||
+        register?.registerType ||
         (registerInfo?.registerType && registerInfo.registerType + '') ||
         RegisterType.SINGLE,
-      leaderId: register.leaderId || registerInfo.leaderId || '',
+      leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {

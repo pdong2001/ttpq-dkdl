@@ -1,4 +1,5 @@
 const REGISTER = '/api/v1/member/add';
+const UPDATE_REGISTER = '/api/v1/EventRegistry/Update/:id';
 const LOGIN = 'api/v1/Auth/login';
 const SEARCH_MEMBER = '/api/v1/member/search';
 const GET_PROVINCE = '/api/address/Province';
@@ -40,6 +41,7 @@ const API = {
   UPLOAD_FILE,
   GET_FILE,
   GET_MEMBER_BY_ID,
+  UPDATE_REGISTER,
 };
 
 export default API;

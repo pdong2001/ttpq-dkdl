@@ -23,7 +23,7 @@ export type UpSertEventRegistryDto = {
   receiveCardAddressId?: number;
   registerType?: RegisterType;
   expDepartmentIds?: number[];
-  wishDepartmentIds?: number[];
+  wishDepartmentId?: number[];
   otherStartAddress?: string;
   otherLeaveAddress?: string;
   type?: string;

@@ -51,7 +51,7 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
-  } = register;
+  } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
 

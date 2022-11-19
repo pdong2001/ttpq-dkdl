@@ -39,7 +39,7 @@ const REGISTER_INFO_TITLE = {
   exps: 'Số lần về chùa',
   strongPointIds: 'Kỹ năng, sở trường',
   expDepartmentIds: 'Kinh nghiệm ở ban',
-  wishDepartmentIds: 'Nguyện vọng vào ban',
+  wishDepartmentId: 'Nguyện vọng vào ban',
   receiveCardAddressId: 'Nơi nhận thẻ',
   note: 'Ghi chú',
 };
