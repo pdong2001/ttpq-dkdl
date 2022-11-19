@@ -31,7 +31,7 @@ const Timeline = () => {
   });
   const days_schedule = [
     {
-      day: { titleDay: 'Monday', titleMonth: 'December', titleDate: '08', titleYear: '2022' },
+      day: { titleDay: 'Thứ tư', titleMonth: 'Tháng 12', titleDate: '28', titleYear: '2022' },
       timelines: [
         { time: '08h00', content: 'Lễ Tổng Kết Đạo Tràng' },
         { time: '11h00', content: 'Dùng cơm trưa' },
@@ -45,7 +45,7 @@ const Timeline = () => {
       ],
     },
     {
-      day: { titleDay: 'Tuesday', titleMonth: 'December', titleDate: '09', titleYear: '2022' },
+      day: { titleDay: 'Thứ năm', titleMonth: 'Tháng 12', titleDate: '29', titleYear: '2022' },
       timelines: [
         { time: '04h30', content: 'Thức Chúng' },
         { time: '04h45', content: 'Tọa Thiền' },
@@ -63,7 +63,7 @@ const Timeline = () => {
       ],
     },
     {
-      day: { titleDay: 'Wednesday', titleMonth: 'December', titleDate: '10', titleYear: '2022' },
+      day: { titleDay: 'Thứ sáu', titleMonth: 'Tháng 12', titleDate: '30', titleYear: '2022' },
       timelines: [
         { time: '03h30', content: 'Thức chúng' },
         { time: '04h00', content: 'Tọa Thiền' },
@@ -112,8 +112,9 @@ const Timeline = () => {
     <Box
       bgGradient={'linear(to-r, darkBlue.400, darkBlue.600)'}
       w='full'
-      py={8}
+      py={20}
       px={{ base: 3, md: 10, xl: 28 }}
+      id='timeline'
     >
       <Box w='100%' textAlign='center'>
         <Heading
@@ -127,7 +128,7 @@ const Timeline = () => {
           mb={10}
           display='inline-block'
         >
-          Lịch trình
+          Chương trình Đại lễ
         </Heading>
 
         <Grid templateColumns='repeat(8, 1fr)' boxShadow='2xl'>

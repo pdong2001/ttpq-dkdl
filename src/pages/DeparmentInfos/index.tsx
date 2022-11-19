@@ -11,18 +11,18 @@ import {
   useDisclosure,
   SimpleGrid,
   Heading,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Image } from '@chakra-ui/react';
 // import environmentDepartment from '~/assets/enviroment.jpg';
 import department_names from '../../configs/departmemt';
 import './style.css';
-import { InfoIcon } from '@chakra-ui/icons'
+import { InfoIcon } from '@chakra-ui/icons';
 
 type Props = {};
 
-function DepartmentInfos({ }: Props) {
+function DepartmentInfos({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [departmentSelected, setDepartmentSelected] = useState({
     name: '',
@@ -33,15 +33,15 @@ function DepartmentInfos({ }: Props) {
   const handleViewDetail = (item: any) => {
     // departmentSelected = item;
     setDepartmentSelected(item);
-    
 
-    
     onOpen();
   };
   return (
-    <Box bgGradient={'linear(to-r, blue.300, blue.700)'}
-      py={12}
+    <Box
+      bgGradient={'linear(to-r, Blue.300, blue.700)'}
+      py={20}
       px={{ base: 10, md: 16, lg: 28, xl: 28 }}
+      id='departmentInfo'
     >
       <Box w='100%' textAlign='center'>
         <Heading
@@ -88,11 +88,7 @@ function DepartmentInfos({ }: Props) {
                   </Text> */}
                   {departmentSelected && departmentSelected.desc}
                   <Stack textAlign='center' spacing={4}>
-                    <Button
-                      size='lg'
-                    >
-                      Đăng ký
-                    </Button>
+                    <Button size='lg'>Đăng ký</Button>
                   </Stack>
                 </Stack>
               </Flex>
@@ -109,19 +105,16 @@ function DepartmentInfos({ }: Props) {
               ></Image>
             </Container>
             {departmentSelected && departmentSelected.desc} */}
-
-
           </ModalBody>
-
         </ModalContent>
       </Modal>
-    </Box >
+    </Box>
   );
 }
 const DepartmentItem = (index: number, item: any, handleViewDetail: any) => {
-
   return (
-    <Box key={index}
+    <Box
+      key={index}
       bgImage={`url(${item.image})`}
       bgSize={'cover'}
       w={'100%'}
@@ -132,8 +125,15 @@ const DepartmentItem = (index: number, item: any, handleViewDetail: any) => {
       cursor={'pointer'}
       onClick={() => handleViewDetail(item)}
     >
-      <Box bgColor={'rgba(0, 0, 0, 0.8)'} w={'100%'} h={'50px'} p={2} display='flex' alignItems={'center'}
-        borderBottomRadius='xl'>
+      <Box
+        bgColor={'rgba(0, 0, 0, 0.8)'}
+        w={'100%'}
+        h={'50px'}
+        p={2}
+        display='flex'
+        alignItems={'center'}
+        borderBottomRadius='xl'
+      >
         <Text color={'white'}>{item.name}</Text>
         <InfoIcon marginLeft={'auto'} w={5} h={5} color={'rgba(255, 255, 255, 0.54)'} />
       </Box>
