@@ -9,28 +9,23 @@ import {
   Stack,
   useColorMode,
   Link,
-  Button,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
 import { nanoid } from '@reduxjs/toolkit';
-import { NavBarLink } from '~/routes';
+import { HashLink } from 'react-router-hash-link';
 
 const Links = [
-  { title: 'Trang chủ', to: '/' },
-  { title: 'Giới thiệu Đại lễ', to: 'eventInfo' },
-  { title: 'Các công việc Đại lễ', to: 'departmentInfo' },
-  { title: 'Chương trình Đại lễ', to: 'timeline' },
+  { title: 'Trang chủ', to: '/#' },
+  { title: 'Giới thiệu Đại lễ', to: '/#eventInfo' },
+  { title: 'Các công việc Đại lễ', to: '/#departmentInfo' },
+  { title: 'Chương trình Đại lễ', to: '/#timeline' },
 ];
 
-const NavLink = ({ children, toId }: { children: ReactNode; toId: string }) => (
+const NavLink = ({ children, to }: { children: ReactNode; to: string }) => (
   <Link
-    onClick={(e) => {
-      const ele = document.getElementById(toId);
-      console.log('element__', ele);
-
-      ele?.scrollIntoView({ behavior: 'smooth' });
-    }}
+    as={HashLink}
+    smooth
     px={2}
     py={1}
     rounded={'md'}
@@ -38,6 +33,7 @@ const NavLink = ({ children, toId }: { children: ReactNode; toId: string }) => (
       textDecoration: 'none',
       bg: useColorModeValue('gray.200', 'gray.700'),
     }}
+    to={to}
   >
     {children}
   </Link>
@@ -71,7 +67,7 @@ export default function NavBar() {
             <Logo />
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               {Links.map((nav) => (
-                <NavLink toId={nav.to} key={nanoid()}>
+                <NavLink to={nav.to} key={nanoid()}>
                   {nav.title}
                 </NavLink>
               ))}
@@ -83,7 +79,7 @@ export default function NavBar() {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
               {Links.map((link) => (
-                <NavLink key={nanoid()} toId={link.to}>
+                <NavLink key={nanoid()} to={link.to}>
                   {link.title}
                 </NavLink>
               ))}
