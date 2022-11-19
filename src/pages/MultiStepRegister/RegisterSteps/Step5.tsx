@@ -130,7 +130,7 @@ const Step5 = (props: StepProps) => {
             Trở về
           </Button>
           <Button flexGrow={1} fontFamily={'heading'} onClick={handleRegister}>
-            Đăng ký
+            {isAddNew ? 'Đăng ký' : 'Cập nhật'}
           </Button>
         </SimpleGrid>
       </Box>
