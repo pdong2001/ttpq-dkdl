@@ -132,7 +132,6 @@ const Step4 = (props: StepProps) => {
     wishDepartmentId,
     receiveCardAddressId,
   }) => {
-    alert(wishDepartmentId);
     function mapName(array, ids) {
       return _.map(
         _.filter(array, function (p) {

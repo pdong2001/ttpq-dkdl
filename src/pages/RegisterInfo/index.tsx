@@ -129,7 +129,7 @@ const RegisterInfo = () => {
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
-  const wishDepartments = data?.wishDepartments;
+  const wishDepartment = data?.wishDepartment;
   const permanent = [
     [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
@@ -413,9 +413,9 @@ const RegisterInfo = () => {
                     <Box>
                       <Text as='b'>Nguyện vọng làm việc tại ban</Text>
                       <Box mt={2}>
-                        {wishDepartments && (
+                        {wishDepartment && (
                           <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
-                            {wishDepartments.name}
+                            {wishDepartment.name}
                           </Tag>
                         )}
                       </Box>
