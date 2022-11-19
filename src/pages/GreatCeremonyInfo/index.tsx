@@ -64,7 +64,8 @@ const GreatCeremonyInfo = () => {
       bgColor={'Blue.800'}
       bgSize={'cover'}
       px={{ base: 10, md: 20, lg: 28 }}
-      py={shortUri ? 10 : 20}
+      py={20}
+      id='eventInfo'
     >
       <FadeInUp>
         <Heading
