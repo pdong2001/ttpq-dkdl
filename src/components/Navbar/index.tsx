@@ -1,15 +1,14 @@
 import { ReactNode, useState, useEffect } from 'react';
 import {
   Box,
-  Flex,
   HStack,
   IconButton,
   useDisclosure,
-  useColorModeValue,
   Text,
   Stack,
   useColorMode,
   Link,
+  Container,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
@@ -76,44 +75,45 @@ export default function NavBar() {
       <Box
         bg={navbar_bg}
         color={'white'}
-        px={4}
         pos={'fixed'}
         top={0}
         zIndex={200}
         w={'full'}
         boxShadow='sm'
       >
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton
-            size={'md'}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}
-          />
-          <HStack spacing={8} alignItems={'center'} px={{ md: 24 }}>
-            <Logo />
-            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
-              {Links.map((nav) => (
-                <NavLink to={nav.to} key={nanoid()} onClick={() => {}}>
-                  {nav.title}
-                </NavLink>
-              ))}
+        <Container maxW={'6xl'} px={[3, 5, 16, 0]}>
+          <HStack h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <IconButton
+              size={'md'}
+              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+              aria-label={'Open Menu'}
+              display={{ md: 'none' }}
+              onClick={isOpen ? onClose : onOpen}
+            />
+            <HStack spacing={8} alignItems={'center'}>
+              <Logo />
+              <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
+                {Links.map((nav) => (
+                  <NavLink to={nav.to} key={nanoid()} onClick={() => {}}>
+                    {nav.title}
+                  </NavLink>
+                ))}
+              </HStack>
             </HStack>
           </HStack>
-        </Flex>
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={nanoid()} to={link.to} onClick={onClose}>
-                  {link.title}
-                </NavLink>
-              ))}
-            </Stack>
-          </Box>
-        ) : null}
+          {isOpen ? (
+            <Box pb={4} display={{ md: 'none' }}>
+              <Stack as={'nav'} spacing={4}>
+                {Links.map((link) => (
+                  <NavLink key={nanoid()} to={link.to} onClick={onClose}>
+                    {link.title}
+                  </NavLink>
+                ))}
+              </Stack>
+            </Box>
+          ) : null}
+        </Container>
       </Box>
     </>
   );

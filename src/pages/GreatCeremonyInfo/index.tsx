@@ -64,7 +64,7 @@ const GreatCeremonyInfo = () => {
     <>
       <Box id='eventInfo' scrollMarginTop={16} />
       <Box bgColor={'#f4f4f6'} bgSize={'cover'} py={10}>
-        <Container maxW='7xl'>
+        <Container maxW='6xl' px={[3, 5, 16, 0]}>
           <FadeInUp>
             <Heading
               as={'h6'}
@@ -124,7 +124,7 @@ const GreatCeremonyInfo = () => {
           <FadeInUp>
             <Stack
               direction={{ base: 'column', lg: 'row' }}
-              spacing={[2]}
+              spacing={[4, 6, 8]}
               rounded='md'
               justifyContent='space-between'
               alignItems='center'
@@ -137,14 +137,14 @@ const GreatCeremonyInfo = () => {
                 <Text
                   textTransform='uppercase'
                   fontWeight='bold'
-                  fontSize={['xl', 'lg', 'xl']}
+                  fontSize={['xl', 'lg', '2xl']}
                   color={primaryColor}
                 >
                   Thời gian diễn ra
                 </Text>
                 <Text textTransform='uppercase'>Số ngày còn lại</Text>
               </VStack>
-              <HStack spacing={[3, 5, 10, 10]}>
+              <HStack spacing={[8, 10, 16, 16]}>
                 {new Array(4).fill('00').map((time, i) => {
                   return (
                     <Square key={i} border='1px' size={[16, 16, 20, 24, 32]} rounded='xl'>
