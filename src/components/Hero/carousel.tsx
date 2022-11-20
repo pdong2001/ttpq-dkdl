@@ -72,7 +72,7 @@ export default function CaptionCarousel() {
   const settings = {
     dots: true,
     arrows: false,
-    // fade: true,
+    fade: true,
     infinite: true,
     // autoplay: true,
     speed: 1000,
@@ -234,7 +234,7 @@ export default function CaptionCarousel() {
           mx={{ base: '10px', md: '80px' }}
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
-          bg='rgba(0,0,0,0.4)'
+          bg='rgba(255,255,255,0.25)'
           _hover={{ background: 'rgba(0,0,0,0.8)' }}
           transitionDuration={'1s'}
           justifyContent={'center'}
