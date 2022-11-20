@@ -4,6 +4,7 @@ import {
   Grid,
   GridItem,
   Avatar,
+  Flex,
   IconButton,
   Stack,
   Button,
@@ -164,7 +165,7 @@ const RegisterInfo = () => {
     },
     [organizationStructureId],
   );
-  if (organizationStructureId) {
+  if (!organizationStructureId) {
     ctnToken.cancel();
   }
 
@@ -195,8 +196,17 @@ const RegisterInfo = () => {
     departure_flight_code: '',
     return_flight_code: '',
   };
+
+  const contactStatusMap = {
+    "-1": "Hủy",
+    "0": "Chưa liên hệ",
+    "1": "Chưa chắc chắn",
+    "2": "Chắc chắn tham gia"
+  }
+
   const startAddress = data.startTime?.address;
   const leaveAddress = data.leaveTime?.address;
+  const contactStatus = data.contactStatus?.toString();
   if (moveType == MoveType.HCM) {
     schedule.departure_address =
       [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
@@ -276,8 +286,19 @@ const RegisterInfo = () => {
               </Table>
             </TableContainer>
 
-            <Stack px={6} pt={5} textAlign={'center'} spacing={2} direction='column'>
+            <Flex px={6} pt={5} textAlign={'center'} alignItems='center' direction='column'>
               <Text as='b' color={primaryColor}>
+                Tình trạng xác nhận
+              </Text>
+              <Tag
+                mt={3}
+                textAlign='center'
+                colorScheme={'blue'}
+                borderRadius='full'
+              >
+                {contactStatusMap[contactStatus?contactStatus:0]}
+              </Tag>
+              {/* <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
               </Text>
               <InputGroup size='md'>
@@ -292,8 +313,8 @@ const RegisterInfo = () => {
                 <InputRightElement width='2.5rem'>
                   <IconButton size='sm' aria-label='Copy Link' icon={<MdContentCopy />} />
                 </InputRightElement>
-              </InputGroup>
-            </Stack>
+              </InputGroup> */}
+            </Flex>
           </Box>
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 7, lg: 8 }}>
@@ -370,18 +391,18 @@ const RegisterInfo = () => {
                         <Td px={0}>
                           {Array.isArray(ele.value)
                             ? ele.value.map((item, idx2) => {
-                                return (
-                                  <Tag
-                                    key={idx2}
-                                    colorScheme={'blue'}
-                                    mr={2}
-                                    mb={1}
-                                    borderRadius='full'
-                                  >
-                                    {item.name}
-                                  </Tag>
-                                );
-                              })
+                              return (
+                                <Tag
+                                  key={idx2}
+                                  colorScheme={'blue'}
+                                  mr={2}
+                                  mb={1}
+                                  borderRadius='full'
+                                >
+                                  {item.name}
+                                </Tag>
+                              );
+                            })
                             : ele.value}
                         </Td>
                       </Tr>
