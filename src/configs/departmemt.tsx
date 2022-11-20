@@ -1,74 +1,49 @@
-import environmentDepartment from '~/assets/enviroment.jpg';
-import codong from '~/assets/co_dong.jpg';
-import fostering from '~/assets/fostering.jpg';
-import issue_road_1 from '~/assets/issue_road_1.jpg';
-import issue_road_2 from '~/assets/issue_road_2.jpg';
-import canteen from '~/assets/canteen.jpg';
-import guide from '~/assets/guide.jpg';
+import _ from 'lodash';
 import { Center, Container } from '@chakra-ui/react';
+
+
+const FOLDER_PATH = '/src/assets/departments';
+const COVER = 'cover.jpg';
+
+const IMAGES_HD1 = _.map((new Array(8).fill(FOLDER_PATH)), (path, i) => `${path}/HD1/image (${i + 1}).jpg`);
+const IMAGES_HD2 = _.map((new Array(10).fill(FOLDER_PATH)), (path, i) => `${path}/HD2/image (${i + 1}).jpg`);
+const IMAGES_BD = _.map((new Array(10).fill(FOLDER_PATH)), (path, i) => `${path}/BD/image (${i + 1}).jpg`);
+const IMAGES_HD = _.map((new Array(9).fill(FOLDER_PATH)), (path, i) => `${path}/HD/image (${i + 1}).jpg`);
+const IMAGES_TK = _.map((new Array(44).fill(FOLDER_PATH)), (path, i) => `${path}/TK/image (${i + 1}).jpg`);
+const IMAGES_MT = _.map((new Array(18).fill(FOLDER_PATH)), (path, i) => `${path}/MT/image (${i + 1}).jpg`);
+console.log({ IMAGES_HD1 })
 
 const department_names = [
   {
-    name: 'Ban thị giả',
-    image: environmentDepartment,
+    name: 'Hành đường 1',
+    image: `${FOLDER_PATH}/HD1/${COVER}`,
     desc: (
       <>
-        <Container>
-          <Center>“Ban Môi Trường</Center>
-          <Center>Nghị lực phi thường</Center>
-          <Center>Nhặt rác ven đường</Center>
-          <Center>Làm đẹp quê hương"</Center>
-        </Container>
         <Container textAlign={'justify'} py='10px'>
-          🍀Từ xưa đến nay, con người ta thường hay yêu những điều cao quý, những điều tốt đẹp, có
-          sức hấp dẫn,... nhưng có mấy ai trên đời này dám cúi đầu để yêu những thứ tầm thường, nhỏ
-          bé, bị người đời hắt hủi. Trái Đất của chúng ta đang đối mặt với thảm hoạ mang tên: "Ô
-          nhiễm môi trường", tất cả đều do chính đôi bàn tay tàn bạo của con người gây nên, vì thế
-          con người chúng ta phải có trách nhiệm yêu thiên nhiên, yêu môi trường và đặc biệt là yêu
-          rác.
+          🌻 Khi những tiếng ve kêu xào xạc qua kẽ lá, lá cờ Phật giáo tung bay trên những nẻo đường,
+          đó là lúc báo hiệu một mùa Phật Đản nữa lại về.
         </Container>
         <Container textAlign={'justify'} pb='10px'>
-          🍀Hãy cúi xuống để nhặt lên những rác thải, hãy hạ thấp cái tôi của mình để nâng ý thức
-          cộng đồng tăng cao. Khi cúi xuống nhặt từng mảnh rác nhỏ, chúng ta đã thể hiện một sự
-          khiêm hạ tột cùng trước những điều bé nhỏ, luôn biết mình là tầm thường là thấp kém, cần
-          phải học hỏi nhiều hơn. Và từ những hành động vô cùng khiêm nhường ấy, chúng ta lại vô
-          tình gieo được một nhân duyên được người khác kính trọng, nể phục và tin yêu.
+          🌻 Các bạn còn chần chờ gì nữa, hãy xách ba lô, tạm xa thành phố vài ngày để cùng tham gia với chúng mình nhé!
         </Container>
         <Container textAlign={'justify'} pb='10px'>
-          🍀Chính vì lẽ đó Ban môi trường chúng con luôn làm việc với tâm nguyện: "Xin cúi xuống làm
-          người hèn kém Miễn đôi tay làm đẹp cuộc đời" Chúng con luôn sẵn sàng chào đón những đôi
-          bàn tay không quản gian khó, chẳng ngại hi sinh để làm đẹp cuộc đời , vì thế mùa lễ sau
-          huynh đệ đăng ký về Ban Môi Trường với chúng con nữa nhé 😁
+          🤗 Về với Team Hành Đường 1, các bạn sẽ được:
+        </Container>
+        <Container textAlign={'justify'} pb='10px'>
+          ☘️ Chiêm ngưỡng khu chợ đầu mối rau củ “siêu độc đáo” chỉ có tại Thiền Tôn Phật Quang.
+        </Container>
+        <Container textAlign={'justify'} pb='10px'>
+          ☘️ Tự tay lựa chọn các nguyên liệu siêu sạch, với số lượng “khổng lồ” để phục vụ hàng nghìn Phật tử,
+          hỗ trợ các quý Thầy Cô nấu các món ăn thơm ngon bổ dưỡng trong căn bếp tràn đầy tình thương.
         </Container>
       </>
     ),
-    code: "TGN",
-    images: [
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    ],
+    code: "HD1",
+    images: IMAGES_HD1,
   },
-  { name: 'Ban hành đường 1', image: issue_road_1, code: "HD1",  images: [
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-    'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-  ], },
   {
-    name: 'Ban hành đường 2',
-    image: issue_road_2,
+    name: 'Hành đường 2',
+    image: `${FOLDER_PATH}/HD2/${COVER}`,
     desc: (
       <>
         <Container>
@@ -76,50 +51,89 @@ const department_names = [
           <Center>Đâu khó có Hành Đường 2"</Center>
         </Container>
         <Container textAlign={'justify'} py='10px'>
-          Tiếp nối công việc Hành Đường 1, nhiệm vụ của Hành Đường 2 là mang những phần cơm đến tận
-          tay quý Phật tử và các bạn sinh viên.{' '}
-        </Container>
-        <Container textAlign={'justify'} pb='10px'>
-          Những hộp cơm được chuyền tận tình qua bàn tay nhỏ bé của các huynh đệ thấm đẫm tình
+          🌻 Tiếp nối công việc Hành Đường 1, nhiệm vụ của Hành Đường 2 là mang những phần cơm đến tận
+          tay quý Phật tử và các bạn sinh viên.
+          <br />
+          ☘️Những hộp cơm được chuyền tận tình qua bàn tay nhỏ bé của các huynh đệ thấm đẫm tình
           thương yêu với mong muốn chăm sóc từng bữa ăn cho tất cả mọi người.
-        </Container>
-        <Container>
+          <br />
           Khi màn đêm buông xuống, không khí se lạnh bao trùm khắp cả thung lũng Núi Dinh, những tấm
-          chăn ấm áp được huynh đệ chuyền tay nhau đem phân phát đến tất cả mọi người. Các bạn còn
-          tận tay đắp chăn cho các Phật tử khi đang ngủ say- một hành động đơn giản nhưng chan chứa
-          tình người.
-        </Container>
-        <Container>
-          “ Phát, phát và phát” tất cả những gì tốt nhất cho các Phật tử về thăm viếng Chùa là nhiệm
+          chăn ấm áp được huynh đệ chuyền tay nhau đem phân phát đến tất cả mọi người.
+          <br />
+          🌻“ Phát, phát và phát” tất cả những gì tốt nhất cho các Phật tử về thăm viếng Chùa là nhiệm
           vụ chính của ban Hành Đường 2.
-        </Container>
-        <Container>
-          Bằng tất cả tình yêu thương và sự quan tâm, các bạn Hành Đường 2 không những trao đi từng
+          <br />
+          ☘️Bằng tất cả tình yêu thương và sự quan tâm, các bạn Hành Đường 2 không những trao đi từng
           hộp cơm mà trao nhau cả nụ cười đầy thân ái kèm theo đó là lời chúc tốt lành.
-        </Container>
-        <Container>
-          Bằng tinh thần nhiệt huyết và trái tim chân thành, huynh đệ Hành Đường 2 đã góp phần tạo
+          <br />
+          🤗Bằng tinh thần nhiệt huyết và trái tim chân thành, huynh đệ Hành Đường 2 đã góp phần tạo
           nên sự thành công của Đại lễ. Các bạn luôn cho đi mà không cần nhận lại. “Sống là cho đâu
           chỉ nhận riêng mình”
         </Container>
       </>
     ),
     code: "HD2",
-    images: [
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    ],
+    images: IMAGES_HD2,
   },
   {
     name: 'Ban tri khách',
-    image: fostering,
+    image: `${FOLDER_PATH}/TK/${COVER}`,
+    desc: (
+      <>
+        <Container textAlign={'justify'} py='10px'>
+          "Tri khách sinh viên,<br />
+          Đón người thân trở về nhà.<br />
+          Tri khách sinh viên,<br />
+          Ân cần phụng sự, chu đáo tận tâm."<br />
+          🔊🔊🔊 Ting ting<br />
+          😊 Nghe tiếng tin nhắn đến, tự nhiên lòng Mr.Phụng Sự vui đến lạ. Cậu khẽ cười.<br />
+          🙇🏻‍️ Mr. Tuổi Trẻ thấy vậy bèn tò mò hỏi Mr. Phụng Sự : Cậu ơi, có chuyện gì mà cậu vui thế?<br />
+          💁🏻‍️ Mr.Phụng Sự: Cậu biết tin gì chưa? Chưa đầy 14 ngày nữa là diễn ra ĐẠI LỄ VU LAN rồi đó.<br />
+          Và BAN TRI KHÁCH đang tuyển thành viên rất rầm rộ cậu ạ. Háo hức chưa?<br />
+          🤷🏻‍️ Mr. Tuổi Trẻ ngạc nhiên: Vậy ban Tri Khách sẽ làm gì? 😊<br />
+          💁🏻‍️ Mr.Phụng Sự trả lời: À, nhiệm vụ của ban Tri Khách là đón tiếp Phật tử gần xa với khẩu hiểu “ Ân cần - Lịch sự - Chu đáo - Tận Tâm ”.<br />
+          <br />
+          😊 ÂN CẦN quan tâm, hướng dẫn tận tình<br />
+          😊 LỊCH SỰ trong từng lời nói và hành động.<br />
+          😊 CHU ĐÁO, TẬN TÂM trong mọi nhiệm vụ.<br />
+          🙆🏻‍️ Mr. Tuổi Trẻ: Uhm...nghe ý nghĩa quá nhỉ!<br />
+        </Container>
+      </>
+    ),
+    code: "TK",
+    images: IMAGES_TK,
+  },
+  {
+    name: 'Ban hướng dẫn',
+    image: `${FOLDER_PATH}/HD/${COVER}`,
+    desc: (
+      <>
+        <Container>
+          <Center>“Gặp nhau trao gửi nụ cười</Center>
+          <Center>Ánh mắt thân ái</Center>
+          <Center>Tình người thân thương.”</Center>
+        </Container>
+        <Container textAlign={'justify'} py='10px'>
+          🍀Được xem là gương mặt đại diện trong mùa lễ bởi lực lượng sinh viên nam thanh, nữ tú,
+          trang phục đẹp và thanh lịch, luôn rạng rỡ tươi cười chào đón Phật tử từ phương xa về dự
+          lễ.
+        </Container>
+        <Container textAlign={'justify'} pb='10px'>
+          🍀Đội ngũ Ban Hướng Dẫn dàn trải khắp khuôn viên chùa và sẵn sàng hỗ trợ Phật Tử mọi lúc,
+          mọi nơi với trọn tình yêu thương và lòng khiêm hạ.
+        </Container>
+        <Container textAlign={'justify'} pb='10px'>
+          🍀Hãy về với team “Ban Hướng Dẫn” để được trải nghiệm cảm giác trong tâm thế một người ân
+          cần, niềm nở, chào đón hàng nghìn từ phương xa về dự lễ.
+        </Container>
+      </>
+    ),
+    code: "HD",
+    images: IMAGES_HD,
+  },
+  {
+    name: 'Ban bồi dưỡng',
+    image: `${FOLDER_PATH}/BD/${COVER}`,
     desc: (
       <>
         <Container>
@@ -143,96 +157,32 @@ const department_names = [
         </Container>
       </>
     ),
-    code: "TK",
-    images: [
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    ],
+    code: "BD",
+    images: IMAGES_BD,
   },
   {
-    name: 'Ban bao vệ',
-    image: guide,
+    name: 'Ban môi trường',
+    image: `${FOLDER_PATH}/MT/${COVER}`,
     desc: (
       <>
         <Container>
-          <Center>“Gặp nhau trao gửi nụ cười</Center>
-          <Center>Ánh mắt thân ái</Center>
-          <Center>Tình người thân thương.”</Center>
-        </Container>
-        <Container textAlign={'justify'} py='10px'>
-          🍀Được xem là gương mặt đại diện trong mùa lễ bởi lực lượng sinh viên nam thanh, nữ tú,
-          trang phục đẹp và thanh lịch, luôn rạng rỡ tươi cười chào đón Phật tử từ phương xa về dự
-          lễ.
-        </Container>
-        <Container textAlign={'justify'} pb='10px'>
-          🍀Đội ngũ Ban Hướng Dẫn dàn trải khắp khuôn viên chùa và sẵn sàng hỗ trợ Phật Tử mọi lúc,
-          mọi nơi với trọn tình yêu thương và lòng khiêm hạ.
-        </Container>
-        <Container textAlign={'justify'} pb='10px'>
-          🍀Hãy về với team “Ban Hướng Dẫn” để được trải nghiệm cảm giác trong tâm thế một người ân
-          cần, niềm nở, chào đón hàng nghìn từ phương xa về dự lễ.
+          🙏 Nguyện ước cho hành tinh <br />
+          Khắp nơi đều tươi xanh<br />
+          Nên nghiêng mình, cúi xuống<br />
+          Nhặt từng cọng rác xinh<br />
+          Cùng về đây bạn ơi! <br />
+          Nơi núi rừng xanh tươi<br />
+          Cùng nhau phân loại rác<br />
+          Vào ban Môi trường thôi <br /><br />
+          🤔Bạn là người luôn trăn trở với hệ thống thùng phân loại rác và mong được phổ biến ở khắp nơi nơi?<br />
+          Bạn luôn khao khát mang tới mọi người thông điệp "Respect your environment. Please! Put your litter in the bin"? <br />
+          😍Vậy xin chúc mừng bạn đã "LỌT TOP" vào ban Môi trường. Nhanh tay đăng ký kẻo ngay hết hạn.<br />
+          Nhưng đừng đăng ký một mình nhé, phải nhiều "mình" mới vui.
         </Container>
       </>
     ),
-    code: "BV",
-    images: [
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    ],
-  },
-  {
-    name: 'Ban căm hoa',
-    image: canteen,
-    desc: (
-      <>
-        <Container>
-          <Center>♥♥♥ CĂN TIN ♥♥♥</Center>
-          <Center>CĂN TIN.... Không sợ khó</Center>
-          <Center>CĂN TIN.... Không sợ gian nan</Center>
-          <Center>CĂN TIN.... Không phàn nàn</Center>
-
-          <Center>Nguyện Yêu Quý khách hàng</Center>
-        </Container>
-        <Container textAlign={'justify'} py='10px'>
-          Sự tươi trẻ và vui tươi của huynh đệ trong Ban Căn Tin đã để lại nhiều ấn tượng đẹp trong
-          lòng cho những ai từng dừng chân tại căn tin.
-        </Container>
-        <Container textAlign={'justify'} pb='10px'>
-          Dù phải làm việc ở xa khu vực diễn ra lễ nhưng huynh đệ vẫn luôn một lòng hướng về những
-          khoảnh khắc lễ thiêng liêng và ý nghĩa của Đại lễ.
-        </Container>
-        <Container>
-          Mùa Đại lễ đã đến rất gần rồi, Huynh đệ hãy làm sống lại giây phút phụng sự hết mình tại
-          #teamCăntin 🙋🙋🙋
-        </Container>
-      </>
-    ),
-    code: "CH",
-    images: [
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-    ],
+    code: "MT",
+    images: IMAGES_MT,
   },
 ];
 export default department_names;
