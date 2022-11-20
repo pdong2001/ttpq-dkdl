@@ -11,7 +11,7 @@ import { useField } from 'formik';
 
 type RadiosProps = { label: string } & RadioGroupProps & StackProps & FormControlProps;
 const Radios = (props: RadiosProps) => {
-  const { spacing, direction, name, children, label, defaultValue } = props;
+  const { spacing, direction, name, children, label, defaultValue, color } = props;
   // @ts-ignore
   const [field, , helpers] = useField(name); //[field, meta, helpers]
   field.value ??= defaultValue; // set default value on props
@@ -19,7 +19,7 @@ const Radios = (props: RadiosProps) => {
 
   return (
     <FormControl {...props}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel color={color}>{label}</FormLabel>
       <RadioGroup
         {...field}
         {...props}

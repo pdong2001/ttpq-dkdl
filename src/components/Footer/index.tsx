@@ -13,7 +13,16 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import {
+  FaAndroid,
+  FaAppStoreIos,
+  FaBuilding,
+  FaFacebook,
+  FaInstagram,
+  FaTiktok,
+  FaTwitter,
+  FaYoutube,
+} from 'react-icons/fa';
 import { BiMailSend } from 'react-icons/bi';
 import Logo from '../Logo';
 import FadeInUp from '../Animation/FadeInUp';
@@ -60,60 +69,55 @@ const ListHeader = ({ children }: { children: ReactNode }) => {
 
 export default function Footer() {
   return (
-    <Box
-      bg={useColorModeValue('gray.50', 'gray.900')}
-      color={useColorModeValue('gray.700', 'gray.200')}
-    >
-      <Container as={Stack} maxW={'6xl'} py={10}>
-        <SimpleGrid templateColumns={{ sm: '1fr 1fr', md: '2fr 1fr 1fr 2fr' }} spacing={8}>
+    <Box bg={'blue.600'} color={'white'}>
+      <Container as={Stack} maxW={'6xl'} py={10} px={[3, 5, 16, 0]}>
+        <SimpleGrid templateColumns={{ sm: '1fr 1fr', md: '2fr 2fr 2fr 2fr' }} spacing={8}>
           <Stack spacing={6}>
             <HStack>
               <Logo />
               <Text>Thiền tôn Phật Quang</Text>
             </HStack>
-            <Text fontSize={'sm'}>© 2022 Chakra Templates. All rights reserved</Text>
             <Stack direction={'row'} spacing={6}>
-              <SocialButton label={'Twitter'} href={'#'}>
-                <FaTwitter />
+              <SocialButton label={'Facebook'} href={'https://www.facebook.com/THIENTONPQ'}>
+                <FaFacebook />
               </SocialButton>
-              <SocialButton label={'YouTube'} href={'#'}>
+
+              <SocialButton label={'YouTube'} href={'https://www.youtube.com/@SenHongPhapQuang'}>
                 <FaYoutube />
               </SocialButton>
-              <SocialButton label={'Instagram'} href={'#'}>
-                <FaInstagram />
+              <SocialButton label={'Tiktok'} href={'https://www.tiktok.com/@phapquang_senhong'}>
+                <FaTiktok />
               </SocialButton>
             </Stack>
           </Stack>
           <Stack align={'flex-start'}>
-            <ListHeader>Company</ListHeader>
-            <Link href={'#'}>About us</Link>
-            <Link href={'#'}>Blog</Link>
-            <Link href={'#'}>Contact us</Link>
-            <Link href={'#'}>Pricing</Link>
-            <Link href={'#'}>Testimonials</Link>
+            <ListHeader>Phát hành</ListHeader>
+            <Link href={'https://congtyphapquang.com/'}>
+              <HStack>
+                <FaBuilding /> <Text>Công ty Pháp Quang</Text>
+              </HStack>
+            </Link>
           </Stack>
           <Stack align={'flex-start'}>
-            <ListHeader>Support</ListHeader>
-            <Link href={'#'}>Help Center</Link>
-            <Link href={'#'}>Terms of Service</Link>
-            <Link href={'#'}>Legal</Link>
-            <Link href={'#'}>Privacy Policy</Link>
-            <Link href={'#'}>Satus</Link>
+            <ListHeader>Thời trang Homis</ListHeader>
+            <Link href={'https://www.facebook.com/HOMISBuddhistfashion/'}>
+              <HStack>
+                <FaFacebook /> <Text>Facebook</Text>
+              </HStack>
+            </Link>
           </Stack>
           <Stack align={'flex-start'}>
-            <ListHeader>Stay up to date</ListHeader>
-            <Stack direction={'row'}>
-              <Input
-                // focusBorderColor={'ttpq.400'}
-                placeholder={'Your email address'}
-                bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
-                border={0}
-                _focus={{
-                  bg: 'whiteAlpha.300',
-                }}
-              />
-              <IconButton aria-label='Subscribe' icon={<BiMailSend />} />
-            </Stack>
+            <ListHeader>App Pháp Quang - Sen Hồng</ListHeader>
+            <Link href={'https://play.google.com/store/apps/details?id=com.pqsoft.phapquang&pli=1'}>
+              <HStack>
+                <FaAndroid /> <Text>Android</Text>
+              </HStack>
+            </Link>
+            <Link href={'https://apps.apple.com/fr/app/ph%C3%A1p-quang/id1608669200'}>
+              <HStack>
+                <FaAppStoreIos /> <Text>IOS</Text>
+              </HStack>
+            </Link>
           </Stack>
         </SimpleGrid>
       </Container>
