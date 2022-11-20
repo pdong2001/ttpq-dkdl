@@ -47,9 +47,9 @@ export default function NavBar() {
   const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
   const Links = [
     { title: 'Trang chủ', to: `/${shortUri}#` },
-    { title: 'Giới thiệu Đại lễ', to: `/${shortUri}#eventInfo` },
-    { title: 'Các công việc Đại lễ', to: `/${shortUri}#departmentInfo` },
-    { title: 'Chương trình Đại lễ', to: `/${shortUri}#timeline` },
+    { title: 'Giới thiệu', to: `/${shortUri}#eventInfo` },
+    { title: 'Các công việc', to: `/${shortUri}#departmentInfo` },
+    { title: 'Chương trình', to: `/${shortUri}#timeline` },
   ];
   const { colorMode, toggleColorMode } = useColorMode();
   const [navbar_bg, setNavbarBg] = useState('rgba(0,0,0)');
@@ -83,7 +83,7 @@ export default function NavBar() {
         w={'full'}
         boxShadow='sm'
       >
-        <Container maxW={'6xl'} px={[3, 5, 16, 0]}>
+        <Container maxW={'6xl'} px={[3, 5, 16, 20, 0]}>
           <HStack h={16} alignItems={'center'} justifyContent={'space-between'}>
             <IconButton
               size={'md'}

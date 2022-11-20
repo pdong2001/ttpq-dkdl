@@ -97,7 +97,7 @@ function DepartmentInfos({}: Props) {
         // px={{ base: 10, md: 16, lg: 28, xl: 28 }}
         id='departmentInfo'
       >
-        <Container maxW='6xl' px={[3, 5, 16, 0]}>
+        <Container maxW='6xl' px={[3, 5, 16, 20, 0]}>
           <FadeInUp>
             <Box w='100%' textAlign='center'>
               <Heading

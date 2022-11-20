@@ -127,7 +127,7 @@ const Timeline = () => {
     <>
       <Box id='timeline' scrollMarginTop={16} />
       <Box bgColor={'#f4f4f6'} w='full' pt={10} pb={24}>
-        <Container maxW='6xl' textAlign='center' px={[3, 5, 16, 0]}>
+        <Container maxW='6xl' textAlign='center' px={[3, 5, 16, 20, 0]}>
           <FadeInUp>
             <Heading
               as={'h6'}

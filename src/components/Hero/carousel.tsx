@@ -163,13 +163,13 @@ export default function CaptionCarousel() {
           <Box
             key={index}
             backgroundImage={`url(${card.image})`}
-            backgroundPosition={{ base: 'center', md: 'bottom' }}
+            backgroundPosition={{ base: 'center' }}
             backgroundRepeat='no-repeat'
             backgroundSize='cover'
             transitionDuration={'2s'}
           >
             <Box bg='rgba(0,0,0, 0.45)'>
-              <Container maxW='6xl' position='relative' px={[3, 5, 16, 0]}>
+              <Container maxW='6xl' position='relative' px={[3, 5, 16, 20, 0]}>
                 {/* This is the block you need to change, to customize the caption */}
                 <Box height='100vh' position='relative' justifyContent={'start'}>
                   <Show {...(isHomePage ? { above: 'md' } : {})}>
@@ -228,12 +228,12 @@ export default function CaptionCarousel() {
         <Box
           pos='absolute'
           left={{ base: '0', md: 'unset' }}
-          right={0}
+          right={{ base: 0, md: '8%', xl: '10%', '2xl': '15%' }}
           transform={'translate(0%, -50%)'}
           top='50%'
           zIndex='1'
           p={'25px'}
-          mx={{ base: '10px', md: '80px' }}
+          // mx={{ base: '10px', md: '80px' }}
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
           bg='rgba(0,0,0,0.25)'

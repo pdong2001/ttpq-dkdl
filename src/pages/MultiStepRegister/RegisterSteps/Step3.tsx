@@ -19,12 +19,23 @@ import { MOVE_TYPE_TITLE } from '~/configs/register';
 import { useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { convertToAppDateTime } from '~/utils/date';
+import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
+import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
+  if (!times) return [];
   return times.map((t) => {
-    const { time, name } = t;
+    const { time, name } = t || {};
     return { ...t, name: `${name}, ${convertToAppDateTime(time)}` };
+  });
+};
+type Address = StartAddressDto | LeaveAddressDto;
+const mappingAddress = (addresses: Address[] | undefined) => {
+  if (!addresses) return [];
+  return addresses.map((addr) => {
+    const { address, name } = addr || {};
+    return { ...addr, name: `${name}, ${address}` };
   });
 };
 
@@ -151,8 +162,8 @@ const Step3 = (props: StepProps) => {
     dispatch(
       fillDataPreview({
         ...values,
-        startAddressId: `${filterTitle(startAddresses, values.startAddressId)}`,
-        leaveAddressId: `${filterTitle(leaveAddresses, values.leaveAddressId)}`,
+        startAddressId: `${filterTitle(mappingAddress(startAddresses), values.startAddressId)}`,
+        leaveAddressId: `${filterTitle(mappingAddress(leaveAddresses), values.leaveAddressId)}`,
         startTimeId: `${filterTitle(startTimes, values.startTimeId)}`,
         leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
       }),
@@ -192,7 +203,7 @@ const Step3 = (props: StepProps) => {
                 <>
                   <Select
                     name='startAddressId'
-                    data={startAddresses}
+                    data={mappingAddress(startAddresses)}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
@@ -209,7 +220,7 @@ const Step3 = (props: StepProps) => {
                   />
                   <Select
                     name='leaveAddressId'
-                    data={leaveAddresses}
+                    data={mappingAddress(leaveAddresses)}
                     label='Địa điểm trở về'
                     placeholder='Địa điểm trở về'
                     onChange={() => {
