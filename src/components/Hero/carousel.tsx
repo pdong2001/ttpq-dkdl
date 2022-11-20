@@ -75,7 +75,7 @@ export default function CaptionCarousel() {
     // fade: true,
     infinite: true,
     // autoplay: true,
-    speed: 500,
+    speed: 1000,
     // autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -165,8 +165,9 @@ export default function CaptionCarousel() {
             backgroundPosition={{ base: 'center', md: 'top' }}
             backgroundRepeat='no-repeat'
             backgroundSize='cover'
+            transitionDuration={'2s'}
           >
-            <Box bg='rgba(0,0,0, 0.2)'>
+            <Box bg='rgba(0,0,0, 0.35)'>
               <Container maxW='6xl' position='relative' px={[3, 5, 16, 0]}>
                 {/* This is the block you need to change, to customize the caption */}
                 <Flex height='100vh' position='relative' justifyContent={'start'}>
@@ -181,7 +182,7 @@ export default function CaptionCarousel() {
                       transform='translate(0, -50%)'
                     >
                       {fade_index == index && (
-                        <>
+                        <Box>
                           <FadeInUp duration={1.5}>
                             <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                               {card.title}
@@ -196,46 +197,52 @@ export default function CaptionCarousel() {
                             <Button
                               as={HashLink}
                               _hover={{ background: 'white', color: 'blue.500' }}
-                              to={`/${shortUri}#eventInfo`}
+                              to={
+                                fade_index === 0
+                                  ? `/${shortUri}#eventInfo`
+                                  : `/${shortUri}#departmentInfo`
+                              }
                               smooth
                             >
                               <HStack>
-                                <Text>Thông tin Đại lễ</Text>
+                                <Text>
+                                  {fade_index === 0 ? 'Thông tin Đại Lễ' : 'Thông tin các ban'}
+                                </Text>
                                 <FaArrowRight />
                               </HStack>
                             </Button>
                           </FadeInUp>
-                        </>
+                        </Box>
                       )}
                     </Stack>
                   </Show>
                 </Flex>
-                {isHomePage && (
-                  <Box
-                    pos='absolute'
-                    left={{ base: '0', md: 'unset' }}
-                    right={0}
-                    transform={'translate(0%, -50%)'}
-                    top='50%'
-                    zIndex='1'
-                    p={'25px'}
-                    mx={{ base: '10px', md: '80px' }}
-                    w={{ md: '45%', lg: '35%' }}
-                    maxW={{ md: '600px' }}
-                    bg='rgba(0,0,0,0.4)'
-                    _hover={{ background: 'rgba(0,0,0,0.8)' }}
-                    transitionDuration={'1s'}
-                    justifyContent={'center'}
-                    borderRadius='md'
-                  >
-                    <Step1 previousStep={() => {}} nextStep={nextStep} />
-                  </Box>
-                )}
               </Container>
             </Box>
           </Box>
         ))}
       </Slider>
+      {isHomePage && (
+        <Box
+          pos='absolute'
+          left={{ base: '0', md: 'unset' }}
+          right={0}
+          transform={'translate(0%, -50%)'}
+          top='50%'
+          zIndex='1'
+          p={'25px'}
+          mx={{ base: '10px', md: '80px' }}
+          w={{ md: '45%', lg: '35%' }}
+          maxW={{ md: '600px' }}
+          bg='rgba(0,0,0,0.4)'
+          _hover={{ background: 'rgba(0,0,0,0.8)' }}
+          transitionDuration={'1s'}
+          justifyContent={'center'}
+          borderRadius='md'
+        >
+          <Step1 previousStep={() => {}} nextStep={nextStep} />
+        </Box>
+      )}
     </Box>
   );
 }

@@ -14,7 +14,7 @@ import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import FormInput from '~/components/Form/FormInput';
 import { useRouteMatch } from 'react-router-dom';
-import { HOME_WITH_SHORT_URI } from '~/routes';
+import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -22,6 +22,7 @@ const Step1 = (props: StepProps) => {
   const dispatch = useAppDispatch();
   const { path } = useRouteMatch();
   const isHomePage = path === HOME_WITH_SHORT_URI;
+  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
 
   const {
     fullName = '',
@@ -93,18 +94,16 @@ const Step1 = (props: StepProps) => {
   };
   const { registerType: localRegisterType } = formik.values;
 
-  const greatCeremony = 'Đại lễ Thành Đạo 2022';
+  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
-  console.log('___', formik.values);
-
   return (
-    <>
+    <Box>
       <Stack spacing={4}>
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.500'>
           {`Đăng Ký Công Quả`}
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+        <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
           {`${greatCeremony} PL.2565 - DL.2022`}
         </Text>
       </Stack>
@@ -153,7 +152,7 @@ const Step1 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </>
+    </Box>
   );
 };
 

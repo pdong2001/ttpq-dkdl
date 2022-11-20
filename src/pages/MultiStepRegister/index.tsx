@@ -36,6 +36,8 @@ const MultiStepRegister = () => {
 
   const dispatch = useAppDispatch();
 
+  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
+
   useEffect(() => {
     if (shortUri) {
       dispatch(
@@ -85,7 +87,7 @@ const MultiStepRegister = () => {
             as={Grid}
             maxW={'5xl'}
             gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
-            py={{ base: 20 }}
+            pt={{ base: 16 }}
             minH='100vh'
             alignItems={'center'}
           >

@@ -14,7 +14,8 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
 import { nanoid } from '@reduxjs/toolkit';
 import { HashLink } from 'react-router-hash-link';
-import { useParams } from 'react-router-dom';
+import { useParams, useRouteMatch } from 'react-router-dom';
+import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 
 const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; onClick: any }) => (
   <Link
@@ -42,7 +43,8 @@ const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; o
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shortUri = '' } = useParams<any>();
-
+  const { path } = useRouteMatch();
+  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
   const Links = [
     { title: 'Trang chủ', to: `/${shortUri}#` },
     { title: 'Giới thiệu Đại lễ', to: `/${shortUri}#eventInfo` },
@@ -53,7 +55,7 @@ export default function NavBar() {
   const [navbar_bg, setNavbarBg] = useState('rgba(0,0,0)');
   const changeBackground = () => {
     const delta = 100;
-    if (window.scrollY >= delta) {
+    if (window.scrollY >= delta || isRegisterPage) {
       setNavbarBg('blue.500');
     } else if (window.scrollY < delta && window.scrollY >= 50) {
       setNavbarBg('rgba(214, 158, 46,' + window.scrollY / delta / 4 + ')');
