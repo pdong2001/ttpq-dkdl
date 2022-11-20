@@ -52,15 +52,17 @@ const SearchLeader = (props: Props) => {
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { primaryColor } = useCustomColorMode();
-  const { leaderId } = useAppSelector((state) => state.registerInfo.data);
+  const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
+  const { leaderId } = useAppSelector((state) => state.register.data.register);
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
-      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
+      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId || editLeaderId }),
       transformResponse: ({ data }) => data,
     },
-    [leaderId],
+    [editLeaderId, leaderId],
   );
-  if (!leaderId) {
+  if (!(editLeaderId || leaderId)) {
+    console.log('cancel leader' + editLeader + 'hello' + leaderId);
     editToken.cancel();
   }
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
@@ -80,7 +82,7 @@ const SearchLeader = (props: Props) => {
   }, [searchValue]);
 
   const startSkelotonColor = 'gray.600';
-  const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.500' : 'gray.600';
+  const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.300' : 'gray.600';
 
   useEffect(() => {
     if (loaded) {
@@ -90,6 +92,8 @@ const SearchLeader = (props: Props) => {
       }
     }
   }, [loaded]);
+
+  console.log('render__');
 
   const isInvalid = (loaded && !data?.data) || (!!error && touched);
   const isHomePage = path === HOME_WITH_SHORT_URI;

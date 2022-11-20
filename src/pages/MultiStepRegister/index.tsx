@@ -85,6 +85,7 @@ const MultiStepRegister = () => {
             maxW={'5xl'}
             gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
             pt={{ base: 16 }}
+            pb={5}
             minH='100vh'
             alignItems={'center'}
           >

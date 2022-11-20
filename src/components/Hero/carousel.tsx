@@ -198,6 +198,7 @@ export default function CaptionCarousel() {
                             <Button
                               as={HashLink}
                               _hover={{ background: 'white', color: 'blue.500' }}
+                              transitionDuration='0.5s'
                               to={
                                 fade_index === 1
                                   ? `/${shortUri}#eventInfo`

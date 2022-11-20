@@ -18,6 +18,15 @@ import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
 import { MOVE_TYPE_TITLE } from '~/configs/register';
 import { useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
+import { convertToAppDateTime } from '~/utils/date';
+
+type Time = StartTimeDto | LeaveTimeDto;
+const mappingTime = (times: Time[]) => {
+  return times.map((t) => {
+    const { time, name } = t;
+    return { ...t, name: `${name}, ${convertToAppDateTime(time)}` };
+  });
+};
 
 const Step3 = (props: StepProps) => {
   const { path } = useRouteMatch();
@@ -26,6 +35,7 @@ const Step3 = (props: StepProps) => {
   const dispatch = useAppDispatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { leaveAddresses, startAddresses } = registerPage;
+
   const { register } = useAppSelector((state) => state.register.data);
   const {
     moveType: editMoveType,
@@ -111,17 +121,19 @@ const Step3 = (props: StepProps) => {
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
 
-  const [leaveTimes, setLeaveTimes] = useState<LeaveTimeDto[] | never[]>();
-  const [startTimes, setStartTimes] = useState<StartTimeDto[] | never[]>();
+  const [leaveTimes, setLeaveTimes] = useState<Time[] | never[]>();
+  const [startTimes, setStartTimes] = useState<Time[] | never[]>();
 
   useEffect(() => {
     const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
-    setLeaveTimes(times);
+    const mappingTimes = mappingTime(times);
+    setLeaveTimes(mappingTimes);
   }, [leaveAddresses, leaveAddressId]);
 
   useEffect(() => {
     const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
-    setStartTimes(times);
+    const mappingTimes = mappingTime(times);
+    setStartTimes(mappingTimes);
   }, [startAddresses, startAddressId]);
 
   useEffect(() => {

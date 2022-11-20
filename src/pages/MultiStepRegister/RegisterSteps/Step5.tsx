@@ -123,15 +123,13 @@ const Step5 = (props: StepProps) => {
         </Text>
         <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
           <Box textAlign={'center'}>
-            {isAddNew && (
-              <>
-                <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
-                <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                  {fullName}
-                </Heading>
-                <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
-              </>
-            )}
+            <>
+              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
+              <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
+                {fullName}
+              </Heading>
+              <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
+            </>
             <Box>
               <Alert status='success'>
                 <CalendarIcon />
