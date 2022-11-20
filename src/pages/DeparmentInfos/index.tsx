@@ -118,11 +118,11 @@ function DepartmentInfos({}: Props) {
             <ModalContent>
               <ModalCloseButton />
               <ModalBody p={0}>
-                <SimpleGrid minH={'100vh'} columns={{ sm: 1, md: 1, base: 2, lg: 2 }} spacing={10}>
-                  <Flex flex={1} width={'100vh'}>
+                <SimpleGrid minH={'100vh'} maxH={'100vh'} columns={{ sm: 1, md: 1, base: 1, lg: 2 }} spacing={10}>
+                  <Flex p={2} flex={1} align={'center'} justify={'center'}>
                     <Carousels
                       images={departmentSelected.images}
-                      styles={{ height: '100vh', width: '100%' }}
+                      styles={{ }}
                       settings={{}}
                     />
                   </Flex>

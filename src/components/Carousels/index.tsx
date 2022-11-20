@@ -19,13 +19,12 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
   const [initSlide, setInitSlide] = useState(0);
 
   const settingsDefault = {
-    dots: true,
     arrows: false,
     fade: true,
-    infinite: true,
+    // infinite: true,
     autoplay: true,
     speed: 500,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4000,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: initSlide,
@@ -34,8 +33,8 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
 
   const [slider, setSlider] = useState<Slider | null>(null);
   // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '50%', md: '50%' });
-  const side = useBreakpointValue({ base: '50%', md: '10px' });
+  const top = useBreakpointValue({ base: '95%', lg: '50%' });
+  const side = useBreakpointValue({ base: '30%', lg: '40px' });
 
   useEffect(() => {
     setTimeout(() => {
@@ -45,7 +44,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
 
   return (
     <>
-      <Box position='relative' style={styles} className='carousel'>
+      <Box position={'relative'} height={'100vh'} width={'full'} overflow={'hidden'} style={styles} className='carousel'>
         {/* CSS files for react-slick */}
         <link
           rel='stylesheet'
@@ -93,7 +92,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
             <Image
               key={index}
               alt={'feature image'}
-              height={'100vh'}
+              height='100vh'
               src={image}
               objectFit={'cover'}
             />
