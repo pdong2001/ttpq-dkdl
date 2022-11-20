@@ -43,6 +43,8 @@ const departmemtImages = [
   'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
 ];
 
+const CODE_REGISTER = 'WCUdZLd';
+
 function DepartmentInfos({}: Props) {
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -80,8 +82,9 @@ function DepartmentInfos({}: Props) {
         console.log('SET_DEPARMENT');
       }, 3000);
       return;
+    } else {
+      history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri: CODE_REGISTER }));
     }
-    alert('Dạ đường link đăng ký không đúng ạ!');
   };
 
   return (

@@ -60,6 +60,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
         <IconButton
           aria-label='left-arrow'
           variant='ghost'
+          color='white'
           position='absolute'
           left={side}
           top={top}
@@ -73,6 +74,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
         <IconButton
           aria-label='right-arrow'
           variant='ghost'
+          color='white'
           position='absolute'
           right={side}
           top={top}
