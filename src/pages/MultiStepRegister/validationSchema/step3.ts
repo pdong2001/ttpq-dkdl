@@ -8,14 +8,14 @@ const step3Schema = Yup.object({
     .nullable()
     .when('moveType', {
       is: MoveType.HCM,
-      then: Yup.string().required('Xin hãy chọn nơi xuất phát HCM'),
+      then: Yup.string().required('Xin hãy chọn nơi xuất phát'),
       otherwise: Yup.string().notRequired(),
     }),
   startTimeId: Yup.string()
     .nullable()
     .when('moveType', {
       is: MoveType.HCM,
-      then: Yup.string().required('Xin hãy chọn ngày giờ đi HCM'),
+      then: Yup.string().required('Xin hãy chọn ngày giờ đi'),
       otherwise: Yup.string().notRequired(),
     }),
   // leaveTimeId: Yup.string()
