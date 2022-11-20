@@ -61,8 +61,8 @@ const ListHeader = ({ children }: { children: ReactNode }) => {
 export default function Footer() {
   return (
     <Box
-      bg={useColorModeValue('gray.50', 'gray.900')}
-      color={useColorModeValue('gray.700', 'gray.200')}
+      bg={'blue.600'}
+      color={'white'}
     >
       <Container as={Stack} maxW={'6xl'} py={10}>
         <SimpleGrid templateColumns={{ sm: '1fr 1fr', md: '2fr 1fr 1fr 2fr' }} spacing={8}>
@@ -106,7 +106,7 @@ export default function Footer() {
               <Input
                 // focusBorderColor={'ttpq.400'}
                 placeholder={'Your email address'}
-                bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
+                bg={'whiteAlpha.900'}
                 border={0}
                 _focus={{
                   bg: 'whiteAlpha.300',

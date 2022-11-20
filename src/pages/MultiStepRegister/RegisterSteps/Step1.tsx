@@ -12,11 +12,16 @@ import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
+import FormInput from '~/components/Form/FormInput';
+import { useRouteMatch } from 'react-router-dom';
+import { HOME_WITH_SHORT_URI } from '~/routes';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+  const { path } = useRouteMatch();
+  const isHomePage = path === HOME_WITH_SHORT_URI;
 
   const {
     fullName = '',
@@ -107,15 +112,35 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <FloatingLabel name='fullName' label='Họ và tên' isRequired />
-              <FloatingLabel name='phoneNumber' label='Số điện thoại' isRequired />
-              <FloatingLabel name='identityCard' label='Số CCCD / Hộ chiếu' isRequired />
-              <Radios label='Hình thức đăng ký' name='registerType'>
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='fullName'
+                label='Họ và tên'
+                isRequired
+              />
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='phoneNumber'
+                label='Số điện thoại'
+                isRequired
+              />
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='identityCard'
+                label='Số CCCD / Hộ chiếu'
+                isRequired
+              />
+              <Radios
+                {...(isHomePage && { color: 'white' })}
+                label='Hình thức đăng ký'
+                name='registerType'
+              >
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
               {isRegisterFollowGroup && (
                 <SearchLeader
+                  {...(isHomePage && { color: 'white' })}
                   name='leaderId'
                   getLeader={(leader) => setLeaderPreview(leader)}
                   label='Trưởng nhóm'

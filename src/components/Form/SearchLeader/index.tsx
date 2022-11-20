@@ -42,7 +42,7 @@ type LeaderData = {
 
 const SearchLeader = (props: Props) => {
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { name, label, getLeader } = props;
+  const { name, label, getLeader, color } = props;
   const [field, { error, touched }, { setValue, setTouched }] = useField(name);
 
   const [searchValue, setSearchValue] = useState('');
@@ -95,6 +95,7 @@ const SearchLeader = (props: Props) => {
       <SimpleGrid columns={{ base: 1, md: 2 }} alignItems='center' gap={{ base: 4, md: 6 }}>
         <InputGroup size='md'>
           <Input
+            color={color}
             placeholder='Tìm bằng SĐT hoặc CCCD / CMT'
             focusBorderColor={primaryColor}
             pr='2.5rem'
