@@ -18,8 +18,8 @@ type FloatingLabelProps = {
   InputProps;
 
 const FloatingLabel = (props: FloatingLabelProps) => {
-  const { label, name, defaultValue, hiddenErrorMessage, color, bgColor, ...rest } = props;
-  // const { bgColor } = useCustomColorMode();
+  const { label, name, defaultValue, hiddenErrorMessage, color, ...rest } = props;
+  const { bgColor } = useCustomColorMode();
   // @ts-ignore
   const [field, meta] = useField(name);
   field.value ??= defaultValue; // set default value on props
