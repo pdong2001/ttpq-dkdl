@@ -60,7 +60,7 @@ const Step2 = (props: StepProps) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      gender,
+      gender: gender + '',
 
       religiousName,
 
@@ -135,13 +135,26 @@ const Step2 = (props: StepProps) => {
         >
           Cập nhật thông tin
         </Heading>
-        <Stack direction={{ base: 'column', lg: 'row' }}>
-          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+        <Stack
+          direction={{ base: 'column', lg: 'row' }}
+          justifyContent='center'
+          spacing={{ lg: 16 }}
+        >
+          {[
+            { title: 'Xin chào bạn', value: fullName },
+            { title: 'Số điện thoại', value: phoneNumber },
+            { title: 'CCCD', value: identityCard },
+          ].map(({ title, value }) => (
+            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+              {title}: <Text as='b'>{value}</Text>
+            </Text>
+          ))}
+          {/* <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
             Xin chào bạn <Text as='b'>{fullName}</Text>
           </Text>
           <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
             {`SĐT: ${phoneNumber} - CCCD: ${identityCard}`}
-          </Text>
+          </Text> */}
         </Stack>
       </Stack>
       <Box mt={{ base: 3, lg: 10 }}>
