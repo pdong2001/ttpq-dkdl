@@ -87,13 +87,11 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
           {...settingsDefault}
           ref={(slider: Slider) => {
             setSlider(slider);
-            console.log('slide', slider);
           }}
         >
           {images.map((image, index) => (
             <Image
               key={index}
-              rounded={'md'}
               alt={'feature image'}
               height={'100vh'}
               src={image}

@@ -14,12 +14,20 @@ import {
   Text,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Image } from '@chakra-ui/react';
+import _ from 'lodash';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { useHistory } from 'react-router-dom';
+
+// import { Image } from '@chakra-ui/react';
 // import environmentDepartment from '~/assets/enviroment.jpg';
 import department_names from '../../configs/departmemt';
+import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import './style.css';
 import { InfoIcon } from '@chakra-ui/icons';
 import Carousels from '~/components/Carousels';
+import { formatUrl } from '~/utils/functions';
+import { fillForm } from '~/slices/register';
+
 
 type Props = {};
 
@@ -34,20 +42,47 @@ const departmemtImages = [
   'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
   'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
 ];
+
 function DepartmentInfos({}: Props) {
+  const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useAppDispatch();
   const [departmentSelected, setDepartmentSelected] = useState({
     name: '',
     image: '',
     desc: <></>,
+    code: '',
+    images: [],
   });
+
+  const {
+    data: registerPageData,
+  } = useAppSelector((state) => state.registerPage);
+
   // let departmentSelected = { name: '', image: '' };
   const handleViewDetail = (item: any) => {
     // departmentSelected = item;
     setDepartmentSelected(item);
-
     onOpen();
   };
+
+
+  const redirectRegisterToDepartment = (code) => {
+    const departmemts = _.get(registerPageData, 'departments');
+    const deparmentWishJoin = _.find(departmemts, d => d.code === code);
+    if(registerPageData.id) {
+      history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri: registerPageData.id }));
+      setTimeout(() => {
+        dispatch(fillForm({
+          wishDepartmentId: _.get(deparmentWishJoin, 'id'),
+        }));
+        console.log('SET_DEPARMENT');
+      }, 3000);
+      return;
+    }
+    alert('Dạ đường link đăng ký không đúng ạ!');
+  }
+
   return (
     <>
       <Box id='departmentInfo' scrollMarginTop={16} />
@@ -81,11 +116,11 @@ function DepartmentInfos({}: Props) {
           <ModalContent>
             <ModalCloseButton />
             <ModalBody p={0}>
-              <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
-              <Flex flex={1} width={'100vh'} direction={{ base: 'column', md: 'row', sm: 'column' }}>
-                  <Carousels images={departmemtImages} styles={{ height: '100vh', width: '100%' }} settings={{}} />
+              <SimpleGrid  minH={'100vh'} columns={{ sm: 1, md: 1, base: 2, lg: 2,  }} spacing={10}>
+              <Flex flex={1} width={'100vh'}>
+                  <Carousels images={departmentSelected.images} styles={{ height: '100vh', width: '100%' }} settings={{}} />
                 </Flex>
-                <Flex p={8} flex={1} align={'center'} justify={'center'}>
+                <Flex p={3} flex={1} align={'center'} justify={'center'}>
                   <Stack spacing={6} w={'full'} maxW={'lg'}>
                     <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                       <Text color={'blue.400'} as={'span'}>
@@ -98,11 +133,11 @@ function DepartmentInfos({}: Props) {
                   </Text> */}
                     {departmentSelected && departmentSelected.desc}
                     <Stack textAlign='center' spacing={4}>
-                      <Button size='lg'>Đăng ký</Button>
+                      <Button onClick={() => redirectRegisterToDepartment(departmentSelected.code)} size='lg'>Đăng ký</Button>
                     </Stack>
                   </Stack>
                 </Flex>
-              </Stack>
+              </SimpleGrid>
             </ModalBody>
           </ModalContent>
         </Modal>

@@ -9,7 +9,7 @@ import { Center, Container } from '@chakra-ui/react';
 
 const department_names = [
   {
-    name: 'Ban môi trường',
+    name: 'Ban thị giả',
     image: environmentDepartment,
     desc: (
       <>
@@ -42,8 +42,30 @@ const department_names = [
         </Container>
       </>
     ),
+    code: "TGN",
+    images: [
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    ],
   },
-  { name: 'Ban hành đường 1', image: issue_road_1 },
+  { name: 'Ban hành đường 1', image: issue_road_1, code: "HD1",  images: [
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+    'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+  ], },
   {
     name: 'Ban hành đường 2',
     image: issue_road_2,
@@ -82,9 +104,21 @@ const department_names = [
         </Container>
       </>
     ),
+    code: "HD2",
+    images: [
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    ],
   },
   {
-    name: 'Ban bồi dưỡng',
+    name: 'Ban tri khách',
     image: fostering,
     desc: (
       <>
@@ -109,9 +143,21 @@ const department_names = [
         </Container>
       </>
     ),
+    code: "TK",
+    images: [
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    ],
   },
   {
-    name: 'Ban hướng dẫn',
+    name: 'Ban bao vệ',
     image: guide,
     desc: (
       <>
@@ -135,11 +181,21 @@ const department_names = [
         </Container>
       </>
     ),
+    code: "BV",
+    images: [
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    ],
   },
-  { name: 'Ban tri khách', image: environmentDepartment },
-  { name: 'Ban cơ động', image: codong },
   {
-    name: 'Ban căn tin',
+    name: 'Ban căm hoa',
     image: canteen,
     desc: (
       <>
@@ -165,6 +221,18 @@ const department_names = [
         </Container>
       </>
     ),
+    code: "CH",
+    images: [
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
+      'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
+    ],
   },
 ];
 export default department_names;
