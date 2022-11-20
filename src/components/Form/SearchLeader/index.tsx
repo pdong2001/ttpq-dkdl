@@ -27,11 +27,14 @@ import { useAppSelector } from '~/hooks/reduxHook';
 import useAxios from '~/hooks/useAxios';
 import { formatUrl } from '~/utils/functions';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
+import { useRouteMatch } from 'react-router-dom';
+import { HOME_WITH_SHORT_URI } from '~/routes';
 
 type Props = {
   name: string;
   label: string;
   getLeader: Function;
+  color?: string;
 };
 type LeaderData = {
   id: string;
@@ -41,6 +44,7 @@ type LeaderData = {
 };
 
 const SearchLeader = (props: Props) => {
+  const { path } = useRouteMatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { name, label, getLeader, color } = props;
   const [field, { error, touched }, { setValue, setTouched }] = useField(name);
@@ -88,11 +92,15 @@ const SearchLeader = (props: Props) => {
   }, [loaded]);
 
   const isInvalid = (loaded && !data?.data) || (!!error && touched);
-
+  const isHomePage = path === HOME_WITH_SHORT_URI;
   return (
     <FormControl isInvalid={isInvalid}>
-      <FormLabel mb={0}>{label}</FormLabel>
-      <SimpleGrid columns={{ base: 1, md: 2 }} alignItems='center' gap={{ base: 4, md: 6 }}>
+      <FormLabel color={color}>{label}</FormLabel>
+      <SimpleGrid
+        columns={{ base: 1, md: isHomePage ? 1 : 2 }}
+        alignItems='center'
+        gap={{ base: 4, md: 6 }}
+      >
         <InputGroup size='md'>
           <Input
             color={color}

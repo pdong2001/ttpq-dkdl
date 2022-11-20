@@ -228,16 +228,9 @@ const Step3 = (props: StepProps) => {
               )}
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              {isAddNew && (
-                <Button
-                  colorScheme='gray'
-                  flexGrow={1}
-                  fontFamily={'heading'}
-                  onClick={previousStep}
-                >
-                  Trở về
-                </Button>
-              )}
+              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+                Trở về
+              </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>
                 Tiếp theo
               </Button>

@@ -57,9 +57,6 @@ const MultiStepRegister = () => {
     if (path === ADD_NEW_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {
       setStep(1);
     }
-    if (path === EDIT_REGISTER_PATH) {
-      setStep(2);
-    }
   }, []);
   const nextStep = () => {
     setStep((currentStep) => currentStep + 1);

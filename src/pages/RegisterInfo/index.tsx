@@ -161,7 +161,8 @@ const RegisterInfo = () => {
     {
       method: 'get',
       url: API.GET_CTN,
-      params: { ctnId: organizationStructureId },
+      params: { CTNGroupId: organizationStructureId },
+      transformResponse: ({ Data }) => Data,
     },
     [organizationStructureId],
   );
@@ -182,7 +183,10 @@ const RegisterInfo = () => {
 
   const tableInfoRight = [
     { title: 'Pháp Danh', value: member?.religiousName },
-    { title: 'Nơi sinh hoạt', value: ctnInfo?.Data[0].Name },
+    {
+      title: 'Nơi sinh hoạt',
+      value: ctnInfo?.find((ctn) => ctn.Id === organizationStructureId).Name,
+    },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },
     { title: 'Kỹ năng', value: member?.strongPoints || [] },
@@ -198,11 +202,11 @@ const RegisterInfo = () => {
   };
 
   const contactStatusMap = {
-    "-1": "Hủy",
-    "0": "Chưa liên hệ",
-    "1": "Chưa chắc chắn",
-    "2": "Chắc chắn tham gia"
-  }
+    '-1': 'Hủy',
+    '0': 'Chưa liên hệ',
+    '1': 'Chưa chắc chắn',
+    '2': 'Chắc chắn tham gia',
+  };
 
   const startAddress = data.startTime?.address;
   const leaveAddress = data.leaveTime?.address;
@@ -290,13 +294,8 @@ const RegisterInfo = () => {
               <Text as='b' color={primaryColor}>
                 Tình trạng xác nhận
               </Text>
-              <Tag
-                mt={3}
-                textAlign='center'
-                colorScheme={'blue'}
-                borderRadius='full'
-              >
-                {contactStatusMap[contactStatus?contactStatus:0]}
+              <Tag mt={3} textAlign='center' colorScheme={'blue'} borderRadius='full'>
+                {contactStatusMap[contactStatus ? contactStatus : 0]}
               </Tag>
               {/* <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
@@ -391,18 +390,18 @@ const RegisterInfo = () => {
                         <Td px={0}>
                           {Array.isArray(ele.value)
                             ? ele.value.map((item, idx2) => {
-                              return (
-                                <Tag
-                                  key={idx2}
-                                  colorScheme={'blue'}
-                                  mr={2}
-                                  mb={1}
-                                  borderRadius='full'
-                                >
-                                  {item.name}
-                                </Tag>
-                              );
-                            })
+                                return (
+                                  <Tag
+                                    key={idx2}
+                                    colorScheme={'blue'}
+                                    mr={2}
+                                    mb={1}
+                                    borderRadius='full'
+                                  >
+                                    {item.name}
+                                  </Tag>
+                                );
+                              })
                             : ele.value}
                         </Td>
                       </Tr>

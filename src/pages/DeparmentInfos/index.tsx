@@ -28,6 +28,7 @@ import { InfoIcon } from '@chakra-ui/icons';
 import Carousels from '~/components/Carousels';
 import { formatUrl } from '~/utils/functions';
 import { fillForm } from '~/slices/register';
+import FadeInUp from '~/components/Animation/FadeInUp';
 
 type Props = {};
 
@@ -97,25 +98,29 @@ function DepartmentInfos({}: Props) {
         id='departmentInfo'
       >
         <Container maxW='6xl' px={[3, 5, 16, 0]}>
-          <Box w='100%' textAlign='center'>
-            <Heading
-              as={'h6'}
-              color='blue.500'
-              lineHeight={1.6}
-              fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
-              textTransform='uppercase'
-              borderBottom={'2px'}
-              borderColor='darkBlue.100'
-              mb={10}
-              display='inline-block'
-            >
-              Các ban trong đại lễ
-            </Heading>
-          </Box>
-
+          <FadeInUp>
+            <Box w='100%' textAlign='center'>
+              <Heading
+                as={'h6'}
+                color='blue.500'
+                lineHeight={1.6}
+                fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
+                textTransform='uppercase'
+                borderBottom={'2px'}
+                borderColor='darkBlue.100'
+                mb={10}
+                display='inline-block'
+              >
+                Các ban trong đại lễ
+              </Heading>
+            </Box>
+          </FadeInUp>
           <SimpleGrid columns={{ md: 2, xl: 3 }} spacing='10px'>
-            {department_names.map((item, index) => DepartmentItem(index, item, handleViewDetail))}
+            {department_names.map((item, index) => (
+              <FadeInUp> {DepartmentItem(index, item, handleViewDetail)} </FadeInUp>
+            ))}
           </SimpleGrid>
+
           <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>

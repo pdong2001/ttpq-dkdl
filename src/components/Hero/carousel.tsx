@@ -17,8 +17,9 @@ import {
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowLeft } from 'react-icons/md';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
-import slider1 from '~/assets/slider1.jpg';
-import slider2 from '~/assets/slider2.jpg';
+import slider1 from '~/assets/cover.jpg';
+import slider2 from '~/assets/cover_2.jpg';
+
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
 import { useHistory, useRouteMatch, useParams } from 'react-router-dom';
@@ -66,16 +67,16 @@ export default function CaptionCarousel() {
   // These are the breakpoints which changes the position of the
   // buttons as the screen size changes
   const top = useBreakpointValue({ base: '95%', lg: '50%' });
-  const side = useBreakpointValue({ base: '30%', lg: '40px' });
+  const side = useBreakpointValue({ base: '0', lg: '40px' });
 
   // Settings for the slider
   const settings = {
-    dots: true,
-    arrows: false,
-    fade: true,
+    dots: false,
+    arrows: true,
+    // fade: true,
     infinite: true,
     // autoplay: true,
-    speed: 1000,
+    speed: 800,
     // autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -95,21 +96,21 @@ export default function CaptionCarousel() {
   // This can be static or loaded from a server
   const cards = [
     {
-      title: 'Đêm thành đạo',
-      text: 'Cả núi rừng im phăng phắc, không một làn gió nhẹ, dường như mọi động thực vật tất thảy đều ngủ say.',
-      image: slider1,
-    },
-    {
       title: 'Ban công quả',
       text: 'Để có một Đại Lễ thành công, phía sau đó là sự cống hiến, hy sinh, phụng sự của biết bao bạn thanh niên, sinh viên với nhiệt huyết tuổi trẻ và tinh thần phụng sự hăng say.',
       image: slider2,
+    },
+    {
+      title: 'Đêm thành đạo',
+      text: 'Cả núi rừng im phăng phắc, không một làn gió nhẹ, dường như mọi động thực vật tất thảy đều ngủ say.',
+      image: slider1,
     },
   ];
 
   const [openRegisterForm, setOpenRegisterForm] = useState(false);
 
   return (
-    <Box position={'relative'} height={'100vh'} width={'full'} overflow={'hidden'}>
+    <Box position={'relative'} minH={'100vh'} width={'full'}>
       {/* CSS files for react-slick */}
       <link
         rel='stylesheet'
@@ -162,15 +163,15 @@ export default function CaptionCarousel() {
           <Box
             key={index}
             backgroundImage={`url(${card.image})`}
-            backgroundPosition={{ base: 'center', md: 'top' }}
+            backgroundPosition={{ base: 'center', md: 'bottom' }}
             backgroundRepeat='no-repeat'
             backgroundSize='cover'
             transitionDuration={'2s'}
           >
-            <Box bg='rgba(0,0,0, 0.35)'>
+            <Box bg='rgba(0,0,0, 0.45)'>
               <Container maxW='6xl' position='relative' px={[3, 5, 16, 0]}>
                 {/* This is the block you need to change, to customize the caption */}
-                <Flex height='100vh' position='relative' justifyContent={'start'}>
+                <Box height='100vh' position='relative' justifyContent={'start'}>
                   <Show {...(isHomePage ? { above: 'md' } : {})}>
                     <Stack
                       color='white'
@@ -198,7 +199,7 @@ export default function CaptionCarousel() {
                               as={HashLink}
                               _hover={{ background: 'white', color: 'blue.500' }}
                               to={
-                                fade_index === 0
+                                fade_index === 1
                                   ? `/${shortUri}#eventInfo`
                                   : `/${shortUri}#departmentInfo`
                               }
@@ -206,7 +207,7 @@ export default function CaptionCarousel() {
                             >
                               <HStack>
                                 <Text>
-                                  {fade_index === 0 ? 'Thông tin Đại Lễ' : 'Thông tin các ban'}
+                                  {fade_index === 1 ? 'Thông tin Đại Lễ' : 'Thông tin các ban'}
                                 </Text>
                                 <FaArrowRight />
                               </HStack>
@@ -216,7 +217,7 @@ export default function CaptionCarousel() {
                       )}
                     </Stack>
                   </Show>
-                </Flex>
+                </Box>
               </Container>
             </Box>
           </Box>
@@ -234,11 +235,12 @@ export default function CaptionCarousel() {
           mx={{ base: '10px', md: '80px' }}
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
-          bg='rgba(255,255,255,0.25)'
+          bg='rgba(0,0,0,0.25)'
           _hover={{ background: 'rgba(0,0,0,0.8)' }}
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'
+          shadow='xl'
         >
           <Step1 previousStep={() => {}} nextStep={nextStep} />
         </Box>

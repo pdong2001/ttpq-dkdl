@@ -47,7 +47,7 @@ const Step4 = (props: StepProps) => {
 
   const { strongPointIds, avatarPath, exps } = previousStepData;
   const { expDepartmentIds, wishDepartmentId, receiveCardAddressId, note } =
-    previousStepData.register;
+    previousStepData.register || {};
 
   // lấy kĩ năng sở trường
   let { data: strongPointList } = useAxios(
