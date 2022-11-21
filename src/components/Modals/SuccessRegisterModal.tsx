@@ -1,4 +1,6 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
+import cover from '~/assets/cover.jpg';
+import React, { useRef } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -21,21 +23,26 @@ import {
   InputRightElement,
   Stack,
   Divider,
+  Center,
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import { MdContentCopy } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
-import { TableComponent, LeaderComponent } from '~/components/Register';
+import { TableComponent, LeaderComponent, OtherInfo } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import * as htmlToImage from 'html-to-image';
+
+
 const PATH_URL = window.location.origin;
 
 export default function SuccessRegisterModal() {
+
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const { avatar, fullName, infos } = mapSuccessData(previewInfo);
@@ -54,23 +61,18 @@ export default function SuccessRegisterModal() {
 
   const { infosSuccess, LinkQrCode } = dataSuccess;
 
-  const onImageDownload = () => {
-    const svg: any = document.getElementById('QRCode');
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas: HTMLCanvasElement = document.createElement('canvas');
-    const ctx: any = canvas.getContext('2d');
-    const img = new Image();
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      const pngFile = canvas.toDataURL('image/png');
-      const downloadLink = document.createElement('a');
-      downloadLink.download = 'QRCode';
-      downloadLink.href = `${pngFile}`;
-      downloadLink.click();
-    };
-    img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+  const onImageDownload = async (fullName) => {
+    function coverName(string) {
+      return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    const svg: any = document.getElementById('download-image');
+    const dataUrl = await htmlToImage.toPng(svg);
+
+    // download image
+    const link = document.createElement('a');
+    link.download = `${coverName(fullName)}_thong-tin-dang-ky.png`;
+    link.href = dataUrl;
+    link.click();
   };
 
   const copyLinkQR = () => {
@@ -94,70 +96,101 @@ export default function SuccessRegisterModal() {
     <Modal isOpen={open} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-          <Heading mb={3} as='h5' size='md'>
+        <ModalHeader textAlign={'center'}>
+          <Heading pt={0} as='h5' size='md'>
             Cảm ơn huynh đệ đã đăng ký!
           </Heading>
-          <Heading mb={3} as='h5' size='sm'>
-            Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ!
-          </Heading>
-          <Divider />
+          {/* <Divider /> */}
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody id='download-image' p={1} background={'#FFFFFF'}>
           <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
-            <Box textAlign={'center'}>
-              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
-              <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                {fullName}
-              </Heading>
-              <Box>{TableComponent(infosSuccess, REGISTER_INFO_TITLE)}</Box>
-              {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
-              <Box>
-                <Divider />
-                <Box w='100%' p={3} textAlign={'center'}>
-                  <QRCode
-                    id='QRCode'
-                    size={256}
-                    style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                    value={LinkQrCode}
-                    viewBox={`0 0 256 256`}
+            <Box>
+              <Box position={'relative'} style={{ paddingBottom: 20 }}>
+                <Box
+                  backgroundImage={`url(${cover})`}
+                  backgroundPosition={{ base: 'center' }}
+                  backgroundRepeat='no-repeat'
+                  backgroundSize='cover'
+                  transitionDuration={'2s'}
+                  width={'100%'}
+                  height={'250px'}
+                >
+                </Box>
+                <Box textAlign={'center'}>
+                  <Avatar size={'2xl'} src={avatar} mb={4} position={'absolute'}
+                    backgroundColor={'#c7ced6'}
+                    style={{ bottom: 10, top: 160 }}
+                    right={{ base: '33.5%', sm: '37%', }}
                   />
                 </Box>
-                <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
-                  <InputGroup size='md'>
-                    <Input
-                      colorScheme={'red'}
-                      isReadOnly={true}
-                      variant='filled'
-                      pr='2.5rem'
-                      type='text'
+              </Box>
+              <Box p={7}>
+                <Box textAlign={'center'}>
+                  <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
+                    {'Phạm văn duy'}
+                  </Heading>
+                  <Heading mb={3} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'lg' }} color={'red'}>
+                    Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ!
+                  </Heading>
+                </Box>
+                <Divider borderBottomWidth={'8px'} />
+                <Box>
+                  {TableComponent(infosSuccess, REGISTER_INFO_TITLE)}
+                </Box>
+                <Divider borderBottomWidth={'8px'} />
+                <Box>
+                  <Box w='60%' pt={3} float={'left'}>
+                    {_.get(previewInfo, 'leader', false) ?
+                      OtherInfo({ isLeader: true, title: _.get(previewInfo, 'leader.religiousName', ''), subTitle: _.get(previewInfo, 'leader.phoneNumber', '') }) :
+                      OtherInfo({ isLeader: false, title: _.get(infos, 'religiousName'), subTitle: _.get(infos, 'organizationStructureId') })}
+                  </Box>
+                  <Box w='40%' pt={3} textAlign={'center'} float={'right'}>
+                    <QRCode
+                      id='QRCode'
+                      size={256}
+                      style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
                       value={LinkQrCode}
+                      viewBox={`0 0 256 256`}
                     />
-                    <InputRightElement width='2.5rem'>
-                      <IconButton
-                        onClick={copyLinkQR}
-                        size='sm'
-                        aria-label='Copy Link'
-                        icon={<MdContentCopy />}
-                      />
-                    </InputRightElement>
-                  </InputGroup>
-                </Stack>
-                <Box id='box-alert' style={{ display: 'none' }}>
-                  <Alert status='success'>
-                    <AlertIcon />
-                    <Box>
-                      <AlertDescription>Coppied</AlertDescription>
-                    </Box>
-                  </Alert>
+                  </Box>
+                  <Box w='100%' pt={3} textAlign={'center'} float={'right'}>
+                    <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
+                      <InputGroup size='md'>
+                        <Input
+                          colorScheme={'red'}
+                          isReadOnly={true}
+                          variant='filled'
+                          pr='2.5rem'
+                          type='text'
+                          value={LinkQrCode}
+                        />
+                        <InputRightElement width='2.5rem'>
+                          <IconButton
+                            onClick={copyLinkQR}
+                            size='sm'
+                            aria-label='Copy Link'
+                            icon={<MdContentCopy />}
+                          />
+                        </InputRightElement>
+                      </InputGroup>
+                    </Stack>
+                  </Box>
+                  <Box id='box-alert' style={{ display: 'none' }}>
+                    <Alert status='success' style={{ borderRadius: 4 }}>
+                      <AlertIcon />
+                      <Box>
+                        <AlertDescription>Coppied</AlertDescription>
+                      </Box>
+                    </Alert>
+                  </Box>
                 </Box>
               </Box>
             </Box>
           </GridItem>
         </ModalBody>
         <ModalFooter>
-          <Button variant='ghost' onClick={onImageDownload} style={{ marginRight: 10 }}>
+          <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} style={{ marginRight: 10 }}>
             Tải mã QR
           </Button>
           <Button

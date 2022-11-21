@@ -35,21 +35,21 @@ const department_names = [
     image: `${FOLDER_PATH}/HD1/${COVER}`,
     desc: (
       <>
-        <Container textAlign={'justify'} py='10px'>
+        <Container textAlign={'justify'} py='0'>
           🌻 Khi những tiếng ve kêu xào xạc qua kẽ lá, lá cờ Phật giáo tung bay trên những nẻo
           đường, đó là lúc báo hiệu một mùa Phật Đản nữa lại về.
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           🌻 Các bạn còn chần chờ gì nữa, hãy xách ba lô, tạm xa thành phố vài ngày để cùng tham gia
           với chúng mình nhé!
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           🤗 Về với Team Hành Đường 1, các bạn sẽ được:
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           ☘️ Chiêm ngưỡng khu chợ đầu mối rau củ “siêu độc đáo” chỉ có tại Thiền Tôn Phật Quang.
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           ☘️ Tự tay lựa chọn các nguyên liệu siêu sạch, với số lượng “khổng lồ” để phục vụ hàng
           nghìn Phật tử, hỗ trợ các quý Thầy Cô nấu các món ăn thơm ngon bổ dưỡng trong căn bếp tràn
           đầy tình thương.
@@ -68,7 +68,7 @@ const department_names = [
           <Center>“Đâu cần Hành Đường 2 có</Center>
           <Center>Đâu khó có Hành Đường 2"</Center>
         </Container>
-        <Container textAlign={'justify'} py='10px'>
+        <Container textAlign={'justify'} py='0'>
           🌻 Tiếp nối công việc Hành Đường 1, nhiệm vụ của Hành Đường 2 là mang những phần cơm đến
           tận tay quý Phật tử và các bạn sinh viên.
           <br />
@@ -98,7 +98,7 @@ const department_names = [
     image: `${FOLDER_PATH}/TK/${COVER}`,
     desc: (
       <>
-        <Container textAlign={'justify'} py='10px'>
+        <Container textAlign={'justify'} py='0'>
           "Tri khách sinh viên,
           <br />
           Đón người thân trở về nhà.
@@ -149,16 +149,16 @@ const department_names = [
           <Center>Ánh mắt thân ái</Center>
           <Center>Tình người thân thương.”</Center>
         </Container>
-        <Container textAlign={'justify'} py='10px'>
+        <Container textAlign={'justify'} py='0'>
           🍀Được xem là gương mặt đại diện trong mùa lễ bởi lực lượng sinh viên nam thanh, nữ tú,
           trang phục đẹp và thanh lịch, luôn rạng rỡ tươi cười chào đón Phật tử từ phương xa về dự
           lễ.
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           🍀Đội ngũ Ban Hướng Dẫn dàn trải khắp khuôn viên chùa và sẵn sàng hỗ trợ Phật Tử mọi lúc,
           mọi nơi với trọn tình yêu thương và lòng khiêm hạ.
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           🍀Hãy về với team “Ban Hướng Dẫn” để được trải nghiệm cảm giác trong tâm thế một người ân
           cần, niềm nở, chào đón hàng nghìn từ phương xa về dự lễ.
         </Container>
@@ -182,11 +182,11 @@ const department_names = [
           <Center>Bồi dưỡng thật mệt nhưng mà thật vui</Center>
           <Center>Ai yêu phụng sự thì làm được thôi...."</Center>
         </Container>
-        <Container textAlign={'justify'} py='10px'>
+        <Container textAlign={'justify'} py='0'>
           🍀Điều kiện vào #teamBồiDưỡng không thể dễ hơn nữa!!! Nhanh tay đăng ký NGAY để hết hạn.
           Nhưng đừng đăng ký một mình nhé, phải nhiều "mình" mới vui.
         </Container>
-        <Container textAlign={'justify'} pb='10px'>
+        <Container textAlign={'justify'} pb='0'>
           🍀Nhân dịp Đại Lễ tại Thiền Tôn Phật Quang, Chúng Thanh niên Phật tử Phật Quang Tp.HCM xin
           kêu gọi quý Phật tử, quý huynh đệ cùng các bạn thanh niên, sinh viên về tham gia dự lễ và
           công quả phụ giúp chùa.

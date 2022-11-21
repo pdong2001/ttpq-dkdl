@@ -8,9 +8,10 @@ type Props = {
   images: any;
   styles: Object;
   settings: Object;
+  imageProps: Object;
 };
 
-const Carousels = ({ images, styles, settings = {} }: Props) => {
+const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%' } }: Props) => {
   const [initSlide, setInitSlide] = useState(0);
 
   const settingsDefault = {
@@ -41,12 +42,14 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
     <>
       <Box
         position={'relative'}
-        // height={'100vh'}
         height={'100%'}
         width={'full'}
         overflow={'hidden'}
         style={styles}
         className='carousel'
+        _hover={{
+          bg: 'whiteAlpha.300',
+        }}
       >
         {/* CSS files for react-slick */}
         <link
@@ -70,6 +73,13 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
           transform={'translate(0%, -50%)'}
           zIndex={2}
           onClick={() => slider?.slickPrev()}
+          borderRadius='50%'
+          w={10}
+          height={10}
+          cursor='pointer'
+          border='2px solid'
+          borderColor='blue.200'
+          
         >
           <BiLeftArrowAlt size='40px' />
         </IconButton>
@@ -84,6 +94,12 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
           transform={'translate(0%, -50%)'}
           zIndex={2}
           onClick={() => slider?.slickNext()}
+          borderRadius='50%'
+        w={10}
+        height={10}
+        cursor='pointer'
+        border='2px solid'
+        borderColor='blue.200'
         >
           <BiRightArrowAlt size='40px' />
         </IconButton>
@@ -97,9 +113,11 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
             <Image
               key={index}
               alt={'feature image'}
-              height='100%'
+              // height='100%'
               src={image}
               objectFit={'cover'}
+              {...imageProps}
+              // width={'100vh'}
             />
           ))}
         </Slider>
