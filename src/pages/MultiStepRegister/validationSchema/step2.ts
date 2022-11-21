@@ -17,7 +17,9 @@ const step2Schema = Yup.object({
         if (!(year || month || date)) {
           return context.createError({ message: 'Bạn ơi, nhập ngày sinh nha' });
         }
-        const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([year, month, date].join('-'));
+
+        const isValidDateFormat = REGEX_YEAR_MONTH_DAY.test([date, month, year].join('-'));
+
         const isValidDateFollowCalender = Validator.validateCalenderDate(value);
 
         return (

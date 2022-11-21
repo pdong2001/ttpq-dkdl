@@ -45,6 +45,7 @@ const SocialButton = ({
       cursor={'pointer'}
       as={'a'}
       href={href}
+      target='_blank'
       display={'inline-flex'}
       alignItems={'center'}
       justifyContent={'center'}
@@ -92,7 +93,7 @@ export default function Footer() {
           </Stack>
           <Stack align={'flex-start'}>
             <ListHeader>Phát hành</ListHeader>
-            <Link href={'https://congtyphapquang.com/'}>
+            <Link isExternal href={'https://congtyphapquang.com/'}>
               <HStack>
                 <FaBuilding /> <Text>Công ty Pháp Quang</Text>
               </HStack>
@@ -100,7 +101,7 @@ export default function Footer() {
           </Stack>
           <Stack align={'flex-start'}>
             <ListHeader>Thời trang Homis</ListHeader>
-            <Link href={'https://www.facebook.com/HOMISBuddhistfashion/'}>
+            <Link isExternal href={'https://www.facebook.com/HOMISBuddhistfashion/'}>
               <HStack>
                 <FaFacebook /> <Text>Facebook</Text>
               </HStack>
@@ -108,12 +109,15 @@ export default function Footer() {
           </Stack>
           <Stack align={'flex-start'}>
             <ListHeader>App Pháp Quang - Sen Hồng</ListHeader>
-            <Link href={'https://play.google.com/store/apps/details?id=com.pqsoft.phapquang&pli=1'}>
+            <Link
+              isExternal
+              href={'https://play.google.com/store/apps/details?id=com.pqsoft.phapquang&pli=1'}
+            >
               <HStack>
                 <FaAndroid /> <Text>Android</Text>
               </HStack>
             </Link>
-            <Link href={'https://apps.apple.com/fr/app/ph%C3%A1p-quang/id1608669200'}>
+            <Link isExternal href={'https://apps.apple.com/fr/app/ph%C3%A1p-quang/id1608669200'}>
               <HStack>
                 <FaAppStoreIos /> <Text>IOS</Text>
               </HStack>

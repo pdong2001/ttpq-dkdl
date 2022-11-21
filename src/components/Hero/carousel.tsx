@@ -72,7 +72,7 @@ export default function CaptionCarousel() {
   // Settings for the slider
   const settings = {
     dots: false,
-    arrows: true,
+    arrows: false,
     // fade: true,
     infinite: true,
     // autoplay: true,
