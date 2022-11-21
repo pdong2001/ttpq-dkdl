@@ -144,7 +144,7 @@ const GreatCeremonyInfo = () => {
                 </Text>
                 <Text textTransform='uppercase'>Số ngày còn lại</Text>
               </VStack>
-              <HStack spacing={[8, 10, 16, 16]}>
+              <HStack spacing={[4, 10, 16, 16]}>
                 {new Array(4).fill('00').map((time, i) => {
                   return (
                     <Square key={i} border='1px' size={[16, 16, 20, 24, 32]} rounded='xl'>
