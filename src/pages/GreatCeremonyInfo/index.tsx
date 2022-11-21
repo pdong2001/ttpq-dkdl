@@ -99,7 +99,7 @@ const GreatCeremonyInfo = () => {
   return (
     <>
       <Box id='eventInfo' scrollMarginTop={16} />
-      <Box bgColor={'#f4f4f6'} bgSize={'cover'} py={10}>
+      <Box bgColor={'#f4f4f6'} bgSize={'cover'} py={5}>
         <Container maxW='6xl' px={[3, 5, 16, 20, 0]}>
           <Box w='100%' textAlign='center'>
             <FadeInUp>

@@ -91,12 +91,7 @@ function DepartmentInfos({}: Props) {
   return (
     <>
       <Box id='departmentInfo' scrollMarginTop={16} />
-      <Box
-        bg='yellow.50'
-        py={10}
-        // px={{ base: 10, md: 16, lg: 28, xl: 28 }}
-        id='departmentInfo'
-      >
+      <Box bg='yellow.50' py={5} id='departmentInfo'>
         <Container maxW='6xl' px={[3, 5, 16, 20, 0]}>
           <FadeInUp>
             <Box w='100%' textAlign='center'>
@@ -126,13 +121,14 @@ function DepartmentInfos({}: Props) {
             <ModalContent>
               <ModalCloseButton />
               <ModalBody p={0}>
-                <SimpleGrid minH={'100vh'} maxH={'100vh'} columns={{ sm: 1, md: 1, base: 1, lg: 2 }} spacing={10}>
+                <SimpleGrid
+                  minH={'100vh'}
+                  maxH={'100vh'}
+                  columns={{ sm: 1, md: 1, base: 1, lg: 2 }}
+                  spacing={10}
+                >
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
-                    <Carousels
-                      images={departmentSelected.images}
-                      styles={{ }}
-                      settings={{}}
-                    />
+                    <Carousels images={departmentSelected.images} styles={{}} settings={{}} />
                   </Flex>
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
                     <Stack spacing={6}>
