@@ -1,5 +1,6 @@
 import { Tag } from '@chakra-ui/react';
 import _ from 'lodash';
+import moment from 'moment';
 import { EVENT_EXP_TITLE, MOVE_TYPE_TITLE } from '~/configs/register';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
@@ -10,7 +11,9 @@ const mapSuccessData = (previewInfo) => {
       religiousName: _.get(previewInfo, 'religiousName', ''),
       phoneNumber: _.get(previewInfo, 'phoneNumber', ''),
       identityCard: _.get(previewInfo, 'identityCard', ''),
-      dateOfBirth: _.get(previewInfo, 'dateOfBirth', ''),
+      dateOfBirth:
+        _.get(previewInfo, 'dateOfBirth', '') &&
+        moment(_.get(previewInfo, 'dateOfBirth')).format('DD-MM-YYYY'),
       email: _.get(previewInfo, 'email', ''),
       organizationStructureId: _.get(previewInfo, 'organizationStructureId', ''),
       permanentAddress: _.get(previewInfo, 'permanentAddress', ''),

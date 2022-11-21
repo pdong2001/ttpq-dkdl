@@ -95,13 +95,14 @@ const Step2 = (props: StepProps) => {
         organizationStructureId,
       } = values;
       const { year, month, date } = dob || {};
+      const dateOfBirth = new Date(+year, +month - 1, +date);
       dispatch(
         fillForm({
           gender,
           religiousName,
           email,
           organizationStructureId,
-          dateOfBirth: [year, month, date].join('-'),
+          dateOfBirth,
           temporaryAddress,
           permanentAddress,
           register,
@@ -112,7 +113,7 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
-          dateOfBirth: [year, month, date].join('-'),
+          dateOfBirth,
           ...(ctnId && { organizationStructureId: ctnName }),
         }),
       );
