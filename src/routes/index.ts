@@ -11,7 +11,6 @@ import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 import FinalStep from '~/pages/MultiStepRegister/RegisterSteps/FinalStep';
 import BlankLayout from '~/components/containers/layouts/BlankLayout';
 import NoFooterLayout from '~/components/containers/layouts/NoFooterLayout';
-import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 
 export type RouteType = {
   key: string;
@@ -38,13 +37,6 @@ export const NavBarLink = [
 ];
 
 const ROUTES: RouteType[] = [
-  {
-    key: 'GREAT_CEREMORY_INFO',
-    path: '/sussess',
-    exact: true,
-    component: SuccessRegisterModal,
-    layout: MainLayout,
-  },
   {
     key: 'GREAT_CEREMORY_INFO',
     path: EVENT_INFO,
