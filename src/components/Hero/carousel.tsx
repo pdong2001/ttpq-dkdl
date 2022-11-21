@@ -56,7 +56,7 @@ export default function CaptionCarousel() {
   // These are the breakpoints which changes the position of the
   // buttons as the screen size changes
   const top = useBreakpointValue({ base: '95%', md: '50%' });
-  const side = useBreakpointValue({ base: '-40px', md: '10px', lg: '20px', '2xl': '8%' });
+  const side = useBreakpointValue({ base: '10px', lg: '20px', '2xl': '8%' });
 
   // Settings for the slider
   const settings = {
