@@ -52,6 +52,7 @@ const createAppSlice = <State extends ReduxState, Response extends ResponseData 
         })
         .addCase(action.rejected, (state, action) => {
           state.loaded = true;
+          state.error = action.payload;
           if (onRejected) {
             state.error = onRejected(state.error, action);
           }

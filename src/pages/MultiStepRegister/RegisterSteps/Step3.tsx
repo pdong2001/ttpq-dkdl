@@ -16,13 +16,37 @@ import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
 import { MOVE_TYPE_TITLE } from '~/configs/register';
+import { useRouteMatch } from 'react-router-dom';
+import { ADD_NEW_REGISTER_PATH } from '~/routes';
+import { convertToAppDateTime } from '~/utils/date';
+import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
+import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
+
+type Time = StartTimeDto | LeaveTimeDto;
+const mappingTime = (times: Time[]) => {
+  if (!times) return [];
+  return times.map((t) => {
+    const { time, name } = t || {};
+    return { ...t, name: `${name}, ${convertToAppDateTime(time)}` };
+  });
+};
+type Address = StartAddressDto | LeaveAddressDto;
+const mappingAddress = (addresses: Address[] | undefined) => {
+  if (!addresses) return [];
+  return addresses.map((addr) => {
+    const { address, name } = addr || {};
+    return { ...addr, name: `${name}, ${address}` };
+  });
+};
 
 const Step3 = (props: StepProps) => {
+  const { path } = useRouteMatch();
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { leaveAddresses, startAddresses } = registerPage;
+
   const { register } = useAppSelector((state) => state.register.data);
   const {
     moveType: editMoveType,
@@ -54,12 +78,15 @@ const Step3 = (props: StepProps) => {
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
+  const isAddNew = path === ADD_NEW_REGISTER_PATH;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       moveType:
-        moveTypeInStore || editMoveType + '' || hasStartAddress ? MoveType.HCM : MoveType.OTHER,
+        moveTypeInStore ||
+        (editMoveType && editMoveType + '') ||
+        (hasStartAddress ? MoveType.HCM : MoveType.OTHER),
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
@@ -105,17 +132,19 @@ const Step3 = (props: StepProps) => {
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
 
-  const [leaveTimes, setLeaveTimes] = useState<LeaveTimeDto[] | never[]>();
-  const [startTimes, setStartTimes] = useState<StartTimeDto[] | never[]>();
+  const [leaveTimes, setLeaveTimes] = useState<Time[] | never[]>();
+  const [startTimes, setStartTimes] = useState<Time[] | never[]>();
 
   useEffect(() => {
     const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
-    setLeaveTimes(times);
+    const mappingTimes = mappingTime(times);
+    setLeaveTimes(mappingTimes);
   }, [leaveAddresses, leaveAddressId]);
 
   useEffect(() => {
     const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
-    setStartTimes(times);
+    const mappingTimes = mappingTime(times);
+    setStartTimes(mappingTimes);
   }, [startAddresses, startAddressId]);
 
   useEffect(() => {
@@ -133,8 +162,8 @@ const Step3 = (props: StepProps) => {
     dispatch(
       fillDataPreview({
         ...values,
-        startAddressId: `${filterTitle(startAddresses, values.startAddressId)}`,
-        leaveAddressId: `${filterTitle(leaveAddresses, values.leaveAddressId)}`,
+        startAddressId: `${filterTitle(mappingAddress(startAddresses), values.startAddressId)}`,
+        leaveAddressId: `${filterTitle(mappingAddress(leaveAddresses), values.leaveAddressId)}`,
         startTimeId: `${filterTitle(startTimes, values.startTimeId)}`,
         leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
       }),
@@ -159,7 +188,7 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios isRequired label='Hình thức di chuyển' name='moveType'>
+              <Radios label='Hình thức di chuyển' name='moveType'>
                 {startAddresses?.length && (
                   <Radio value={MoveType.HCM}>{MOVE_TYPE_TITLE[MoveType.HCM]}</Radio>
                 )}
@@ -174,7 +203,7 @@ const Step3 = (props: StepProps) => {
                 <>
                   <Select
                     name='startAddressId'
-                    data={startAddresses}
+                    data={mappingAddress(startAddresses)}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
@@ -191,7 +220,7 @@ const Step3 = (props: StepProps) => {
                   />
                   <Select
                     name='leaveAddressId'
-                    data={leaveAddresses}
+                    data={mappingAddress(leaveAddresses)}
                     label='Địa điểm trở về'
                     placeholder='Địa điểm trở về'
                     onChange={() => {

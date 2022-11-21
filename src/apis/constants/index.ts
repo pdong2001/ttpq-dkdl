@@ -19,6 +19,7 @@ const LOGIN_MEMBER = '/api/v1/Auth/login-member';
 const UPLOAD_FILE = '/api/v1/BlobStorage/Upload';
 const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/api/v1/BlobStorage/GetOne/:id`;
 const GET_MEMBER_BY_ID = '/api/v1/Member/get-by-id/:id';
+const UPDATE_MEMBER = '/api/v1/Member/update/:id';
 
 const API = {
   REGISTER,
@@ -42,6 +43,7 @@ const API = {
   GET_FILE,
   GET_MEMBER_BY_ID,
   UPDATE_REGISTER,
+  UPDATE_MEMBER,
 };
 
 export default API;

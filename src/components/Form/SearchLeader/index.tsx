@@ -27,11 +27,14 @@ import { useAppSelector } from '~/hooks/reduxHook';
 import useAxios from '~/hooks/useAxios';
 import { formatUrl } from '~/utils/functions';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
+import { useRouteMatch } from 'react-router-dom';
+import { HOME_WITH_SHORT_URI } from '~/routes';
 
 type Props = {
   name: string;
   label: string;
   getLeader: Function;
+  color?: string;
 };
 type LeaderData = {
   id: string;
@@ -41,22 +44,25 @@ type LeaderData = {
 };
 
 const SearchLeader = (props: Props) => {
+  const { path } = useRouteMatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { name, label, getLeader } = props;
+  const { name, label, getLeader, color } = props;
   const [field, { error, touched }, { setValue, setTouched }] = useField(name);
 
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { primaryColor } = useCustomColorMode();
-  const { leaderId } = useAppSelector((state) => state.registerInfo.data);
+  const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
+  const { leaderId } = useAppSelector((state) => state.register.data.register);
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
-      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
+      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId || editLeaderId }),
       transformResponse: ({ data }) => data,
     },
-    [leaderId],
+    [editLeaderId, leaderId],
   );
-  if (!leaderId) {
+  if (!(editLeaderId || leaderId)) {
+    console.log('cancel leader' + editLeader + 'hello' + leaderId);
     editToken.cancel();
   }
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
@@ -76,7 +82,7 @@ const SearchLeader = (props: Props) => {
   }, [searchValue]);
 
   const startSkelotonColor = 'gray.600';
-  const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.500' : 'gray.600';
+  const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.300' : 'gray.600';
 
   useEffect(() => {
     if (loaded) {
@@ -87,14 +93,21 @@ const SearchLeader = (props: Props) => {
     }
   }, [loaded]);
 
-  const isInvalid = (loaded && !data?.data) || (!!error && touched);
+  console.log('render__');
 
+  const isInvalid = (loaded && !data?.data) || (!!error && touched);
+  const isHomePage = path === HOME_WITH_SHORT_URI;
   return (
     <FormControl isInvalid={isInvalid}>
-      <FormLabel mb={0}>{label}</FormLabel>
-      <SimpleGrid columns={{ base: 1, md: 2 }} alignItems='center' gap={{ base: 4, md: 6 }}>
+      <FormLabel color={color}>{label}</FormLabel>
+      <SimpleGrid
+        columns={{ base: 1, md: isHomePage ? 1 : 2 }}
+        alignItems='center'
+        gap={{ base: 4, md: 6 }}
+      >
         <InputGroup size='md'>
           <Input
+            color={color}
             placeholder='Tìm bằng SĐT hoặc CCCD / CMT'
             focusBorderColor={primaryColor}
             pr='2.5rem'

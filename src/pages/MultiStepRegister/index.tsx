@@ -36,6 +36,8 @@ const MultiStepRegister = () => {
 
   const dispatch = useAppDispatch();
 
+  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
+
   useEffect(() => {
     if (shortUri) {
       dispatch(
@@ -54,9 +56,6 @@ const MultiStepRegister = () => {
   useEffect(() => {
     if (path === ADD_NEW_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {
       setStep(1);
-    }
-    if (path === EDIT_REGISTER_PATH) {
-      setStep(2);
     }
   }, []);
   const nextStep = () => {
@@ -78,23 +77,25 @@ const MultiStepRegister = () => {
   const { bgColor } = useCustomColorMode();
   return (
     <>
+      <Box id='register' scrollMarginTop={16} />
       {loaded && (
-        <Box bgImage={CoverImage} bgSize={'cover'} backgroundAttachment='fixed'>
+        <Box bgGradient='linear(to-r,  blue.200, Blue.500)'>
           <Container
             as={Grid}
-            maxW={'full'}
+            maxW={'5xl'}
             gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
-            py={{ base: 20 }}
+            pt={{ base: 16 }}
+            pb={5}
             minH='100vh'
             alignItems={'center'}
           >
-            <GridItem colSpan={{ base: 3, lg: step === 1 ? 3 : 2 }}>
+            <GridItem colSpan={{ base: 3 }}>
               <FadeInUp>
                 <Box
                   bg={bgColor}
                   rounded={'xl'}
                   p={{ base: 4, sm: 6, md: 8 }}
-                  mx={{ base: 1, sm: 10, md: 20, lg: 6, xl: 20 }}
+                  mx={{ base: 1, sm: 10, md: 20, lg: 6 }}
                 >
                   <Step nextStep={nextStep} previousStep={previousStep} />
                 </Box>

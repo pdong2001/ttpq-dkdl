@@ -21,6 +21,9 @@ export const searchMember = createAsyncRequest('searchMember', {
   method: 'post',
   url: API.SEARCH_MEMBER,
 });
+export const updateMember = createAsyncRequest('member/update', {
+  method: 'post',
+});
 
 type Data = MemberDto & UpSertMemberDto;
 
@@ -43,6 +46,9 @@ const slice = createAppSlice<typeof initialState>(
     /* non-async action */
     fillForm: (state, action) => {
       state.data = { ...state.data, ...action.payload };
+    },
+    onlyKeep: (state, action) => {
+      state.data = { ...action.payload };
     },
   },
   [
@@ -72,5 +78,5 @@ const slice = createAppSlice<typeof initialState>(
 );
 
 const registerReducer = slice.reducer;
-export const { fillForm } = slice.actions;
+export const { fillForm, onlyKeep } = slice.actions;
 export default registerReducer;

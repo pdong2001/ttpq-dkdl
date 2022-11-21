@@ -4,6 +4,7 @@ import {
   Grid,
   GridItem,
   Avatar,
+  Flex,
   IconButton,
   Stack,
   Button,
@@ -56,6 +57,7 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { EVENT_EXP_TITLE } from '~/configs/register';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -91,13 +93,14 @@ const RegisterInfo = () => {
     );
   };
 
-  const { data: memberAuthdata, error: memberAuthError } = useAppSelector(
-    (state) => state.memberAuth,
-  );
+  const {
+    data: memberAuthdata,
+    error: memberAuthError,
+    loaded: authenLoaded,
+  } = useAppSelector((state) => state.memberAuth);
   const { data, loaded, error } = useAppSelector((state) => state.registerInfo);
 
   useEffect(() => {
-    console.log(memberAuthdata.token);
     if (memberAuthdata.token && isSubmit.current) {
       dispatch(
         getRegisterInfo({
@@ -108,8 +111,9 @@ const RegisterInfo = () => {
         history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
       });
     }
+
     if (memberAuthError) onOpenLoginAlert();
-  }, [memberAuthdata.token, memberAuthError]);
+  }, [memberAuthdata.token, memberAuthError, authenLoaded]);
 
   useEffect(() => {
     dispatch(
@@ -119,9 +123,6 @@ const RegisterInfo = () => {
       }),
     );
   }, []);
-  if (loaded) {
-    console.log('data, error', data, error);
-  }
   const member = data?.member;
   const note = data?.note;
   const leaderId = data?.leaderId;
@@ -160,11 +161,12 @@ const RegisterInfo = () => {
     {
       method: 'get',
       url: API.GET_CTN,
-      params: { ctnId: organizationStructureId },
+      params: { CTNGroupId: organizationStructureId },
+      transformResponse: ({ Data }) => Data,
     },
     [organizationStructureId],
   );
-  if (organizationStructureId) {
+  if (!organizationStructureId) {
     ctnToken.cancel();
   }
 
@@ -181,7 +183,10 @@ const RegisterInfo = () => {
 
   const tableInfoRight = [
     { title: 'Pháp Danh', value: member?.religiousName },
-    { title: 'Nơi sinh hoạt', value: ctnInfo?.Data[0].Name },
+    {
+      title: 'Nơi sinh hoạt',
+      value: ctnInfo?.find((ctn) => ctn.Id === organizationStructureId).Name,
+    },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },
     { title: 'Kỹ năng', value: member?.strongPoints || [] },
@@ -195,11 +200,24 @@ const RegisterInfo = () => {
     departure_flight_code: '',
     return_flight_code: '',
   };
+
+  const contactStatusMap = {
+    '-1': 'Hủy',
+    '0': 'Chưa liên hệ',
+    '1': 'Chưa chắc chắn',
+    '2': 'Chắc chắn tham gia',
+  };
+
+  const startAddress = data.startTime?.address;
+  const leaveAddress = data.leaveTime?.address;
+  const contactStatus = data.contactStatus?.toString();
   if (moveType == MoveType.HCM) {
-    schedule.departure_address = data.startTime?.address?.address || '';
+    schedule.departure_address =
+      [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
     schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
     schedule.return_time = convertToAppDateTime(data.leaveTime?.time) || '';
-    schedule.return_address = data.leaveTime?.address?.address || '';
+    schedule.return_address =
+      [leaveAddress?.name, leaveAddress?.address].filter((e) => !!e).join(', ') || '';
   } else {
     schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
@@ -272,8 +290,14 @@ const RegisterInfo = () => {
               </Table>
             </TableContainer>
 
-            <Stack px={6} pt={5} textAlign={'center'} spacing={2} direction='column'>
+            <Flex px={6} pt={5} textAlign={'center'} alignItems='center' direction='column'>
               <Text as='b' color={primaryColor}>
+                Tình trạng xác nhận
+              </Text>
+              <Tag mt={3} textAlign='center' colorScheme={'blue'} borderRadius='full'>
+                {contactStatusMap[contactStatus ? contactStatus : 0]}
+              </Tag>
+              {/* <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
               </Text>
               <InputGroup size='md'>
@@ -288,8 +312,8 @@ const RegisterInfo = () => {
                 <InputRightElement width='2.5rem'>
                   <IconButton size='sm' aria-label='Copy Link' icon={<MdContentCopy />} />
                 </InputRightElement>
-              </InputGroup>
-            </Stack>
+              </InputGroup> */}
+            </Flex>
           </Box>
         </GridItem>
         <GridItem colSpan={{ base: 3, md: 7, lg: 8 }}>
@@ -398,7 +422,7 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {member?.exps} lần
+                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
                     </Box>
                     <Box>
                       <Text as='b'>Kinh nghiệm làm việc tại các ban</Text>

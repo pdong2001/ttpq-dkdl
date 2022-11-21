@@ -13,7 +13,7 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { register, updateRegister } from '~/slices/register';
+import { register, updateMember, updateRegister } from '~/slices/register';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
@@ -43,14 +43,33 @@ const Step5 = (props: StepProps) => {
     leaderId,
   } = registerInfo;
 
-  const { register: registerData } = formData;
+  const { register: registerData, exps } = formData;
 
   const handleRegister = () => {
-    const request = isAddNew
-      ? register({
+    console.log('update data__', {
+      memberId,
+      leaderId,
+      moveType,
+      ...registerData,
+    });
+    if (isAddNew) {
+      dispatch(
+        register({
           data: formData,
+        }),
+      )
+        .then(unwrapResult)
+        .then(({ data }) => {
+          alert('Dạ HD tạo mới đăng ký thành công');
+          nextStep();
         })
-      : updateRegister({
+        .catch((e) => {
+          alert(e.message || 'Dạ có lỗi xảy ra ạ');
+          console.log('Dạ có lỗi xảy ra ạ', e);
+        });
+    } else {
+      const updateRegisterInfo = dispatch(
+        updateRegister({
           url: formatUrl(API.UPDATE_REGISTER, { id }),
           data: {
             memberId,
@@ -58,20 +77,35 @@ const Step5 = (props: StepProps) => {
             moveType,
             ...registerData,
           },
+        }),
+      );
+      const updateMemberInfo = dispatch(
+        updateMember({
+          url: formatUrl(API.UPDATE_MEMBER, { id: memberId }),
+          data: {
+            ..._.omit(formData, ['register']),
+          },
+        }),
+      );
+      Promise.all([updateRegisterInfo, updateMemberInfo])
+        .then((result) => result.map(unwrapResult))
+        .then(([{ data: register, code: registerCode }, { data: member, code: memberCode }]) => {
+          if (registerCode >= 400) {
+            return Promise.reject(register);
+          }
+          if (memberCode >= 400) {
+            return Promise.reject(member);
+          }
+          console.log('member__', member);
+          console.log('register__', register);
+          alert('Dạ HD đã cập nhật thành công ạ');
+          window.location.replace(`${window.location.origin}/register-info/${register?.id}`);
+        })
+        .catch((e) => {
+          alert(e?.message || 'Dạ có lỗi xảy ra ạ');
+          console.log('error__', e);
         });
-    dispatch(request)
-      .then(unwrapResult)
-      .then(({ data }) => {
-        if (isAddNew) {
-          nextStep();
-        } else {
-          window.location.replace(`${window.location.origin}/register-info/${data?.id}`);
-        }
-      })
-      .catch((e) => {
-        alert(e.message || 'Dạ có lỗi xảy ra ạ');
-        console.log('Dạ có lỗi xảy ra ạ', e);
-      });
+    }
   };
   const { infos, schedules, jobs, avatar, fullName } = mapSuccessData(previewInfo);
   return (
@@ -89,15 +123,13 @@ const Step5 = (props: StepProps) => {
         </Text>
         <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
           <Box textAlign={'center'}>
-            {isAddNew && (
-              <>
-                <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
-                <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                  {fullName}
-                </Heading>
-                <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
-              </>
-            )}
+            <>
+              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
+              <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
+                {fullName}
+              </Heading>
+              <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
+            </>
             <Box>
               <Alert status='success'>
                 <CalendarIcon />
@@ -130,7 +162,7 @@ const Step5 = (props: StepProps) => {
             Trở về
           </Button>
           <Button flexGrow={1} fontFamily={'heading'} onClick={handleRegister}>
-            Đăng ký
+            {isAddNew ? 'Đăng ký' : 'Cập nhật'}
           </Button>
         </SimpleGrid>
       </Box>

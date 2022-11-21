@@ -6,17 +6,24 @@ import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm } from '~/slices/register';
+import { fillForm, onlyKeep } from '~/slices/register';
 import { fillDataPreview } from '~/slices/previewInfo';
 import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
+import FormInput from '~/components/Form/FormInput';
+import { useRouteMatch } from 'react-router-dom';
+import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+  const { path } = useRouteMatch();
+  const isHomePage = path === HOME_WITH_SHORT_URI;
+  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
 
   const {
     fullName = '',
@@ -66,6 +73,18 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
+      // .then(unwrapResult)
+      // .catch(() => {
+      //   alert('Not found member');
+      //   dispatch(
+      //     onlyKeep({
+      //       identityCard,
+      //       phoneNumber,
+      //       fullName,
+      //       register: { leaderId, registerType },
+      //     }),
+      //   );
+      // });
       dispatch(
         fillDataPreview({
           fullName,
@@ -88,18 +107,16 @@ const Step1 = (props: StepProps) => {
   };
   const { registerType: localRegisterType } = formik.values;
 
-  const greatCeremony = 'Đại lễ Thành Đạo 2022';
+  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
-  console.log('___', formik.values);
-
   return (
-    <>
+    <Box>
       <Stack spacing={4}>
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.500'>
           {`Đăng Ký Công Quả`}
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+        <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
           {`${greatCeremony} PL.2565 - DL.2022`}
         </Text>
       </Stack>
@@ -107,15 +124,35 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <FloatingLabel name='fullName' label='Họ và tên' isRequired />
-              <FloatingLabel name='phoneNumber' label='Số điện thoại' isRequired />
-              <FloatingLabel name='identityCard' label='Số CCCD / Hộ chiếu' isRequired />
-              <Radios label='Hình thức đăng ký' name='registerType'>
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='fullName'
+                label='Họ và tên'
+                isRequired
+              />
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='phoneNumber'
+                label='Số điện thoại'
+                isRequired
+              />
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='identityCard'
+                label='Số CCCD / Hộ chiếu'
+                isRequired
+              />
+              <Radios
+                {...(isHomePage && { color: 'white' })}
+                label='Hình thức đăng ký'
+                name='registerType'
+              >
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios>
               {isRegisterFollowGroup && (
                 <SearchLeader
+                  {...(isHomePage && { color: 'white' })}
                   name='leaderId'
                   getLeader={(leader) => setLeaderPreview(leader)}
                   label='Trưởng nhóm'
@@ -128,7 +165,7 @@ const Step1 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </>
+    </Box>
   );
 };
 

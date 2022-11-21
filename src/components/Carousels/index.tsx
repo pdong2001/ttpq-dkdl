@@ -14,13 +14,12 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
   const [initSlide, setInitSlide] = useState(0);
 
   const settingsDefault = {
-    dots: true,
     arrows: false,
     fade: true,
-    infinite: true,
+    // infinite: true,
     autoplay: true,
     speed: 500,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4000,
     slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: initSlide,
@@ -29,8 +28,8 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
 
   const [slider, setSlider] = useState<Slider | null>(null);
   // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '50%', md: '50%' });
-  const side = useBreakpointValue({ base: '50%', md: '10px' });
+  const top = useBreakpointValue({ base: '95%', lg: '50%' });
+  const side = useBreakpointValue({ base: '30%', lg: '40px' });
 
   useEffect(() => {
     setTimeout(() => {
@@ -40,7 +39,15 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
 
   return (
     <>
-      <Box position='relative' style={styles} className='carousel'>
+      <Box
+        position={'relative'}
+        // height={'100vh'}
+        height={'100%'}
+        width={'full'}
+        overflow={'hidden'}
+        style={styles}
+        className='carousel'
+      >
         {/* CSS files for react-slick */}
         <link
           rel='stylesheet'
@@ -56,6 +63,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
         <IconButton
           aria-label='left-arrow'
           variant='ghost'
+          color='white'
           position='absolute'
           left={side}
           top={top}
@@ -69,6 +77,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
         <IconButton
           aria-label='right-arrow'
           variant='ghost'
+          color='white'
           position='absolute'
           right={side}
           top={top}
@@ -82,19 +91,15 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
           {...settingsDefault}
           ref={(slider: Slider) => {
             setSlider(slider);
-            console.log('slide', slider);
           }}
         >
           {images.map((image, index) => (
             <Image
               key={index}
-              rounded={'md'}
               alt={'feature image'}
-              // height={'100vh'}
+              height='100%'
               src={image}
-              // objectFit={'cover'}
-              width={'100vh'}
-              // objectFit={'contain'}
+              objectFit={'cover'}
             />
           ))}
         </Slider>
