@@ -1,14 +1,9 @@
-import {
-  Box,
-  Image,
-  IconButton,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Box, Image, IconButton, useBreakpointValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import Slider from 'react-slick';
 
-import './style.css'
+import './style.css';
 type Props = {
   images: any;
   styles: Object;
@@ -40,11 +35,19 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
     setTimeout(() => {
       setInitSlide(2);
     }, 1000);
-  })
+  });
 
   return (
     <>
-      <Box position={'relative'} height={'100vh'} width={'full'} overflow={'hidden'} style={styles} className='carousel'>
+      <Box
+        position={'relative'}
+        // height={'100vh'}
+        height={'100%'}
+        width={'full'}
+        overflow={'hidden'}
+        style={styles}
+        className='carousel'
+      >
         {/* CSS files for react-slick */}
         <link
           rel='stylesheet'
@@ -94,7 +97,7 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
             <Image
               key={index}
               alt={'feature image'}
-              height='100vh'
+              height='100%'
               src={image}
               objectFit={'cover'}
             />
@@ -104,6 +107,5 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
     </>
   );
 };
-
 
 export default Carousels;
