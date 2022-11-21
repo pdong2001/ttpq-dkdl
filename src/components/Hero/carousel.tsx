@@ -119,6 +119,7 @@ export default function CaptionCarousel() {
         cursor='pointer'
         border='2px solid'
         borderColor='blue.200'
+        display={{ base: 'none', md: 'block' }}
       ></Box>
       {/* Right Icon */}
       <Box
@@ -139,6 +140,7 @@ export default function CaptionCarousel() {
         cursor='pointer'
         border='2px solid'
         borderColor='blue.200'
+        display={{ base: 'none', md: 'block' }}
       ></Box>
       {/* Slider */}
       <Slider {...settings} ref={(slider) => setSlider(slider)}>
