@@ -142,11 +142,16 @@ const GreatCeremonyInfo = () => {
               </FadeInUp>
               <FadeInUp>
                 <Text color={'white'} textAlign='justify' mb={2}>
-                  Theo truyền thống, hằng năm kể từ ngày mồng 6 - 8/12 âm lịch, Thiền Tôn Phật Quang
-                  (Núi Dinh – BRVT) trang nghiêm trọng thể tổ chức kỷ niệm ngày Đức Phật Thích Ca
-                  Mâu Ni Thành Đạo, với một chương trình diễn ra bao gồm nhiều hoạt động thiết thực,
-                  đã giúp cho Lễ hội trở nên rất ý nghĩa, trong đó, tất cả Hội chúng được dịp hoài
-                  niệm ghi nhớ ngày đạo Phật được khai sinh trên toàn cõi năm châu bốn bể này.
+                  “Cứ mỗi lần ngồi lại với nhau để tưởng nhớ đến đêm Phật Thành Đạo Quả Vô Thượng
+                  Chánh Đẳng Chánh Giác, chúng con lại khởi lên niềm vui bất tận. Giống như trong
+                  khu rừng rậm gai góc, bỗng có con đường hiện ra. Giống như trong trại giam tăm
+                  tối, bỗng cánh cửa hé mở. Khi tâm của Phật bừng chiếu cả pháp giới thì cũng là lúc
+                  thế gian có con đường dẫn ra khỏi luân hồi khổ đau.” - Trích Cảm niệm Thành Đạo.
+                  <br />
+                  <br />
+                  Kính mừng sự kiện vĩ đại ấy, Thiền Tôn Phật Quang long trọng tổ chức chương trình
+                  Đại lễ kỷ niệm mừng ngày Đức Phật Bổn Sư Thích Ca Mâu Ni thành đạo PL. 2566 - DL.
+                  2022.
                 </Text>
               </FadeInUp>
               <FadeInUp>
@@ -162,19 +167,6 @@ const GreatCeremonyInfo = () => {
         </Container>
         {/* countdown */}
         <FadeInUp>
-          {/* <Stack
-            as={SimpleGrid}
-            maxW={'full'}
-            columns={{ base: 1, md: 2, lg: 3 }}
-            // templateColumns='repeat(3, 1fr)'
-            // gridGap={{ base: 5 }}
-            alignItems='start'
-            px={{ base: 10, md: 20, lg: 28 }}
-            pb={10}
-            color='white'
-            rounded='md'
-            justifyContent={['space-between']}
-          > */}
           <Stack
             direction={['column', 'row']}
             spacing={[5, 10, 16, 32]}
@@ -207,7 +199,6 @@ const GreatCeremonyInfo = () => {
                       >
                         {time}
                       </Text>
-
                       <Text fontSize={['sm', 'md', 'lg', 'xl', '2xl']}>{times[i].title}</Text>
                     </VStack>
                   </Square>
