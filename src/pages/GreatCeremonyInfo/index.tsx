@@ -8,13 +8,30 @@ import {
   Stack,
   VStack,
 } from '@chakra-ui/layout';
-import { Button, Text, Image } from '@chakra-ui/react';
+import { Button, Text, Image, GridItem, Grid } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import AboutImage from '~/assets/about.jpg';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { useParams } from 'react-router-dom';
+import Carousels from '~/components/Carousels';
+import EVENT_INFO_00 from '~/assets/event-info/dai-le-00.jpg';
+import EVENT_INFO_01 from '~/assets/event-info/dai-le-01.jpg';
+import EVENT_INFO_10 from '~/assets/event-info/dai-le-10.jpg';
+import EVENT_INFO_11 from '~/assets/event-info/dai-le-11.jpg';
+import EVENT_INFO_20 from '~/assets/event-info/dai-le-20.jpg';
+import EVENT_INFO_21 from '~/assets/event-info/dai-le-21.jpg';
+import EVENT_INFO_30 from '~/assets/event-info/dai-le-30.jpg';
+import EVENT_INFO_31 from '~/assets/event-info/dai-le-31.jpg';
+import EVENT_INFO_40 from '~/assets/event-info/dai-le-40.jpg';
+import EVENT_INFO_41 from '~/assets/event-info/dai-le-41.jpg';
+import EVENT_INFO_42 from '~/assets/event-info/dai-le-42.jpg';
+import EVENT_INFO_50 from '~/assets/event-info/dai-le-50.jpg';
+import EVENT_INFO_51 from '~/assets/event-info/dai-le-51.jpg';
+import EVENT_INFO_52 from '~/assets/event-info/dai-le-52.jpg';
+import EVENT_INFO_53 from '~/assets/event-info/dai-le-53.jpg';
+import EVENT_INFO_54 from '~/assets/event-info/dai-le-54.jpg';
 
 const BuddhaEnlightenmentStartTime = 'December 27, 2022 00:00:00';
 const times = [
@@ -46,6 +63,25 @@ const coundown = (startTime) => {
   }, 1000);
 };
 
+const eventImgages = [
+  EVENT_INFO_00,
+  EVENT_INFO_01,
+  EVENT_INFO_10,
+  EVENT_INFO_11,
+  EVENT_INFO_20,
+  EVENT_INFO_21,
+  EVENT_INFO_30,
+  EVENT_INFO_31,
+  EVENT_INFO_40,
+  EVENT_INFO_41,
+  EVENT_INFO_42,
+  EVENT_INFO_50,
+  EVENT_INFO_51,
+  EVENT_INFO_52,
+  EVENT_INFO_53,
+  EVENT_INFO_54,
+];
+
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
   const { event } = useAppSelector((state) => state.registerPage.data);
@@ -62,38 +98,37 @@ const GreatCeremonyInfo = () => {
   return (
     <>
       <Box id='eventInfo' scrollMarginTop={16} />
-      {/* <Box bgColor={'Blue.800'} bgSize={'cover'} px={{ base: 10, md: 20, lg: 28 }} py={10}> */}
-      <Box
-        bgGradient={'linear(to-r, #59C173, #a17fe0, #5D26C1)'}
-        bgSize={'cover'}
-        px={{ base: 10, md: 20, lg: 28 }}
-        py={10}
-      >
-        <FadeInUp>
-          <Heading
-            as={'h6'}
-            color={'blue.500'}
-            lineHeight={1.6}
-            fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
-            textTransform='uppercase'
-            borderBottom={'2px'}
-            borderColor='Blue.100'
-            mb={10}
-            display='inline-block'
-          >
-            Thông tin đại lễ
-          </Heading>
-        </FadeInUp>
+      {/* section pt 100, pb 0, bg*/}
+      <Box pt={10} pb={0} bgGradient={'linear(to-r, #59C173, #a17fe0, #5D26C1)'}>
+        {/* title */}
+        <Box w='100%' textAlign='center'>
+          <FadeInUp>
+            <Heading
+              as={'h6'}
+              color={'blue.500'}
+              lineHeight={1.6}
+              fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
+              textTransform='uppercase'
+              borderBottom={'2px'}
+              borderColor='darkBlue.100'
+              mb={10}
+              display='inline-block'
+            >
+              Thông tin đại lễ
+            </Heading>
+          </FadeInUp>
+        </Box>
+        {/* container */}
         <Container
           as={SimpleGrid}
           maxW={'full'}
-          columns={{ base: 1, lg: 2 }}
-          gridGap={{ base: 10 }}
+          columns={{ base: 1, md: 2 }}
+          gridGap={{ base: 5 }}
           alignItems='start'
-          px={0}
-          mb={10}
+          px={{ base: 10, md: 20, lg: 28 }}
+          pb={5}
         >
-          <VStack align={'start'}>
+          <VStack>
             <Box mb={{ base: 4, md: 0 }}>
               <FadeInUp>
                 <Heading
@@ -120,63 +155,67 @@ const GreatCeremonyInfo = () => {
             </Box>
           </VStack>
           <FadeInUp>
-            <Image src={AboutImage} maxW='full' rounded={'md'} objectFit={'contain'} />
+            <Box>
+              <Carousels images={eventImgages} styles={{}} settings={{}} />
+            </Box>
           </FadeInUp>
         </Container>
+        {/* countdown */}
+        <FadeInUp>
+          {/* <Stack
+            as={SimpleGrid}
+            maxW={'full'}
+            columns={{ base: 1, md: 2, lg: 3 }}
+            // templateColumns='repeat(3, 1fr)'
+            // gridGap={{ base: 5 }}
+            alignItems='start'
+            px={{ base: 10, md: 20, lg: 28 }}
+            pb={10}
+            color='white'
+            rounded='md'
+            justifyContent={['space-between']}
+          > */}
+          <Stack
+            direction={['column', 'row']}
+            spacing={[5, 10, 16, 32]}
+            px={{ base: 10, md: 20, lg: 28 }}
+            color='white'
+            rounded='md'
+            justifyContent={['space-between']}
+            pb={10}
+          >
+            <VStack spacing={5} justifyContent='start' alignItems='start'>
+              <Text
+                textTransform='uppercase'
+                fontWeight='bold'
+                fontSize={['xl', '2xl']}
+                color={primaryColor}
+              >
+                Thời gian diễn ra
+              </Text>
+              <Text textTransform='uppercase'>Số ngày còn lại</Text>
+            </VStack>
+            <HStack spacing={[1, 6, 11, 15, 20]} justifyContent={['space-between']}>
+              {new Array(4).fill('00').map((time, i) => {
+                return (
+                  <Square key={i} border='1px' size={['16', '16', '32']} p={6}>
+                    <VStack spacing={[1, 2, 3, 4]}>
+                      <Text
+                        id={`countdown-${times[i].id}`}
+                        fontWeight={'bold'}
+                        fontSize={['xl', '2xl', '3xl', '4xl']}
+                      >
+                        {time}
+                      </Text>
 
-        {/* CONFERENCE DATE */}
-        <Container
-          as={SimpleGrid}
-          maxW={'full'}
-          columns={{ base: 1, lg: 2 }}
-          gridGap={{ base: 10 }}
-          alignItems={['start']}
-          px={0}
-          mb={10}
-        >
-          <FadeInUp>
-            <Stack
-              direction={['column', 'row']}
-              spacing={[5, 10, 16, 32]}
-              color='white'
-              rounded='md'
-              justifyContent={['center']}
-            >
-              <VStack justifyContent='center' alignItems={['center', 'start']} spacing={5}>
-                <Text
-                  textTransform='uppercase'
-                  fontWeight='bold'
-                  fontSize={['xl', '2xl']}
-                  color={primaryColor}
-                >
-                  Thời gian diễn ra
-                </Text>
-                <Text textTransform='uppercase'>Số ngày còn lại</Text>
-              </VStack>
-              {/* <HStack spacing={5} justifyContent='center'> */}
-              <HStack spacing={5} justifyContent='space-between'>
-                {new Array(4).fill('00').map((time, i) => {
-                  return (
-                    // <Square key={i} border='1px' size={['14', '10', '32']} p={6}>
-                    <Square key={i} border='1px' size={['16', '16', '32']} p={6}>
-                      <VStack spacing={[1, 2, 3, 4]}>
-                        <Text
-                          id={`countdown-${times[i].id}`}
-                          fontWeight={'bold'}
-                          fontSize={['xl', '2xl', '3xl', '4xl']}
-                        >
-                          {time}
-                        </Text>
-
-                        <Text fontSize={['sm', 'md', 'lg', 'xl', '2xl']}>{times[i].title}</Text>
-                      </VStack>
-                    </Square>
-                  );
-                })}
-              </HStack>
-            </Stack>
-          </FadeInUp>
-        </Container>
+                      <Text fontSize={['sm', 'md', 'lg', 'xl', '2xl']}>{times[i].title}</Text>
+                    </VStack>
+                  </Square>
+                );
+              })}
+            </HStack>
+          </Stack>
+        </FadeInUp>
       </Box>
     </>
   );
