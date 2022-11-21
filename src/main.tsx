@@ -1,24 +1,26 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider, withDefaultColorScheme } from '@chakra-ui/react';
 import { extendTheme } from '@chakra-ui/react';
-import { floatingLabel, primaryColor, colorMode } from './theme';
+import { floatingLabel, primaryColor } from './theme';
+import { Provider as ReduxProvider } from 'react-redux';
+import store from './store';
+import Loading from './components/Loading';
 
 const theme = extendTheme(
-  colorMode,
   primaryColor,
   floatingLabel,
-  withDefaultColorScheme({ colorScheme: 'ttpq' }),
+  withDefaultColorScheme({ colorScheme: 'blue' }),
 );
 
 ReactDOM.createRoot(document.getElementById('root') as Element).render(
-  <React.StrictMode>
+  <ReduxProvider store={store}>
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <App />
+        <Loading />
       </BrowserRouter>
     </ChakraProvider>
-  </React.StrictMode>,
+  </ReduxProvider>,
 );

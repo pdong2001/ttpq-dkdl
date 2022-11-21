@@ -20,11 +20,10 @@ const FadeInUp = (props: FadeInUpProps) => {
       variants={fadeInVariants}
       initial='start'
       whileInView='end'
-      viewport={{ once: true, amount: 0.5 }}
+      viewport={{ once: true, amount: 0.3 }}
       transition={{ delay, ease: [0.4, 0, 0.2, 1], duration }} //cubic-bezier(0.4, 0, 0.2, 1)
       {...props}
     />
-
   );
 };
 

@@ -1,69 +1,171 @@
-import {
-  Stack,
-  Heading,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  HStack,
-  Radio,
-  Button,
-  Box,
-  Text,
-} from '@chakra-ui/react';
-import React from 'react';
+import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import useCustomColorMode from '~/hooks/useColorMode';
+import _ from 'lodash';
 import { StepProps } from '..';
+import { Form, FormikProvider, useFormik } from 'formik';
+import Radios from '~/components/Form/Radios';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { fillForm, onlyKeep } from '~/slices/register';
+import { fillDataPreview } from '~/slices/previewInfo';
+import { searchMember } from '../../../slices/register';
+import step1Schema from '../validationSchema/step1';
+import SearchLeader from '~/components/Form/SearchLeader';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
+import FormInput from '~/components/Form/FormInput';
+import { useRouteMatch } from 'react-router-dom';
+import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
-  const { bgColor, primaryColor, formTextColor } = useCustomColorMode();
-  console.log('primary Color', primaryColor);
+  const { primaryColor } = useCustomColorMode();
+  const dispatch = useAppDispatch();
+  const { path } = useRouteMatch();
+  const isHomePage = path === HOME_WITH_SHORT_URI;
+  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
+
+  const {
+    fullName = '',
+    phoneNumber,
+    identityCard,
+    register,
+  } = useAppSelector((state) => state.register.data) || {};
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
+
+  const { member } = registerInfo || {};
+
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      fullName: fullName || member?.fullName,
+      phoneNumber: phoneNumber || member?.phoneNumber,
+      identityCard: identityCard || member?.identityCard,
+      registerType:
+        register?.registerType ||
+        (registerInfo?.registerType && registerInfo.registerType + '') ||
+        RegisterType.SINGLE,
+      leaderId: register?.leaderId || registerInfo?.leaderId || '',
+    },
+    validationSchema: step1Schema,
+    onSubmit: (values) => {
+      let { fullName, identityCard, registerType, leaderId, phoneNumber } = values;
+      if (registerType === RegisterType.SINGLE) {
+        leaderId = '';
+      }
+      dispatch(
+        fillForm({
+          fullName,
+          identityCard,
+          phoneNumber,
+          register: {
+            ...register,
+            registerType,
+            leaderId,
+          },
+        }),
+      );
+      dispatch(
+        searchMember({
+          data: {
+            phoneNumber,
+            identityCard,
+          },
+        }),
+      );
+      // .then(unwrapResult)
+      // .catch(() => {
+      //   alert('Not found member');
+      //   dispatch(
+      //     onlyKeep({
+      //       identityCard,
+      //       phoneNumber,
+      //       fullName,
+      //       register: { leaderId, registerType },
+      //     }),
+      //   );
+      // });
+      dispatch(
+        fillDataPreview({
+          fullName,
+          identityCard,
+          phoneNumber,
+        }),
+      );
+      nextStep();
+    },
+  });
+
+  const setLeaderPreview = (leader) => {
+    if (_.get(leader, 'success', false)) {
+      dispatch(
+        fillDataPreview({
+          leader: _.get(leader, 'data', {}),
+        }),
+      );
+    }
+  };
+  const { registerType: localRegisterType } = formik.values;
+
+  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
+  const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
   return (
-    <Stack
-      bg={bgColor}
-      rounded={'xl'}
-      p={{ base: 4, sm: 6, md: 8 }}
-      spacing={{ base: 8 }}
-      maxW={{ lg: 'lg' }}
-      mx={{ base: 10, md: 20 }}
-    >
+    <Box>
       <Stack spacing={4}>
-        <Heading
-          color={primaryColor}
-          lineHeight={1.1}
-          fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
-        >
-          Đăng ký đại lễ
+        <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.500'>
+          {`Đăng Ký Công Quả`}
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
+        <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
+          {`${greatCeremony} PL.2565 - DL.2022`}
         </Text>
       </Stack>
-      <Box as={'form'} mt={10}>
-        <Stack spacing={4}>
-          <FloatingLabel name='name' label='Họ và tên' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số điện thoại' color={formTextColor} />
-          <FloatingLabel name='phone' label='Số căn cước / Hộ chiếu' color={formTextColor} />
-          <FormControl as='fieldset' border={1}>
-            <FormLabel as='legend' color={formTextColor}>
-              Hình thức đăng ký
-            </FormLabel>
-            <RadioGroup defaultValue='0' color={formTextColor}>
-              <HStack spacing='24px'>
-                <Radio value='0'>Cá nhân</Radio>
-                <Radio value='1'>Nhóm</Radio>
-              </HStack>
-            </RadioGroup>
-          </FormControl>
-        </Stack>
-        <Button fontFamily={'heading'} mt={8} w={'full'} onClick={nextStep}>
-          Tiếp theo
-        </Button>
+      <Box mt={{ base: 4, sm: 10 }}>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='fullName'
+                label='Họ và tên'
+                isRequired
+              />
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='phoneNumber'
+                label='Số điện thoại'
+                isRequired
+              />
+              <FormInput
+                {...(isHomePage && { color: 'white' })}
+                name='identityCard'
+                label='Số CCCD / Hộ chiếu'
+                isRequired
+              />
+              <Radios
+                {...(isHomePage && { color: 'white' })}
+                label='Hình thức đăng ký'
+                name='registerType'
+              >
+                <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
+                <Radio value={RegisterType.GROUP}>Nhóm</Radio>
+              </Radios>
+              {isRegisterFollowGroup && (
+                <SearchLeader
+                  {...(isHomePage && { color: 'white' })}
+                  name='leaderId'
+                  getLeader={(leader) => setLeaderPreview(leader)}
+                  label='Trưởng nhóm'
+                />
+              )}
+            </Stack>
+            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+              Tiếp theo
+            </Button>
+          </Form>
+        </FormikProvider>
       </Box>
-      form
-    </Stack>
+    </Box>
   );
 };
 

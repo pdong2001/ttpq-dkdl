@@ -7,8 +7,10 @@ import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
 import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
+import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 import FinalStep from '~/pages/MultiStepRegister/RegisterSteps/FinalStep';
 import BlankLayout from '~/components/containers/layouts/BlankLayout';
+import NoFooterLayout from '~/components/containers/layouts/NoFooterLayout';
 
 export type RouteType = {
   key: string;
@@ -20,25 +22,32 @@ export type RouteType = {
   strict?: boolean;
   sensitive?: boolean;
 };
+export const ADD_NEW_REGISTER_PATH = '/:shortUri/register';
+export const EDIT_REGISTER_PATH = '/:shortUri/edit-register';
+export const HOME_WITH_SHORT_URI = '/:shortUri';
+export const EVENT_INFO = '/great-ceremony-info';
+export const TIMELINE = '/timeline';
+export const DEPARTMENT_INFO = '/department-info';
+
+export const NavBarLink = [
+  { title: 'Trang chủ', to: '/' },
+  { title: 'Giới thiệu đại lễ', to: EVENT_INFO },
+  { title: 'Các ban Đại lễ', to: DEPARTMENT_INFO },
+  { title: 'Thời khóa', to: TIMELINE },
+];
 
 const ROUTES: RouteType[] = [
   {
-    key: 'HOME',
-    path: '/',
+    key: 'GREAT_CEREMORY_INFO',
+    path: EVENT_INFO,
     exact: true,
-    component: Home,
-    layout: MainLayout,
-  },
-  {
-    key: 'MULTI_STEP_REGISTER',
-    path: '/register',
-    component: MultiStepRegister,
+    component: GreatCeremonyInfo,
     layout: MainLayout,
   },
   {
     key: 'GREAT_CEREMORY_INFO',
-    path: '/great-ceremory-info',
-    component: GreatCeremonyInfo,
+    path: '/great-ceremony-info/details',
+    component: GreatCeremonyInfoDetails,
     layout: MainLayout,
   },
   {
@@ -64,6 +73,26 @@ const ROUTES: RouteType[] = [
     path: '/register-success',
     component: FinalStep,
     layout: BlankLayout,
+  },
+  {
+    path: '/not-found',
+    exact: true,
+    key: 'NOT_FOUND',
+    component: NotFound,
+    layout: MainLayout,
+  },
+  {
+    key: 'HOME',
+    path: ['/', HOME_WITH_SHORT_URI],
+    exact: true,
+    component: Home,
+    layout: MainLayout,
+  },
+  {
+    key: 'MULTI_STEP_REGISTER',
+    path: [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH],
+    component: MultiStepRegister,
+    layout: NoFooterLayout,
   },
   {
     key: 'NOT_FOUND',
