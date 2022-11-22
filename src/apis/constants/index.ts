@@ -23,10 +23,11 @@ const UPDATE_MEMBER = api('/Member/update/:id');
 const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/BlobStorage/GetOne/:id`;
 
 /* API from app Nhân sự */
-const GET_PROVINCE = '/api/address/Province';
-const GET_DISTRICT = '/api/address/District';
-const GET_WARD = '/api/address/Ward';
-
+const GET_PROVINCE = '/apis/address/Province';
+const GET_DISTRICT = '/apis/address/District';
+const GET_WARD = '/apis/address/Ward';
+const UPLOAD_PHOTO = '/apis/photo/upload';
+const GET_PHOTO = `${import.meta.env.TTPQ_BASE_URL}/apis/photo?key=:key`;
 
 const API = {
   REGISTER,
@@ -51,6 +52,8 @@ const API = {
   GET_MEMBER_BY_ID,
   UPDATE_REGISTER,
   UPDATE_MEMBER,
+  UPLOAD_PHOTO,
+  GET_PHOTO,
 };
 
 export default API;
