@@ -18,6 +18,11 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { formatUrl } from '~/utils/functions';
 
 type UploadFileProps = InputProps & { dropLabel?: string };
+type ImageResponse = {
+  fileName: string;
+  storedFileName: string;
+};
+type UploadResponse = { data?: ImageResponse[] };
 export default function UploadFile(props: UploadFileProps) {
   const { name = '', placeholder, dropLabel } = props;
   const [label, setLabel] = useState(placeholder);
@@ -35,17 +40,20 @@ export default function UploadFile(props: UploadFileProps) {
   useEffect(() => {
     if (file) {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('files', file);
       setData(formData);
     }
   }, [file]);
 
   /* Upload file */
-  const { cancel, data: uploadResponse } = useAxios(
+  const { cancel, data: uploadResponse } = useAxios<UploadResponse>(
     {
-      url: API.UPLOAD_FILE,
+      url: API.UPLOAD_PHOTO,
       method: 'post',
       data,
+      params: {
+        folder: 'dkdl_avatar',
+      },
     },
     [data],
   );
@@ -55,7 +63,11 @@ export default function UploadFile(props: UploadFileProps) {
 
   useEffect(() => {
     if (uploadResponse?.data) {
-      helpers.setValue(formatUrl(API.GET_FILE, { id: uploadResponse.data }));
+      helpers.setValue(
+        formatUrl(API.GET_PHOTO, {
+          key: uploadResponse.data[0]?.storedFileName,
+        }),
+      );
     }
   }, [uploadResponse]);
 

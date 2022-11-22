@@ -27,7 +27,7 @@ const GET_PROVINCE = '/apis/address/Province';
 const GET_DISTRICT = '/apis/address/District';
 const GET_WARD = '/apis/address/Ward';
 const UPLOAD_PHOTO = '/apis/photo/upload';
-const GET_PHOTO = '/apis/photo';
+const GET_PHOTO = `${import.meta.env.TTPQ_BASE_URL}/apis/photo?key=:key`;
 
 const API = {
   REGISTER,
