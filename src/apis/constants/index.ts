@@ -5,6 +5,7 @@ const REGISTER = api('/member/add');
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
 const SEARCH_MEMBER = api('/member/search');
+
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
 const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = api('/ReceiveCardAddresses/Event/:id');
@@ -25,6 +26,7 @@ const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/BlobStorage/GetOne/:id`;
 const GET_PROVINCE = '/api/address/Province';
 const GET_DISTRICT = '/api/address/District';
 const GET_WARD = '/api/address/Ward';
+
 
 const API = {
   REGISTER,
