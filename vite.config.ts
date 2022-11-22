@@ -16,6 +16,7 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    host: 'dangkydaile.ctnpq.com',
     watch: {
       usePolling: true,
     },
