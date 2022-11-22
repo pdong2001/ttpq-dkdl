@@ -46,12 +46,6 @@ const Step5 = (props: StepProps) => {
   const { register: registerData, exps } = formData;
 
   const handleRegister = () => {
-    console.log('update data__', {
-      memberId,
-      leaderId,
-      moveType,
-      ...registerData,
-    });
     if (isAddNew) {
       dispatch(
         register({
