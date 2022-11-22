@@ -60,7 +60,6 @@ const Step5 = (props: StepProps) => {
       )
         .then(unwrapResult)
         .then(({ data }) => {
-          alert('Dạ HD tạo mới đăng ký thành công');
           nextStep();
         })
         .catch((e) => {
@@ -96,10 +95,7 @@ const Step5 = (props: StepProps) => {
           if (memberCode >= 400) {
             return Promise.reject(member);
           }
-          console.log('member__', member);
-          console.log('register__', register);
-          alert('Dạ HD đã cập nhật thành công ạ');
-          window.location.replace(`${window.location.origin}/register-info/${register?.id}`);
+          window.open(`${window.location.origin}/register-info/${register?.id}`);
         })
         .catch((e) => {
           alert(e?.message || 'Dạ có lỗi xảy ra ạ');

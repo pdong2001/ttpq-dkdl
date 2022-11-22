@@ -1,21 +1,17 @@
-import {
-  Box,
-  Image,
-  IconButton,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Box, Image, IconButton, useBreakpointValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import Slider from 'react-slick';
 
-import './style.css'
+import './style.css';
 type Props = {
   images: any;
   styles: Object;
   settings: Object;
+  imageProps: Object;
 };
 
-const Carousels = ({ images, styles, settings = {} }: Props) => {
+const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%' } }: Props) => {
   const [initSlide, setInitSlide] = useState(0);
 
   const settingsDefault = {
@@ -40,11 +36,21 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
     setTimeout(() => {
       setInitSlide(2);
     }, 1000);
-  })
+  });
 
   return (
     <>
-      <Box position={'relative'} height={'100vh'} width={'full'} overflow={'hidden'} style={styles} className='carousel'>
+      <Box
+        position={'relative'}
+        height={'100%'}
+        width={'full'}
+        overflow={'hidden'}
+        style={styles}
+        className='carousel'
+        _hover={{
+          bg: 'whiteAlpha.300',
+        }}
+      >
         {/* CSS files for react-slick */}
         <link
           rel='stylesheet'
@@ -67,6 +73,13 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
           transform={'translate(0%, -50%)'}
           zIndex={2}
           onClick={() => slider?.slickPrev()}
+          borderRadius='50%'
+          w={10}
+          height={10}
+          cursor='pointer'
+          border='2px solid'
+          borderColor='blue.200'
+          
         >
           <BiLeftArrowAlt size='40px' />
         </IconButton>
@@ -81,6 +94,12 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
           transform={'translate(0%, -50%)'}
           zIndex={2}
           onClick={() => slider?.slickNext()}
+          borderRadius='50%'
+        w={10}
+        height={10}
+        cursor='pointer'
+        border='2px solid'
+        borderColor='blue.200'
         >
           <BiRightArrowAlt size='40px' />
         </IconButton>
@@ -94,9 +113,11 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
             <Image
               key={index}
               alt={'feature image'}
-              height='100vh'
+              // height='100%'
               src={image}
               objectFit={'cover'}
+              {...imageProps}
+              // width={'100vh'}
             />
           ))}
         </Slider>
@@ -104,6 +125,5 @@ const Carousels = ({ images, styles, settings = {} }: Props) => {
     </>
   );
 };
-
 
 export default Carousels;

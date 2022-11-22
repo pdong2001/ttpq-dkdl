@@ -32,18 +32,6 @@ import FadeInUp from '~/components/Animation/FadeInUp';
 
 type Props = {};
 
-const departmemtImages = [
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-];
-
 const CODE_REGISTER = 'WCUdZLd';
 
 function DepartmentInfos({}: Props) {
@@ -91,12 +79,7 @@ function DepartmentInfos({}: Props) {
   return (
     <>
       <Box id='departmentInfo' scrollMarginTop={16} />
-      <Box
-        bg='yellow.50'
-        py={10}
-        // px={{ base: 10, md: 16, lg: 28, xl: 28 }}
-        id='departmentInfo'
-      >
+      <Box bg='yellow.50' py={5} id='departmentInfo'>
         <Container maxW='6xl' px={[3, 5, 16, 20, 0]}>
           <FadeInUp>
             <Box w='100%' textAlign='center'>
@@ -124,23 +107,31 @@ function DepartmentInfos({}: Props) {
           <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>
-              <ModalCloseButton />
+              <ModalCloseButton zIndex={1}
+                backgroundColor='#FFF'
+               _hover={{
+                  bg: 'whiteAlpha.300',
+                }}
+              />
               <ModalBody p={0}>
-                <SimpleGrid minH={'100vh'} maxH={'100vh'} columns={{ sm: 1, md: 1, base: 1, lg: 2 }} spacing={10}>
+                <SimpleGrid
+                  minH={'100vh'}
+                  maxH={'100vh'}
+                  columns={{ sm: 1, md: 1, base: 1, lg: 2 }}
+                  spacing={10}
+                >
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
-                    <Carousels
-                      images={departmentSelected.images}
-                      styles={{ }}
-                      settings={{}}
-                    />
+                    <Carousels images={departmentSelected.images} styles={{}} settings={{}} imageProps={{height: '100vh'}} />
                   </Flex>
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
                     <Stack spacing={6}>
+                    <Container textAlign={'justify'} py='0'>
                       <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                         <Text color={'blue.400'} as={'span'}>
                           {departmentSelected && departmentSelected.name}
                         </Text>{' '}
                       </Heading>
+                      </Container>
                       {/* <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
                     The project board is an exclusive resource for contract work. It's
                     perfect for freelancers, agencies, and moonlighters.

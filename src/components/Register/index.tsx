@@ -1,4 +1,4 @@
-import { Stack, Heading, Box, Text, Image, Table, TableContainer, Tbody, Td, Tr, Alert } from '@chakra-ui/react';
+import { Stack, Heading, Box, Text, Image, Table, TableContainer, Tbody, Td, Tr, Alert, Divider, TableCaption, Tfoot, Th, Thead } from '@chakra-ui/react';
 import _ from 'lodash';
 import { Card, CardBody } from '@chakra-ui/card';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
@@ -11,7 +11,7 @@ const TableComponent = (infos, mapTitles): JSX.Element => {
           {_.map(infos, (info, key) => {
             return (
               <Tr key={key}>
-                <Td pr={1} pl={{ base: 4, sm: 4, md: 4 }}>
+                <Td pr={1} pl={{ base: 2, sm: 2, md: 2 }}>
                   <Text as='b'>{mapTitles[key]}</Text>
                 </Td>
                 <Td pl={{ base: 2, sm: 2, md: 2 }}>
@@ -54,4 +54,34 @@ const LeaderComponent = (leader): JSX.Element => {
   );
 }
 
-export { LeaderComponent, TableComponent }
+const OtherInfo = ({ isLeader, title, subTitle }) => {
+  return (
+    <>
+      <Card
+        direction={{ base: 'column', sm: 'column' }}
+        overflow='hidden'
+        pr={5}
+      >
+        <TableContainer>
+          <Table variant='simple' colorScheme={'gray'}>
+            <Thead>
+              <Tr>
+                <Th pl={1}>{isLeader ? 'Nhóm trưởng' : 'Thông tin khác'}</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Td fontSize={{ base: 'xs', sm: 'md', md: 'lg' }} pl={1}>{isLeader ? '' : 'Pháp danh: '} {title}</Td>
+              </Tr>
+              <Tr>
+                <Td fontSize={{ base: 'xs', sm: 'md', md: 'lg' }} pl={1}>{isLeader ? '' : 'Nơi tu tập: '}{subTitle}</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Card>
+    </>
+  )
+}
+
+export { LeaderComponent, TableComponent, OtherInfo }

@@ -1,12 +1,11 @@
 const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
+
 const REGISTER = api('/member/add');
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
 const SEARCH_MEMBER = api('/member/search');
-const GET_PROVINCE = api('/address/Province');
-const GET_DISTRICT = api('/address/District');
-const GET_WARD = api('/address/Ward');
+
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
 const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = api('/ReceiveCardAddresses/Event/:id');
@@ -22,6 +21,12 @@ const UPLOAD_FILE = api('/BlobStorage/Upload');
 const GET_MEMBER_BY_ID = api('/Member/get-by-id/:id');
 const UPDATE_MEMBER = api('/Member/update/:id');
 const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/BlobStorage/GetOne/:id`;
+
+/* API from app Nhân sự */
+const GET_PROVINCE = '/api/address/Province';
+const GET_DISTRICT = '/api/address/District';
+const GET_WARD = '/api/address/Ward';
+
 
 const API = {
   REGISTER,
@@ -47,6 +52,5 @@ const API = {
   UPDATE_REGISTER,
   UPDATE_MEMBER,
 };
-console.log('api__', API);
 
 export default API;
