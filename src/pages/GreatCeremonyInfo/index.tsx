@@ -44,8 +44,6 @@ const times = [
 
 const coundown = (startTime) => {
   const targetDate: any = new Date(startTime || '');
-  console.log('targetDate', targetDate);
-
   setInterval(() => {
     const today = new Date().getTime();
     const diff = targetDate - today;
