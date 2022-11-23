@@ -26,8 +26,8 @@ const CustomSelect = (props: CustomSelectProps) => {
   const {
     data,
     hiddenErrorMessage,
-    valueField = 'name',
-    labelField = 'id',
+    valueField = 'id',
+    labelField = 'name',
     label,
     name,
     isRequired,
