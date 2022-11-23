@@ -1,25 +1,33 @@
-const REGISTER = '/api/v1/member/add';
-const UPDATE_REGISTER = '/api/v1/EventRegistry/Update/:id';
-const LOGIN = 'api/v1/Auth/login';
-const SEARCH_MEMBER = '/api/v1/member/search';
-const GET_PROVINCE = '/api/address/Province';
-const GET_DISTRICT = '/api/address/District';
-const GET_WARD = '/api/address/Ward';
-const GET_STRONG_POINT = '/api/v1/SkillForRegisters/GetAll';
-const GET_DEPARTMENT_BY_EVENT = 'api/v1/Department/get-all';
-const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = '/api/v1/ReceiveCardAddresses/Event/:id';
-const GET_CTN = '/api/ctn/list';
-const SEARCH_LEADER = '/api/v1/EventRegistry/search-leader';
-const GET_REGISTER_PAGE = '/api/v1/EventRegistryPages/GetById/:shortUri';
-const GET_START_ADDRESS_BY_EVENT = '/api/v1/StartAddresses/event/:id';
-const GET_LEAVE_ADDRESS_BY_EVENT = '/api/v1/LeaveAddresses/event/:id';
-const GET_REGISTER_INFO = '/api/v1/EventRegistry/GetById/:id';
-const GET_MEMBER_IN_GROUP = '/api/v1/EventRegistry/group/:leaderId';
-const LOGIN_MEMBER = '/api/v1/Auth/login-member';
-const UPLOAD_FILE = '/api/v1/BlobStorage/Upload';
-const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/api/v1/BlobStorage/GetOne/:id`;
-const GET_MEMBER_BY_ID = '/api/v1/Member/get-by-id/:id';
-const UPDATE_MEMBER = '/api/v1/Member/update/:id';
+const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
+const api = (api: string) => `${API_PREFIX}${api}`;
+
+const REGISTER = api('/member/add');
+const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
+const LOGIN = api('/Auth/login');
+const SEARCH_MEMBER = api('/member/search');
+
+const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
+const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
+const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = api('/ReceiveCardAddresses/Event/:id');
+const GET_CTN = api('/ctn/list');
+const SEARCH_LEADER = api('/EventRegistry/search-leader');
+const GET_REGISTER_PAGE = api('/EventRegistryPages/GetById/:shortUri');
+const GET_START_ADDRESS_BY_EVENT = api('/StartAddresses/event/:id');
+const GET_LEAVE_ADDRESS_BY_EVENT = api('/LeaveAddresses/event/:id');
+const GET_REGISTER_INFO = api('/EventRegistry/GetById/:id');
+const GET_MEMBER_IN_GROUP = api('/EventRegistry/group/:leaderId');
+const LOGIN_MEMBER = api('/Auth/login-member');
+const UPLOAD_FILE = api('/BlobStorage/Upload');
+const GET_MEMBER_BY_ID = api('/Member/get-by-id/:id');
+const UPDATE_MEMBER = api('/Member/update/:id');
+const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/BlobStorage/GetOne/:id`;
+
+/* API from app Nhân sự */
+const GET_PROVINCE = '/apis/address/Province';
+const GET_DISTRICT = '/apis/address/District';
+const GET_WARD = '/apis/address/Ward';
+const UPLOAD_PHOTO = '/apis/photo/upload';
+const GET_PHOTO = `${import.meta.env.TTPQ_BASE_URL}/apis/photo?key=:key`;
 
 const API = {
   REGISTER,
@@ -44,6 +52,8 @@ const API = {
   GET_MEMBER_BY_ID,
   UPDATE_REGISTER,
   UPDATE_MEMBER,
+  UPLOAD_PHOTO,
+  GET_PHOTO,
 };
 
 export default API;

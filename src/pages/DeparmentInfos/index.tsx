@@ -32,18 +32,6 @@ import FadeInUp from '~/components/Animation/FadeInUp';
 
 type Props = {};
 
-const departmemtImages = [
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/4-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/5-23.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/aa.jpg',
-  'https://thientonphatquang.com/wp-content/uploads/2022/01/6-2.jpg',
-];
-
 const CODE_REGISTER = 'WCUdZLd';
 
 function DepartmentInfos({}: Props) {
@@ -119,7 +107,12 @@ function DepartmentInfos({}: Props) {
           <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>
-              <ModalCloseButton />
+              <ModalCloseButton zIndex={1}
+                backgroundColor='#FFF'
+               _hover={{
+                  bg: 'whiteAlpha.300',
+                }}
+              />
               <ModalBody p={0}>
                 <SimpleGrid
                   minH={'100vh'}
@@ -128,15 +121,17 @@ function DepartmentInfos({}: Props) {
                   spacing={10}
                 >
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
-                    <Carousels images={departmentSelected.images} styles={{}} settings={{}} />
+                    <Carousels images={departmentSelected.images} styles={{}} settings={{}} imageProps={{height: '100vh'}} />
                   </Flex>
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
                     <Stack spacing={6}>
+                    <Container textAlign={'justify'} py='0'>
                       <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
                         <Text color={'blue.400'} as={'span'}>
                           {departmentSelected && departmentSelected.name}
                         </Text>{' '}
                       </Heading>
+                      </Container>
                       {/* <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
                     The project board is an exclusive resource for contract work. It's
                     perfect for freelancers, agencies, and moonlighters.
