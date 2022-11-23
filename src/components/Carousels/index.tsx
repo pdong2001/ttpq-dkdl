@@ -6,9 +6,9 @@ import Slider from 'react-slick';
 import './style.css';
 type Props = {
   images: any;
-  styles: Object;
-  settings: Object;
-  imageProps: Object;
+  styles?: Object;
+  settings?: Object;
+  imageProps?: Object;
 };
 
 const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%' } }: Props) => {
@@ -79,7 +79,6 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
           cursor='pointer'
           border='2px solid'
           borderColor='blue.200'
-          
         >
           <BiLeftArrowAlt size='40px' />
         </IconButton>
@@ -95,11 +94,11 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
           zIndex={2}
           onClick={() => slider?.slickNext()}
           borderRadius='50%'
-        w={10}
-        height={10}
-        cursor='pointer'
-        border='2px solid'
-        borderColor='blue.200'
+          w={10}
+          height={10}
+          cursor='pointer'
+          border='2px solid'
+          borderColor='blue.200'
         >
           <BiRightArrowAlt size='40px' />
         </IconButton>

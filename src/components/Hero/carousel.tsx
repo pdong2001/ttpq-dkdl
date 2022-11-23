@@ -13,14 +13,10 @@ import {
 } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
-// import slider1 from '~/assets/cover.jpg';
-// import slider2 from '~/assets/cover_2.jpg';
-// import slider0 from '~/assets/cover_0.jpg';
 import slider00 from '~/assets/cover-hero/cover-00.jpg';
-import slider10 from '~/assets/cover-hero/cover-10.jpg';
-import slider20 from '~/assets/cover-hero/cover-20.jpg';
-import slider30 from '~/assets/cover-hero/cover-30.jpg';
-import slider40 from '~/assets/cover-hero/cover-40.jpg';
+import slider01 from '~/assets/cover-hero/cover-01.jpg';
+import slider02 from '~/assets/cover-hero/cover-02.jpg';
+import slider03 from '~/assets/cover-hero/cover-03.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -98,22 +94,17 @@ export default function CaptionCarousel() {
     {
       title: '',
       text: '',
-      image: slider10,
+      image: slider01,
     },
     {
       title: '',
       text: '',
-      image: slider20,
+      image: slider02,
     },
     {
       title: '',
       text: '',
-      image: slider30,
-    },
-    {
-      title: '',
-      text: '',
-      image: slider40,
+      image: slider03,
     },
   ];
 
