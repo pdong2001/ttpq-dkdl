@@ -26,7 +26,6 @@ import API from '~/apis/constants';
 
 const Step5 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
-  const history = useHistory();
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state) => state.register.data);
@@ -43,7 +42,7 @@ const Step5 = (props: StepProps) => {
     leaderId,
   } = registerInfo;
 
-  const { register: registerData, exps } = formData;
+  const { register: registerData} = formData;
 
   const handleRegister = () => {
     if (isAddNew) {
@@ -146,7 +145,6 @@ const Step5 = (props: StepProps) => {
         </GridItem>
       </Stack>
       <Box mt={10}>
-        <Stack spacing={4}></Stack>
         <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
           <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
             Trở về
