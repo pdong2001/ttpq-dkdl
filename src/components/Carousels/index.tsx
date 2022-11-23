@@ -6,8 +6,8 @@ import Slider from 'react-slick';
 import './style.css';
 type Props = {
   images: any;
-  styles: Object;
-  settings: Object;
+  styles?: Object;
+  settings?: Object;
   imageProps?: Object;
 };
 

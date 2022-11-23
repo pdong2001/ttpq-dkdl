@@ -9,13 +9,27 @@ import {
   VStack,
   Flex,
 } from '@chakra-ui/layout';
-import { Button, Text, Image, GridItem, Grid, color } from '@chakra-ui/react';
+import {
+  Button,
+  Text,
+  Image,
+  GridItem,
+  Grid,
+  color,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  useDisclosure,
+  ModalHeader,
+} from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import AboutImage from '~/assets/about.jpg';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { useAppSelector } from '~/hooks/reduxHook';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import Carousels from '~/components/Carousels';
 import EVENT_INFO_00 from '~/assets/event-info/dai-le-00.jpg';
 import EVENT_INFO_01 from '~/assets/event-info/dai-le-01.jpg';
@@ -33,6 +47,7 @@ import EVENT_INFO_51 from '~/assets/event-info/dai-le-51.jpg';
 import EVENT_INFO_52 from '~/assets/event-info/dai-le-52.jpg';
 import EVENT_INFO_53 from '~/assets/event-info/dai-le-53.jpg';
 import EVENT_INFO_54 from '~/assets/event-info/dai-le-54.jpg';
+import GreatCeremonyInfoDetails from './details';
 
 const BuddhaEnlightenmentStartTime = 'December 27, 2022 00:00:00';
 const times = [
@@ -86,6 +101,7 @@ const GreatCeremonyInfo = () => {
   const { event } = useAppSelector((state) => state.registerPage.data);
   const { startDate: startTime } = event || { startDate: BuddhaEnlightenmentStartTime };
   const { shortUri } = useParams<any>();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const startDate = new Date(startTime || '');
@@ -93,6 +109,8 @@ const GreatCeremonyInfo = () => {
       coundown(startTime);
     }
   }, []);
+
+  const handleViewDetail = () => {};
 
   return (
     <>
@@ -105,7 +123,7 @@ const GreatCeremonyInfo = () => {
                 as={'h6'}
                 color={'blue.500'}
                 lineHeight={1.6}
-                fontSize={{ base: 'sm', sm: 'md', md: '2xl' }}
+                fontSize={{ base: 'sm', sm: 'md', md: 'xl' }}
                 textTransform='uppercase'
                 borderBottom={'2px'}
                 borderColor='darkBlue.100'
@@ -158,7 +176,7 @@ const GreatCeremonyInfo = () => {
                   </Box>
                 </FadeInUp>
                 <FadeInUp>
-                  <Button
+                  {/* <Button
                     mt={2}
                     cursor={'pointer'}
                     as={'a'}
@@ -170,12 +188,13 @@ const GreatCeremonyInfo = () => {
                     transition={'background 0.3s ease'}
                   >
                     Tìm hiểu thêm
-                  </Button>
+                  </Button> */}
+                  <Button onClick={onOpen}>Tìm hiểu thêm</Button>
                 </FadeInUp>
               </Box>
             </VStack>
             <FadeInUp>
-              <Carousels images={eventImgages} styles={{}} settings={{}} />
+              <Carousels images={eventImgages} />
             </FadeInUp>
           </Container>
 
@@ -225,6 +244,22 @@ const GreatCeremonyInfo = () => {
           </FadeInUp>
         </Container>
       </Box>
+      {/* event detail */}
+      <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton
+            zIndex={1}
+            backgroundColor='#FFF'
+            _hover={{
+              bg: 'whiteAlpha.300',
+            }}
+          />
+          <ModalBody p={0}>
+            <GreatCeremonyInfoDetails />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

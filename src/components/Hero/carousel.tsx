@@ -13,8 +13,10 @@ import {
 } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
-import slider1 from '~/assets/cover.jpg';
-import slider2 from '~/assets/cover_2.jpg';
+import slider00 from '~/assets/cover-hero/cover-00.jpg';
+import slider01 from '~/assets/cover-hero/cover-01.jpg';
+import slider02 from '~/assets/cover-hero/cover-02.jpg';
+import slider03 from '~/assets/cover-hero/cover-03.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -85,14 +87,24 @@ export default function CaptionCarousel() {
   // This can be static or loaded from a server
   const cards = [
     {
-      title: 'Ban công quả',
-      text: 'Để có một Đại Lễ thành công, phía sau đó là sự cống hiến, hy sinh, phụng sự của biết bao bạn thanh niên, sinh viên với nhiệt huyết tuổi trẻ và tinh thần phụng sự hăng say.',
-      image: slider2,
+      title: '',
+      text: '',
+      image: slider00,
     },
     {
-      title: 'Đêm thành đạo',
-      text: 'Cả núi rừng im phăng phắc, không một làn gió nhẹ, dường như mọi động thực vật tất thảy đều ngủ say.',
-      image: slider1,
+      title: '',
+      text: '',
+      image: slider01,
+    },
+    {
+      title: '',
+      text: '',
+      image: slider02,
+    },
+    {
+      title: '',
+      text: '',
+      image: slider03,
     },
   ];
 
@@ -153,7 +165,7 @@ export default function CaptionCarousel() {
             backgroundSize='cover'
             transitionDuration={'2s'}
           >
-            <Box bg='rgba(0,0,0, 0.45)'>
+            <Box>
               <Container maxW='6xl' position='relative' px={[3, 5, 16, 20, 0]}>
                 {/* This is the block you need to change, to customize the caption */}
                 <Box height='100vh' position='relative' justifyContent={'start'}>
@@ -179,7 +191,7 @@ export default function CaptionCarousel() {
                               {card.text}
                             </Text>
                           </FadeInUp>
-                          <FadeInUp delay={0.9} duration={1.5}>
+                          {/* <FadeInUp delay={0.9} duration={1.5}>
                             <Button
                               as={HashLink}
                               _hover={{ background: 'white', color: 'blue.500' }}
@@ -198,7 +210,7 @@ export default function CaptionCarousel() {
                                 <FaArrowRight />
                               </HStack>
                             </Button>
-                          </FadeInUp>
+                          </FadeInUp> */}
                         </Box>
                       )}
                     </Stack>
