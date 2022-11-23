@@ -11,12 +11,10 @@ const TableComponent = (infos, mapTitles): JSX.Element => {
           {_.map(infos, (info, key) => {
             return (
               <Tr key={key}>
-                <Td pr={1} pl={{ base: 2, sm: 2, md: 2 }}>
-                  <Text as='b'>{mapTitles[key]}</Text>
+                <Td w={{base: '120px', sm: '200px', md: '300px'}} p={0}>
+                  <Text as='b' fontSize={{base: 14, sm: 16}}>{mapTitles[key]}</Text>
                 </Td>
-                <Td pl={{ base: 2, sm: 2, md: 2 }}>
-                  {info}
-                </Td>
+                <Td fontSize={{base: 14, sm: 16}}> {info}</Td>
               </Tr>
             );
           })}
@@ -35,16 +33,17 @@ const LeaderComponent = (leader): JSX.Element => {
         <Heading p={2} as='h5' size='md'>Trưởng nhóm</Heading>
       </Alert>
       <Card
-        direction={{ base: 'column', sm: 'row' }}
+        direction={{ base: 'row'}}
         overflow='hidden' variant='outline' pt={5} pl={2}
       >
-        <Image boxSize='100px' objectFit='cover' src={avatarPath} alt='Dan Abramov' />
+        <Image boxSize={{base: '60px', sm: '70px', md: '100px'}} objectFit='cover' src={avatarPath} alt={fullName} />
         <Stack>
           <CardBody>
-            <Box textAlign={'center'} pl={10}>
-              <Heading size='md'>{fullName}</Heading>
-              <Text py='2'>{religiousName}</Text>
-              <Text py='2'>{phoneNumber}</Text>
+            <Box pl={{base: '10px', sm: '10px', md: '30px'}}>
+              <Heading size={{base: 'sm', sm: 'md'}}>{fullName}</Heading>
+              <Divider />
+              <Text fontSize={{base: '14px', sm: '16px'}}>{religiousName}</Text>
+              <Text fontSize={{base: '14px', sm: '16px'}}>{phoneNumber}</Text>
             </Box>
           </CardBody>
         </Stack>
@@ -63,7 +62,7 @@ const OtherInfo = ({ isLeader, title, subTitle }) => {
         pr={5}
       >
         <TableContainer>
-          <Table variant='simple' colorScheme={'gray'}>
+          <Table variant='simple' colorScheme={'gray'} size='md'>
             <Thead>
               <Tr>
                 <Th pl={1}>{isLeader ? 'Nhóm trưởng' : 'Thông tin khác'}</Th>

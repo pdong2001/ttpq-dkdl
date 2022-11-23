@@ -65,7 +65,7 @@ export default function SuccessRegisterModal() {
     function coverName(string) {
       return string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
-    const svg: any = document.getElementById('download-image');
+    const svg: any = document.getElementById('chakra-modal-download-image');
     const dataUrl = await htmlToImage.toPng(svg);
 
     // download image
@@ -93,7 +93,7 @@ export default function SuccessRegisterModal() {
     history.go(0);
   };
   return (
-    <Modal isOpen={open} onClose={onClose} size={'xl'}>
+    <Modal isOpen={open} onClose={onClose} size={'xl'} id='download-image'>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader textAlign={'center'}>
@@ -103,7 +103,7 @@ export default function SuccessRegisterModal() {
           {/* <Divider /> */}
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody id='download-image' p={1} background={'#FFFFFF'}>
+        <ModalBody p={1} background={'#FFFFFF'}>
           <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}>
             <Box>
               <Box position={'relative'} style={{ paddingBottom: 20 }}>
@@ -128,7 +128,7 @@ export default function SuccessRegisterModal() {
               <Box p={7}>
                 <Box textAlign={'center'}>
                   <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                    {'Phạm văn duy'}
+                    {fullName}
                   </Heading>
                   <Heading mb={3} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'lg' }} color={'red'}>
                     Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ!

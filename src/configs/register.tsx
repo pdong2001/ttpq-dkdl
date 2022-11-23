@@ -26,7 +26,7 @@ const REGISTER_INFO_TITLE = {
   permanentAddress: 'Địa chỉ thưởng trú',
   temporaryAddress: 'Địa chỉ tạm trú',
   // schedules
-  MOVE_TYPE_TITLE: 'Hình thức di chuyển',
+  moveType: 'Hình thức di chuyển',
   startAddressId: 'Nơi xuất phát',
   startTimeId: 'Nơi xuất phát',
   leaveTimeId: 'Thời gian trở về',
