@@ -9,7 +9,6 @@ import { setGlobalLoading } from '~/components/Loading/slice';
 const useAxios = <Data = any>(
   axiosParams: AxiosRequestConfig,
   dependencies: any[] = [],
-  useOriginAxios?: boolean,
   hideSpinner?: boolean,
 ) => {
   const [data, setData] = useState<Data>();
@@ -25,8 +24,7 @@ const useAxios = <Data = any>(
 
     try {
       !hideSpinner && dispatch(setGlobalLoading(true));
-      const ourAxios = useOriginAxios ? axios : publicRequest;
-      const res = await ourAxios.request({
+      const res = await publicRequest.request({
         cancelToken: cancel.token,
         ...axiosParams,
         transformResponse: [

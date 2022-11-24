@@ -5,7 +5,6 @@ import DepartmentInfos from '../DeparmentInfos';
 import GreatCeremonyInfo from '../GreatCeremonyInfo';
 import Timeline from '../Timeline';
 import CaptionCarousel from '~/components/Hero/carousel';
-import useAxios from '~/hooks/useAxios';
 
 export default function Home() {
   const { shortUri } = useParams<any>();
