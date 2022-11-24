@@ -14,13 +14,11 @@ import {
   Text,
   Container,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import _ from 'lodash';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-// import { Image } from '@chakra-ui/react';
-// import environmentDepartment from '~/assets/enviroment.jpg';
 import department_names from '../../configs/departmemt';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import './style.css';
@@ -38,6 +36,7 @@ function DepartmentInfos({}: Props) {
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useAppDispatch();
+  const { shortUri = '' } = useParams<any>();
   const [departmentSelected, setDepartmentSelected] = useState({
     name: '',
     image: '',
@@ -72,7 +71,7 @@ function DepartmentInfos({}: Props) {
       }, 3000);
       return;
     } else {
-      history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri: CODE_REGISTER }));
+      history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri }));
     }
   };
 
@@ -107,9 +106,10 @@ function DepartmentInfos({}: Props) {
           <Modal isOpen={isOpen} size='full' onClose={onClose} scrollBehavior='inside'>
             <ModalOverlay />
             <ModalContent>
-              <ModalCloseButton zIndex={1}
+              <ModalCloseButton
+                zIndex={1}
                 backgroundColor='#FFF'
-               _hover={{
+                _hover={{
                   bg: 'whiteAlpha.300',
                 }}
               />
@@ -121,30 +121,37 @@ function DepartmentInfos({}: Props) {
                   spacing={10}
                 >
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
-                    <Carousels images={departmentSelected.images} styles={{}} settings={{}} imageProps={{height: '100vh'}} />
+                    <Carousels
+                      images={departmentSelected.images}
+                      styles={{}}
+                      settings={{}}
+                      imageProps={{ height: '100vh' }}
+                    />
                   </Flex>
                   <Flex p={2} flex={1} align={'center'} justify={'center'}>
                     <Stack spacing={6}>
-                    <Container textAlign={'justify'} py='0'>
-                      <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-                        <Text color={'blue.400'} as={'span'}>
-                          {departmentSelected && departmentSelected.name}
-                        </Text>{' '}
-                      </Heading>
+                      <Container textAlign={'justify'} py='0'>
+                        <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+                          <Text color={'blue.400'} as={'span'}>
+                            {departmentSelected && departmentSelected.name}
+                          </Text>{' '}
+                        </Heading>
                       </Container>
                       {/* <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
                     The project board is an exclusive resource for contract work. It's
                     perfect for freelancers, agencies, and moonlighters.
                   </Text> */}
                       {departmentSelected && departmentSelected.desc}
-                      <Stack textAlign='center' spacing={4}>
-                        <Button
-                          onClick={() => redirectRegisterToDepartment(departmentSelected.code)}
-                          size='lg'
-                        >
-                          Đăng ký
-                        </Button>
-                      </Stack>
+                      {shortUri && (
+                        <Stack textAlign='center' spacing={4}>
+                          <Button
+                            onClick={() => redirectRegisterToDepartment(departmentSelected.code)}
+                            size='lg'
+                          >
+                            Đăng ký
+                          </Button>
+                        </Stack>
+                      )}
                     </Stack>
                   </Flex>
                 </SimpleGrid>

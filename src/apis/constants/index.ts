@@ -1,10 +1,8 @@
 const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
 
-const REGISTER = api('/member/add');
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
-const SEARCH_MEMBER = api('/Member/search');
 
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
@@ -16,19 +14,18 @@ const GET_LEAVE_ADDRESS_BY_EVENT = api('/LeaveAddresses/event/:id');
 const GET_REGISTER_INFO = api('/EventRegistry/GetById/:id');
 const GET_MEMBER_IN_GROUP = api('/EventRegistry/group/:leaderId');
 const LOGIN_MEMBER = api('/Auth/login-member');
-const UPLOAD_FILE = api('/BlobStorage/Upload');
 const GET_MEMBER_BY_ID = api('/Member/get-by-id/:id');
 const UPDATE_MEMBER = api('/Member/update/:id');
-const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/BlobStorage/GetOne/:id`;
+const REGISTER = api('/Member/add');
+const SEARCH_MEMBER = api('/Member/search');
 
 /* API from app Nhân sự */
-const GET_PROVINCE = '/apis/address/Province';
-const GET_DISTRICT = '/apis/address/District';
-const GET_WARD = '/apis/address/Ward';
-const UPLOAD_PHOTO = '/apis/photo/upload';
-const GET_CTN = '/apis/ctn/list';
-
-const GET_PHOTO = `${import.meta.env.TTPQ_BASE_URL}/apis/photo?key=:key`;
+const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
+const GET_DISTRICT = 'https://ctnpq.com/apis/address/District';
+const GET_WARD = 'https://ctnpq.com/apis/address/Ward';
+const UPLOAD_PHOTO = 'https://ctnpq.com/apis/photo/upload';
+const GET_CTN = 'https://ctnpq.com/api/ctn/list';
+const GET_PHOTO = `https://ctnpq.com/apis/photo?key=:key`;
 
 const API = {
   REGISTER,
@@ -48,8 +45,6 @@ const API = {
   GET_REGISTER_INFO,
   GET_MEMBER_IN_GROUP,
   LOGIN_MEMBER,
-  UPLOAD_FILE,
-  GET_FILE,
   GET_MEMBER_BY_ID,
   UPDATE_REGISTER,
   UPDATE_MEMBER,
