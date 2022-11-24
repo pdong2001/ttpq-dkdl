@@ -4,12 +4,11 @@ const api = (api: string) => `${API_PREFIX}${api}`;
 const REGISTER = api('/member/add');
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
-const SEARCH_MEMBER = api('/member/search');
+const SEARCH_MEMBER = api('/Member/search');
 
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
 const GET_RECEIVE_CARD_ADDRESSES_BY_EVENT = api('/ReceiveCardAddresses/Event/:id');
-const GET_CTN = api('/ctn/list');
 const SEARCH_LEADER = api('/EventRegistry/search-leader');
 const GET_REGISTER_PAGE = api('/EventRegistryPages/GetById/:shortUri');
 const GET_START_ADDRESS_BY_EVENT = api('/StartAddresses/event/:id');
@@ -23,10 +22,13 @@ const UPDATE_MEMBER = api('/Member/update/:id');
 const GET_FILE = `${import.meta.env.TTPQ_BASE_URL}/BlobStorage/GetOne/:id`;
 
 /* API from app Nhân sự */
-const GET_PROVINCE = '/api/address/Province';
-const GET_DISTRICT = '/api/address/District';
-const GET_WARD = '/api/address/Ward';
+const GET_PROVINCE = '/apis/address/Province';
+const GET_DISTRICT = '/apis/address/District';
+const GET_WARD = '/apis/address/Ward';
+const UPLOAD_PHOTO = '/apis/photo/upload';
+const GET_CTN = '/apis/ctn/list';
 
+const GET_PHOTO = `${import.meta.env.TTPQ_BASE_URL}/apis/photo?key=:key`;
 
 const API = {
   REGISTER,
@@ -51,6 +53,8 @@ const API = {
   GET_MEMBER_BY_ID,
   UPDATE_REGISTER,
   UPDATE_MEMBER,
+  UPLOAD_PHOTO,
+  GET_PHOTO,
 };
 
 export default API;

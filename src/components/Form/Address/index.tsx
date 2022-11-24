@@ -47,7 +47,7 @@ function Address(props: AddressProps) {
       params: {
         Regions: '1,2,3',
       },
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [],
   );
@@ -56,7 +56,7 @@ function Address(props: AddressProps) {
       method: 'get',
       url: API.GET_DISTRICT,
       params: { Status: 1, ProvinceId: provinceId },
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [provinceId],
   );
@@ -72,7 +72,7 @@ function Address(props: AddressProps) {
         Status: 1,
         DistrictId: districtId,
       },
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [districtId],
   );
@@ -95,7 +95,7 @@ function Address(props: AddressProps) {
 
   const mapTitle = ({ provinceId, districtId, wardId }) => {
     function filterTitle(array, id) {
-      return _.get(_.filter(array, (a) => a.Id == id)[0], 'Name', '');
+      return _.get(_.filter(array, (a) => a.id == id)[0], 'name', '');
     }
     setDataPreview({
       [`${name}`]: `${filterTitle(wards, wardId)}, ${filterTitle(
@@ -112,8 +112,6 @@ function Address(props: AddressProps) {
       <FormLabel mb={0}>{label}</FormLabel>
       <Stack direction={direction} spacing={spacing}>
         <Select
-          valueField='Id'
-          labelField='Name'
           placeholder='Tỉnh'
           name={provinceName}
           data={provinces}
@@ -125,8 +123,6 @@ function Address(props: AddressProps) {
           }}
         />
         <Select
-          valueField='Id'
-          labelField='Name'
           placeholder='Huyện'
           name={districtName}
           data={districts}
@@ -138,8 +134,6 @@ function Address(props: AddressProps) {
           }}
         />
         <Select
-          valueField='Id'
-          labelField='Name'
           placeholder='Xã'
           name={wardName}
           data={wards}

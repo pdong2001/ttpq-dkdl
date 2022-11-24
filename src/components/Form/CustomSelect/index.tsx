@@ -18,16 +18,16 @@ type CustomSelectProps = {
   data?: SelectData[];
   label?: string;
   hiddenErrorMessage?: boolean;
-  valueField: string;
-  labelField: string;
+  valueField?: string;
+  labelField?: string;
 } & SelectProps;
 
 const CustomSelect = (props: CustomSelectProps) => {
   const {
     data,
     hiddenErrorMessage,
-    valueField,
-    labelField,
+    valueField = 'id',
+    labelField = 'name',
     label,
     name,
     isRequired,
@@ -55,10 +55,5 @@ const CustomSelect = (props: CustomSelectProps) => {
     </FormControl>
   );
 };
-
-CustomSelect.defaultProps = {
-  labelField: 'name',
-  valueField: 'id',
-} as CustomSelectProps;
 
 export default CustomSelect;

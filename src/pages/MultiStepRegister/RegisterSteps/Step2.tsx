@@ -124,7 +124,6 @@ const Step2 = (props: StepProps) => {
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));
   };
-
   return (
     <>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
@@ -150,12 +149,6 @@ const Step2 = (props: StepProps) => {
               {title}: <Text as='b'>{value}</Text>
             </Text>
           ))}
-          {/* <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            Xin chào bạn <Text as='b'>{fullName}</Text>
-          </Text>
-          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            {`SĐT: ${phoneNumber} - CCCD: ${identityCard}`}
-          </Text> */}
         </Stack>
       </Stack>
       <Box mt={{ base: 3, lg: 10 }}>
