@@ -14,6 +14,7 @@ type FloatingLabelProps = {
   helperText?: string;
   errorMessage?: string;
   hiddenErrorMessage?: boolean;
+  inputmode?: string;
 } & FormControlProps &
   InputProps;
 

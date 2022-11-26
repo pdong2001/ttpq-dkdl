@@ -135,12 +135,15 @@ const Step1 = (props: StepProps) => {
                 name='phoneNumber'
                 label='Số điện thoại'
                 isRequired
+                pattern='[0-9]*'
+                inputmode='numeric'
               />
               <FormInput
                 {...(isHomePage && { color: 'white' })}
                 name='identityCard'
                 label='Số CCCD / Hộ chiếu'
                 isRequired
+                inputmode='numeric'
               />
               <Radios
                 {...(isHomePage && { color: 'white' })}
