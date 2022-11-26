@@ -56,9 +56,9 @@ function DateOfBirth(props: DateOfBirthProps) {
         {label}
       </FormLabel>
       <HStack align='flex-end'>
-        <FloatingLabel name={dateName} label='Ngày' hiddenErrorMessage />
+        <FloatingLabel inputmode='numeric' name={dateName} label='Ngày' hiddenErrorMessage />
         <CustomSelect placeholder='Tháng' data={monthOfBirth} name={monthName} hiddenErrorMessage />
-        <FloatingLabel name={yearName} label='Năm' hiddenErrorMessage />
+        <FloatingLabel inputmode='numeric' name={yearName} label='Năm' hiddenErrorMessage />
         <VisuallyHiddenInput tabIndex={-1} {...field} />
       </HStack>
       <FormErrorMessage>{meta?.error}</FormErrorMessage>

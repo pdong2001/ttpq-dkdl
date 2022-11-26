@@ -120,6 +120,7 @@ const SearchLeader = (props: Props) => {
                 setTouched(false);
               }
             }}
+            inputmode='numeric'
           />
           <InputRightElement onClick={() => setSearchValue(inputValue)} width='2.6rem'>
             <IconButton size='sm' aria-label='Search' icon={<SearchIcon />} />
