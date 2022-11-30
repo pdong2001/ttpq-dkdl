@@ -28,7 +28,9 @@ import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
+
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
+
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
@@ -68,6 +70,15 @@ const Step4 = (props: StepProps) => {
     url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
     transformResponse: ({ data }) => data,
   });
+
+  // size áo
+  const shirtSizeList = [
+    { id: 1, name: 'S' },
+    { id: 2, name: 'M' },
+    { id: 3, name: 'L' },
+    { id: 4, name: 'XL' },
+    { id: 5, name: 'XXL' },
+  ];
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -205,6 +216,13 @@ const Step4 = (props: StepProps) => {
                 data={receiveCardLocationList}
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
+                isRequired
+              />
+              <Select
+                name='shirtSize'
+                data={shirtSizeList}
+                label='Size áo'
+                placeholder='Chọn size áo'
                 isRequired
               />
               <FormControl name='avatarPath' as='fieldset' border={1}>

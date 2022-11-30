@@ -21,6 +21,7 @@ import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
+import { TransitType } from '~/dtos/Enums/transitType.enum';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -75,6 +76,8 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
+
+    transitType: transitTypeInStore,
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
@@ -98,6 +101,8 @@ const Step3 = (props: StepProps) => {
       otherLeaveTime: otherLeaveTime || (editOtherLeaveTime && new Date(editOtherLeaveTime)),
       startPlaneCode: startPlaneCode || editStartPlaneCode,
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
+
+      transitType: transitTypeInStore,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
@@ -109,6 +114,7 @@ const Step3 = (props: StepProps) => {
         if (moveType == MoveType.BY_YOUR_SELF) {
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
+          values.transitType = undefined;
         }
       } else {
         values.otherStartAddress = '';
@@ -169,6 +175,8 @@ const Step3 = (props: StepProps) => {
       }),
     );
   };
+
+  console.log('___', formik.values);
 
   return (
     <>
@@ -245,7 +253,26 @@ const Step3 = (props: StepProps) => {
                   )}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
                   {moveType === MoveType.OTHER && (
-                    <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                    <>
+                      <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+
+                      <Radios
+                        spacing={2}
+                        direction='column'
+                        label='Đăng ký ô tô'
+                        name='transitType'
+                        isRequired
+                      >
+                        <Radio value={TransitType.ChieuDi}>
+                          Chiều đi (Từ Tân Sơn Nhất về Chùa)
+                        </Radio>
+                        <Radio value={TransitType.ChieuVe}>
+                          Chiều về (Từ chùa ra Tân Sơn Nhất)
+                        </Radio>
+                        <Radio value={TransitType.CaHaiChieu}>Cả 2 chiều</Radio>
+                        <Radio value={TransitType.TuTuc}>Tự túc</Radio>
+                      </Radios>
+                    </>
                   )}
                 </>
               )}

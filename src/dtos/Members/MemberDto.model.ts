@@ -31,4 +31,5 @@ export type MemberDto = {
   organizationStructureId?: number;
   strongPoints?: SkillForRegisterDto[];
   register?: EventRegistryDto;
+  workEnglish?: string;
 };

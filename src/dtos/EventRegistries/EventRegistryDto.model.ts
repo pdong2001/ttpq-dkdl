@@ -53,4 +53,7 @@ export type EventRegistryDto = {
   departmentDetail?: DepartmentDetailDto;
   eventRegistryPage?: EventRegistryPageDto;
   receiveCardAddress?: ReceiveCardAddressDto;
+  transitType?: number;
+  shirtSize?: number;
+  volunteerCert?: number;
 };

@@ -23,4 +23,5 @@ export type UpSertMemberDto = {
   permanentAddress?: UpSertAddressDto;
   temporaryAddress?: UpSertAddressDto;
   register: UpSertEventRegistryDto;
+  workEnglish?: string;
 };

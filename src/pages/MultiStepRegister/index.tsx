@@ -12,10 +12,11 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
-import Step5 from './RegisterSteps/Step5';
+import Step6 from './RegisterSteps/Step6';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getRegisterPage } from '~/slices/registerPage';
+import Step5 from './RegisterSteps/Step5';
 
 type Step = (props: StepProps) => JSX.Element;
 export type StepProps = {
@@ -23,11 +24,11 @@ export type StepProps = {
   previousStep: () => void;
 };
 
-const registerSteps = [Step1, Step2, Step3, Step4, Step5, SuccessRegisterModal];
+const registerSteps = [Step1, Step2, Step3, Step4, Step5, Step6, SuccessRegisterModal];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const history = useHistory();
