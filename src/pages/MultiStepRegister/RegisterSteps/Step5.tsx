@@ -19,10 +19,12 @@ import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
+import { useContext } from 'react';
+import { MessageContext } from '~/providers/message';
 
 const Step5 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
@@ -33,6 +35,7 @@ const Step5 = (props: StepProps) => {
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
   const { path } = useRouteMatch();
   const isAddNew = path === ADD_NEW_REGISTER_PATH;
+  const messageService = useContext(MessageContext);
 
   const {
     id,
@@ -42,7 +45,7 @@ const Step5 = (props: StepProps) => {
     leaderId,
   } = registerInfo;
 
-  const { register: registerData} = formData;
+  const { register: registerData } = formData;
 
   const handleRegister = () => {
     if (isAddNew) {
@@ -52,12 +55,11 @@ const Step5 = (props: StepProps) => {
         }),
       )
         .then(unwrapResult)
-        .then(({ data }) => {
+        .then(() => {
           nextStep();
         })
         .catch((e) => {
-          alert(e.message || 'Dạ có lỗi xảy ra ạ');
-          console.log('Dạ có lỗi xảy ra ạ', e);
+          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
         });
     } else {
       const updateRegisterInfo = dispatch(
@@ -91,8 +93,7 @@ const Step5 = (props: StepProps) => {
           window.open(`${window.location.origin}/register-info/${register?.id}`);
         })
         .catch((e) => {
-          alert(e?.message || 'Dạ có lỗi xảy ra ạ');
-          console.log('error__', e);
+          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
         });
     }
   };

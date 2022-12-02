@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
@@ -16,12 +16,14 @@ import { useAppDispatch } from '~/hooks/reduxHook';
 import API from '~/apis/constants';
 import { getRegisterPage } from '~/slices/registerPage';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { MessageContext } from '~/providers/message';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
   const { shortUri = '' } = useParams<any>();
   const dispatch = useAppDispatch();
   const [registerAvailable, setRegisterAvailable] = useState(true);
+  const messageService = useContext(MessageContext);
 
   useEffect(() => {
     if (!shortUri) {
@@ -43,13 +45,14 @@ export default function CaptionCarousel() {
           const isTimeup = new Date(start) > today || today > new Date(end);
           if (isTimeup) {
             setRegisterAvailable(false);
+            messageService.add({ description: 'Trang đăng ký đã hết hạn', status: 'warning' });
           }
         })
         .catch(() => {
           history.push('/not-found');
         });
     }
-  }, [shortUri, dispatch, history]);
+  }, [shortUri, dispatch, history, messageService]);
 
   // As we have used custom buttons, we need a reference variable to
   // change the state
@@ -233,7 +236,7 @@ export default function CaptionCarousel() {
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
           bg='rgba(0,0,0,0.25)'
-          _hover={{ background: 'rgba(0,0,0,0.8)' }}
+          _hover={{ background: 'rgba(0,0,0,.9)' }}
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'
