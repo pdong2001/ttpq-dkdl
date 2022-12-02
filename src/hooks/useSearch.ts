@@ -6,24 +6,24 @@ export default function useSearch<RequestData, ResponseData>(
   requestConfig: AxiosRequestConfig<RequestData>,
   searchValue: string,
 ) {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState<ResponseData>();
 
   // useEffect(() => {
   //   setData();
   // }, [searchValue]);
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
 
   useEffect(() => {
-    setError(false);
-    let cancel;
     if (searchValue) {
       setLoaded(false);
 
       publicRequest
         .request<ResponseData>({
           ...requestConfig,
-          cancelToken: new axios.CancelToken((c) => (cancel = c)),
+          cancelToken: source.token,
         })
         .then((res) => {
           setData(res.data);
@@ -38,11 +38,9 @@ export default function useSearch<RequestData, ResponseData>(
           setError(true);
           setLoaded(true);
         });
-    } else {
-      setLoaded(false);
     }
 
-    return () => searchValue && cancel();
+    return () => searchValue && source.cancel();
   }, [searchValue]);
 
   return { loaded, error, data };

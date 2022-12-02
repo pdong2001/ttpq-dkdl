@@ -7,7 +7,7 @@ import { UpSertEventRegistryDto } from '../EventRegistries/UpSertEventRegistryDt
 export type UpSertMemberDto = {
   work?: string;
   email?: string;
-  gender: Gender;
+  gender?: Gender;
   fullName?: string;
   avatarPath?: string;
   phoneNumber: string;

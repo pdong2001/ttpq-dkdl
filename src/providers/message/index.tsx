@@ -21,7 +21,6 @@ const { Provider } = MessageContext;
 const MessageProvider = ({ children }: { children: ReactNode }) => {
   const toast = useToast({
     position: 'bottom-right',
-    duration: 3000,
     variant: 'left-accent',
   });
   const toastIdRef = useRef<ToastId>();

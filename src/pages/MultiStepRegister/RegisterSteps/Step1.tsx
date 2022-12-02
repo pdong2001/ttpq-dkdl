@@ -93,6 +93,7 @@ const Step1 = (props: StepProps) => {
 
   const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+  console.log('____', formik.values);
 
   return (
     <Box>
@@ -120,14 +121,14 @@ const Step1 = (props: StepProps) => {
                 label='Số điện thoại'
                 isRequired
                 pattern='[0-9]*'
-                inputmode='numeric'
+                inputMode='numeric'
               />
               <FormInput
                 {...(isHomePage && { color: 'white' })}
                 name='identityCard'
                 label='Số CCCD / Hộ chiếu'
                 isRequired
-                inputmode='numeric'
+                inputMode='numeric'
               />
               <Radios
                 {...(isHomePage && { color: 'white' })}

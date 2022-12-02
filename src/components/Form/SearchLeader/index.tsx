@@ -1,7 +1,6 @@
 import { SearchIcon } from '@chakra-ui/icons';
 import {
   Avatar,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -11,8 +10,7 @@ import {
   InputGroup,
   InputRightElement,
   SimpleGrid,
-  Skeleton,
-  SkeletonCircle,
+  Spinner,
   Text,
   VisuallyHiddenInput,
   VStack,
@@ -29,11 +27,12 @@ import { formatUrl } from '~/utils/functions';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
+import { loadPlugin } from 'immer/dist/internal';
 
 type Props = {
   name: string;
   label: string;
-  getLeader: Function;
+  getLeader: (leader: any) => void;
   color?: string;
 };
 type LeaderData = {
@@ -62,7 +61,6 @@ const SearchLeader = (props: Props) => {
     [editLeaderId, leaderId],
   );
   if (!(editLeaderId || leaderId)) {
-    console.log('cancel leader' + editLeader + 'hello' + leaderId);
     editToken.cancel();
   }
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
@@ -78,22 +76,18 @@ const SearchLeader = (props: Props) => {
     searchValue,
   );
 
-  getLeader(data);
-  const startSkelotonColor = 'gray.600';
-  const endSkeletonColor = loaded ? 'gray.600' : searchValue ? 'gray.300' : 'gray.600';
+  getLeader(data || editLeader);
 
   useEffect(() => {
-    if (loaded) {
-      const { data: leader } = data || {};
-      if (leader) {
-        setValue(leader.id);
-      }
+    const { data: leader } = data || {};
+    if (leader || editLeader) {
+      setValue(leader?.id || editLeader?.id);
     }
-  }, [loaded]);
+  }, [data, editLeader]);
 
-  console.log('render__');
+  const isInvalid = !!error && touched;
+  const isValidSearchValue = inputValue?.length >= 8;
 
-  const isInvalid = (loaded && !data?.data) || (!!error && touched);
   const isHomePage = path === HOME_WITH_SHORT_URI;
   return (
     <FormControl isInvalid={isInvalid}>
@@ -105,13 +99,18 @@ const SearchLeader = (props: Props) => {
       >
         <InputGroup size='md'>
           <Input
+            autoComplete='off'
             color={color}
             placeholder='Tìm bằng SĐT hoặc CCCD / CMT'
             focusBorderColor={primaryColor}
             pr='2.5rem'
             value={inputValue}
             onChange={(e) => {
-              setInputValue(e.target.value);
+              const { value } = e.target;
+              setInputValue(value);
+              if (isValidSearchValue) {
+                setSearchValue(value);
+              }
             }}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
@@ -120,55 +119,35 @@ const SearchLeader = (props: Props) => {
                 setTouched(false);
               }
             }}
-            inputmode='numeric'
+            inputMode='numeric'
           />
           <InputRightElement onClick={() => setSearchValue(inputValue)} width='2.6rem'>
             <IconButton size='sm' aria-label='Search' icon={<SearchIcon />} />
           </InputRightElement>
         </InputGroup>
         <HStack spacing={{ base: 4, md: 6, lg: 2 }} justifyContent='center'>
-          {loaded && (!data?.data || isInvalid) ? (
-            <FormErrorMessage>
-              {(touched ? error : '') || (!data?.data && 'Không tìm thấy trưởng đoàn')}
-            </FormErrorMessage>
+          {!data?.data && !editLeader ? (
+            searchValue &&
+            (loaded ? (
+              <Text color='blue.500'>{'Không tìm thấy trưởng đoàn'}</Text>
+            ) : (
+              <Spinner color='blue.500' />
+            ))
           ) : (
             <>
-              <SkeletonCircle
-                isLoaded={loaded || !!leaderId}
-                startColor={startSkelotonColor}
-                endColor={endSkeletonColor}
-                size='16'
-                as={Flex}
-                alignItems='center'
-              >
-                <Avatar src={data?.data?.avatarPath || editLeader?.member?.avatarPath} />
-              </SkeletonCircle>
+              <Avatar src={data?.data?.avatarPath || editLeader?.member?.avatarPath} />
               <VStack alignItems='start'>
-                <Skeleton
-                  as={Flex}
-                  justifyItems='center'
-                  isLoaded={loaded || !!leaderId}
-                  startColor={startSkelotonColor}
-                  endColor={endSkeletonColor}
-                  height={8}
-                  minWidth={32}
-                >
-                  <Text color={primaryColor} fontWeight='bold'>
-                    {data?.data?.fullName || editLeader?.member?.fullName}
-                  </Text>
-                </Skeleton>
-                <Skeleton
-                  isLoaded={loaded || !!leaderId}
-                  startColor={startSkelotonColor}
-                  endColor={endSkeletonColor}
-                  height={8}
-                  minWidth={40}
-                >
-                  <Text>{data?.data?.religiousName || editLeader?.member?.religiousName}</Text>
-                </Skeleton>
+                <Text color={primaryColor} fontWeight='bold'>
+                  {data?.data?.fullName || editLeader?.member?.fullName}
+                </Text>
+
+                <Text color={isHomePage ? 'white' : ''}>
+                  {data?.data?.religiousName || editLeader?.member?.religiousName}
+                </Text>
               </VStack>
             </>
           )}
+          {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </HStack>
       </SimpleGrid>
       <VisuallyHiddenInput {...field} />
