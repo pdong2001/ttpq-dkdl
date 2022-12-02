@@ -1,12 +1,10 @@
 import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
-import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
-import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm, onlyKeep } from '~/slices/register';
+import { fillForm } from '~/slices/register';
 import { fillDataPreview } from '~/slices/previewInfo';
 import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
@@ -14,16 +12,13 @@ import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import FormInput from '~/components/Form/FormInput';
 import { useRouteMatch } from 'react-router-dom';
-import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { HOME_WITH_SHORT_URI } from '~/routes';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
-  const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const { path } = useRouteMatch();
   const isHomePage = path === HOME_WITH_SHORT_URI;
-  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
 
   const {
     fullName = '',
@@ -49,7 +44,8 @@ const Step1 = (props: StepProps) => {
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {
-      let { fullName, identityCard, registerType, leaderId, phoneNumber } = values;
+      const { fullName, identityCard, registerType, phoneNumber } = values;
+      let { leaderId } = values;
       if (registerType === RegisterType.SINGLE) {
         leaderId = '';
       }
@@ -73,18 +69,6 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
-      // .then(unwrapResult)
-      // .catch(() => {
-      //   alert('Not found member');
-      //   dispatch(
-      //     onlyKeep({
-      //       identityCard,
-      //       phoneNumber,
-      //       fullName,
-      //       register: { leaderId, registerType },
-      //     }),
-      //   );
-      // });
       dispatch(
         fillDataPreview({
           fullName,
