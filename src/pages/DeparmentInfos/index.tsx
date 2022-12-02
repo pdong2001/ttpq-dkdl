@@ -27,6 +27,7 @@ import Carousels from '~/components/Carousels';
 import { formatUrl } from '~/utils/functions';
 import { fillForm } from '~/slices/register';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { nanoid } from '@reduxjs/toolkit';
 
 type Props = {};
 
@@ -99,7 +100,7 @@ function DepartmentInfos({}: Props) {
           </FadeInUp>
           <SimpleGrid columns={{ md: 2, xl: 3 }} spacing='10px'>
             {department_names.map((item, index) => (
-              <FadeInUp> {DepartmentItem(index, item, handleViewDetail)} </FadeInUp>
+              <FadeInUp key={nanoid()}> {DepartmentItem(index, item, handleViewDetail)} </FadeInUp>
             ))}
           </SimpleGrid>
 

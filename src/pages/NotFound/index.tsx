@@ -1,10 +1,10 @@
-import { Box, Heading, Text, Button, VStack } from '@chakra-ui/react';
+import { Box, Heading, Text, Button, Stack } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 
 export default function NotFound() {
   const history = useHistory();
   return (
-    <Box as={VStack} textAlign='center' py={10} px={6} minH='100vh' justifyContent='center'>
+    <Box as={Stack} textAlign='center' py={10} px={6} minH='100vh' justifyContent='center'>
       <Heading
         display='inline-block'
         as='h2'
