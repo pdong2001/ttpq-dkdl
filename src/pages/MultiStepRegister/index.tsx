@@ -1,7 +1,6 @@
 import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import CoverImage from '~/assets/festival_cover.jpg';
 import Step1 from './RegisterSteps/Step1';
 import Step2 from './RegisterSteps/Step2';
 import Step3 from './RegisterSteps/Step3';
@@ -35,8 +34,6 @@ const MultiStepRegister = () => {
   const { loaded } = useAppSelector((state) => state.registerPage);
 
   const dispatch = useAppDispatch();
-
-  const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
 
   useEffect(() => {
     if (shortUri) {

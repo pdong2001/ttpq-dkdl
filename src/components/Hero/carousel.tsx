@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  useBreakpointValue,
-  Stack,
-  Heading,
-  Text,
-  Button,
-  createIcon,
-  HStack,
-  Show,
-  Container,
-} from '@chakra-ui/react';
+import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
 import slider00 from '~/assets/cover-hero/cover-00.jpg';
@@ -23,8 +12,6 @@ import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
 import { useHistory, useRouteMatch, useParams } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
-import { FaArrowRight } from 'react-icons/fa';
-import { HashLink } from 'react-router-hash-link';
 import { useAppDispatch } from '~/hooks/reduxHook';
 import API from '~/apis/constants';
 import { getRegisterPage } from '~/slices/registerPage';
@@ -34,8 +21,12 @@ export default function CaptionCarousel() {
   const { path } = useRouteMatch();
   const { shortUri = '' } = useParams<any>();
   const dispatch = useAppDispatch();
+  const [registerAvailable, setRegisterAvailable] = useState(true);
 
   useEffect(() => {
+    if (!shortUri) {
+      setRegisterAvailable(false);
+    }
     if (shortUri) {
       dispatch(
         getRegisterPage({
@@ -44,11 +35,21 @@ export default function CaptionCarousel() {
         }),
       )
         .then(unwrapResult)
+        .then(({ data }) => {
+          const { start, end } = data;
+          console.log(start, end);
+
+          const today = new Date();
+          const isTimeup = new Date(start) > today || today > new Date(end);
+          if (isTimeup) {
+            setRegisterAvailable(false);
+          }
+        })
         .catch(() => {
           history.push('/not-found');
         });
     }
-  }, [shortUri]);
+  }, [shortUri, dispatch, history]);
 
   // As we have used custom buttons, we need a reference variable to
   // change the state
@@ -107,8 +108,6 @@ export default function CaptionCarousel() {
       image: slider03,
     },
   ];
-
-  const [openRegisterForm, setOpenRegisterForm] = useState(false);
 
   return (
     <Box position={'relative'} minH={'100vh'} width={'full'}>
@@ -221,7 +220,7 @@ export default function CaptionCarousel() {
           </Box>
         ))}
       </Slider>
-      {isHomePage && (
+      {registerAvailable && (
         <Box
           pos='absolute'
           left={{ base: '0', md: 'unset' }}
@@ -240,7 +239,7 @@ export default function CaptionCarousel() {
           borderRadius='md'
           shadow='xl'
         >
-          <Step1 previousStep={() => {}} nextStep={nextStep} />
+          <Step1 previousStep={() => undefined} nextStep={nextStep} />
         </Box>
       )}
     </Box>
