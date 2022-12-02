@@ -30,12 +30,9 @@ type Data = MemberDto & UpSertMemberDto;
 const initialState: ReduxState<Data> = {
   data: {
     fullName: '',
-    gender: Gender.MALE,
     identityCard: '',
     phoneNumber: '',
-    register: {
-      registerType: RegisterType.SINGLE,
-    },
+    register: {},
   },
 };
 
