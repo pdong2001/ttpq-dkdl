@@ -47,7 +47,7 @@ const CustomSelect = (props: CustomSelectProps) => {
       <Select onChange={customChange} {...restField} {...rest} name={name}>
         {data?.map((item) => (
           <option key={nanoid()} value={item[valueField]}>
-            <Text>{item[labelField]}</Text>
+            {item[labelField]}
           </option>
         ))}
       </Select>

@@ -13,6 +13,7 @@ import step2Schema from '../validationSchema/step2';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import CultivationPlace from '~/components/Form/CultivationPlace';
 import FormInput from '~/components/Form/FormInput';
+import { nanoid } from '@reduxjs/toolkit';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -60,7 +61,7 @@ const Step2 = (props: StepProps) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      gender: gender + '',
+      gender: (gender && gender + '') || Gender.MALE,
 
       religiousName,
 
@@ -120,6 +121,7 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
+  console.log('gender', formik.values);
 
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));
@@ -145,7 +147,7 @@ const Step2 = (props: StepProps) => {
             { title: 'Số điện thoại', value: phoneNumber },
             { title: 'CCCD', value: identityCard },
           ].map(({ title, value }) => (
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            <Text key={nanoid()} color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
               {title}: <Text as='b'>{value}</Text>
             </Text>
           ))}
