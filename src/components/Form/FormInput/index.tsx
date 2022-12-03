@@ -14,7 +14,7 @@ type FormInputProps = {
   helperText?: string;
   errorMessage?: string;
   hiddenErrorMessage?: boolean;
-  inputmode?: string;
+  inputMode?: string;
 } & FormControlProps &
   InputProps;
 
