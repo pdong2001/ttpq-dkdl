@@ -2,10 +2,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
-import slider00 from '~/assets/cover-hero/cover-00.jpg';
-import slider01 from '~/assets/cover-hero/cover-01.jpg';
-import slider02 from '~/assets/cover-hero/cover-02.jpg';
-import slider03 from '~/assets/cover-hero/cover-03.jpg';
+// import slider00 from '~/assets/cover-hero/cover-00.jpg';
+// import slider01 from '~/assets/cover-hero/cover-01.jpg';
+// import slider02 from '~/assets/cover-hero/cover-02.jpg';
+// import slider03 from '~/assets/cover-hero/cover-03.jpg';
+
+import cover01 from '~/assets/cover/cover-1.jpg';
+import cover02 from '~/assets/cover/cover-2.jpg';
+import cover03 from '~/assets/cover/cover-3.jpg';
+import cover04 from '~/assets/cover/cover-4.jpg';
+import cover05 from '~/assets/cover/cover-5.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -68,13 +74,14 @@ export default function CaptionCarousel() {
   const settings = {
     dots: false,
     arrows: false,
-    // fade: true,
     infinite: true,
-    // autoplay: true,
-    speed: 800,
-    // autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    fade: true,
+    cssEase: 'linear',
+
     beforeChange: function (old_index: number, new_index: number) {
       setFadeIndex(new_index);
     },
@@ -93,22 +100,27 @@ export default function CaptionCarousel() {
     {
       title: '',
       text: '',
-      image: slider00,
+      image: cover01,
     },
     {
       title: '',
       text: '',
-      image: slider01,
+      image: cover02,
     },
     {
       title: '',
       text: '',
-      image: slider02,
+      image: cover03,
     },
     {
       title: '',
       text: '',
-      image: slider03,
+      image: cover04,
+    },
+    {
+      title: '',
+      text: '',
+      image: cover05,
     },
   ];
 
@@ -193,26 +205,6 @@ export default function CaptionCarousel() {
                               {card.text}
                             </Text>
                           </FadeInUp>
-                          {/* <FadeInUp delay={0.9} duration={1.5}>
-                            <Button
-                              as={HashLink}
-                              _hover={{ background: 'white', color: 'blue.500' }}
-                              transitionDuration='0.5s'
-                              to={
-                                fade_index === 1
-                                  ? `/${shortUri}#eventInfo`
-                                  : `/${shortUri}#departmentInfo`
-                              }
-                              smooth
-                            >
-                              <HStack>
-                                <Text>
-                                  {fade_index === 1 ? 'Thông tin Đại Lễ' : 'Thông tin các ban'}
-                                </Text>
-                                <FaArrowRight />
-                              </HStack>
-                            </Button>
-                          </FadeInUp> */}
                         </Box>
                       )}
                     </Stack>
@@ -230,17 +222,17 @@ export default function CaptionCarousel() {
           right={{ base: 0, md: '8%', xl: '10%', '2xl': '15%' }}
           transform={'translate(0%, -50%)'}
           top='50%'
-          zIndex='1'
+          zIndex='200'
           p={'25px'}
           // mx={{ base: '10px', md: '80px' }}
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
-          bg='rgba(0,0,0,0.25)'
+          bg='rgba(0,0,0,0.85)'
           _hover={{ background: 'rgba(0,0,0,.9)' }}
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'
-          shadow='xl'
+          shadow='5xl'
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />
         </Box>
