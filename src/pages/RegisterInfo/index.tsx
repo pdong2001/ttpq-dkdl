@@ -5,7 +5,6 @@ import {
   GridItem,
   Avatar,
   Flex,
-  IconButton,
   Stack,
   Button,
   Tag,
@@ -26,15 +25,9 @@ import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 
-import {
-  MdPhone,
-  MdContentCopy,
-  MdDepartureBoard,
-  MdLocationCity,
-  MdFacebook,
-} from 'react-icons/md';
+import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
-import { InputGroup, Input, InputRightElement } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
 import { FormControl, FormLabel } from '@chakra-ui/react';
 import {
   Modal,
@@ -55,7 +48,7 @@ import { getRegisterInfo } from '~/slices/registerInfo';
 import { Gender } from '~/dtos/Enums/Gender.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
-import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
+import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { EVENT_EXP_TITLE } from '~/configs/register';
 // type Props = {};

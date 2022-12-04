@@ -93,7 +93,6 @@ const Step1 = (props: StepProps) => {
 
   const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  console.log('____', formik.values);
 
   return (
     <Box>
@@ -102,7 +101,7 @@ const Step1 = (props: StepProps) => {
           {`Đăng Ký Công Quả`}
         </Heading>
         <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
-          {`${greatCeremony} PL.2565 - DL.2022`}
+          {`${greatCeremony} PL.2566 - DL.2023`}
         </Text>
       </Stack>
       <Box mt={{ base: 4, sm: 10 }}>

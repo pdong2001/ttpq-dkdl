@@ -42,16 +42,16 @@ const floatingLabel = {
 // generate in https://themera.vercel.app/
 const colors = {
   blue: {
-    50: '#FEF7E6',
-    100: '#FDE8BA',
-    200: '#FBD98D',
-    300: '#FACA61',
-    400: '#F9BB34',
-    500: '#F7AB08',
-    600: '#C68906',
-    700: '#946705',
-    800: '#634503',
-    900: '#312202',
+    '50': '#FBF5EA',
+    '100': '#F3E3C4',
+    '200': '#EBD19E',
+    '300': '#E3BF78',
+    '400': '#DBAD52',
+    '500': '#D39B2C',
+    '600': '#A97C23',
+    '700': '#7E5D1B',
+    '800': '#543E12',
+    '900': '#2A1F09',
   },
   Blue: theme.colors.blue,
 };
