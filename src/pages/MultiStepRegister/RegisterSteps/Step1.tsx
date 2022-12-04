@@ -92,13 +92,14 @@ const Step1 = (props: StepProps) => {
   };
   const { registerType: localRegisterType } = formik.values;
 
-  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
+  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2023';
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+  console.log('___', formik.values);
 
   return (
     <FadeInUp>
       <Stack spacing={4}>
-        <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.500'>
+        <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.300'>
           {`Đăng Ký Công Quả`}
         </Heading>
         <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
@@ -129,6 +130,7 @@ const Step1 = (props: StepProps) => {
                 label='Số CCCD / Hộ chiếu'
                 isRequired
                 inputMode='numeric'
+                type='number'
               />
               <Radios
                 {...(isHomePage && { color: 'white' })}

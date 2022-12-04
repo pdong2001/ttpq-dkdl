@@ -2,10 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
-// import slider00 from '~/assets/cover-hero/cover-00.jpg';
-// import slider01 from '~/assets/cover-hero/cover-01.jpg';
-// import slider02 from '~/assets/cover-hero/cover-02.jpg';
-// import slider03 from '~/assets/cover-hero/cover-03.jpg';
 
 import cover01 from '~/assets/cover-slide/cover-1.jpg';
 import cover02 from '~/assets/cover-slide/cover-2.jpg';
@@ -58,7 +54,7 @@ export default function CaptionCarousel() {
           history.push('/not-found');
         });
     }
-  }, [shortUri, dispatch, history, messageService]);
+  }, [shortUri]);
 
   // As we have used custom buttons, we need a reference variable to
   // change the state
@@ -221,7 +217,7 @@ export default function CaptionCarousel() {
           left={{ base: '0', md: 'unset' }}
           right={{ base: 0, md: '8%', xl: '10%', '2xl': '15%' }}
           transform={{ base: 'translate(0, 0)', md: 'translate(0%, -50%)' }}
-          top={{ base: 16, md: '50%' }}
+          top={{ base: 16, sm: 20, md: '50%' }}
           p={'25px'}
           mx={{ base: 3, md: 'unset' }}
           w={{ md: '45%', lg: '35%' }}
@@ -231,7 +227,9 @@ export default function CaptionCarousel() {
           justifyContent={'center'}
           borderRadius='md'
           shadow='5xl'
-          zIndex='300'
+          zIndex='2'
+          opacity={0.97}
+          _hover={{ opacity: 1 }}
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />
         </Box>

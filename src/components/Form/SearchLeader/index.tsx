@@ -129,7 +129,7 @@ const SearchLeader = (props: Props) => {
           {!data?.data && !editLeader ? (
             searchValue &&
             (loaded ? (
-              <Text color='blue.500'>{'Không tìm thấy trưởng đoàn'}</Text>
+              <Text color='blue.300'>{'Không tìm thấy trưởng đoàn'}</Text>
             ) : (
               <Spinner color='blue.500' />
             ))

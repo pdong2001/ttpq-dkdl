@@ -30,7 +30,7 @@ import FadeInUp from '~/components/Animation/FadeInUp';
 
 const Step5 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
-  const [openSuccess, setOpenSuccess] = useState(true);
+  const [openSuccess, setOpenSuccess] = useState(false);
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state) => state.register.data);

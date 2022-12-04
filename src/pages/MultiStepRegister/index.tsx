@@ -25,7 +25,7 @@ const registerSteps = [Step1, Step2, Step3, Step4, Step5];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(4);
+  const [step, setStep] = useState<number>(0);
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const history = useHistory();
@@ -80,7 +80,7 @@ const MultiStepRegister = () => {
             as={Grid}
             maxW={'5xl'}
             gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
-            pt={{ base: 16 }}
+            pt={{ base: 20 }}
             pb={5}
             minH='100vh'
             alignItems={'center'}

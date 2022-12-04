@@ -14,7 +14,7 @@ const floatingLabel = {
             _focusWithin: {
               label: {
                 ...activeLabelStyles,
-                color: 'blue.500',
+                color: 'blue.300',
               },
             },
             'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
@@ -59,6 +59,12 @@ const colors = {
 const primaryColor = extendTheme({
   colors,
 });
+const colorModeConfig = {
+  initialColorMode: 'dark',
+  // useSystemColorMode: false,
+};
+
+const colorMode = extendTheme({ colorModeConfig });
 
 // const colorMode = extendTheme({ colorModeConfig });
 export { primaryColor, floatingLabel };

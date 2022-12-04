@@ -12,24 +12,18 @@ import {
 import {
   Button,
   Text,
-  Image,
-  GridItem,
-  Grid,
-  color,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalCloseButton,
   ModalBody,
   useDisclosure,
-  ModalHeader,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import AboutImage from '~/assets/about.jpg';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { useAppSelector } from '~/hooks/reduxHook';
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Carousels from '~/components/Carousels';
 import EVENT_INFO_00 from '~/assets/event-info/dai-le-00.jpg';
 import EVENT_INFO_01 from '~/assets/event-info/dai-le-01.jpg';
