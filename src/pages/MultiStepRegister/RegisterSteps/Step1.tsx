@@ -13,6 +13,7 @@ import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import FormInput from '~/components/Form/FormInput';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
+import FadeInUp from '~/components/Animation/FadeInUp';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -95,7 +96,7 @@ const Step1 = (props: StepProps) => {
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
   return (
-    <Box>
+    <FadeInUp>
       <Stack spacing={4}>
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }} color='blue.500'>
           {`Đăng Ký Công Quả`}
@@ -104,7 +105,7 @@ const Step1 = (props: StepProps) => {
           {`${greatCeremony} PL.2566 - DL.2023`}
         </Text>
       </Stack>
-      <Box mt={{ base: 4, sm: 10 }}>
+      <Box mt={{ base: 4 }}>
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
@@ -152,7 +153,7 @@ const Step1 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </Box>
+    </FadeInUp>
   );
 };
 

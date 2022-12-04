@@ -28,6 +28,7 @@ import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
+import FadeInUp from '~/components/Animation/FadeInUp';
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -50,7 +51,7 @@ const Step4 = (props: StepProps) => {
     previousStepData.register || {};
 
   // lấy kĩ năng sở trường
-  let { data: strongPointList } = useAxios(
+  const { data: strongPointList } = useAxios(
     {
       method: 'get',
       url: API.GET_STRONG_POINT,
@@ -91,7 +92,7 @@ const Step4 = (props: StepProps) => {
         receiveCardAddressId,
         note,
       } = values;
-      let fillData = {
+      const fillData = {
         strongPointIds,
         exps,
         avatarPath,
@@ -157,7 +158,7 @@ const Step4 = (props: StepProps) => {
   console.log('___', formik.values);
 
   return (
-    <>
+    <FadeInUp>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -229,7 +230,7 @@ const Step4 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </>
+    </FadeInUp>
   );
 };
 

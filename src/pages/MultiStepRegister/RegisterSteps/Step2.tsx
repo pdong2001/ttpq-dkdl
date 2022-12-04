@@ -14,6 +14,7 @@ import { Gender } from '~/dtos/Enums/Gender.enum';
 import CultivationPlace from '~/components/Form/CultivationPlace';
 import FormInput from '~/components/Form/FormInput';
 import { nanoid } from '@reduxjs/toolkit';
+import FadeInUp from '~/components/Animation/FadeInUp';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -127,7 +128,7 @@ const Step2 = (props: StepProps) => {
     dispatch(fillDataPreview(dataFillForm));
   };
   return (
-    <>
+    <FadeInUp>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
         <Heading
           color={primaryColor}
@@ -202,7 +203,7 @@ const Step2 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </>
+    </FadeInUp>
   );
 };
 

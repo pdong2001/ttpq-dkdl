@@ -19,15 +19,18 @@ import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { MessageContext } from '~/providers/message';
+import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
+import FadeInUp from '~/components/Animation/FadeInUp';
 
 const Step5 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
+  const [openSuccess, setOpenSuccess] = useState(true);
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const formData = useAppSelector((state) => state.register.data);
@@ -36,7 +39,7 @@ const Step5 = (props: StepProps) => {
   const { path } = useRouteMatch();
   const isAddNew = path === ADD_NEW_REGISTER_PATH;
   const messageService = useContext(MessageContext);
-
+  const history = useHistory();
   const {
     id,
     moveType,
@@ -56,7 +59,7 @@ const Step5 = (props: StepProps) => {
       )
         .then(unwrapResult)
         .then(() => {
-          nextStep();
+          setOpenSuccess(true);
         })
         .catch((e) => {
           messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
@@ -99,7 +102,7 @@ const Step5 = (props: StepProps) => {
   };
   const { infos, schedules, jobs, avatar, fullName } = mapSuccessData(previewInfo);
   return (
-    <>
+    <FadeInUp>
       <Stack spacing={4}>
         <Box textAlign={'center'}>
           <Heading
@@ -157,7 +160,8 @@ const Step5 = (props: StepProps) => {
           </Button>
         </SimpleGrid>
       </Box>
-    </>
+      <SuccessRegisterModal open={openSuccess} setOpen={setOpenSuccess} />
+    </FadeInUp>
   );
 };
 

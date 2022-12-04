@@ -7,11 +7,11 @@ import Slider from 'react-slick';
 // import slider02 from '~/assets/cover-hero/cover-02.jpg';
 // import slider03 from '~/assets/cover-hero/cover-03.jpg';
 
-import cover01 from '~/assets/cover/cover-1.jpg';
-import cover02 from '~/assets/cover/cover-2.jpg';
-import cover03 from '~/assets/cover/cover-3.jpg';
-import cover04 from '~/assets/cover/cover-4.jpg';
-import cover05 from '~/assets/cover/cover-5.jpg';
+import cover01 from '~/assets/cover-slide/cover-1.jpg';
+import cover02 from '~/assets/cover-slide/cover-2.jpg';
+import cover03 from '~/assets/cover-slide/cover-3.jpg';
+import cover04 from '~/assets/cover-slide/cover-4.jpg';
+import cover05 from '~/assets/cover-slide/cover-5.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -220,19 +220,18 @@ export default function CaptionCarousel() {
           pos='absolute'
           left={{ base: '0', md: 'unset' }}
           right={{ base: 0, md: '8%', xl: '10%', '2xl': '15%' }}
-          transform={'translate(0%, -50%)'}
-          top='50%'
-          zIndex='200'
+          transform={{ base: 'translate(0, 0)', md: 'translate(0%, -50%)' }}
+          top={{ base: 16, md: '50%' }}
           p={'25px'}
-          // mx={{ base: '10px', md: '80px' }}
+          mx={{ base: 3, md: 'unset' }}
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
-          bg='rgba(0,0,0,0.85)'
-          _hover={{ background: 'rgba(0,0,0,.9)' }}
+          bg='gray.900'
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'
           shadow='5xl'
+          zIndex='300'
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />
         </Box>
