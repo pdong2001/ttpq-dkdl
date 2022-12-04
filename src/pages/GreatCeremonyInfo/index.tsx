@@ -193,9 +193,11 @@ const GreatCeremonyInfo = () => {
                 </FadeInUp>
               </Box>
             </VStack>
-            <FadeInUp>
-              <Carousels images={eventImgages} />
-            </FadeInUp>
+            <Box style={{ height: '100%' }}>
+              <FadeInUp>
+                <Carousels images={eventImgages} />
+              </FadeInUp>
+            </Box>
           </Container>
 
           {/* CONFERENCE DATE */}

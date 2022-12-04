@@ -29,8 +29,8 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
 
   const [slider, setSlider] = useState<Slider | null>(null);
   // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '95%', lg: '50%' });
-  const side = useBreakpointValue({ base: '30%', lg: '40px' });
+  const top = useBreakpointValue({ base: '50%', lg: '50%' });
+  const side = useBreakpointValue({ base: '5%', lg: '5%' });
 
   useEffect(() => {
     setTimeout(() => {
