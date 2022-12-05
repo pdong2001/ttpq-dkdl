@@ -133,7 +133,7 @@ function DepartmentInfos({}: Props) {
                     <Stack spacing={6}>
                       <Container textAlign={'justify'} py='0'>
                         <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-                          <Text color={'blue.400'} as={'span'}>
+                          <Text color={'blue.500'} as={'span'}>
                             {departmentSelected && departmentSelected.name}
                           </Text>{' '}
                         </Heading>

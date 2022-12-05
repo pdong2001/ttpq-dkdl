@@ -229,7 +229,7 @@ export default function CaptionCarousel() {
           borderRadius='md'
           shadow='5xl'
           zIndex='2'
-          opacity={0.95}
+          // opacity={0.95}
           _hover={{ opacity: 1 }}
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />

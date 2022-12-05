@@ -65,28 +65,28 @@ export default function NavBar() {
   ];
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
-  const [bgOpacity, setBgOpacity] = useState(0.95);
+  const [bgOpacity, setBgOpacity] = useState(1);
   const isChangeMode = window.scrollY < delta && window.scrollY >= 50;
   const changeBackground = () => {
     const opacity = window.scrollY >= window.innerHeight - 50 ? 1 : 0.95;
 
-    setBgOpacity(opacity);
-    if (window.scrollY >= delta || isRegisterPage) {
-      setNavbarBg('blue.500');
-      if (!isLight) {
-        toggleColorMode();
-      }
-    } else if (isChangeMode) {
-      setNavbarBg('gray.900');
-      // setNavbarBg('rgba(214, 158, 46,' + window.scrollY / delta / 4 + ')');
-    } else {
-      if (isHomePage) {
-        setNavbarBg('gray.900');
-        if (isLight) {
-          // toggleColorMode();
-        }
-      }
-    }
+    // setBgOpacity(opacity);
+    // if (window.scrollY >= delta || isRegisterPage) {
+    //   setNavbarBg('blue.500');
+    //   if (!isLight) {
+    //     toggleColorMode();
+    //   }
+    // } else if (isChangeMode) {
+    //   // setNavbarBg('gray.900');
+    //   // setNavbarBg('rgba(214, 158, 46,' + window.scrollY / delta / 4 + ')');
+    // } else {
+    //   if (isHomePage) {
+    //     // setNavbarBg('gray.900');
+    //     if (isLight) {
+    //       // toggleColorMode();
+    //     }
+    //   }
+    // }
   };
   useEffect(() => {
     changeBackground();
@@ -107,7 +107,7 @@ export default function NavBar() {
         w={'full'}
         boxShadow='md'
         opacity={bgOpacity}
-        color={useColorModeValue('white', 'blue.400')}
+        color={useColorModeValue('white', 'blue.500')}
       >
         {/* <Container maxW={'6xl'} px={[3, 5, 16, 20, 0]}> */}
         <Box px={4}>
@@ -139,7 +139,7 @@ export default function NavBar() {
                   }
                 />
               </MenuButton>
-              <MenuList color={useColorModeValue('blue.500', 'blue.300')}>
+              <MenuList fontWeight='bold' color={'blue.500'}>
                 <MenuItem>
                   <HStack spacing={1}>
                     <BiQr /> <span>Mã QR cá nhân</span>

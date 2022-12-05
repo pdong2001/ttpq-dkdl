@@ -9,7 +9,7 @@ export default function NotFound() {
         display='inline-block'
         as='h2'
         size='2xl'
-        bgGradient='linear(to-r, blue.400, blue.600)'
+        bgGradient='linear(to-r, blue.500, blue.600)'
         backgroundClip='text'
       >
         404
@@ -22,7 +22,7 @@ export default function NotFound() {
       </Text>
 
       <Button
-        bgGradient='linear(to-r, blue.400, blue.500, blue.600)'
+        bgGradient='linear(to-r, blue.500, blue.500, blue.600)'
         color='white'
         variant='solid'
         onClick={() => history.push('/')}

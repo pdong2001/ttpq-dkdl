@@ -92,14 +92,14 @@ const Step1 = (props: StepProps) => {
   // };
   // const { registerType: localRegisterType } = formik.values;
 
-  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2023';
+  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2022';
   // const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  console.log('___', formik.values);
+  // console.log('___', formik.values);
 
   return (
     <FadeInUp>
       <Stack spacing={4}>
-        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.400'>
+        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.500'>
           {`Đăng Ký Công Quả`}
         </Heading>
         <Text color={isHomePage ? 'blue.50' : 'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
