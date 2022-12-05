@@ -24,7 +24,7 @@ const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
 const GET_DISTRICT = 'https://ctnpq.com/apis/address/District';
 const GET_WARD = 'https://ctnpq.com/apis/address/Ward';
 const UPLOAD_PHOTO = 'https://ctnpq.com/apis/photo/upload';
-const GET_CTN = 'https://ctnpq.com/api/ctn/list';
+const GET_CTN = 'https://ctnpq.com/apis/ctn/list';
 const GET_PHOTO = `https://ctnpq.com/apis/photo?key=:key`;
 
 const API = {
