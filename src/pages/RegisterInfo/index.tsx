@@ -51,6 +51,7 @@ import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { EVENT_EXP_TITLE } from '~/configs/register';
+import Login from '~/components/Login';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -185,7 +186,7 @@ const RegisterInfo = () => {
     { title: 'Kỹ năng', value: member?.strongPoints || [] },
   ];
 
-  let schedule = {
+  const schedule = {
     departure_address: '',
     departure_time: '',
     return_address: '',
@@ -330,7 +331,12 @@ const RegisterInfo = () => {
                 >
                   Cập nhật
                 </Button>
-                <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
+                <Login
+                  title={'Xác nhận thông tin'}
+                  isOpen={isOpenLoginModal}
+                  onClose={onCloseLoginModal}
+                />
+                {/* <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Xác nhận thông tin</ModalHeader>
@@ -367,7 +373,7 @@ const RegisterInfo = () => {
                       <Button onClick={loginMember}>Gửi</Button>
                     </ModalFooter>
                   </ModalContent>
-                </Modal>
+                </Modal> */}
               </HStack>
 
               <Divider borderBottomWidth={'2px'} />

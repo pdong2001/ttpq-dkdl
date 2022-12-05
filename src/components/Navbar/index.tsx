@@ -6,7 +6,6 @@ import {
   useDisclosure,
   Text,
   Stack,
-  useColorMode,
   Link,
   Avatar,
   Button,

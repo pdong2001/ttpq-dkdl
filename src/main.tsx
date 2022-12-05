@@ -21,7 +21,6 @@ ReactDOM.render(
         <MessageProvider>
           <App />
         </MessageProvider>
-
         <Loading />
       </BrowserRouter>
     </ChakraProvider>
