@@ -216,8 +216,8 @@ export default function CaptionCarousel() {
           pos='absolute'
           left={{ base: '0', md: 'unset' }}
           right={{ base: 0, md: '8%', xl: '10%', '2xl': '15%' }}
-          transform={{ base: 'translate(0, 0)', md: 'translate(0%, -50%)' }}
-          top={{ base: 16, sm: 20, md: '50%' }}
+          transform={{ base: 'translate(0%, -50%)' }}
+          top={{ base: '50%' }}
           p={'25px'}
           mx={{ base: 3, md: 'unset' }}
           w={{ md: '45%', lg: '35%' }}
@@ -228,7 +228,7 @@ export default function CaptionCarousel() {
           borderRadius='md'
           shadow='5xl'
           zIndex='2'
-          opacity={0.97}
+          opacity={0.95}
           _hover={{ opacity: 1 }}
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />

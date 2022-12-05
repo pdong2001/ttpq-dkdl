@@ -46,21 +46,21 @@ const SearchLeader = (props: Props) => {
   const { path } = useRouteMatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { name, label, getLeader, color } = props;
-  const [field, { error, touched }, { setValue, setTouched }] = useField(name);
+  const [field, { error, touched }, { setValue }] = useField(name);
 
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { primaryColor } = useCustomColorMode();
-  const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
+  // const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
   const { leaderId } = useAppSelector((state) => state.register.data.register);
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
-      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId || editLeaderId }),
+      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
       transformResponse: ({ data }) => data,
     },
-    [editLeaderId, leaderId],
+    [leaderId],
   );
-  if (!(editLeaderId || leaderId)) {
+  if (!leaderId) {
     editToken.cancel();
   }
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
@@ -80,10 +80,12 @@ const SearchLeader = (props: Props) => {
 
   useEffect(() => {
     const { data: leader } = data || {};
-    if (leader || editLeader) {
-      setValue(leader?.id || editLeader?.id);
+    if (leader) {
+      setValue(leader?.id);
+    } else {
+      setValue('');
     }
-  }, [data, editLeader]);
+  }, [data]);
 
   const isInvalid = !!error && touched;
   const isValidSearchValue = inputValue?.length >= 8;
@@ -110,13 +112,6 @@ const SearchLeader = (props: Props) => {
               setInputValue(value);
               if (isValidSearchValue) {
                 setSearchValue(value);
-              }
-            }}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                setSearchValue(inputValue);
-                setTouched(false);
               }
             }}
             inputMode='numeric'
@@ -147,7 +142,7 @@ const SearchLeader = (props: Props) => {
               </VStack>
             </>
           )}
-          {error && <FormErrorMessage>{error}</FormErrorMessage>}
+          {loaded && error && <FormErrorMessage>{error}</FormErrorMessage>}
         </HStack>
       </SimpleGrid>
       <VisuallyHiddenInput {...field} />

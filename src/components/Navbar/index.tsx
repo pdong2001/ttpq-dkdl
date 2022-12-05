@@ -65,8 +65,12 @@ export default function NavBar() {
   ];
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
+  const [bgOpacity, setBgOpacity] = useState(0.95);
   const isChangeMode = window.scrollY < delta && window.scrollY >= 50;
   const changeBackground = () => {
+    const opacity = window.scrollY >= window.innerHeight - 50 ? 1 : 0.95;
+
+    setBgOpacity(opacity);
     if (window.scrollY >= delta || isRegisterPage) {
       setNavbarBg('blue.500');
       if (!isLight) {
@@ -102,7 +106,7 @@ export default function NavBar() {
         zIndex={200}
         w={'full'}
         boxShadow='md'
-        opacity={0.97}
+        opacity={bgOpacity}
         color={useColorModeValue('white', 'blue.300')}
       >
         {/* <Container maxW={'6xl'} px={[3, 5, 16, 20, 0]}> */}
