@@ -3,11 +3,14 @@ import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
 
-import cover01 from '~/assets/cover-slide/cover-1.jpg';
-import cover02 from '~/assets/cover-slide/cover-2.jpg';
-import cover03 from '~/assets/cover-slide/cover-3.jpg';
-import cover04 from '~/assets/cover-slide/cover-4.jpg';
-import cover05 from '~/assets/cover-slide/cover-5.jpg';
+import cover00 from '~/assets/cover-hero/cover-00.jpg';
+import cover01 from '~/assets/cover-ctn/cover-1.jpg';
+// import cover02 from '~/assets/cover-ctn/cover-2.jpg';
+import cover03 from '~/assets/cover-ctn/cover-3.jpg';
+// import cover04 from '~/assets/cover-ctn/cover-4.jpg';
+import cover05 from '~/assets/cover-ctn/cover-5.jpg';
+import cover06 from '~/assets/event-info/dai-le-10.jpg';
+import cover07 from '~/assets/event-info/dai-le-20.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -102,7 +105,12 @@ export default function CaptionCarousel() {
     {
       title: '',
       text: '',
-      image: cover02,
+      image: cover00,
+    },
+    {
+      title: '',
+      text: '',
+      image: cover06,
     },
     {
       title: '',
@@ -112,7 +120,7 @@ export default function CaptionCarousel() {
     {
       title: '',
       text: '',
-      image: cover04,
+      image: cover07,
     },
     {
       title: '',
