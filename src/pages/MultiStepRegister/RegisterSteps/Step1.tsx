@@ -98,41 +98,46 @@ const Step1 = (props: StepProps) => {
 
   return (
     <FadeInUp>
-      <Stack spacing={4}>
-        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.500'>
-          {`Đăng Ký Công Quả`}
-        </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          {`${greatCeremony}`}
-        </Text>
-      </Stack>
-      <Box mt={{ base: 4 }}>
-        <FormikProvider value={formik}>
-          <Form noValidate>
-            <Stack spacing={4}>
-              <FormInput
-                {...(isHomePage && { color: 'gray.500' })}
-                name='fullName'
-                label='Họ và tên'
-                isRequired
-              />
-              <FormInput
-                {...(isHomePage && { color: 'gray.500' })}
-                name='phoneNumber'
-                label='Số điện thoại'
-                isRequired
-                pattern='[0-9]*'
-                inputMode='numeric'
-              />
-              <FormInput
-                {...(isHomePage && { color: 'gray.500' })}
-                name='identityCard'
-                label='Số CCCD / Hộ chiếu'
-                isRequired
-                inputMode='numeric'
-                type='number'
-              />
-              {/* <Radios
+      <Box>
+        <Stack spacing={4}>
+          <Heading
+            lineHeight={1.1}
+            fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }}
+            color='blue.500'
+          >
+            {`Đăng Ký Công Quả`}
+          </Heading>
+          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+            {`${greatCeremony}`}
+          </Text>
+        </Stack>
+        <Box mt={{ base: 4 }}>
+          <FormikProvider value={formik}>
+            <Form noValidate>
+              <Stack spacing={4}>
+                <FormInput
+                  {...(isHomePage && { color: 'gray.500' })}
+                  name='fullName'
+                  label='Họ và tên'
+                  isRequired
+                />
+                <FormInput
+                  {...(isHomePage && { color: 'gray.500' })}
+                  name='phoneNumber'
+                  label='Số điện thoại'
+                  isRequired
+                  pattern='[0-9]*'
+                  inputMode='numeric'
+                />
+                <FormInput
+                  {...(isHomePage && { color: 'gray.500' })}
+                  name='identityCard'
+                  label='Số CCCD / Hộ chiếu'
+                  isRequired
+                  inputMode='numeric'
+                  type='number'
+                />
+                {/* <Radios
                 {...(isHomePage && { color: 'white' })}
                 label='Hình thức đăng ký'
                 name='registerType'
@@ -140,7 +145,7 @@ const Step1 = (props: StepProps) => {
                 <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                 <Radio value={RegisterType.GROUP}>Nhóm</Radio>
               </Radios> */}
-              {/* {isRegisterFollowGroup && (
+                {/* {isRegisterFollowGroup && (
                 <SearchLeader
                   {...(isHomePage && { color: 'white' })}
                   name='leaderId'
@@ -148,12 +153,13 @@ const Step1 = (props: StepProps) => {
                   label='Trưởng nhóm'
                 />
               )} */}
-            </Stack>
-            <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
-              Tiếp theo
-            </Button>
-          </Form>
-        </FormikProvider>
+              </Stack>
+              <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
+                Tiếp theo
+              </Button>
+            </Form>
+          </FormikProvider>
+        </Box>
       </Box>
     </FadeInUp>
   );

@@ -29,7 +29,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
     {
       method: 'get',
       url: API.GET_CTN,
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [],
   );

@@ -90,7 +90,7 @@ const MultiStepRegister = () => {
                 bg={bgColor}
                 rounded={'xl'}
                 p={{ base: 4, sm: 6, md: 8 }}
-                mx={{ base: 1, sm: 10, md: 20, lg: 6 }}
+                mx={{ base: 1, sm: 10, md: step === 0 ? 60 : 20, lg: step === 0 ? 60 : 6 }}
               >
                 <Step nextStep={nextStep} previousStep={previousStep} />
               </Box>
