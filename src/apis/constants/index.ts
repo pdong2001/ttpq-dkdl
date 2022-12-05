@@ -1,4 +1,4 @@
-const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
+const API_PREFIX = process.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
 
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');

@@ -13,7 +13,7 @@ export const onRejectedResponse = (error: any): any => {
 };
 
 const publicRequest = axios.create({
-  baseURL: `${import.meta.env.TTPQ_BASE_URL}`,
+  baseURL: `${process.env.TTPQ_BASE_URL}`,
 });
 
 publicRequest.interceptors.response.use(onFullfilledRequest, onRejectedResponse);
