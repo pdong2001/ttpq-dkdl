@@ -19,7 +19,7 @@ const Step1 = (props: StepProps) => {
   const { nextStep } = props;
   const dispatch = useAppDispatch();
   const { path } = useRouteMatch();
-  const isHomePage = path === HOME_WITH_SHORT_URI;
+  const isHomePage = false && path === HOME_WITH_SHORT_URI;
 
   const {
     fullName = '',
@@ -99,10 +99,10 @@ const Step1 = (props: StepProps) => {
   return (
     <FadeInUp>
       <Stack spacing={4}>
-        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.300'>
+        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.400'>
           {`Đăng Ký Công Quả`}
         </Heading>
-        <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
+        <Text color={isHomePage ? 'blue.50' : 'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           {`${greatCeremony}`}
         </Text>
       </Stack>
@@ -110,14 +110,8 @@ const Step1 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
+              <FormInput name='fullName' label='Họ và tên' isRequired />
               <FormInput
-                {...(isHomePage && { color: 'white' })}
-                name='fullName'
-                label='Họ và tên'
-                isRequired
-              />
-              <FormInput
-                {...(isHomePage && { color: 'white' })}
                 name='phoneNumber'
                 label='Số điện thoại'
                 isRequired
@@ -125,7 +119,6 @@ const Step1 = (props: StepProps) => {
                 inputMode='numeric'
               />
               <FormInput
-                {...(isHomePage && { color: 'white' })}
                 name='identityCard'
                 label='Số CCCD / Hộ chiếu'
                 isRequired

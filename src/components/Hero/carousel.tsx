@@ -19,6 +19,7 @@ import API from '~/apis/constants';
 import { getRegisterPage } from '~/slices/registerPage';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { MessageContext } from '~/providers/message';
+import useCustomColorMode from '~/hooks/useColorMode';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -119,7 +120,7 @@ export default function CaptionCarousel() {
       image: cover05,
     },
   ];
-
+  const { bgColor } = useCustomColorMode();
   return (
     <Box position={'relative'} minH={'100vh'} width={'full'}>
       {/* Left Icon */}
@@ -222,7 +223,7 @@ export default function CaptionCarousel() {
           mx={{ base: 3, md: 'unset' }}
           w={{ md: '45%', lg: '35%' }}
           maxW={{ md: '600px' }}
-          bg='gray.900'
+          bg={bgColor}
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'

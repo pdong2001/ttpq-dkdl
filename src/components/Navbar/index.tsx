@@ -83,7 +83,7 @@ export default function NavBar() {
       if (isHomePage) {
         setNavbarBg('gray.900');
         if (isLight) {
-          toggleColorMode();
+          // toggleColorMode();
         }
       }
     }
@@ -107,7 +107,7 @@ export default function NavBar() {
         w={'full'}
         boxShadow='md'
         opacity={bgOpacity}
-        color={useColorModeValue('white', 'blue.300')}
+        color={useColorModeValue('white', 'blue.400')}
       >
         {/* <Container maxW={'6xl'} px={[3, 5, 16, 20, 0]}> */}
         <Box px={4}>

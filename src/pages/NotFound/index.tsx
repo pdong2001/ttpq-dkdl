@@ -1,10 +1,10 @@
-import { Box, Heading, Text, Button, Stack } from '@chakra-ui/react';
+import { Box, Heading, Text, Button, Stack, Container } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 
 export default function NotFound() {
   const history = useHistory();
   return (
-    <Box as={Stack} textAlign='center' py={10} px={6} minH='100vh' justifyContent='center'>
+    <Container as={Stack} textAlign='center' py={10} px={6} minH='100vh' justifyContent='center'>
       <Heading
         display='inline-block'
         as='h2'
@@ -15,10 +15,10 @@ export default function NotFound() {
         404
       </Heading>
       <Text fontSize='18px' mt={3} mb={2}>
-        Page Not Found
+        Không tìm thấy trang
       </Text>
       <Text color={'gray.500'} mb={6}>
-        The page you're looking for does not seem to exist
+        Trang bạn tìm chưa tồn tại ạ
       </Text>
 
       <Button
@@ -29,6 +29,6 @@ export default function NotFound() {
       >
         Go to Home
       </Button>
-    </Box>
+    </Container>
   );
 }

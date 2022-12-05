@@ -1,6 +1,5 @@
 import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from './RegisterSteps/Step1';
 import Step2 from './RegisterSteps/Step2';
 import Step3 from './RegisterSteps/Step3';
@@ -25,7 +24,7 @@ const registerSteps = [Step1, Step2, Step3, Step4, Step5];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(3);
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const history = useHistory();

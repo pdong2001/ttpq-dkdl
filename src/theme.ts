@@ -14,7 +14,7 @@ const floatingLabel = {
             _focusWithin: {
               label: {
                 ...activeLabelStyles,
-                color: 'blue.300',
+                color: 'blue.400',
               },
             },
             'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label':
