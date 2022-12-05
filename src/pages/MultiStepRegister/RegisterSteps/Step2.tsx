@@ -138,7 +138,7 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
-  console.log('gender', register.leaderId, formik.values.registerType, formik.errors);
+  // console.log('gender', register.leaderId, formik.values.registerType, formik.errors);
 
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));

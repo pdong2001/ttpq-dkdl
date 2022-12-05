@@ -51,8 +51,6 @@ const delta = window.innerHeight / 5;
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { colorMode, toggleColorMode } = useColorMode();
-  const isLight = colorMode === 'light';
   const { shortUri = '' } = useParams<any>();
   const { path } = useRouteMatch();
   const isRegisterPage = [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH].includes(path);
@@ -65,27 +63,18 @@ export default function NavBar() {
   ];
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
-  const [bgOpacity, setBgOpacity] = useState(0.95);
+  const [color, setColor] = useState('blue.500');
   const isChangeMode = window.scrollY < delta && window.scrollY >= 50;
   const changeBackground = () => {
-    const opacity = window.scrollY >= window.innerHeight - 50 ? 1 : 0.95;
-
-    setBgOpacity(opacity);
+    const delta = 100;
     if (window.scrollY >= delta || isRegisterPage) {
       setNavbarBg('blue.500');
-      if (!isLight) {
-        toggleColorMode();
-      }
+      setColor('white');
     } else if (isChangeMode) {
-      setNavbarBg('gray.900');
-      // setNavbarBg('rgba(214, 158, 46,' + window.scrollY / delta / 4 + ')');
+      setNavbarBg('rgba(214, 158, 46,' + window.scrollY / delta / 4 + ')');
     } else {
-      if (isHomePage) {
-        setNavbarBg('gray.900');
-        if (isLight) {
-          toggleColorMode();
-        }
-      }
+      setNavbarBg('rgba(0,0,0,0.6)');
+      setColor('white');
     }
   };
   useEffect(() => {
@@ -99,16 +88,7 @@ export default function NavBar() {
   return (
     <>
       {/* <Box background='transparent' height={16}></Box> */}
-      <Box
-        bg={navBarBg}
-        pos={'fixed'}
-        top={0}
-        zIndex={200}
-        w={'full'}
-        boxShadow='md'
-        opacity={bgOpacity}
-        color={useColorModeValue('white', 'blue.300')}
-      >
+      <Box bg={navBarBg} pos={'fixed'} top={0} zIndex={200} w={'full'} boxShadow='md' color={color}>
         {/* <Container maxW={'6xl'} px={[3, 5, 16, 20, 0]}> */}
         <Box px={4}>
           <HStack h={16} alignItems={'center'} justifyContent={'space-between'}>

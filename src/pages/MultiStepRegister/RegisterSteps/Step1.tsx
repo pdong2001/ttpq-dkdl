@@ -94,15 +94,15 @@ const Step1 = (props: StepProps) => {
 
   const greatCeremony = 'Đại Lễ Phật Thành Đạo 2023';
   // const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  console.log('___', formik.values);
+  // console.log('___', formik.values);
 
   return (
     <FadeInUp>
       <Stack spacing={4}>
-        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.300'>
+        <Heading lineHeight={1.1} fontSize={{ base: 'xl', sm: '2xl', md: '3xl' }} color='blue.500'>
           {`Đăng Ký Công Quả`}
         </Heading>
-        <Text color={isHomePage ? 'blue.50' : 'gray.400'} fontSize={{ base: 'sm', sm: 'md' }}>
+        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
           {`${greatCeremony}`}
         </Text>
       </Stack>
@@ -111,13 +111,13 @@ const Step1 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <FormInput
-                {...(isHomePage && { color: 'white' })}
+                {...(isHomePage && { color: 'gray.500' })}
                 name='fullName'
                 label='Họ và tên'
                 isRequired
               />
               <FormInput
-                {...(isHomePage && { color: 'white' })}
+                {...(isHomePage && { color: 'gray.500' })}
                 name='phoneNumber'
                 label='Số điện thoại'
                 isRequired
@@ -125,7 +125,7 @@ const Step1 = (props: StepProps) => {
                 inputMode='numeric'
               />
               <FormInput
-                {...(isHomePage && { color: 'white' })}
+                {...(isHomePage && { color: 'gray.500' })}
                 name='identityCard'
                 label='Số CCCD / Hộ chiếu'
                 isRequired

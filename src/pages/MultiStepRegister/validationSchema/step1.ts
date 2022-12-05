@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { REGEX_PHONE } from '~/utils/common';
 
 const step1Schema = Yup.object({

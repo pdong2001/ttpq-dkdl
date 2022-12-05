@@ -59,12 +59,6 @@ const colors = {
 const primaryColor = extendTheme({
   colors,
 });
-const colorModeConfig = {
-  initialColorMode: 'dark',
-  // useSystemColorMode: false,
-};
-
-const colorMode = extendTheme({ colorModeConfig });
 
 // const colorMode = extendTheme({ colorModeConfig });
 export { primaryColor, floatingLabel };

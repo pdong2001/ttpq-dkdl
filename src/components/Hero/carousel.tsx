@@ -19,6 +19,7 @@ import API from '~/apis/constants';
 import { getRegisterPage } from '~/slices/registerPage';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { MessageContext } from '~/providers/message';
+import useCustomColorMode from '~/hooks/useColorMode';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -119,7 +120,7 @@ export default function CaptionCarousel() {
       image: cover05,
     },
   ];
-
+  const { bgColor } = useCustomColorMode();
   return (
     <Box position={'relative'} minH={'100vh'} width={'full'}>
       {/* Left Icon */}
@@ -221,15 +222,14 @@ export default function CaptionCarousel() {
           p={'25px'}
           mx={{ base: 3, md: 'unset' }}
           w={{ md: '45%', lg: '35%' }}
-          maxW={{ md: '600px' }}
-          bg='gray.900'
+          maxW={{ md: '450px' }}
+          bg={{ base: bgColor, md: 'rgba(255,255,255,.85)' }}
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'
           shadow='5xl'
           zIndex='2'
-          opacity={0.95}
-          _hover={{ opacity: 1 }}
+          _hover={{ background: 'rgba(255, 255, 255, 1)' }}
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />
         </Box>
