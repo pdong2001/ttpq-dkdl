@@ -22,6 +22,7 @@ import {
   Stack,
   Divider,
   Tag,
+  HStack,
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import { MdContentCopy } from 'react-icons/md';
@@ -31,7 +32,6 @@ import { useAppSelector } from '~/hooks/reduxHook';
 import { TableComponent, OtherInfo } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
-import { useHistory, useParams } from 'react-router-dom';
 
 import * as htmlToImage from 'html-to-image';
 
@@ -39,28 +39,26 @@ const PATH_URL = window.location.origin;
 
 export default function SuccessRegisterModal({
   open,
-  setOpen,
+  onClose,
 }: {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  onClose: () => void;
 }) {
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
-  const { avatar, fullName, infos } = mapSuccessData(previewInfo);
-  const history = useHistory();
-  const { shortUri } = useParams<any>();
+  // const { avatar, fullName, infos } = mapSuccessData(previewInfo);
   const dataSuccess = {
     infosSuccess: {
-      phoneNumber: _.get(infos, 'phoneNumber', ''),
-      identityCard: _.get(infos, 'identityCard', ''),
-      email: _.get(infos, 'email', ''),
+      phoneNumber: registerResult?.phoneNumber,
+      identityCard: registerResult?.identityCard,
+      email: registerResult?.email,
     },
     avatar: registerResult.avatarPath,
     LinkQrCode: `${PATH_URL}/register-info/${registerResult.register?.id}`,
     fullName: registerResult.fullName,
   };
 
-  const { infosSuccess, LinkQrCode } = dataSuccess;
+  const { infosSuccess, LinkQrCode, avatar, fullName } = dataSuccess;
 
   const onImageDownload = async (fullName) => {
     function coverName(string) {
@@ -87,11 +85,6 @@ export default function SuccessRegisterModal({
     setTimeout(() => {
       eleAlert.style.display = 'none';
     }, 1000);
-  };
-  const onClose = () => {
-    setOpen(false);
-    history.push(`/${shortUri}`);
-    history.go(0);
   };
   return (
     <Modal
@@ -134,7 +127,7 @@ export default function SuccessRegisterModal({
             <Box px={5}>
               <Box textAlign={'center'}>
                 <Heading fontSize={['lg', 'xl', '2xl']} fontFamily={'body'} mb={2}>
-                  {fullName || 'hekki'}
+                  {fullName}
                 </Heading>
                 <Heading mb={2} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'lg' }} color={'red'}>
                   <Tag>Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ</Tag>
@@ -145,28 +138,24 @@ export default function SuccessRegisterModal({
                 <Box>{TableComponent(infosSuccess, REGISTER_INFO_TITLE)}</Box>
                 <Divider borderBottomWidth={'2px'} />
                 <Box>
-                  <Box w='70%' pt={3} float={'left'}>
-                    {_.get(previewInfo, 'leader', false)
-                      ? OtherInfo({
-                          isLeader: true,
-                          title: _.get(previewInfo, 'leader.religiousName', ''),
-                          subTitle: _.get(previewInfo, 'leader.phoneNumber', ''),
-                        })
-                      : OtherInfo({
-                          isLeader: false,
-                          title: _.get(infos, 'religiousName'),
-                          subTitle: _.get(infos, 'organizationStructureId'),
-                        })}
-                  </Box>
-                  <Box w='30%' pt={3} textAlign='center' float='right'>
-                    <QRCode
-                      id='QRCode'
-                      size={256}
-                      style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                      value={LinkQrCode}
-                      viewBox={`0 0 256 256`}
-                    />
-                  </Box>
+                  <HStack>
+                    <Box w='70%' pt={3}>
+                      {OtherInfo({
+                        isLeader: false,
+                        title: registerResult?.religiousName || '',
+                        subTitle: registerResult?.organizationStructureId,
+                      })}
+                    </Box>
+                    <Box w='30%' pt={3} textAlign='center'>
+                      <QRCode
+                        id='QRCode'
+                        size={256}
+                        style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                        value={LinkQrCode}
+                        viewBox={`0 0 256 256`}
+                      />
+                    </Box>
+                  </HStack>
                   <Box w='100%' pt={3} textAlign={'center'} float={'right'}>
                     <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
                       <InputGroup size='md'>
