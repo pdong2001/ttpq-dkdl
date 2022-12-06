@@ -56,4 +56,5 @@ export type EventRegistryDto = {
   receiveCardAddress?: ReceiveCardAddressDto;
   // thêm field
   transitType?: TransitType;
+  shirtSizeId?: number;
 };

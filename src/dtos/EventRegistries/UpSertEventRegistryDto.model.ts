@@ -31,4 +31,5 @@ export type UpSertEventRegistryDto = {
   ctnId?: string;
   // thêm field
   transitType?: TransitType;
+  shirtSizeId?: number;
 };

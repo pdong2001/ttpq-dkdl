@@ -44,6 +44,12 @@ const step3Schema = Yup.object({
     then: Yup.string().notRequired(),
     otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
   }),
+  // thêm field
+  transitType: Yup.string().when('moveType', {
+    is: MoveType.OTHER,
+    then: Yup.string().required(),
+    otherwise: Yup.string().notRequired(),
+  }),
 });
 
 export default step3Schema;

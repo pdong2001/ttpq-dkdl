@@ -106,29 +106,32 @@ const Step3 = (props: StepProps) => {
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
       // thêm field
       transitType:
-        transitTypeInStore ||
-        (editTransitType && editTransitType + '') ||
-        (!hasStartAddress ? TransitType.CaHaiChieu : undefined),
+        transitTypeInStore || (editTransitType && editTransitType + '') || TransitType.CaHaiChieu,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
       if (moveType != MoveType.HCM) {
+        // tỉnh khác
         values.startAddressId = undefined;
         values.startTimeId = undefined;
         values.leaveAddressId = undefined;
         values.leaveTimeId = undefined;
         if (moveType == MoveType.BY_YOUR_SELF) {
+          // tự túc
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
           // thêm field
-          values.transitType = undefined;
+          values.transitType = '';
         }
       } else {
+        // hcm
         values.otherStartAddress = '';
         values.otherStartTime = '';
         values.otherLeaveTime = '';
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
+        // thêm field
+        values.transitType = '';
       }
       dispatch(
         fillForm({
