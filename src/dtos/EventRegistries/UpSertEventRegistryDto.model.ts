@@ -1,6 +1,7 @@
 import { MoveType } from '../Enums/MoveType.enum';
 import { PositionType } from '../Enums/PositionType.enum';
 import { RegisterType } from '../Enums/RegisterType.enum';
+import { TransitType } from '../Enums/TransitType.enum';
 
 export type UpSertEventRegistryDto = {
   memberId?: string;
@@ -28,4 +29,6 @@ export type UpSertEventRegistryDto = {
   otherLeaveAddress?: string;
   type?: string;
   ctnId?: string;
+  // thêm field
+  transitType?: TransitType;
 };

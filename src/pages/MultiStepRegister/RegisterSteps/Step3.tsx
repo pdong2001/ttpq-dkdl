@@ -22,6 +22,7 @@ import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { TransitType } from '~/dtos/Enums/TransitType.enum';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -60,6 +61,8 @@ const Step3 = (props: StepProps) => {
     returnPlaneCode: editReturnPlaneCode,
     leaveTime,
     startTime,
+    //thêm field
+    transitType: editTransitType,
   } = useAppSelector((state) => state.registerInfo.data);
   const { addressId: editStartAddressId } = startTime || {};
   const { addressId: editLeaveAddressId } = leaveTime || {};
@@ -76,6 +79,8 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
+    // thêm field
+    transitType: transitTypeInStore,
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
@@ -99,6 +104,11 @@ const Step3 = (props: StepProps) => {
       otherLeaveTime: otherLeaveTime || (editOtherLeaveTime && new Date(editOtherLeaveTime)),
       startPlaneCode: startPlaneCode || editStartPlaneCode,
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
+      // thêm field
+      transitType:
+        transitTypeInStore ||
+        (editTransitType && editTransitType + '') ||
+        (!hasStartAddress ? TransitType.CaHaiChieu : undefined),
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
@@ -110,6 +120,8 @@ const Step3 = (props: StepProps) => {
         if (moveType == MoveType.BY_YOUR_SELF) {
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
+          // thêm field
+          values.transitType = undefined;
         }
       } else {
         values.otherStartAddress = '';
@@ -170,6 +182,8 @@ const Step3 = (props: StepProps) => {
       }),
     );
   };
+
+  console.log('___', formik.values);
 
   return (
     <FadeInUp>
@@ -246,7 +260,26 @@ const Step3 = (props: StepProps) => {
                   )}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
                   {moveType === MoveType.OTHER && (
-                    <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                    <>
+                      <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                      {/* thêm field */}
+                      <Radios
+                        spacing={2}
+                        direction='column'
+                        label='Đăng ký ô tô'
+                        name='transitType'
+                        isRequired
+                      >
+                        <Radio value={TransitType.ChieuDi}>
+                          Chiều đi (Từ Tân Sơn Nhất về Chùa)
+                        </Radio>
+                        <Radio value={TransitType.ChieuVe}>
+                          Chiều về (Từ chùa ra Tân Sơn Nhất)
+                        </Radio>
+                        <Radio value={TransitType.CaHaiChieu}>Cả 2 chiều</Radio>
+                        <Radio value={TransitType.TuTuc}>Tự túc</Radio>
+                      </Radios>
+                    </>
                   )}
                 </>
               )}

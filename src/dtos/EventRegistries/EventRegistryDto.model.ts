@@ -13,6 +13,7 @@ import { EventRegistryPageDto } from '../EventRegistryPages/EventRegistryPageDto
 import { MemberDto } from '../Members/MemberDto.model';
 import { DepartmentDetailDto } from '../DepartmentDetails/DepartmentDetailDto.model';
 import { AreaDto } from '../Areas/AreaDto.model';
+import { TransitType } from '../Enums/TransitType.enum';
 
 export type EventRegistryDto = {
   id?: string;
@@ -53,4 +54,6 @@ export type EventRegistryDto = {
   departmentDetail?: DepartmentDetailDto;
   eventRegistryPage?: EventRegistryPageDto;
   receiveCardAddress?: ReceiveCardAddressDto;
+  // thêm field
+  transitType?: TransitType;
 };
