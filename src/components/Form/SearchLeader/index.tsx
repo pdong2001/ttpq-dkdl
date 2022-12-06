@@ -27,7 +27,6 @@ import { formatUrl } from '~/utils/functions';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
-import { loadPlugin } from 'immer/dist/internal';
 
 type Props = {
   name: string;
@@ -80,12 +79,12 @@ const SearchLeader = (props: Props) => {
 
   useEffect(() => {
     const { data: leader } = data || {};
-    if (leader) {
-      setValue(leader?.id);
+    if (leader || editLeader) {
+      setValue(leader?.id || editLeader?.id);
     } else {
       setValue('');
     }
-  }, [data]);
+  }, [data, editLeader]);
 
   const isInvalid = !!error && touched;
   const isValidSearchValue = inputValue?.length >= 8;

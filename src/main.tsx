@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import Loading from './components/Loading';
 import MessageProvider from './providers/message';
+import AuthProvider from './providers/auth';
 
 const theme = extendTheme(
   primaryColor,
@@ -19,10 +20,11 @@ ReactDOM.render(
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <MessageProvider>
-          <App />
+          <AuthProvider>
+            <App />
+            <Loading />
+          </AuthProvider>
         </MessageProvider>
-
-        <Loading />
       </BrowserRouter>
     </ChakraProvider>
   </ReduxProvider>,

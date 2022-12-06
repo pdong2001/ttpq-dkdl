@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useContext } from 'react';
 import {
   Box,
   HStack,
@@ -6,7 +6,6 @@ import {
   useDisclosure,
   Text,
   Stack,
-  useColorMode,
   Link,
   Avatar,
   Button,
@@ -15,7 +14,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  useColorModeValue,
+  MenuIcon,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
@@ -24,6 +23,11 @@ import { HashLink } from 'react-router-hash-link';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH, HOME_WITH_SHORT_URI } from '~/routes';
 import { BiLogOutCircle, BiQr, BiUserCircle } from 'react-icons/bi';
+import { useAppSelector } from '~/hooks/reduxHook';
+import { AuthContext } from '~/providers/auth';
+import SuccessRegisterModal from '../Modals/SuccessRegisterModal';
+import API from '~/apis/constants';
+import { formatUrl } from '~/utils/functions';
 
 const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; onClick?: any }) => (
   <Link
@@ -47,7 +51,7 @@ const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; o
     </Text>
   </Link>
 );
-const delta = window.innerHeight / 5;
+const delta = window.innerHeight / 1.5;
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,12 +66,16 @@ export default function NavBar() {
     { title: 'Chương trình', to: `/${shortUri}#timeline` },
   ];
 
+  const { login, logout, member } = useContext(AuthContext);
+
   const [navBarBg, setNavbarBg] = useState('blue.500');
   const [color, setColor] = useState('blue.500');
   const isChangeMode = window.scrollY < delta && window.scrollY >= 50;
   const changeBackground = () => {
-    const delta = 100;
-    if (window.scrollY >= delta || isRegisterPage) {
+    const isOver = window.scrollY >= delta || isRegisterPage;
+
+    // const delta = 100;
+    if (isOver) {
       setNavbarBg('blue.500');
       setColor('white');
     } else if (isChangeMode) {
@@ -85,6 +93,11 @@ export default function NavBar() {
       window.removeEventListener('scroll', changeBackground);
     };
   });
+
+  const [openQR, setOpenQR] = useState(false);
+  const showQR = () => {
+    setOpenQR(true);
+  };
   return (
     <>
       {/* <Box background='transparent' height={16}></Box> */}
@@ -109,35 +122,41 @@ export default function NavBar() {
                 ))}
               </HStack>
             </HStack>
-
-            <Menu>
-              <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
-              </MenuButton>
-              <MenuList color={useColorModeValue('blue.500', 'blue.300')}>
-                <MenuItem>
-                  <HStack spacing={1}>
-                    <BiQr /> <span>Mã QR cá nhân</span>
+            {member.userToken ? (
+              <Menu>
+                <MenuButton cursor={'pointer'} minW={0}>
+                  <HStack color='white'>
+                    <Text>{`Xin chào, ${member.fullName}`}</Text>
+                    <Avatar size={'sm'} src={member.avatarPath} />
                   </HStack>
-                </MenuItem>
-                <MenuItem>
-                  <HStack spacing={1}>
-                    <BiUserCircle /> <span>Thông tin đăng ký</span>
-                  </HStack>
-                </MenuItem>
-                <MenuDivider />
-                <MenuItem>
-                  <HStack spacing={1}>
-                    <BiLogOutCircle /> <span>Đăng xuất</span>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+                </MenuButton>
+                <MenuList color={'blue.500'}>
+                  <MenuItem onClick={showQR}>
+                    <HStack spacing={1}>
+                      <BiQr /> <span>Mã QR cá nhân</span>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem>
+                    <HStack spacing={1}>
+                      <BiUserCircle /> <span>Thông tin đăng ký</span>
+                    </HStack>
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem onClick={logout}>
+                    <HStack spacing={1}>
+                      <BiLogOutCircle /> <span>Đăng xuất</span>
+                    </HStack>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            ) : (
+              <Button
+                colorScheme={window.scrollY >= delta || isRegisterPage ? 'yellow' : 'whiteAlpha'}
+                onClick={() => login()}
+              >
+                Đăng nhập
+              </Button>
+            )}
           </HStack>
 
           {isOpen ? (
@@ -152,6 +171,12 @@ export default function NavBar() {
             </Box>
           ) : null}
         </Box>
+        <SuccessRegisterModal
+          open={openQR}
+          onClose={() => {
+            setOpenQR(false);
+          }}
+        />
       </Box>
     </>
   );

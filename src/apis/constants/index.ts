@@ -3,6 +3,7 @@ const api = (api: string) => `${API_PREFIX}${api}`;
 
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
+const GET_LOGGEDIN_MEMBER = api('/Auth/member');
 
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
@@ -50,6 +51,7 @@ const API = {
   UPDATE_MEMBER,
   UPLOAD_PHOTO,
   GET_PHOTO,
+  GET_LOGGEDIN_MEMBER,
 };
 
 export default API;
