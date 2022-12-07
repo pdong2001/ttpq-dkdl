@@ -13,7 +13,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
@@ -35,6 +35,7 @@ import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { EVENT_EXP_TITLE } from '~/configs/register';
 import LoginPopup from '~/components/LoginPopup';
+import { AuthContext } from '~/providers/auth';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -48,13 +49,9 @@ const RegisterInfo = () => {
     onOpen: onOpenLoginModal,
     onClose: onCloseLoginModal,
   } = useDisclosure();
+  const { member: authMember } = useContext(AuthContext);
 
   const { data } = useAppSelector((state) => state.registerInfo);
-
-  // useEffect(() => {
-  //   if (authMember.userToken && isSubmit.current) {
-  //   }
-  // }, [memberAuthdata.token, memberAuthError, authenLoaded]);
 
   useEffect(() => {
     dispatch(
@@ -72,6 +69,9 @@ const RegisterInfo = () => {
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
+  const assignedDepartment = data.departmentDetail;
+  const assignedArea = data.area;
+  const assignedGroup = data.group;
   const permanent = [
     [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
@@ -103,7 +103,7 @@ const RegisterInfo = () => {
       method: 'get',
       url: API.GET_CTN,
       params: { CTNGroupId: organizationStructureId },
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [organizationStructureId],
   );
@@ -172,13 +172,14 @@ const RegisterInfo = () => {
   const groupMembers = groupData?.data || [];
 
   const handleUpdateInfo = () => {
-    if (member?.register?.id === id) {
+    if (isOwner) {
       history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
     } else {
       onOpenLoginModal();
     }
   };
-
+  const isOwner = authMember?.register?.id === data.id;
+``
   return (
     <Box
       pt={24}
@@ -279,7 +280,7 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                {member?.register?.id === id && (
+                {isOwner && (
                   <Button onClick={handleUpdateInfo} size='sm'>
                     Cập nhật
                   </Button>
@@ -373,6 +374,15 @@ const RegisterInfo = () => {
                     <Box>
                       <Text as='b'>Nơi nhận thẻ:</Text>{' '}
                       {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
+                    </Box>
+                  </Stack>
+                  <Stack>
+                    <Box>
+                      <Text as='b'>Ban đã được phân:</Text>
+
+                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
+                        {assignedDepartment.}
+                      </Tag> */}
                     </Box>
                   </Stack>
                 </TabPanel>
