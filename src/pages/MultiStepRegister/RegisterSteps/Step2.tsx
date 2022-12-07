@@ -14,6 +14,10 @@ import { Gender } from '~/dtos/Enums/Gender.enum';
 import CultivationPlace from '~/components/Form/CultivationPlace';
 import FormInput from '~/components/Form/FormInput';
 import { nanoid } from '@reduxjs/toolkit';
+import FadeInUp from '~/components/Animation/FadeInUp';
+import SearchLeader from '~/components/Form/SearchLeader';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
+import _ from 'lodash';
 
 const Step2 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
@@ -44,6 +48,8 @@ const Step2 = (props: StepProps) => {
     dateOfBirth,
     register,
   } = useAppSelector((state) => state.register.data) || {};
+
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
 
   const [permanentAddressProvince, permanentAddressDistrict, permanentAddressWard] = [
     permanentAddress?.provinceId || permanentProvince?.id,
@@ -83,6 +89,12 @@ const Step2 = (props: StepProps) => {
       temporaryAddressWard,
 
       organizationStructureId: ctnId == 0 ? organizationStructureId : ctnId,
+
+      registerType:
+        register?.registerType ||
+        (registerInfo?.registerType && registerInfo.registerType + '') ||
+        RegisterType.SINGLE,
+      leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
     validationSchema: step2Schema,
     onSubmit: (values) => {
@@ -94,7 +106,12 @@ const Step2 = (props: StepProps) => {
         permanentAddress,
         temporaryAddress,
         organizationStructureId,
+        registerType,
       } = values;
+      let { leaderId } = values;
+      if (registerType === RegisterType.SINGLE) {
+        leaderId = '';
+      }
       const { year, month, date } = dob || {};
       const dateOfBirth = new Date(+year, +month - 1, +date);
       dispatch(
@@ -106,7 +123,7 @@ const Step2 = (props: StepProps) => {
           dateOfBirth,
           temporaryAddress,
           permanentAddress,
-          register,
+          register: { ...register, leaderId, registerType },
         }),
       );
       dispatch(
@@ -121,13 +138,32 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
-  console.log('gender', formik.values);
+  console.log(
+    'gender',
+    register.leaderId,
+    formik.values.registerType,
+    formik.errors,
+    formik.values,
+  );
 
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));
   };
+  const { registerType: localRegisterType } = formik.values;
+
+  const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+
+  const setLeaderPreview = (leader) => {
+    if (_.get(leader, 'success', false)) {
+      dispatch(
+        fillDataPreview({
+          leader: _.get(leader, 'data', {}),
+        }),
+      );
+    }
+  };
   return (
-    <>
+    <FadeInUp>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
         <Heading
           color={primaryColor}
@@ -188,6 +224,17 @@ const Step2 = (props: StepProps) => {
                     label='Địa chỉ tạm trú'
                     isRequired
                   />
+                  <Radios label='Hình thức đăng ký' name='registerType'>
+                    <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
+                    <Radio value={RegisterType.GROUP}>Nhóm</Radio>
+                  </Radios>
+                  {isRegisterFollowGroup && (
+                    <SearchLeader
+                      name='leaderId'
+                      getLeader={(leader) => setLeaderPreview(leader)}
+                      label='Trưởng nhóm'
+                    />
+                  )}
                 </Stack>
               </SimpleGrid>
             </Stack>
@@ -202,7 +249,7 @@ const Step2 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </>
+    </FadeInUp>
   );
 };
 

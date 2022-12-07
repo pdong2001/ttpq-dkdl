@@ -3,11 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "source": "./index.html",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:w": "vite build --watch",
-    "preview": "vite preview",
+    "dev": "parcel serve -p 3000",
+    "build": "parcel build",
     "lint": "npx eslint src",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
@@ -45,6 +44,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^2.2.0",
     "@types/axios": "^0.14.0",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.24",
@@ -55,6 +55,7 @@
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
     "@vitejs/plugin-react": "^2.2.0",
+    "buffer": "^5.5.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -62,11 +63,18 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "parcel": "^2.8.0",
+    "parcel-plugin-static-files-copy": "^2.6.0",
+    "parcel-reporter-static-files-copy": "^1.4.0",
+    "parcel-resolver-tspaths": "^0.0.9",
     "prettier": "^2.7.1",
+    "process": "^0.11.10",
     "redux-logger": "^3.0.6",
-    "typescript": "^4.8.4",
-    "vite": "^3.2.1",
-    "vite-plugin-checker": "^0.5.1",
-    "vite-tsconfig-paths": "^3.5.2"
+    "typescript": "^4.8.4"
+  },
+  "alias": {},
+  "staticFiles": {
+    "staticPath": "public",
+    "watcherGlob": "**"
   }
 }

@@ -11,14 +11,9 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Collapse,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
@@ -27,19 +22,7 @@ import { useHistory } from 'react-router-dom';
 
 import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
-import { Input } from '@chakra-ui/react';
-import { FormControl, FormLabel } from '@chakra-ui/react';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { getMemberAuth } from '~/slices/memberAuth';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
@@ -51,6 +34,7 @@ import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { EVENT_EXP_TITLE } from '~/configs/register';
+import LoginPopup from '~/components/LoginPopup';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -66,47 +50,12 @@ const RegisterInfo = () => {
     onClose: onCloseLoginModal,
   } = useDisclosure();
 
-  const { isOpen: isOpenLoginAlert, onOpen: onOpenLoginAlert } = useDisclosure();
+  const { data } = useAppSelector((state) => state.registerInfo);
 
-  const [login_phone, setLoginPhone] = useState<string>('');
-  const [login_id_card, setLoginIdCard] = useState<string>('');
-  const handleLoginPhoneChange = (e) => setLoginPhone(e.target.value);
-  const handleLoginIdCardChange = (e) => setLoginIdCard(e.target.value);
-  const loginMember = () => {
-    isSubmit.current = true;
-    dispatch(
-      getMemberAuth({
-        method: 'post',
-        url: API.LOGIN_MEMBER,
-        data: {
-          phoneNumber: login_phone,
-          identityCard: login_id_card,
-        },
-      }),
-    );
-  };
-
-  const {
-    data: memberAuthdata,
-    error: memberAuthError,
-    loaded: authenLoaded,
-  } = useAppSelector((state) => state.memberAuth);
-  const { data, loaded, error } = useAppSelector((state) => state.registerInfo);
-
-  useEffect(() => {
-    if (memberAuthdata.token && isSubmit.current) {
-      dispatch(
-        getRegisterInfo({
-          method: 'get',
-          url: formatUrl(API.GET_REGISTER_INFO, { id }),
-        }),
-      ).then(() => {
-        history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
-      });
-    }
-
-    if (memberAuthError) onOpenLoginAlert();
-  }, [memberAuthdata.token, memberAuthError, authenLoaded]);
+  // useEffect(() => {
+  //   if (authMember.userToken && isSubmit.current) {
+  //   }
+  // }, [memberAuthdata.token, memberAuthError, authenLoaded]);
 
   useEffect(() => {
     dispatch(
@@ -178,14 +127,14 @@ const RegisterInfo = () => {
     { title: 'Pháp Danh', value: member?.religiousName },
     {
       title: 'Nơi sinh hoạt',
-      value: ctnInfo?.find((ctn) => ctn.Id === organizationStructureId).Name,
+      value: ctnInfo?.find((ctn) => ctn.id === organizationStructureId).name,
     },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },
     { title: 'Kỹ năng', value: member?.strongPoints || [] },
   ];
 
-  let schedule = {
+  const schedule = {
     departure_address: '',
     departure_time: '',
     return_address: '',
@@ -323,14 +272,27 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button
-                  display={memberAuthdata.token && 'none'}
-                  onClick={onOpenLoginModal}
-                  size='sm'
-                >
+                <Button onClick={onOpenLoginModal} size='sm'>
                   Cập nhật
                 </Button>
-                <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
+                <LoginPopup
+                  title={'Xác nhận thông tin'}
+                  isOpen={isOpenLoginModal}
+                  onClose={onCloseLoginModal}
+                  onSuccess={() => {
+                    dispatch(
+                      getRegisterInfo({
+                        method: 'get',
+                        url: formatUrl(API.GET_REGISTER_INFO, { id }),
+                      }),
+                    ).then(() => {
+                      history.push(
+                        formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }),
+                      );
+                    });
+                  }}
+                />
+                {/* <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Xác nhận thông tin</ModalHeader>
@@ -367,7 +329,7 @@ const RegisterInfo = () => {
                       <Button onClick={loginMember}>Gửi</Button>
                     </ModalFooter>
                   </ModalContent>
-                </Modal>
+                </Modal> */}
               </HStack>
 
               <Divider borderBottomWidth={'2px'} />

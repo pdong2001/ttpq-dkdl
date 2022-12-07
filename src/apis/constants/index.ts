@@ -1,8 +1,9 @@
-const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
+const API_PREFIX = process.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
 
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
+const GET_MEMBER = api('/Auth/member');
 
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
@@ -18,13 +19,14 @@ const GET_MEMBER_BY_ID = api('/Member/get-by-id/:id');
 const UPDATE_MEMBER = api('/Member/update/:id');
 const REGISTER = api('/Member/add');
 const SEARCH_MEMBER = api('/Member/search');
+const GET_REGISTER_BY_EVENT = api('/EventRegistry/event/:eventId');
 
 /* API from app Nhân sự */
 const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
 const GET_DISTRICT = 'https://ctnpq.com/apis/address/District';
 const GET_WARD = 'https://ctnpq.com/apis/address/Ward';
 const UPLOAD_PHOTO = 'https://ctnpq.com/apis/photo/upload';
-const GET_CTN = 'https://ctnpq.com/api/ctn/list';
+const GET_CTN = 'https://ctnpq.com/apis/ctn/list';
 const GET_PHOTO = `https://ctnpq.com/apis/photo?key=:key`;
 
 const API = {
@@ -50,6 +52,8 @@ const API = {
   UPDATE_MEMBER,
   UPLOAD_PHOTO,
   GET_PHOTO,
+  GET_MEMBER,
+  GET_REGISTER_BY_EVENT
 };
 
 export default API;

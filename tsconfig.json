@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "types": ["vite/client"],
+    "types": ["node"],
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
@@ -28,6 +28,6 @@
       "~/*": ["src/*"]
     }
   },
-  "include": ["vite.config.ts", "**/*.ts", "**/*.tsx"],
+  "include": [".parcelrc", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

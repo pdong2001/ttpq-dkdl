@@ -2,16 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
-// import slider00 from '~/assets/cover-hero/cover-00.jpg';
-// import slider01 from '~/assets/cover-hero/cover-01.jpg';
-// import slider02 from '~/assets/cover-hero/cover-02.jpg';
-// import slider03 from '~/assets/cover-hero/cover-03.jpg';
 
-import cover01 from '~/assets/cover/cover-1.jpg';
-import cover02 from '~/assets/cover/cover-2.jpg';
-import cover03 from '~/assets/cover/cover-3.jpg';
-import cover04 from '~/assets/cover/cover-4.jpg';
-import cover05 from '~/assets/cover/cover-5.jpg';
+import cover00 from '~/assets/cover-hero/cover-00.jpg';
+import cover01 from '~/assets/cover-ctn/cover-1.jpg';
+// import cover02 from '~/assets/cover-ctn/cover-2.jpg';
+import cover03 from '~/assets/cover-ctn/cover-3.jpg';
+// import cover04 from '~/assets/cover-ctn/cover-4.jpg';
+import cover05 from '~/assets/cover-ctn/cover-5.jpg';
+import cover06 from '~/assets/event-info/dai-le-10.jpg';
+import cover07 from '~/assets/event-info/dai-le-20.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -23,6 +22,7 @@ import API from '~/apis/constants';
 import { getRegisterPage } from '~/slices/registerPage';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { MessageContext } from '~/providers/message';
+import useCustomColorMode from '~/hooks/useColorMode';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -58,7 +58,7 @@ export default function CaptionCarousel() {
           history.push('/not-found');
         });
     }
-  }, [shortUri, dispatch, history, messageService]);
+  }, [shortUri]);
 
   // As we have used custom buttons, we need a reference variable to
   // change the state
@@ -105,7 +105,12 @@ export default function CaptionCarousel() {
     {
       title: '',
       text: '',
-      image: cover02,
+      image: cover00,
+    },
+    {
+      title: '',
+      text: '',
+      image: cover06,
     },
     {
       title: '',
@@ -115,7 +120,7 @@ export default function CaptionCarousel() {
     {
       title: '',
       text: '',
-      image: cover04,
+      image: cover07,
     },
     {
       title: '',
@@ -123,7 +128,7 @@ export default function CaptionCarousel() {
       image: cover05,
     },
   ];
-
+  const { bgColor } = useCustomColorMode();
   return (
     <Box position={'relative'} minH={'100vh'} width={'full'}>
       {/* Left Icon */}
@@ -220,19 +225,19 @@ export default function CaptionCarousel() {
           pos='absolute'
           left={{ base: '0', md: 'unset' }}
           right={{ base: 0, md: '8%', xl: '10%', '2xl': '15%' }}
-          transform={'translate(0%, -50%)'}
-          top='50%'
-          zIndex='200'
+          transform={{ base: 'translate(0%, -50%)' }}
+          top={{ base: '50%' }}
           p={'25px'}
-          // mx={{ base: '10px', md: '80px' }}
+          mx={{ base: 3, md: 'unset' }}
           w={{ md: '45%', lg: '35%' }}
-          maxW={{ md: '600px' }}
-          bg='rgba(0,0,0,0.85)'
-          _hover={{ background: 'rgba(0,0,0,.9)' }}
+          maxW={{ md: '450px' }}
+          bg={{ base: bgColor, md: 'rgba(255,255,255,.85)' }}
           transitionDuration={'1s'}
           justifyContent={'center'}
           borderRadius='md'
           shadow='5xl'
+          zIndex='2'
+          _hover={{ background: 'rgba(255, 255, 255, 1)' }}
         >
           <Step1 previousStep={() => undefined} nextStep={nextStep} />
         </Box>

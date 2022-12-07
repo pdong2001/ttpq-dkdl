@@ -1,5 +1,5 @@
-import { Box, Image, IconButton, useBreakpointValue } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { Box, Image, useBreakpointValue, Flex } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import Slider from 'react-slick';
 
@@ -29,8 +29,8 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
 
   const [slider, setSlider] = useState<Slider | null>(null);
   // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '95%', lg: '50%' });
-  const side = useBreakpointValue({ base: '30%', lg: '40px' });
+  const top = useBreakpointValue({ base: '50%', lg: '50%' });
+  const side = useBreakpointValue({ base: '5%', lg: '5%' });
 
   useEffect(() => {
     setTimeout(() => {
@@ -51,21 +51,13 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
           bg: 'whiteAlpha.300',
         }}
       >
-        {/* CSS files for react-slick */}
-        <link
-          rel='stylesheet'
-          type='text/css'
-          href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
-        />
-        <link
-          rel='stylesheet'
-          type='text/css'
-          href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
-        />
         {/* Left Icon */}
-        <IconButton
+        <Box
+          as={Flex}
+          alignItems='center'
+          justifyContent='center'
           aria-label='left-arrow'
-          variant='ghost'
+          // variant='ghost'
           color='white'
           position='absolute'
           left={side}
@@ -79,13 +71,19 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
           cursor='pointer'
           border='2px solid'
           borderColor='blue.200'
+          _hover={{
+            bg: 'whiteAlpha.300',
+          }}
         >
-          <BiLeftArrowAlt size='40px' />
-        </IconButton>
+          <BiLeftArrowAlt size='30px' />
+        </Box>
         {/* Right Icon */}
-        <IconButton
+        <Box
           aria-label='right-arrow'
-          variant='ghost'
+          as={Flex}
+          alignItems='center'
+          justifyContent='center'
+          // variant='ghost'
           color='white'
           position='absolute'
           right={side}
@@ -99,9 +97,12 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
           cursor='pointer'
           border='2px solid'
           borderColor='blue.200'
+          _hover={{
+            bg: 'whiteAlpha.300',
+          }}
         >
-          <BiRightArrowAlt size='40px' />
-        </IconButton>
+          <BiRightArrowAlt size='30px' />
+        </Box>
         <Slider
           {...settingsDefault}
           ref={(slider: Slider) => {

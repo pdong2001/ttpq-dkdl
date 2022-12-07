@@ -21,6 +21,7 @@ import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
+import FadeInUp from '~/components/Animation/FadeInUp';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -171,7 +172,7 @@ const Step3 = (props: StepProps) => {
   };
 
   return (
-    <>
+    <FadeInUp>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -261,7 +262,7 @@ const Step3 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </>
+    </FadeInUp>
   );
 };
 

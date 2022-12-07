@@ -8,11 +8,10 @@ import Step4 from './RegisterSteps/Step4';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
+import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import Step5 from './RegisterSteps/Step5';
-import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getRegisterPage } from '~/slices/registerPage';
 
@@ -22,11 +21,11 @@ export type StepProps = {
   previousStep: () => void;
 };
 
-const registerSteps = [Step1, Step2, Step3, Step4, Step5, SuccessRegisterModal];
+const registerSteps = [Step1, Step2, Step3, Step4, Step5];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const history = useHistory();
@@ -81,22 +80,20 @@ const MultiStepRegister = () => {
             as={Grid}
             maxW={'5xl'}
             gridTemplateColumns={{ base: 'repeat(3, 1fr)' }}
-            pt={{ base: 16 }}
+            pt={{ base: 20 }}
             pb={5}
             minH='100vh'
             alignItems={'center'}
           >
             <GridItem colSpan={{ base: 3 }}>
-              <FadeInUp>
-                <Box
-                  bg={bgColor}
-                  rounded={'xl'}
-                  p={{ base: 4, sm: 6, md: 8 }}
-                  mx={{ base: 1, sm: 10, md: 20, lg: 6 }}
-                >
-                  <Step nextStep={nextStep} previousStep={previousStep} />
-                </Box>
-              </FadeInUp>
+              <Box
+                bg={bgColor}
+                rounded={'xl'}
+                p={{ base: 4, sm: 6, md: 8 }}
+                mx={{ base: 1, sm: 10, md: step === 0 ? 60 : 20, lg: step === 0 ? 60 : 6 }}
+              >
+                <Step nextStep={nextStep} previousStep={previousStep} />
+              </Box>
             </GridItem>
           </Container>
         </Box>

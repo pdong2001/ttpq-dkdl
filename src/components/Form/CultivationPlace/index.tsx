@@ -9,7 +9,6 @@ import {
 import CustomSelect from '~/components/Form/CustomSelect';
 import _ from 'lodash';
 import { useEffect } from 'react';
-import useCustomColorMode from '~/hooks/useColorMode';
 import { useField } from 'formik';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
@@ -30,7 +29,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
     {
       method: 'get',
       url: API.GET_CTN,
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [],
   );
@@ -45,8 +44,8 @@ function CultivationPlace(props: CultivationPlaceProps) {
       <FormLabel mb={0}>{label}</FormLabel>
       <CustomSelect
         {...field}
-        valueField='Id'
-        labelField='Name'
+        valueField='id'
+        labelField='name'
         data={groups}
         placeholder='Nơi sinh hoạt'
         hiddenErrorMessage
