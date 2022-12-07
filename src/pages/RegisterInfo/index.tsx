@@ -279,9 +279,11 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button onClick={handleUpdateInfo} size='sm'>
-                  Cập nhật
-                </Button>
+                {member?.register?.id === id && (
+                  <Button onClick={handleUpdateInfo} size='sm'>
+                    Cập nhật
+                  </Button>
+                )}
                 <LoginPopup
                   title={'Xác thực thông tin'}
                   isOpen={isOpenLoginModal}
@@ -299,44 +301,6 @@ const RegisterInfo = () => {
                     });
                   }}
                 />
-                {/* <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Xác nhận thông tin</ModalHeader>
-
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                      <Collapse in={isOpenLoginAlert} animateOpacity>
-                        <Alert status='error' variant='subtle' mb={2}>
-                          <AlertIcon />
-                          <AlertTitle>Lỗi đăng nhập!</AlertTitle>
-                          <AlertDescription>Tài khoản nhập vào không đúng.</AlertDescription>
-                        </Alert>
-                      </Collapse>
-                      <FormControl isRequired>
-                        <FormLabel>Số điện thoại</FormLabel>
-                        <Input
-                          placeholder='Số điện thoại'
-                          value={login_phone}
-                          onChange={handleLoginPhoneChange}
-                        />
-                      </FormControl>
-
-                      <FormControl mt={4} isRequired>
-                        <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
-                        <Input
-                          placeholder='Số CCCD/CMT'
-                          value={login_id_card}
-                          onChange={handleLoginIdCardChange}
-                        />
-                      </FormControl>
-                    </ModalBody>
-
-                    <ModalFooter>
-                      <Button onClick={loginMember}>Gửi</Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal> */}
               </HStack>
 
               <Divider borderBottomWidth={'2px'} />
