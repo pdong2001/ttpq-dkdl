@@ -78,7 +78,7 @@ export default function SuccessRegisterModal({
       identityCard: registerResult?.identityCard || member.identityCard,
       email: registerResult?.email || member.email,
     },
-    avatar: registerResult.avatarPath,
+    avatar: registerResult.avatarPath || member.avatarPath,
     LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
     registerInfoPath: `/register-info/${registerId}`,
     fullName: registerResult.fullName || member.fullName,

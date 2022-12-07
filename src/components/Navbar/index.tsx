@@ -20,7 +20,7 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
 import { nanoid } from '@reduxjs/toolkit';
 import { HashLink } from 'react-router-hash-link';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH, HOME_WITH_SHORT_URI } from '~/routes';
 import { BiLogOutCircle, BiQr, BiUserCircle } from 'react-icons/bi';
 import { useAppSelector } from '~/hooks/reduxHook';
@@ -54,6 +54,7 @@ const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; o
 const delta = window.innerHeight / 1.5;
 
 export default function NavBar() {
+  const history = useHistory();
   const registerPage = useAppSelector((state) => state.registerPage.data);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shortUri = '' } = useParams<any>();
@@ -147,7 +148,12 @@ export default function NavBar() {
                   </MenuItem>
                   {registerPage.eventId && (
                     <>
-                      <MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          const registerInfoPath = `/register-info/${member.register?.id}`;
+                          history.push(registerInfoPath);
+                        }}
+                      >
                         <HStack spacing={1}>
                           <BiUserCircle /> <span>Thông tin đăng ký</span>
                         </HStack>
