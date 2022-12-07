@@ -36,7 +36,8 @@ import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
 import { useContext } from 'react';
 import { AuthContext } from '~/providers/auth';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { EDIT_REGISTER_PATH } from '~/routes';
 
 const PATH_URL = window.location.origin;
 
@@ -52,10 +53,13 @@ export default function SuccessRegisterModal({
   isCentered?: boolean;
 }) {
   const history = useHistory();
+  const { shortUri } = useParams<any>();
+  const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const { eventId } = useAppSelector((state) => state.registerPage.data);
   const { member } = useContext(AuthContext);
+  const isRegisterPopup = path === EDIT_REGISTER_PATH;
   const organizationStructureId =
     registerResult.organizationStructureId || member.organizationStructureId;
   const { data: ctnName, cancel: ctnToken } = useAxios(
@@ -80,7 +84,7 @@ export default function SuccessRegisterModal({
     },
     avatar: registerResult.avatarPath || member.avatarPath,
     LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
-    registerInfoPath: `/register-info/${registerId}`,
+    registerInfoPath: `/${shortUri}/register-info/${registerId}`,
     fullName: registerResult.fullName || member.fullName,
   };
 
@@ -156,7 +160,7 @@ export default function SuccessRegisterModal({
                 <Heading fontSize={['lg', 'xl', 'xl']} fontFamily={'body'} mb={2}>
                   {fullName}
                 </Heading>
-                {eventId && (
+                {isRegisterPopup && (
                   <Heading
                     mb={2}
                     as='h5'
@@ -235,7 +239,7 @@ export default function SuccessRegisterModal({
           {eventId && (
             <>
               <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
-                Tải mã QR
+                Lưu về máy
               </Button>
               <Button
                 colorScheme='yellow'

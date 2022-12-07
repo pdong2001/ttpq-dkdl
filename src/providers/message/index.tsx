@@ -22,6 +22,7 @@ const MessageProvider = ({ children }: { children: ReactNode }) => {
   const toast = useToast({
     position: 'top',
     variant: 'left-accent',
+    isClosable: true,
   });
   const toastIdRef = useRef<ToastId>();
   const close = () => {
