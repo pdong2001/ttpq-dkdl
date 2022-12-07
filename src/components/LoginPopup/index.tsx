@@ -14,10 +14,9 @@ import {
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useContext, useState } from 'react';
 import API from '~/apis/constants';
-import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { useAppDispatch } from '~/hooks/reduxHook';
 import { MessageContext } from '~/providers/message';
 import { getMemberAuth } from '~/slices/memberAuth';
-import { fillForm } from '~/slices/register';
 
 type LoginProps = {
   isOpen: boolean;
@@ -43,8 +42,7 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
   const login = () => {
     dispatch(
       getMemberAuth({
-        method: 'post',
-        url: API.LOGIN_MEMBER,
+
         data: {
           phoneNumber: phone,
           identityCard: identityNumber,
@@ -52,16 +50,7 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
       }),
     )
       .then(unwrapResult)
-      .then((res) => {
-        console.log('res login', res);
-        if (res.data?.member) {
-          dispatch(fillForm(res.data.member));
-        }
-
-        messageService.add({
-          title: 'Đăng nhập thành công',
-          status: 'success',
-        });
+      .then(() => {
         onSuccess?.();
       })
       .catch((err) => {

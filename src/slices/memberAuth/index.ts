@@ -26,12 +26,21 @@ const initialState: MemberAuthState = {
 
 export const getMemberAuth = createAsyncRequest<MemberLoginRequest>('memberAuth/get', {
   method: 'post',
+  url: API.LOGIN_MEMBER,
 });
 
-export const getLoggedInMember = createAsyncRequest<void>('member/get', {
+export const getLoggedInMember = createAsyncRequest('user/get', {
   method: 'get',
-  url: API.GET_LOGGEDIN_MEMBER,
+  url: API.GET_MEMBER,
 });
+
+export const getLoggedInRegister = createAsyncRequest<{ eventId: number | string }>(
+  'register/getLoggedIn',
+  {
+    method: 'get',
+    url: API.GET_REGISTER_BY_EVENT,
+  },
+);
 
 const memberAuth = createAppSlice<MemberAuthState>(
   'member_authen',
@@ -56,6 +65,12 @@ const memberAuth = createAppSlice<MemberAuthState>(
       action: getLoggedInMember,
       onFullfilled: (state, action) => {
         return { ...state, ...action.payload.data };
+      },
+    },
+    {
+      action: getLoggedInRegister,
+      onFullfilled: (state, action) => {
+        return { ...state, register: action.payload.data };
       },
     },
   ],
