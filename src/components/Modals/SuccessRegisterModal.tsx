@@ -24,41 +24,67 @@ import {
   Tag,
   HStack,
 } from '@chakra-ui/react';
-import _ from 'lodash';
 import { MdContentCopy } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
 import { TableComponent, OtherInfo } from '~/components/Register';
-import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 
 import * as htmlToImage from 'html-to-image';
+import useAxios from '~/hooks/useAxios';
+import API from '~/apis/constants';
+import { useContext } from 'react';
+import { AuthContext } from '~/providers/auth';
+import { useHistory } from 'react-router-dom';
 
 const PATH_URL = window.location.origin;
 
 export default function SuccessRegisterModal({
   open,
   onClose,
+  title,
+  isCentered,
 }: {
   open: boolean;
   onClose: () => void;
+  title: string;
+  isCentered?: boolean;
 }) {
+  const history = useHistory();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
+  const { eventId } = useAppSelector((state) => state.registerPage.data);
+  const { member } = useContext(AuthContext);
+  const organizationStructureId =
+    registerResult.organizationStructureId || member.organizationStructureId;
+  const { data: ctnName, cancel: ctnToken } = useAxios(
+    {
+      method: 'get',
+      url: API.GET_CTN,
+      params: { CTNGroupId: organizationStructureId },
+      transformResponse: ({ data }) => data?.find((ctn) => ctn.id === organizationStructureId).name,
+    },
+    [organizationStructureId],
+  );
+  if (!organizationStructureId || previewInfo.organizationStructureId) {
+    ctnToken.cancel();
+  }
+  const registerId = registerResult.register?.id || member.register?.id;
   // const { avatar, fullName, infos } = mapSuccessData(previewInfo);
   const dataSuccess = {
     infosSuccess: {
-      phoneNumber: registerResult?.phoneNumber,
-      identityCard: registerResult?.identityCard,
-      email: registerResult?.email,
+      phoneNumber: registerResult?.phoneNumber || member.phoneNumber,
+      identityCard: registerResult?.identityCard || member.identityCard,
+      email: registerResult?.email || member.email,
     },
     avatar: registerResult.avatarPath,
-    LinkQrCode: `${PATH_URL}/register-info/${registerResult.register?.id}`,
-    fullName: registerResult.fullName,
+    LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
+    registerInfoPath: `/register-info/${registerId}`,
+    fullName: registerResult.fullName || member.fullName,
   };
 
-  const { infosSuccess, LinkQrCode, avatar, fullName } = dataSuccess;
+  const { infosSuccess, LinkQrCode, avatar, fullName, registerInfoPath } = dataSuccess;
 
   const onImageDownload = async (fullName) => {
     function coverName(string) {
@@ -93,12 +119,13 @@ export default function SuccessRegisterModal({
       onClose={onClose}
       size={['sm', 'md', 'lg']}
       id='download-image'
+      isCentered={isCentered}
     >
       <ModalOverlay />
-      <ModalContent fontSize={['sm']}>
+      <ModalContent fontSize={['sm']} my={0}>
         <ModalHeader textAlign={'center'}>
           <Heading pt={0} as='h5' size='sx'>
-            Cảm ơn huynh đệ đã đăng ký
+            {title}
           </Heading>
         </ModalHeader>
         <ModalCloseButton />
@@ -113,7 +140,7 @@ export default function SuccessRegisterModal({
                 backgroundSize='cover'
                 transitionDuration={'2s'}
                 width={'100%'}
-                height={['140px', '160px', '200px']}
+                height={['140px', '160px', '180px']}
               ></Box>
               <Box
                 textAlign='center'
@@ -121,17 +148,24 @@ export default function SuccessRegisterModal({
                 transform='translate(-50%, -50%)'
                 left='50%'
               >
-                <Avatar size={['lg', 'xl', 'xl']} src={avatar} backgroundColor={'#c7ced6'} />
+                <Avatar size={['lg', 'xl']} src={avatar} backgroundColor={'#c7ced6'} />
               </Box>
             </Box>
             <Box px={5}>
               <Box textAlign={'center'}>
-                <Heading fontSize={['lg', 'xl', '2xl']} fontFamily={'body'} mb={2}>
+                <Heading fontSize={['lg', 'xl', 'xl']} fontFamily={'body'} mb={2}>
                   {fullName}
                 </Heading>
-                <Heading mb={2} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'lg' }} color={'red'}>
-                  <Tag>Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ</Tag>
-                </Heading>
+                {eventId && (
+                  <Heading
+                    mb={2}
+                    as='h5'
+                    fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
+                    color={'red'}
+                  >
+                    <Tag>Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ</Tag>
+                  </Heading>
+                )}
               </Box>
               <Divider borderBottomWidth={'2px'} />
               <Box overflowY='scroll'>
@@ -139,45 +173,49 @@ export default function SuccessRegisterModal({
                 <Divider borderBottomWidth={'2px'} />
                 <Box>
                   <HStack>
-                    <Box w='70%' pt={3}>
+                    <Box w={eventId ? '70%' : '100%'} pt={3}>
                       {OtherInfo({
                         isLeader: false,
-                        title: registerResult?.religiousName || '',
-                        subTitle: registerResult?.organizationStructureId,
+                        title: registerResult?.religiousName || member.religiousName,
+                        subTitle: previewInfo.organizationStructureId || ctnName,
                       })}
                     </Box>
-                    <Box w='30%' pt={3} textAlign='center'>
-                      <QRCode
-                        id='QRCode'
-                        size={256}
-                        style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                        value={LinkQrCode}
-                        viewBox={`0 0 256 256`}
-                      />
-                    </Box>
-                  </HStack>
-                  <Box w='100%' pt={3} textAlign={'center'} float={'right'}>
-                    <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
-                      <InputGroup size='md'>
-                        <Input
-                          colorScheme={'red'}
-                          isReadOnly={true}
-                          variant='filled'
-                          pr='2.5rem'
-                          type='text'
+                    {eventId && (
+                      <Box w='30%' pt={3} textAlign='center'>
+                        <QRCode
+                          id='QRCode'
+                          size={256}
+                          style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
                           value={LinkQrCode}
+                          viewBox={`0 0 256 256`}
                         />
-                        <InputRightElement width='2.5rem'>
-                          <IconButton
-                            onClick={copyLinkQR}
-                            size='sm'
-                            aria-label='Copy Link'
-                            icon={<MdContentCopy />}
+                      </Box>
+                    )}
+                  </HStack>
+                  {eventId && (
+                    <Box w='100%' pt={3} textAlign={'center'} float={'right'}>
+                      <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
+                        <InputGroup size='md'>
+                          <Input
+                            colorScheme={'red'}
+                            isReadOnly={true}
+                            variant='filled'
+                            pr='2.5rem'
+                            type='text'
+                            value={LinkQrCode}
                           />
-                        </InputRightElement>
-                      </InputGroup>
-                    </Stack>
-                  </Box>
+                          <InputRightElement width='2.5rem'>
+                            <IconButton
+                              onClick={copyLinkQR}
+                              size='sm'
+                              aria-label='Copy Link'
+                              icon={<MdContentCopy />}
+                            />
+                          </InputRightElement>
+                        </InputGroup>
+                      </Stack>
+                    </Box>
+                  )}
                   <Box id='box-alert' style={{ display: 'none' }}>
                     <Alert status='success' style={{ borderRadius: 4 }}>
                       <AlertIcon />
@@ -194,18 +232,23 @@ export default function SuccessRegisterModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
-            Tải mã QR
-          </Button>
-          <Button
-            colorScheme='yellow'
-            onClick={() => {
-              window.location.href = LinkQrCode;
-            }}
-          >
-            Thông tin đăng ký
-            <ArrowForwardIcon pl={1} />
-          </Button>
+          {eventId && (
+            <>
+              <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
+                Tải mã QR
+              </Button>
+              <Button
+                colorScheme='yellow'
+                onClick={() => {
+                  // historyLinkQrCode;
+                  history.push(registerInfoPath);
+                }}
+              >
+                Thông tin đăng ký
+                <ArrowForwardIcon pl={1} />
+              </Button>
+            </>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>

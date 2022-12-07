@@ -54,6 +54,7 @@ const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; o
 const delta = window.innerHeight / 1.5;
 
 export default function NavBar() {
+  const registerPage = useAppSelector((state) => state.registerPage.data);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shortUri = '' } = useParams<any>();
   const { path } = useRouteMatch();
@@ -133,15 +134,27 @@ export default function NavBar() {
                 <MenuList color={'blue.500'}>
                   <MenuItem onClick={showQR}>
                     <HStack spacing={1}>
-                      <BiQr /> <span>Mã QR cá nhân</span>
+                      {registerPage.eventId ? (
+                        <>
+                          <BiQr /> <span>Mã QR cá nhân</span>
+                        </>
+                      ) : (
+                        <>
+                          <BiUserCircle /> <span>Thông tin cá nhân</span>
+                        </>
+                      )}
                     </HStack>
                   </MenuItem>
-                  <MenuItem>
-                    <HStack spacing={1}>
-                      <BiUserCircle /> <span>Thông tin đăng ký</span>
-                    </HStack>
-                  </MenuItem>
-                  <MenuDivider />
+                  {registerPage.eventId && (
+                    <>
+                      <MenuItem>
+                        <HStack spacing={1}>
+                          <BiUserCircle /> <span>Thông tin đăng ký</span>
+                        </HStack>
+                      </MenuItem>
+                      <MenuDivider />
+                    </>
+                  )}
                   <MenuItem onClick={logout}>
                     <HStack spacing={1}>
                       <BiLogOutCircle /> <span>Đăng xuất</span>
@@ -176,6 +189,8 @@ export default function NavBar() {
           onClose={() => {
             setOpenQR(false);
           }}
+          title={`${registerPage.eventId ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
+          isCentered={!registerPage.eventId}
         />
       </Box>
     </>

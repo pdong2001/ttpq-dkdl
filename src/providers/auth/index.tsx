@@ -1,8 +1,15 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { stat } from 'fs';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import LoginPopup from '~/components/LoginPopup';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { AuthMember, getLoggedInMember, logout as logoutMember } from '~/slices/memberAuth';
+import {
+  AuthMember,
+  getLoggedInMember,
+  getLoggedInRegister,
+  logout as logoutMember,
+} from '~/slices/memberAuth';
+import { MessageContext } from '../message';
 
 export type AuthValue = {
   login: () => void;
@@ -27,12 +34,21 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const history = useHistory();
   const memberLoggedIn = useAppSelector((state) => state.memberAuth.data);
   const [member, setMember] = useState(memberLoggedIn);
-
+  const messageService = useContext(MessageContext);
+  const { eventId } = useAppSelector((state) => state.registerPage.data);
   useEffect(() => {
     if (memberLoggedIn.userToken) {
       dispatch(getLoggedInMember({}));
+
+      if (eventId) {
+        dispatch(
+          getLoggedInRegister({
+            eventId: eventId || '',
+          }),
+        );
+      }
     }
-  }, []);
+  }, [eventId]);
   useEffect(() => {
     setMember(memberLoggedIn);
   }, [memberLoggedIn]);
@@ -48,6 +64,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     reload();
   };
   const onSuccess = () => {
+    messageService.add({
+      title: 'Đăng nhập thành công',
+      status: 'success',
+    });
     setOpenLogin(false);
     reload();
   };
