@@ -13,22 +13,29 @@ function App() {
   const dispatch = useAppDispatch();
   const messageService = useContext(MessageContext);
   const history = useHistory();
-  console.log('render app');
 
   useEffect(() => {
-    console.log('short', shortUri);
-
     if (shortUri) {
       dispatch(getRegisterPage({ shortUri }))
         .then(unwrapResult)
         .then(({ data }) => {
           const { start, end } = data;
-          console.log(start, end);
-
           const today = new Date();
           const isTimeup = new Date(start) > today || today > new Date(end);
+          if (new Date(start) > today) {
+            messageService.add({
+              description: 'Trang đăng ký chưa mở',
+              status: 'error',
+            });
+          }
+          if (today > new Date(end)) {
+            messageService.add({
+              description: 'Trang đăng ký đã hết hạn',
+              status: 'error',
+            });
+          }
           if (isTimeup) {
-            messageService.add({ description: 'Trang đăng ký đã hết hạn', status: 'error' });
+            history.push('/');
           }
         })
         .catch(() => {
