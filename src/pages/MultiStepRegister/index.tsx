@@ -1,19 +1,15 @@
 import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from './RegisterSteps/Step1';
 import Step2 from './RegisterSteps/Step2';
 import Step3 from './RegisterSteps/Step3';
 import Step4 from './RegisterSteps/Step4';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import { useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
-import API from '~/apis/constants';
 import Step5 from './RegisterSteps/Step5';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { getRegisterPage } from '~/slices/registerPage';
 
 type Step = (props: StepProps) => JSX.Element;
 export type StepProps = {
@@ -31,23 +27,6 @@ const MultiStepRegister = () => {
   const history = useHistory();
   const Step: Step = registerSteps[step];
   const { loaded } = useAppSelector((state) => state.registerPage);
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (shortUri) {
-      dispatch(
-        getRegisterPage({
-          method: 'get',
-          url: formatUrl(API.GET_REGISTER_PAGE, { shortUri }),
-        }),
-      )
-        .then(unwrapResult)
-        .catch(() => {
-          history.push('/not-found');
-        });
-    }
-  }, [shortUri]);
 
   useEffect(() => {
     if (path === ADD_NEW_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {

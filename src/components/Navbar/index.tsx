@@ -150,7 +150,7 @@ export default function NavBar() {
                     <>
                       <MenuItem
                         onClick={() => {
-                          const registerInfoPath = `/register-info/${member.register?.id}`;
+                          const registerInfoPath = `${shortUri}/register-info/${member.register?.id}`;
                           history.push(registerInfoPath);
                         }}
                       >

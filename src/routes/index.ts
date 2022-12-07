@@ -40,26 +40,27 @@ const ROUTES: RouteType[] = [
     component: GreatCeremonyInfo,
     layout: MainLayout,
   },
+  // {
+  //   path: '/great-ceremony-info/details',
+  //   component: GreatCeremonyInfoDetails,
+  //   layout: MainLayout,
+  // },
   {
-    path: '/great-ceremony-info/details',
-    component: GreatCeremonyInfoDetails,
-    layout: MainLayout,
-  },
-  {
-    path: ['/register-info/:id', '/register-info'],
+    path: ['/:shortUri/register-info/:id'],
     component: RegisterInfo,
     layout: MainLayout,
+    needAuth: true,
   },
-  {
-    path: '/timeline',
-    component: Timeline,
-    layout: MainLayout,
-  },
-  {
-    path: '/department-info',
-    component: DepartmentInfos,
-    layout: MainLayout,
-  },
+  // {
+  //   path: '/timeline',
+  //   component: Timeline,
+  //   layout: MainLayout,
+  // },
+  // {
+  //   path: '/department-info',
+  //   component: DepartmentInfos,
+  //   layout: MainLayout,
+  // },
   {
     path: '/not-found',
     exact: true,

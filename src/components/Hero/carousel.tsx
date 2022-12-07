@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
@@ -17,48 +17,26 @@ import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
 import { useHistory, useRouteMatch, useParams } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
-import { useAppDispatch } from '~/hooks/reduxHook';
-import API from '~/apis/constants';
-import { getRegisterPage } from '~/slices/registerPage';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { MessageContext } from '~/providers/message';
+import { useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
   const { shortUri = '' } = useParams<any>();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [registerAvailable, setRegisterAvailable] = useState(true);
-  const messageService = useContext(MessageContext);
+  // const messageService = useContext(MessageContext);
+  const pageConfig = useAppSelector((state) => state.registerPage.data);
 
   useEffect(() => {
-    if (!shortUri) {
-      setRegisterAvailable(false);
-    }
-    if (shortUri) {
-      dispatch(
-        getRegisterPage({
-          method: 'get',
-          url: formatUrl(API.GET_REGISTER_PAGE, { shortUri }),
-        }),
-      )
-        .then(unwrapResult)
-        .then(({ data }) => {
-          const { start, end } = data;
-          console.log(start, end);
+    console.log('config', pageConfig);
 
-          const today = new Date();
-          const isTimeup = new Date(start) > today || today > new Date(end);
-          if (isTimeup) {
-            setRegisterAvailable(false);
-            messageService.add({ description: 'Trang đăng ký đã hết hạn', status: 'warning' });
-          }
-        })
-        .catch(() => {
-          history.push('/not-found');
-        });
+    if (!pageConfig.eventId) {
+      setRegisterAvailable(false);
+    } else {
+      setRegisterAvailable(true);
     }
-  }, [shortUri]);
+  }, [pageConfig]);
 
   // As we have used custom buttons, we need a reference variable to
   // change the state

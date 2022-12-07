@@ -38,7 +38,6 @@ import LoginPopup from '~/components/LoginPopup';
 // type Props = {};
 
 const RegisterInfo = () => {
-  const isSubmit = useRef<boolean>(false);
   const history = useHistory();
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
@@ -172,6 +171,14 @@ const RegisterInfo = () => {
 
   const groupMembers = groupData?.data || [];
 
+  const handleUpdateInfo = () => {
+    if (member?.register?.id === id) {
+      history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
+    } else {
+      onOpenLoginModal();
+    }
+  };
+
   return (
     <Box
       pt={24}
@@ -272,7 +279,7 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button onClick={onOpenLoginModal} size='sm'>
+                <Button onClick={handleUpdateInfo} size='sm'>
                   Cập nhật
                 </Button>
                 <LoginPopup
