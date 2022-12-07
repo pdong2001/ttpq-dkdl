@@ -1,3 +1,4 @@
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import {
   Modal,
   ModalOverlay,
@@ -10,8 +11,10 @@ import {
   Input,
   ModalFooter,
   Button,
+  Tooltip,
 } from '@chakra-ui/react';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { Form } from 'formik';
 import { useContext, useState } from 'react';
 import API from '~/apis/constants';
 import { useAppDispatch } from '~/hooks/reduxHook';
@@ -42,7 +45,6 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
   const login = () => {
     dispatch(
       getMemberAuth({
-
         data: {
           phoneNumber: phone,
           identityCard: identityNumber,
@@ -62,33 +64,46 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
         }
       });
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login();
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+      <form onSubmit={handleSubmit}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{title}</ModalHeader>
 
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-          <FormControl isRequired>
-            <FormLabel>Số điện thoại</FormLabel>
-            <Input placeholder='Số điện thoại' value={phone} onChange={handlePhoneChange} />
-          </FormControl>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl isRequired>
+              <FormLabel>
+                Số điện thoại{' '}
+                <Tooltip label='Số điện thoại phải đủ 10 số ạ'>
+                  <QuestionOutlineIcon />
+                </Tooltip>
+              </FormLabel>
+              <Input placeholder='Số điện thoại' value={phone} onChange={handlePhoneChange} />
+            </FormControl>
 
-          <FormControl mt={4} isRequired>
-            <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
-            <Input
-              placeholder='Số CCCD/CMT'
-              value={identityNumber}
-              onChange={handleIdentityNumberChange}
-            />
-          </FormControl>
-        </ModalBody>
+            <FormControl mt={4} isRequired>
+              <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
+              <Input
+                placeholder='Số CCCD/CMT'
+                value={identityNumber}
+                onChange={handleIdentityNumberChange}
+              />
+            </FormControl>
+          </ModalBody>
 
-        <ModalFooter>
-          <Button onClick={login}>Gửi</Button>
-        </ModalFooter>
-      </ModalContent>
+          <ModalFooter>
+            <Button disabled={phone.length < 10 || !identityNumber} type='submit'>
+              Gửi
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </form>
     </Modal>
   );
 };
