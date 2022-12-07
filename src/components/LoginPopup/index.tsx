@@ -14,9 +14,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { Form } from 'formik';
 import { useContext, useState } from 'react';
-import API from '~/apis/constants';
 import { useAppDispatch } from '~/hooks/reduxHook';
 import { MessageContext } from '~/providers/message';
 import { getMemberAuth } from '~/slices/memberAuth';
@@ -26,9 +24,10 @@ type LoginProps = {
   onClose: () => void;
   title: string;
   onSuccess?: () => void;
+  isLogin?: boolean;
 };
 
-const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
+const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) => {
   const [phone, setPhone] = useState('');
   const [identityNumber, setIdentityNumber] = useState('');
   const dispatch = useAppDispatch();
@@ -99,7 +98,7 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
 
           <ModalFooter>
             <Button disabled={phone.length < 10 || !identityNumber} type='submit'>
-              Gửi
+              {isLogin ? 'Đăng nhập' : 'Xác thực'}
             </Button>
           </ModalFooter>
         </ModalContent>

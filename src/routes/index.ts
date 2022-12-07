@@ -49,7 +49,6 @@ const ROUTES: RouteType[] = [
     path: ['/:shortUri/register-info/:id'],
     component: RegisterInfo,
     layout: MainLayout,
-    needAuth: true,
   },
   // {
   //   path: '/timeline',

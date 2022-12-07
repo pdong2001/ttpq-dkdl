@@ -58,6 +58,7 @@ export const AppRoute = ({
             onClose={onCloseLogin}
             onSuccess={handleLoginSuccess}
             title='Mời bạn đăng nhập'
+            isLogin
           />
           <Box minH='100vh'></Box>
         </Layout>

@@ -83,7 +83,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <Provider value={contextValue}>
       {children}
-      <LoginPopup isOpen={openLogin} title='Đăng nhập' onSuccess={onSuccess} onClose={onClose} />
+      <LoginPopup
+        isOpen={openLogin}
+        title='Đăng nhập'
+        onSuccess={onSuccess}
+        onClose={onClose}
+        isLogin
+      />
     </Provider>
   );
 };

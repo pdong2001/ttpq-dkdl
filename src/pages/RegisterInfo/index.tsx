@@ -283,7 +283,7 @@ const RegisterInfo = () => {
                   Cập nhật
                 </Button>
                 <LoginPopup
-                  title={'Xác nhận thông tin'}
+                  title={'Xác thực thông tin'}
                   isOpen={isOpenLoginModal}
                   onClose={onCloseLoginModal}
                   onSuccess={() => {
