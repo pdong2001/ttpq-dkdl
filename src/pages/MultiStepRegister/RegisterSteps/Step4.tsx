@@ -206,7 +206,6 @@ const Step4 = (props: StepProps) => {
                 data={receiveCardLocationList}
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
-                isRequired
               />
               <FormControl name='avatarPath' as='fieldset' border={1}>
                 <FormLabel as='legend'>Hình thẻ</FormLabel>

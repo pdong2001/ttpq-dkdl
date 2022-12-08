@@ -87,7 +87,7 @@ const Step3 = (props: StepProps) => {
       moveType:
         moveTypeInStore ||
         (editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.HCM : MoveType.OTHER),
+        (hasStartAddress ? MoveType.WithCTN : MoveType.Other),
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
@@ -95,19 +95,19 @@ const Step3 = (props: StepProps) => {
       leaveTimeId: leaveTimeIdInStore || editLeaveTimeId,
 
       otherStartAddress: otherStartAddress || editOtherStartAddress,
-      otherStartTime: otherStartTime || (editOtherStartTime && new Date(editOtherStartTime)),
-      otherLeaveTime: otherLeaveTime || (editOtherLeaveTime && new Date(editOtherLeaveTime)),
+      otherStartTime: otherStartTime || editOtherStartTime,
+      otherLeaveTime: otherLeaveTime || editOtherLeaveTime,
       startPlaneCode: startPlaneCode || editStartPlaneCode,
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
-      if (moveType != MoveType.HCM) {
+      if (moveType != MoveType.WithCTN) {
         values.startAddressId = undefined;
         values.startTimeId = undefined;
         values.leaveAddressId = undefined;
         values.leaveTimeId = undefined;
-        if (moveType == MoveType.BY_YOUR_SELF) {
+        if (moveType == MoveType.Other) {
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
         }
@@ -171,6 +171,8 @@ const Step3 = (props: StepProps) => {
     );
   };
 
+  console.log('____', formik.values);
+
   return (
     <FadeInUp>
       <Stack spacing={4}>
@@ -191,16 +193,13 @@ const Step3 = (props: StepProps) => {
             <Stack spacing={4}>
               <Radios label='Hình thức di chuyển' name='moveType'>
                 {startAddresses?.length && (
-                  <Radio value={MoveType.HCM}>{MOVE_TYPE_TITLE[MoveType.HCM]}</Radio>
+                  <Radio value={MoveType.WithCTN}>{MOVE_TYPE_TITLE[MoveType.WithCTN]}</Radio>
                 )}
-                []
-                <Radio value={MoveType.OTHER}>{MOVE_TYPE_TITLE[MoveType.OTHER]}</Radio>
-                <Radio value={MoveType.BY_YOUR_SELF}>
-                  {MOVE_TYPE_TITLE[MoveType.BY_YOUR_SELF]}
-                </Radio>
+                <Radio value={MoveType.ByPlane}>{MOVE_TYPE_TITLE[MoveType.ByPlane]}</Radio>
+                <Radio value={MoveType.Other}>{MOVE_TYPE_TITLE[MoveType.Other]}</Radio>
               </Radios>
-              {moveType == MoveType.HCM && (
-                // HCM
+              {moveType == MoveType.WithCTN && (
+                // WithCTN
                 <>
                   <Select
                     name='startAddressId'
@@ -236,16 +235,16 @@ const Step3 = (props: StepProps) => {
                   />
                 </>
               )}
-              {moveType !== MoveType.HCM && (
+              {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
                   <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
                   <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
-                  {moveType === MoveType.OTHER && (
+                  {moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
                   )}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
-                  {moveType === MoveType.OTHER && (
+                  {moveType === MoveType.ByPlane && (
                     <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
                   )}
                 </>

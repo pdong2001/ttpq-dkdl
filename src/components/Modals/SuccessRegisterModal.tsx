@@ -83,7 +83,7 @@ export default function SuccessRegisterModal({
       email: registerResult?.email || member.email,
     },
     avatar: registerResult.avatarPath || member.avatarPath,
-    LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
+    LinkQrCode: `${PATH_URL}/${shortUri}/register-info/${registerId}`,
     registerInfoPath: `/${shortUri}/register-info/${registerId}`,
     fullName: registerResult.fullName || member.fullName,
   };
@@ -245,7 +245,7 @@ export default function SuccessRegisterModal({
                 colorScheme='yellow'
                 onClick={() => {
                   // historyLinkQrCode;
-                  history.push(registerInfoPath);
+                  history.replace(registerInfoPath);
                 }}
               >
                 Thông tin đăng ký

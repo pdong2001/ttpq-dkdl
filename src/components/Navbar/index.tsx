@@ -14,7 +14,6 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  MenuIcon,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
@@ -26,8 +25,6 @@ import { BiLogOutCircle, BiQr, BiUserCircle } from 'react-icons/bi';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { AuthContext } from '~/providers/auth';
 import SuccessRegisterModal from '../Modals/SuccessRegisterModal';
-import API from '~/apis/constants';
-import { formatUrl } from '~/utils/functions';
 
 const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; onClick?: any }) => (
   <Link
@@ -150,8 +147,8 @@ export default function NavBar() {
                     <>
                       <MenuItem
                         onClick={() => {
-                          const registerInfoPath = `${shortUri}/register-info/${member.register?.id}`;
-                          history.push(registerInfoPath);
+                          const registerInfoPath = `/${shortUri}/register-info/${member.register?.id}`;
+                          history.replace(registerInfoPath);
                         }}
                       >
                         <HStack spacing={1}>

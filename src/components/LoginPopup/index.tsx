@@ -97,7 +97,7 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
           </ModalBody>
 
           <ModalFooter>
-            <Button disabled={phone.length < 10 || !identityNumber} type='submit'>
+            <Button disabled={ || !identityNumber} type='submit'>
               {isLogin ? 'Đăng nhập' : 'Xác thực'}
             </Button>
           </ModalFooter>

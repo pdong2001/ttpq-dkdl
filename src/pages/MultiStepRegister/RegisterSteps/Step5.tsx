@@ -80,7 +80,7 @@ const Step5 = (props: StepProps) => {
       );
       const updateMemberInfo = dispatch(
         updateMember({
-          url: formatUrl(API.UPDATE_MEMBER, { id: memberId }),
+          url: API.UPDATE_MEMBER,
           data: {
             ..._.omit(formData, ['register']),
           },
@@ -95,7 +95,7 @@ const Step5 = (props: StepProps) => {
           if (memberCode >= 400) {
             return Promise.reject(member);
           }
-          window.open(`${window.location.origin}/register-info/${register?.id}`);
+          window.open(`${window.location.origin}/${shortUri}/register-info/${register?.id}`);
         })
         .catch((e) => {
           messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });

@@ -43,7 +43,7 @@ const RegisterInfo = () => {
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
-  const { id } = useParams<any>();
+  const { id, shortUri } = useParams<any>();
   const {
     isOpen: isOpenLoginModal,
     onOpen: onOpenLoginModal,
@@ -163,7 +163,7 @@ const RegisterInfo = () => {
     schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
     schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
-    if (moveType == MoveType.OTHER) {
+    if (moveType == MoveType.Other) {
       schedule.departure_flight_code = data.startPlaneCode || '';
       schedule.return_flight_code = data.returnPlaneCode || '';
     }
@@ -173,13 +173,13 @@ const RegisterInfo = () => {
 
   const handleUpdateInfo = () => {
     if (isOwner) {
-      history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
+      history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri }));
     } else {
       onOpenLoginModal();
     }
   };
   const isOwner = authMember?.register?.id === data.id;
-``
+  ``;
   return (
     <Box
       pt={24}
@@ -404,7 +404,7 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'blue'}>
                           {schedule && schedule?.departure_time}
                         </Tag>
-                        {moveType == MoveType.OTHER && schedule && schedule.departure_flight_code && (
+                        {moveType == MoveType.Other && schedule && schedule.departure_flight_code && (
                           <Tag mr={2} mb={1} colorScheme={'blue'}>
                             Mã chuyến bay: {schedule?.departure_flight_code}
                           </Tag>
@@ -420,7 +420,7 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
                           {schedule && schedule?.return_time}
                         </Tag>
-                        {moveType == MoveType.OTHER && schedule && schedule.return_flight_code && (
+                        {moveType == MoveType.Other && schedule && schedule.return_flight_code && (
                           <Tag mr={2} mb={1} colorScheme={'pink'}>
                             Mã chuyến bay: {schedule?.return_flight_code}
                           </Tag>

@@ -21,7 +21,7 @@ const mapSuccessData = (previewInfo) => {
       gender: _.get(previewInfo, 'gender') == 0 ? 'Nam' : 'Nữ',
     },
     schedules: {
-      [MoveType.HCM]: {
+      [MoveType.WithCTN]: {
         moveType: (
           <Tag variant='outline' colorScheme={'blue'}>
             {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
@@ -31,7 +31,7 @@ const mapSuccessData = (previewInfo) => {
         startTimeId: _.get(previewInfo, 'startTimeId', ''),
         leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
       },
-      [MoveType.BY_YOUR_SELF]: {
+      [MoveType.ByPlane]: {
         moveType: (
           <Tag variant='outline' colorScheme={'pink'}>
             {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
@@ -41,7 +41,7 @@ const mapSuccessData = (previewInfo) => {
         otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
         otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
       },
-      [MoveType.OTHER]: {
+      [MoveType.Other]: {
         moveType: (
           <Tag variant='outline' colorScheme={'green'}>
             {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
