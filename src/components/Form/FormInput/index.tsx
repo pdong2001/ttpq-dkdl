@@ -2,6 +2,7 @@ import {
   FormControl,
   FormControlProps,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   InputProps,
@@ -19,7 +20,15 @@ type FormInputProps = {
   InputProps;
 
 const FormInput = (props: FormInputProps) => {
-  const { label, name, defaultValue, hiddenErrorMessage, as: Component = Input, color } = props;
+  const {
+    label,
+    name,
+    defaultValue,
+    hiddenErrorMessage,
+    as: Component = Input,
+    color,
+    helperText,
+  } = props;
   const { primaryColor } = useCustomColorMode();
   // @ts-ignore
   const [field, meta] = useField(name);
@@ -29,6 +38,7 @@ const FormInput = (props: FormInputProps) => {
     <FormControl isInvalid={!!meta.error && meta.touched} {...{ color }}>
       <FormLabel tabIndex={-1}>{label}</FormLabel>
       <Component focusBorderColor={primaryColor} placeholder=' ' {...field} {...{ name }} />
+      <FormHelperText>{helperText}</FormHelperText>
       {!hiddenErrorMessage && meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>
   );
