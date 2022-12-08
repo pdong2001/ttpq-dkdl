@@ -1,15 +1,11 @@
-import { Box, Button, Heading, Radio, Stack, Text } from '@chakra-ui/react';
-import _ from 'lodash';
+import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
-import Radios from '~/components/Form/Radios';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { fillForm } from '~/slices/register';
 import { fillDataPreview } from '~/slices/previewInfo';
 import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
-// import SearchLeader from '~/components/Form/SearchLeader';
-import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import FormInput from '~/components/Form/FormInput';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
