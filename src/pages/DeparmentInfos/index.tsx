@@ -68,7 +68,6 @@ function DepartmentInfos({}: Props) {
             },
           }),
         );
-        console.log('SET_DEPARMENT');
       }, 3000);
       return;
     } else {
