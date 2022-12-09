@@ -65,6 +65,7 @@ const RegisterInfo = () => {
   const note = data?.note;
   const leaderId = data?.leaderId;
   const moveType = data?.moveType;
+  console.log('🚀 ~ file: index.tsx:68 ~ RegisterInfo ~ moveType', moveType);
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
@@ -152,7 +153,7 @@ const RegisterInfo = () => {
   const startAddress = data.startTime?.address;
   const leaveAddress = data.leaveTime?.address;
   const contactStatus = data.contactStatus?.toString();
-  if (moveType == MoveType.HCM) {
+  if (moveType == MoveType.WithCTN) {
     schedule.departure_address =
       [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
     schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
@@ -163,11 +164,13 @@ const RegisterInfo = () => {
     schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
     schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
-    if (moveType == MoveType.Other) {
+    if (moveType == MoveType.ByPlane) {
       schedule.departure_flight_code = data.startPlaneCode || '';
       schedule.return_flight_code = data.returnPlaneCode || '';
     }
   }
+
+  console.log('🚀 ~ file: index.tsx:158 ~ RegisterInfo ~ schedule', schedule);
 
   const groupMembers = groupData?.data || [];
 
@@ -372,13 +375,23 @@ const RegisterInfo = () => {
                       </Box>
                     </Box>
                     <Box>
-                      <Text as='b'>Nơi nhận thẻ:</Text>{' '}
-                      {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
+                      <Text as='b'>Ban đã được phân:</Text>
+
+                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
+                        {assignedDepartment.}
+                      </Tag> */}
                     </Box>
                   </Stack>
                   <Stack>
                     <Box>
-                      <Text as='b'>Ban đã được phân:</Text>
+                      <Text as='b'>Nơi nhận thẻ:</Text>{' '}
+                      {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
+                    </Box>
+                  </Stack>
+
+                  <Stack>
+                    <Box>
+                      <Text as='b'>Size áo:</Text>
 
                       {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
                         {assignedDepartment.}
@@ -404,11 +417,13 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'blue'}>
                           {schedule && schedule?.departure_time}
                         </Tag>
-                        {moveType == MoveType.Other && schedule && schedule.departure_flight_code && (
-                          <Tag mr={2} mb={1} colorScheme={'blue'}>
-                            Mã chuyến bay: {schedule?.departure_flight_code}
-                          </Tag>
-                        )}
+                        {moveType == MoveType.ByPlane &&
+                          schedule &&
+                          schedule.departure_flight_code && (
+                            <Tag mr={2} mb={1} colorScheme={'blue'}>
+                              Mã chuyến bay: {schedule?.departure_flight_code}
+                            </Tag>
+                          )}
                       </Box>
                     </Box>
                     <Box>
@@ -420,14 +435,14 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
                           {schedule && schedule?.return_time}
                         </Tag>
-                        {moveType == MoveType.Other && schedule && schedule.return_flight_code && (
+                        {moveType == MoveType.ByPlane && schedule && schedule.return_flight_code && (
                           <Tag mr={2} mb={1} colorScheme={'pink'}>
                             Mã chuyến bay: {schedule?.return_flight_code}
                           </Tag>
                         )}
                       </Box>
                     </Box>
-                    {moveType == MoveType.HCM && (
+                    {moveType == MoveType.WithCTN && (
                       <Box>
                         <HStack>
                           <MdLocationCity />
