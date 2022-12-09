@@ -34,8 +34,8 @@ export type UpSertEventRegistryDto = {
   // thêm field
   carBookingType?: CarBookingType;
   clothingSize?: ClothingSize;
-  // certificateRegistry?: boolean;
-  certificateRegistry?: CertificateRegistry;
+  certificateRegistry?: boolean;
+  // certificateRegistry?: CertificateRegistry;
   companyNameVIE?: string;
   companyNameEN?: string;
 };
