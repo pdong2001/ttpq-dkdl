@@ -19,7 +19,7 @@ import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
@@ -40,6 +40,7 @@ const Step6 = (props: StepProps) => {
   const isAddNew = path === ADD_NEW_REGISTER_PATH;
   const messageService = useContext(MessageContext);
   const history = useHistory();
+  const { shortUri } = useParams<any>();
   const {
     id,
     moveType,
@@ -52,7 +53,7 @@ const Step6 = (props: StepProps) => {
   const { certificateRegistry } = registerData;
   const submitData = {
     ...formData,
-    register: { ...register, certificateRegistry: !!certificateRegistry },
+    register: { ...registerData, certificateRegistry: !!certificateRegistry },
   };
 
   const handleRegister = () => {
@@ -165,7 +166,14 @@ const Step6 = (props: StepProps) => {
           </Button>
         </SimpleGrid>
       </Box>
-      <SuccessRegisterModal open={openSuccess} setOpen={setOpenSuccess} />
+      <SuccessRegisterModal
+        open={openSuccess}
+        onClose={() => {
+          history.push(`/${shortUri}`);
+          history.go(0);
+        }}
+        title='Đăng ký thành công'
+      />
     </FadeInUp>
   );
 };
