@@ -189,7 +189,6 @@ const Step3 = (props: StepProps) => {
     );
   };
 
-  console.log('___', formik.values);
 
   return (
     <FadeInUp>

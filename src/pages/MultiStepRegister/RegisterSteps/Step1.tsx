@@ -90,7 +90,6 @@ const Step1 = (props: StepProps) => {
 
   const greatCeremony = 'Đại Lễ Phật Thành Đạo 2023';
   // const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  // console.log('___', formik.values);
 
   return (
     <FadeInUp>
