@@ -36,6 +36,8 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { EVENT_EXP_TITLE } from '~/configs/register';
 import LoginPopup from '~/components/LoginPopup';
 import { AuthContext } from '~/providers/auth';
+import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+import { get } from 'lodash';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -65,11 +67,17 @@ const RegisterInfo = () => {
   const note = data?.note;
   const leaderId = data?.leaderId;
   const moveType = data?.moveType;
-  console.log('🚀 ~ file: index.tsx:68 ~ RegisterInfo ~ moveType', moveType);
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
+  const department = get(data, 'departmentDetail.department.name');
+  const roles = get(data, 'departmentDetail.roles', []);
+  const roles1 = roles.find((item) => item.role === 1);
+  console.log('🚀 ~ file: index.tsx:77 ~ RegisterInfo ~ roles1', roles1);
+
+  const clothingSize: any = data?.clothingSize;
+
   const assignedDepartment = data.departmentDetail;
   const assignedArea = data.area;
   const assignedGroup = data.group;
@@ -169,8 +177,6 @@ const RegisterInfo = () => {
       schedule.return_flight_code = data.returnPlaneCode || '';
     }
   }
-
-  console.log('🚀 ~ file: index.tsx:158 ~ RegisterInfo ~ schedule', schedule);
 
   const groupMembers = groupData?.data || [];
 
@@ -343,6 +349,7 @@ const RegisterInfo = () => {
 
             <Tabs isFitted variant='enclosed'>
               <TabList>
+                <Tab>Ban</Tab>
                 <Tab>Công quả</Tab>
                 <Tab>Lịch trình</Tab>
                 <Tab>Khác</Tab>
@@ -351,9 +358,6 @@ const RegisterInfo = () => {
               <TabPanels>
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
-                    <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
-                    </Box>
                     <Box>
                       <Text as='b'>Kinh nghiệm làm việc tại các ban</Text>
                       <Box mt={2}>
@@ -376,26 +380,37 @@ const RegisterInfo = () => {
                     </Box>
                     <Box>
                       <Text as='b'>Ban đã được phân:</Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {department}
+                        </Tag>
+                      </Box>
+                    </Box>
 
-                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
-                        {assignedDepartment.}
-                      </Tag> */}
+                    <Box>
+                      <Text as='b'>Trưởng Ban:</Text> {roles1?.fullName}
+                      <Box>
+                        {' '}
+                        <Text as='b'>Điện Thoại:</Text> {roles1?.phoneNumber}
+                      </Box>
                     </Box>
                   </Stack>
-                  <Stack>
+                </TabPanel>
+
+                <TabPanel px={0}>
+                  <Stack spacing='30px'>
+                    <Box>
+                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
+                    </Box>
                     <Box>
                       <Text as='b'>Nơi nhận thẻ:</Text>{' '}
                       {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
                     </Box>
-                  </Stack>
-
-                  <Stack>
                     <Box>
                       <Text as='b'>Size áo:</Text>
-
-                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
-                        {assignedDepartment.}
-                      </Tag> */}
+                      <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                        {ClothingSize[clothingSize]}
+                      </Tag>
                     </Box>
                   </Stack>
                 </TabPanel>
