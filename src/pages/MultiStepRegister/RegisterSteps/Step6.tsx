@@ -50,7 +50,7 @@ const Step6 = (props: StepProps) => {
   } = registerInfo;
 
   const { register: registerData } = formData;
-  const { certificateRegistry } = registerData;
+  const { certificateRegistry } = registerData || {};
   const submitData = {
     ...formData,
     register: { ...registerData, certificateRegistry: !!certificateRegistry },
@@ -79,6 +79,7 @@ const Step6 = (props: StepProps) => {
             leaderId,
             moveType,
             ...registerData,
+            certificateRegistry: !!certificateRegistry,
           },
         }),
       );
@@ -99,7 +100,8 @@ const Step6 = (props: StepProps) => {
           if (memberCode >= 400) {
             return Promise.reject(member);
           }
-          window.open(`${window.location.origin}/register-info/${register?.id}`);
+          messageService.add({ title: 'Cập nhật thành công', status: 'success' });
+          history.replace(`/${shortUri}/register-info/${register?.id}`);
         })
         .catch((e) => {
           messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
