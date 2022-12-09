@@ -2,6 +2,7 @@ export enum CarBookingType {
   Go = '0',
   Return = '1',
   Both = '2',
+  ByYourSelf = '3',
 }
 export namespace CarBookingType {
   export function toString(type: CarBookingType): string {
@@ -12,6 +13,8 @@ export namespace CarBookingType {
         return 'Chiều về';
       case CarBookingType.Both:
         return 'Cả 2 chiều';
+      case CarBookingType.ByYourSelf:
+        return 'Tự túc';
       default:
         return '';
     }

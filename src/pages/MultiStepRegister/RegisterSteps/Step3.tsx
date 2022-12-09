@@ -277,6 +277,7 @@ const Step3 = (props: StepProps) => {
                           Chiều về (Từ chùa ra Tân Sơn Nhất)
                         </Radio>
                         <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
+                        <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
                       </Radios>
                     </>
                   )}
