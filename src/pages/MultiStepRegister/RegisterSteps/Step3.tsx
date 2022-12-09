@@ -22,7 +22,7 @@ import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import { TransitType } from '~/dtos/Enums/TransitType.enum';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -62,7 +62,7 @@ const Step3 = (props: StepProps) => {
     leaveTime,
     startTime,
     //thêm field
-    transitType: editTransitType,
+    carBookingType: editCarBookingType,
   } = useAppSelector((state) => state.registerInfo.data);
   const { addressId: editStartAddressId } = startTime || {};
   const { addressId: editLeaveAddressId } = leaveTime || {};
@@ -80,7 +80,7 @@ const Step3 = (props: StepProps) => {
     otherStartTime = '',
     otherStartAddress = '',
     // thêm field
-    transitType: transitTypeInStore,
+    carBookingType: carBookingTypeInStore,
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
@@ -105,8 +105,10 @@ const Step3 = (props: StepProps) => {
       startPlaneCode: startPlaneCode || editStartPlaneCode,
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
       // thêm field
-      transitType:
-        transitTypeInStore || (editTransitType && editTransitType + '') || TransitType.CaHaiChieu,
+      carBookingType:
+        carBookingTypeInStore ||
+        (editCarBookingType && editCarBookingType + '') ||
+        CarBookingType.Both,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
@@ -121,7 +123,7 @@ const Step3 = (props: StepProps) => {
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
           // thêm field
-          values.transitType = '';
+          values.carBookingType = '';
         }
       } else {
         // hcm
@@ -131,7 +133,7 @@ const Step3 = (props: StepProps) => {
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
         // thêm field
-        values.transitType = '';
+        values.carBookingType = '';
       }
       dispatch(
         fillForm({
@@ -270,17 +272,15 @@ const Step3 = (props: StepProps) => {
                         spacing={2}
                         direction='column'
                         label='Đăng ký ô tô'
-                        name='transitType'
+                        name='carBookingType'
                         isRequired
                       >
-                        <Radio value={TransitType.ChieuDi}>
-                          Chiều đi (Từ Tân Sơn Nhất về Chùa)
-                        </Radio>
-                        <Radio value={TransitType.ChieuVe}>
+                        <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
+                        <Radio value={CarBookingType.Return}>
                           Chiều về (Từ chùa ra Tân Sơn Nhất)
                         </Radio>
-                        <Radio value={TransitType.CaHaiChieu}>Cả 2 chiều</Radio>
-                        <Radio value={TransitType.TuTuc}>Tự túc</Radio>
+                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
+                        {/* <Radio value={CarBookingType.TuTuc}>Tự túc</Radio> */}
                       </Radios>
                     </>
                   )}

@@ -13,7 +13,12 @@ import { EventRegistryPageDto } from '../EventRegistryPages/EventRegistryPageDto
 import { MemberDto } from '../Members/MemberDto.model';
 import { DepartmentDetailDto } from '../DepartmentDetails/DepartmentDetailDto.model';
 import { AreaDto } from '../Areas/AreaDto.model';
-import { TransitType } from '../Enums/TransitType.enum';
+import { CarBookingType } from '../Enums/CarBookingType.enum';
+import { EventDto } from '../EventDto.model';
+import { ClothingSize } from '../Enums/ClothingSize.enum';
+import { StatusType } from '../Enums/StatusType.enum';
+import { GroupDto } from '../Groups/GroupDto.model';
+import { CertificateRegistry } from '../Enums/CertificateRegistry.enum';
 
 export type EventRegistryDto = {
   id?: string;
@@ -27,6 +32,9 @@ export type EventRegistryDto = {
   otherStartAddress?: string;
   eventRegistryPageId?: string;
   area?: AreaDto;
+  isArrived: boolean;
+  event?: EventDto;
+  group?: GroupDto;
   moveType?: MoveType;
   member?: MemberDto;
   areaId?: number;
@@ -35,11 +43,12 @@ export type EventRegistryDto = {
   position?: PositionType;
   leaderId?: string;
   startDate?: string;
+  arrivedAt?: Date;
   startTimeId?: number;
   leaveTimeId?: number;
   printStatus?: PrintStatus;
   registerRole?: RegisterRole;
-  contactStatus?: ContactStatusType;
+  assignStatus?: StatusType;
   otherStartTime?: string;
   otherLeaveTime?: string;
   receiveCardStatus?: ReceiveCardStatus;
@@ -51,10 +60,15 @@ export type EventRegistryDto = {
   expDepartments?: DepartmentDto[];
   wishDepartment?: DepartmentDto;
   leader?: EventRegistryDto;
+  contactStatus?: ContactStatusType;
   departmentDetail?: DepartmentDetailDto;
   eventRegistryPage?: EventRegistryPageDto;
   receiveCardAddress?: ReceiveCardAddressDto;
   // thêm field
-  transitType?: TransitType;
-  shirtSizeId?: number;
+  carBookingType?: CarBookingType;
+  clothingSize?: ClothingSize;
+  // certificateRegistry?: boolean;
+  certificateRegistry?: CertificateRegistry;
+  companyNameVIE?: string;
+  companyNameEN?: string;
 };

@@ -29,7 +29,9 @@ import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
+
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
+
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
@@ -42,7 +44,7 @@ const Step4 = (props: StepProps) => {
     member,
     receiveCardAddressId: editReceiverCardId,
     // thêm field
-    shirtSizeId: editShirtSizeId,
+    clothingSize: editClothingSize,
     note: editNote,
   } = useAppSelector((state) => state.registerInfo.data);
   const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
@@ -54,7 +56,7 @@ const Step4 = (props: StepProps) => {
     wishDepartmentId,
     receiveCardAddressId,
     // thêm field
-    shirtSizeId,
+    clothingSize,
     note,
   } = previousStepData.register || {};
 
@@ -80,7 +82,7 @@ const Step4 = (props: StepProps) => {
 
   // thêm field
   // size áo
-  const shirtSizeList = [
+  const clothingSizeList = [
     { id: 1, name: 'S' },
     { id: 2, name: 'M' },
     { id: 3, name: 'L' },
@@ -97,7 +99,7 @@ const Step4 = (props: StepProps) => {
       wishDepartmentId: wishDepartmentId || wishDepartment?.id || '',
       receiveCardAddressId: receiveCardAddressId || editReceiverCardId || '',
       // thêm field
-      shirtSizeId: shirtSizeId || editShirtSizeId || '',
+      clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
       note: note || editNote || '',
     },
@@ -112,7 +114,7 @@ const Step4 = (props: StepProps) => {
         receiveCardAddressId,
         note,
         // thêm field
-        shirtSizeId,
+        clothingSize,
       } = values;
       const fillData = {
         strongPointIds,
@@ -129,7 +131,7 @@ const Step4 = (props: StepProps) => {
           ctnId,
           type,
           // thêm field
-          shirtSizeId,
+          clothingSize,
         },
       };
       dispatch(fillForm(fillData));
@@ -234,8 +236,8 @@ const Step4 = (props: StepProps) => {
               />
               {/* thêm field */}
               <Select
-                name='shirtSizeId'
-                data={shirtSizeList}
+                name='clothingSize'
+                data={clothingSizeList}
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired

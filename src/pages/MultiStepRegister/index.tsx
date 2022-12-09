@@ -14,6 +14,7 @@ import API from '~/apis/constants';
 import Step5 from './RegisterSteps/Step5';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getRegisterPage } from '~/slices/registerPage';
+import Step6 from './RegisterSteps/Step6';
 
 type Step = (props: StepProps) => JSX.Element;
 export type StepProps = {
@@ -21,7 +22,7 @@ export type StepProps = {
   previousStep: () => void;
 };
 
-const registerSteps = [Step1, Step2, Step3, Step4, Step5];
+const registerSteps = [Step1, Step2, Step3, Step4, Step5, Step6];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);

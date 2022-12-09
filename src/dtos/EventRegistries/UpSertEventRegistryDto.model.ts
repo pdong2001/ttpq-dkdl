@@ -1,7 +1,9 @@
 import { MoveType } from '../Enums/MoveType.enum';
 import { PositionType } from '../Enums/PositionType.enum';
 import { RegisterType } from '../Enums/RegisterType.enum';
-import { TransitType } from '../Enums/TransitType.enum';
+import { CarBookingType } from '../Enums/CarBookingType.enum';
+import { ClothingSize } from '../Enums/ClothingSize.enum';
+import { CertificateRegistry } from '../Enums/CertificateRegistry.enum';
 
 export type UpSertEventRegistryDto = {
   memberId?: string;
@@ -30,6 +32,10 @@ export type UpSertEventRegistryDto = {
   type?: string;
   ctnId?: string;
   // thêm field
-  transitType?: TransitType;
-  shirtSizeId?: number;
+  carBookingType?: CarBookingType;
+  clothingSize?: ClothingSize;
+  // certificateRegistry?: boolean;
+  certificateRegistry?: CertificateRegistry;
+  companyNameVIE?: string;
+  companyNameEN?: string;
 };
