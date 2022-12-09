@@ -99,16 +99,9 @@ function Step5(props: StepProps) {
               </Radios>
               {certificateRegistry === CertificateRegistry.YES && (
                 <>
-                  <FloatingLabel
-                    name='companyNameVIE'
-                    label='Tên trường hoặc nơi công tác để in vào giấy tình nguyện'
-                    isRequired
-                  />
-                  <FloatingLabel
-                    name='companyNameEN'
-                    label='Tên tiếng anh của trường hoặc nơi công tác in vào giấy tình nguyện'
-                    isRequired
-                  />
+                  <Text>Tên trường hoặc nơi công tác</Text>
+                  <FloatingLabel name='companyNameVIE' label='Tiếng Việt' isRequired />
+                  <FloatingLabel name='companyNameEN' label='Tiếng Anh' />
                 </>
               )}
             </Stack>
