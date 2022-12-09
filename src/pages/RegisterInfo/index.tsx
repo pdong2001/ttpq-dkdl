@@ -11,14 +11,9 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Collapse,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
@@ -27,19 +22,7 @@ import { useHistory } from 'react-router-dom';
 
 import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
-import { Input } from '@chakra-ui/react';
-import { FormControl, FormLabel } from '@chakra-ui/react';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { getMemberAuth } from '~/slices/memberAuth';
 import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
@@ -51,62 +34,24 @@ import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { EVENT_EXP_TITLE } from '~/configs/register';
+import LoginPopup from '~/components/LoginPopup';
+import { AuthContext } from '~/providers/auth';
 // type Props = {};
 
 const RegisterInfo = () => {
-  const isSubmit = useRef<boolean>(false);
   const history = useHistory();
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
-  const { id } = useParams<any>();
+  const { id, shortUri } = useParams<any>();
   const {
     isOpen: isOpenLoginModal,
     onOpen: onOpenLoginModal,
     onClose: onCloseLoginModal,
   } = useDisclosure();
+  const { member: authMember } = useContext(AuthContext);
 
-  const { isOpen: isOpenLoginAlert, onOpen: onOpenLoginAlert } = useDisclosure();
-
-  const [login_phone, setLoginPhone] = useState<string>('');
-  const [login_id_card, setLoginIdCard] = useState<string>('');
-  const handleLoginPhoneChange = (e) => setLoginPhone(e.target.value);
-  const handleLoginIdCardChange = (e) => setLoginIdCard(e.target.value);
-  const loginMember = () => {
-    isSubmit.current = true;
-    dispatch(
-      getMemberAuth({
-        method: 'post',
-        url: API.LOGIN_MEMBER,
-        data: {
-          phoneNumber: login_phone,
-          identityCard: login_id_card,
-        },
-      }),
-    );
-  };
-
-  const {
-    data: memberAuthdata,
-    error: memberAuthError,
-    loaded: authenLoaded,
-  } = useAppSelector((state) => state.memberAuth);
-  const { data, loaded, error } = useAppSelector((state) => state.registerInfo);
-
-  useEffect(() => {
-    if (memberAuthdata.token && isSubmit.current) {
-      dispatch(
-        getRegisterInfo({
-          method: 'get',
-          url: formatUrl(API.GET_REGISTER_INFO, { id }),
-        }),
-      ).then(() => {
-        history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }));
-      });
-    }
-
-    if (memberAuthError) onOpenLoginAlert();
-  }, [memberAuthdata.token, memberAuthError, authenLoaded]);
+  const { data } = useAppSelector((state) => state.registerInfo);
 
   useEffect(() => {
     dispatch(
@@ -124,6 +69,9 @@ const RegisterInfo = () => {
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
+  const assignedDepartment = data.departmentDetail;
+  const assignedArea = data.area;
+  const assignedGroup = data.group;
   const permanent = [
     [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
@@ -155,7 +103,7 @@ const RegisterInfo = () => {
       method: 'get',
       url: API.GET_CTN,
       params: { CTNGroupId: organizationStructureId },
-      transformResponse: ({ Data }) => Data,
+      transformResponse: ({ data }) => data,
     },
     [organizationStructureId],
   );
@@ -178,14 +126,14 @@ const RegisterInfo = () => {
     { title: 'Pháp Danh', value: member?.religiousName },
     {
       title: 'Nơi sinh hoạt',
-      value: ctnInfo?.find((ctn) => ctn.Id === organizationStructureId).Name,
+      value: ctnInfo?.find((ctn) => ctn.id === organizationStructureId).name,
     },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },
     { title: 'Kỹ năng', value: member?.strongPoints || [] },
   ];
 
-  let schedule = {
+  const schedule = {
     departure_address: '',
     departure_time: '',
     return_address: '',
@@ -215,7 +163,7 @@ const RegisterInfo = () => {
     schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
     schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
-    if (moveType == MoveType.OTHER) {
+    if (moveType == MoveType.Other) {
       schedule.departure_flight_code = data.startPlaneCode || '';
       schedule.return_flight_code = data.returnPlaneCode || '';
     }
@@ -223,6 +171,15 @@ const RegisterInfo = () => {
 
   const groupMembers = groupData?.data || [];
 
+  const handleUpdateInfo = () => {
+    if (isOwner) {
+      history.push(formatUrl(EDIT_REGISTER_PATH, { shortUri }));
+    } else {
+      onOpenLoginModal();
+    }
+  };
+  const isOwner = authMember?.register?.id === data.id;
+  ``;
   return (
     <Box
       pt={24}
@@ -323,51 +280,28 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button
-                  display={memberAuthdata.token && 'none'}
-                  onClick={onOpenLoginModal}
-                  size='sm'
-                >
-                  Cập nhật
-                </Button>
-                <Modal isOpen={isOpenLoginModal} onClose={onCloseLoginModal}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Xác nhận thông tin</ModalHeader>
-
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                      <Collapse in={isOpenLoginAlert} animateOpacity>
-                        <Alert status='error' variant='subtle' mb={2}>
-                          <AlertIcon />
-                          <AlertTitle>Lỗi đăng nhập!</AlertTitle>
-                          <AlertDescription>Tài khoản nhập vào không đúng.</AlertDescription>
-                        </Alert>
-                      </Collapse>
-                      <FormControl isRequired>
-                        <FormLabel>Số điện thoại</FormLabel>
-                        <Input
-                          placeholder='Số điện thoại'
-                          value={login_phone}
-                          onChange={handleLoginPhoneChange}
-                        />
-                      </FormControl>
-
-                      <FormControl mt={4} isRequired>
-                        <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
-                        <Input
-                          placeholder='Số CCCD/CMT'
-                          value={login_id_card}
-                          onChange={handleLoginIdCardChange}
-                        />
-                      </FormControl>
-                    </ModalBody>
-
-                    <ModalFooter>
-                      <Button onClick={loginMember}>Gửi</Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
+                {isOwner && (
+                  <Button onClick={handleUpdateInfo} size='sm'>
+                    Cập nhật
+                  </Button>
+                )}
+                <LoginPopup
+                  title={'Xác thực thông tin'}
+                  isOpen={isOpenLoginModal}
+                  onClose={onCloseLoginModal}
+                  onSuccess={() => {
+                    dispatch(
+                      getRegisterInfo({
+                        method: 'get',
+                        url: formatUrl(API.GET_REGISTER_INFO, { id }),
+                      }),
+                    ).then(() => {
+                      history.push(
+                        formatUrl(EDIT_REGISTER_PATH, { shortUri: data.eventRegistryPageId }),
+                      );
+                    });
+                  }}
+                />
               </HStack>
 
               <Divider borderBottomWidth={'2px'} />
@@ -442,6 +376,15 @@ const RegisterInfo = () => {
                       {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
                     </Box>
                   </Stack>
+                  <Stack>
+                    <Box>
+                      <Text as='b'>Ban đã được phân:</Text>
+
+                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
+                        {assignedDepartment.}
+                      </Tag> */}
+                    </Box>
+                  </Stack>
                 </TabPanel>
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
@@ -461,7 +404,7 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'blue'}>
                           {schedule && schedule?.departure_time}
                         </Tag>
-                        {moveType == MoveType.OTHER && schedule && schedule.departure_flight_code && (
+                        {moveType == MoveType.Other && schedule && schedule.departure_flight_code && (
                           <Tag mr={2} mb={1} colorScheme={'blue'}>
                             Mã chuyến bay: {schedule?.departure_flight_code}
                           </Tag>
@@ -477,7 +420,7 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
                           {schedule && schedule?.return_time}
                         </Tag>
-                        {moveType == MoveType.OTHER && schedule && schedule.return_flight_code && (
+                        {moveType == MoveType.Other && schedule && schedule.return_flight_code && (
                           <Tag mr={2} mb={1} colorScheme={'pink'}>
                             Mã chuyến bay: {schedule?.return_flight_code}
                           </Tag>

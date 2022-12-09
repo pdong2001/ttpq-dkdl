@@ -9,10 +9,8 @@ import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
 import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 import NoFooterLayout from '~/components/containers/layouts/NoFooterLayout';
-import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 
 export type RouteType = {
-  key: string;
   path?: string | string[];
   needAuth?: boolean;
   exact?: boolean;
@@ -37,58 +35,49 @@ export const NavBarLink = [
 
 const ROUTES: RouteType[] = [
   {
-    key: 'GREAT_CEREMORY_INFO',
     path: EVENT_INFO,
     exact: true,
     component: GreatCeremonyInfo,
     layout: MainLayout,
   },
+  // {
+  //   path: '/great-ceremony-info/details',
+  //   component: GreatCeremonyInfoDetails,
+  //   layout: MainLayout,
+  // },
   {
-    key: 'GREAT_CEREMORY_INFO',
-    path: '/great-ceremony-info/details',
-    component: GreatCeremonyInfoDetails,
-    layout: MainLayout,
-  },
-  {
-    key: 'REGISTER_INFO',
-    path: ['/register-info/:id', '/register-info'],
+    path: ['/:shortUri/register-info/:id'],
     component: RegisterInfo,
     layout: MainLayout,
   },
-  {
-    key: 'TIMELINE',
-    path: '/timeline',
-    component: Timeline,
-    layout: MainLayout,
-  },
-  {
-    key: 'DEPARTMENT_INFO',
-    path: '/department-info',
-    component: DepartmentInfos,
-    layout: MainLayout,
-  },
+  // {
+  //   path: '/timeline',
+  //   component: Timeline,
+  //   layout: MainLayout,
+  // },
+  // {
+  //   path: '/department-info',
+  //   component: DepartmentInfos,
+  //   layout: MainLayout,
+  // },
   {
     path: '/not-found',
     exact: true,
-    key: 'NOT_FOUND',
     component: NotFound,
     layout: MainLayout,
   },
   {
-    key: 'HOME',
     path: ['/', HOME_WITH_SHORT_URI],
     exact: true,
     component: Home,
     layout: MainLayout,
   },
   {
-    key: 'MULTI_STEP_REGISTER',
     path: [ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH],
     component: MultiStepRegister,
     layout: NoFooterLayout,
   },
   {
-    key: 'NOT_FOUND',
     component: NotFound,
     layout: MainLayout,
   },

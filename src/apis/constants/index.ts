@@ -3,6 +3,7 @@ const api = (api: string) => `${API_PREFIX}${api}`;
 
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
+const GET_MEMBER = api('/Auth/member');
 
 const GET_STRONG_POINT = api('/SkillForRegisters/GetAll');
 const GET_DEPARTMENT_BY_EVENT = api('/Department/get-all');
@@ -15,9 +16,10 @@ const GET_REGISTER_INFO = api('/EventRegistry/GetById/:id');
 const GET_MEMBER_IN_GROUP = api('/EventRegistry/group/:leaderId');
 const LOGIN_MEMBER = api('/Auth/login-member');
 const GET_MEMBER_BY_ID = api('/Member/get-by-id/:id');
-const UPDATE_MEMBER = api('/Member/update/:id');
+const UPDATE_MEMBER = api('/Member/update');
 const REGISTER = api('/Member/add');
 const SEARCH_MEMBER = api('/Member/search');
+const GET_REGISTER_BY_EVENT = api('/EventRegistry/event/:eventId');
 
 /* API from app Nhân sự */
 const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
@@ -50,6 +52,8 @@ const API = {
   UPDATE_MEMBER,
   UPLOAD_PHOTO,
   GET_PHOTO,
+  GET_MEMBER,
+  GET_REGISTER_BY_EVENT
 };
 
 export default API;

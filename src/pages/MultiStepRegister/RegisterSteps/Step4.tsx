@@ -232,7 +232,6 @@ const Step4 = (props: StepProps) => {
                 data={receiveCardLocationList}
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
-                isRequired
               />
               {/* thêm field */}
               <Select

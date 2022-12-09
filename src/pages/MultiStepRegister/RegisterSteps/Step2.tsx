@@ -113,7 +113,7 @@ const Step2 = (props: StepProps) => {
         leaderId = '';
       }
       const { year, month, date } = dob || {};
-      const dateOfBirth = new Date(+year, +month - 1, +date);
+      const dateOfBirth = [date, month, year].join('-');
       dispatch(
         fillForm({
           gender,
@@ -138,7 +138,6 @@ const Step2 = (props: StepProps) => {
       nextStep();
     },
   });
-  // console.log('gender', register.leaderId, formik.values.registerType, formik.errors);
 
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));

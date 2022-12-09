@@ -1,8 +1,6 @@
 import { UpSertEventRegistryDto } from './../../dtos/EventRegistries/UpSertEventRegistryDto.model';
 import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
-import { Gender } from '~/dtos/Enums/Gender.enum';
-import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 import API from '~/apis/constants';
 import { MemberDto } from '~/dtos/Members/MemberDto.model';

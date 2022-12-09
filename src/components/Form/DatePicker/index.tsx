@@ -54,9 +54,9 @@ const DateTimePicker = ({
         <ReactDatePicker
           showPopperArrow={false}
           dateFormat={dateFormat}
-          selected={value}
+          selected={value && new Date(value)}
           onChange={(value) => {
-            setValue(value);
+            setValue(value?.toLocaleString());
           }}
           customInput={<CustomInput label={label} />}
           showTimeSelect={showTimeSelect}
