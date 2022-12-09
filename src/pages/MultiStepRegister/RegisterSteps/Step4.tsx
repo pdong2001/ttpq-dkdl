@@ -29,7 +29,10 @@ import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
+
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
@@ -41,14 +44,22 @@ const Step4 = (props: StepProps) => {
     wishDepartment,
     member,
     receiveCardAddressId: editReceiverCardId,
+    // thêm field
+    clothingSize: editClothingSize,
     note: editNote,
   } = useAppSelector((state) => state.registerInfo.data);
   const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
 
   const { strongPointIds, avatarPath, exps } = previousStepData;
-  const { expDepartmentIds, wishDepartmentId, receiveCardAddressId, note } =
-    previousStepData.register || {};
+  const {
+    expDepartmentIds,
+    wishDepartmentId,
+    receiveCardAddressId,
+    // thêm field
+    clothingSize,
+    note,
+  } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
   const { data: strongPointList } = useAxios(
@@ -70,6 +81,16 @@ const Step4 = (props: StepProps) => {
     transformResponse: ({ data }) => data,
   });
 
+  // thêm field
+  // size áo
+  const clothingSizeList = [
+    { id: 1, name: 'S' },
+    { id: 2, name: 'M' },
+    { id: 3, name: 'L' },
+    { id: 4, name: 'XL' },
+    { id: 5, name: 'XXL' },
+  ];
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -78,6 +99,8 @@ const Step4 = (props: StepProps) => {
       expDepartmentIds: expDepartmentIds || mapObjectArrayToIds(expDepartments) || [],
       wishDepartmentId: wishDepartmentId || wishDepartment?.id || '',
       receiveCardAddressId: receiveCardAddressId || editReceiverCardId || '',
+      // thêm field
+      clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
       note: note || editNote || '',
     },
@@ -91,6 +114,8 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId,
         receiveCardAddressId,
         note,
+        // thêm field
+        clothingSize,
       } = values;
       const fillData = {
         strongPointIds,
@@ -106,6 +131,8 @@ const Step4 = (props: StepProps) => {
           eventRegistryPageId: id,
           ctnId,
           type,
+          // thêm field
+          clothingSize,
         },
       };
       dispatch(fillForm(fillData));
@@ -118,6 +145,7 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds,
         wishDepartmentId,
         receiveCardAddressId,
+        clothingSize,
       });
       nextStep();
     },
@@ -132,6 +160,7 @@ const Step4 = (props: StepProps) => {
     expDepartmentIds,
     wishDepartmentId,
     receiveCardAddressId,
+    clothingSize,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -151,10 +180,10 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds: mapName(departments, expDepartmentIds),
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
         receiveCardAddressId: mapName(receiveCardLocationList, [+receiveCardAddressId]),
+        clothingSize: ClothingSize.toString(clothingSize),
       }),
     );
   };
-
 
   return (
     <FadeInUp>
@@ -205,6 +234,16 @@ const Step4 = (props: StepProps) => {
                 data={receiveCardLocationList}
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
+              />
+              {/* thêm field */}
+              <Select
+                name='clothingSize'
+                data={ClothingSize.getList()}
+                label='Size áo'
+                placeholder='Chọn size áo'
+                isRequired
+                valueField='value'
+                labelField='label'
               />
               <FormControl name='avatarPath' as='fieldset' border={1}>
                 <FormLabel as='legend'>Hình thẻ</FormLabel>

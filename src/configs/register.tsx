@@ -35,6 +35,8 @@ const REGISTER_INFO_TITLE = {
   otherLeaveTime: 'Ngày giờ về',
   startPlaneCode: 'Mã chuyến bay đi',
   returnPlaneCode: 'Mã chuyến bay về',
+  // thêm field
+  transitType: 'Đăng ký ô tô',
   // jobs
   exps: 'Số lần về chùa',
   strongPointIds: 'Kỹ năng, sở trường',
@@ -43,5 +45,13 @@ const REGISTER_INFO_TITLE = {
   receiveCardAddressId: 'Nơi nhận thẻ',
   note: 'Ghi chú',
 };
+
+// // thêm field
+// const TRANSIT_TYPE_TITLE = {
+//   [TransitType.ChieuDi]: 'Chiều đi (Từ Tân Sơn Nhất về chùa)',
+//   [TransitType.ChieuVe]: 'Chiều về (Từ chùa về Tân Sơn Nhất)',
+//   [TransitType.CaHaiChieu]: 'Cả hai chiều',
+//   [TransitType.TuTuc]: 'Tự túc',
+// };
 
 export { REGISTER_INFO_TITLE, MOVE_TYPE_TITLE, EVENT_EXP_TITLE };

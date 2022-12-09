@@ -22,6 +22,7 @@ import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -60,6 +61,8 @@ const Step3 = (props: StepProps) => {
     returnPlaneCode: editReturnPlaneCode,
     leaveTime,
     startTime,
+    //thêm field
+    carBookingType: editCarBookingType,
   } = useAppSelector((state) => state.registerInfo.data);
   const { addressId: editStartAddressId } = startTime || {};
   const { addressId: editLeaveAddressId } = leaveTime || {};
@@ -76,6 +79,8 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
+    // thêm field
+    carBookingType: carBookingTypeInStore,
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
@@ -99,24 +104,37 @@ const Step3 = (props: StepProps) => {
       otherLeaveTime: otherLeaveTime || editOtherLeaveTime,
       startPlaneCode: startPlaneCode || editStartPlaneCode,
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
+      // thêm field
+      carBookingType:
+        carBookingTypeInStore ||
+        (editCarBookingType && editCarBookingType + '') ||
+        CarBookingType.Both,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
       if (moveType != MoveType.WithCTN) {
+        // máy bay
         values.startAddressId = undefined;
         values.startTimeId = undefined;
         values.leaveAddressId = undefined;
         values.leaveTimeId = undefined;
+
         if (moveType == MoveType.Other) {
+          // tự túc
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
+          // thêm field
+          values.carBookingType = '';
         }
       } else {
+        // with CTN
         values.otherStartAddress = '';
         values.otherStartTime = '';
         values.otherLeaveTime = '';
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
+        // thêm field
+        values.carBookingType = '';
       }
       dispatch(
         fillForm({
@@ -129,6 +147,7 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
+  console.log(formik.errors);
 
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
@@ -170,7 +189,6 @@ const Step3 = (props: StepProps) => {
       }),
     );
   };
-
 
   return (
     <FadeInUp>
@@ -244,7 +262,24 @@ const Step3 = (props: StepProps) => {
                   )}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
                   {moveType === MoveType.ByPlane && (
-                    <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                    <>
+                      <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                      {/* thêm field */}
+                      <Radios
+                        spacing={2}
+                        direction='column'
+                        label='Đăng ký ô tô'
+                        name='carBookingType'
+                        isRequired
+                      >
+                        <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
+                        <Radio value={CarBookingType.Return}>
+                          Chiều về (Từ chùa ra Tân Sơn Nhất)
+                        </Radio>
+                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
+                        <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
+                      </Radios>
+                    </>
                   )}
                 </>
               )}

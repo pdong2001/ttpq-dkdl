@@ -52,6 +52,12 @@ const mapSuccessData = (previewInfo) => {
         startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
         otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
         returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
+        // thêm field
+        // transitType: (
+        //   <Tag variant='outline' colorScheme={'green'}>
+        //     {TRANSIT_TYPE_TITLE[_.get(previewInfo, 'transitType', '')]}
+        //   </Tag>
+        // ),
       },
     },
     jobs: {

@@ -1,7 +1,8 @@
 export enum CarBookingType {
-  Go = 0,
-  Return = 1,
-  Both = 2,
+  Go = '0',
+  Return = '1',
+  Both = '2',
+  ByYourSelf = '3',
 }
 export namespace CarBookingType {
   export function toString(type: CarBookingType): string {
@@ -12,16 +13,14 @@ export namespace CarBookingType {
         return 'Chiều về';
       case CarBookingType.Both:
         return 'Cả 2 chiều';
+      case CarBookingType.ByYourSelf:
+        return 'Tự túc';
       default:
         return '';
     }
   }
   export function getList() {
-    const types = Object.keys(CarBookingType)
-      .map((item) => Number(item))
-      .filter((item) => {
-        return !isNaN(item);
-      });
+    const types = Object.keys(CarBookingType).map((item) => item as CarBookingType);
     const result = types.map((i) => {
       return {
         value: i,

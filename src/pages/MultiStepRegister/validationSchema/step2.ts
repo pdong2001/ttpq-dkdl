@@ -29,6 +29,7 @@ const step2Schema = Yup.object({
   dobMonth: Yup.string().required(),
   dobYear: Yup.string().required(),
   // email: Yup.string().email('Email không hợp lệ').required('Xin hãy nhập email'),
+  email: Yup.string().email('Email không hợp lệ'),
   permanentAddress: Yup.object().shape({
     provinceId: Yup.number(),
     districtId: Yup.number(),

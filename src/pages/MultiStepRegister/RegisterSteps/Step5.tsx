@@ -1,176 +1,123 @@
-import {
-  Stack,
-  Heading,
-  Button,
-  Box,
-  Text,
-  SimpleGrid,
-  Avatar,
-  GridItem,
-  Alert,
-} from '@chakra-ui/react';
-import useCustomColorMode from '~/hooks/useColorMode';
-import _ from 'lodash';
-import { StepProps } from '..';
-import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { register, updateMember, updateRegister } from '~/slices/register';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { TableComponent, LeaderComponent } from '~/components/Register';
-import { mapSuccessData } from '~/components/Register/bindingData';
-import { REGISTER_INFO_TITLE } from '~/configs/register';
-import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { ADD_NEW_REGISTER_PATH } from '~/routes';
-import { formatUrl } from '~/utils/functions';
-import API from '~/apis/constants';
-import { useContext, useState } from 'react';
-import { MessageContext } from '~/providers/message';
-import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
+import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Form, FormikProvider, useFormik } from 'formik';
+import React from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
+import Radios from '~/components/Form/Radios';
+import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
+import useCustomColorMode from '~/hooks/useColorMode';
+import { fillDataPreview } from '~/slices/previewInfo';
+import { StepProps } from '..';
+import { fillForm } from '../../../slices/register';
+import step5Schema from '../validationSchema/step5';
 
-const Step5 = (props: StepProps) => {
-  const { previousStep, nextStep } = props;
-  const [openSuccess, setOpenSuccess] = useState(false);
+function Step5(props: StepProps) {
+  const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
-  const formData = useAppSelector((state) => state.register.data);
-  const previewInfo = useAppSelector((state) => state.previewInfo.data);
-  const registerInfo = useAppSelector((state) => state.registerInfo.data);
-  const { path } = useRouteMatch();
-  const isAddNew = path === ADD_NEW_REGISTER_PATH;
-  const messageService = useContext(MessageContext);
-  const history = useHistory();
-  const { shortUri } = useParams<any>();
+
+  const { register: previousStepData } = useAppSelector((state) => state.register.data);
+  const {
+    certificateRegistry: certificateRegistryInStore,
+    companyNameVIE: companyNameVIEInStore,
+    companyNameEN: companyNameENInStore,
+  } = previousStepData || {};
 
   const {
-    id,
-    moveType,
+    certificateRegistry: editCertificateRegistry,
+    companyNameVIE: editCompanyNameVIE = '',
+    companyNameEN: editCompanyNameEN = '',
+  } = useAppSelector((state) => state.registerInfo.data);
 
-    memberId,
-    leaderId,
-  } = registerInfo;
-
-  const { register: registerData } = formData;
-
-  const handleRegister = () => {
-    if (isAddNew) {
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      certificateRegistry:
+        (certificateRegistryInStore && certificateRegistryInStore + '') ||
+        (editCertificateRegistry && editCertificateRegistry + '') ||
+        CertificateRegistry.NO,
+      companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
+      companyNameEN: companyNameENInStore || editCompanyNameEN,
+    },
+    validationSchema: step5Schema,
+    onSubmit: (values) => {
+      const { certificateRegistry, companyNameVIE, companyNameEN } = values;
+      const fillData = {
+        register: {
+          ...previousStepData,
+          certificateRegistry,
+          companyNameVIE,
+          companyNameEN,
+        },
+      };
+      dispatch(fillForm(fillData));
       dispatch(
-        register({
-          data: formData,
-        }),
-      )
-        .then(unwrapResult)
-        .then(() => {
-          setOpenSuccess(true);
-        })
-        .catch((e) => {
-          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
-        });
-    } else {
-      const updateRegisterInfo = dispatch(
-        updateRegister({
-          url: formatUrl(API.UPDATE_REGISTER, { id }),
-          data: {
-            memberId,
-            leaderId,
-            moveType,
-            ...registerData,
-          },
+        fillDataPreview({
+          companyNameVIE,
+          companyNameEN,
         }),
       );
-      const updateMemberInfo = dispatch(
-        updateMember({
-          url: API.UPDATE_MEMBER,
-          data: {
-            ..._.omit(formData, ['register']),
-          },
-        }),
-      );
-      Promise.all([updateRegisterInfo, updateMemberInfo])
-        .then((result) => result.map(unwrapResult))
-        .then(([{ data: register, code: registerCode }, { data: member, code: memberCode }]) => {
-          if (registerCode >= 400) {
-            return Promise.reject(register);
-          }
-          if (memberCode >= 400) {
-            return Promise.reject(member);
-          }
-          window.open(`${window.location.origin}/${shortUri}/register-info/${register?.id}`);
-        })
-        .catch((e) => {
-          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
-        });
-    }
-  };
-  const { infos, schedules, jobs, avatar, fullName } = mapSuccessData(previewInfo);
+      nextStep();
+    },
+  });
+
+  const { certificateRegistry } = formik.values;
+
+  console.log('___', formik.values);
+
   return (
     <FadeInUp>
       <Stack spacing={4}>
-        <Box textAlign={'center'}>
-          <Heading
-            color={primaryColor}
-            lineHeight={1.1}
-            fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
-          >
-            {`Xác nhận ${isAddNew ? 'đăng ký' : 'chỉnh sửa'}`}
-          </Heading>
-          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            PL.2565 - DL.2022
-          </Text>
-        </Box>
-        <GridItem>
-          <Box>
-            <Box textAlign={'center'}>
-              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
-              <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
-                {fullName}
-              </Heading>
-            </Box>
-            <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
-            <Box>
-              <Alert status='success'>
-                <CalendarIcon />
-                <Heading p={2} as='h5' size='md'>
-                  Lịch trình di chuyển
-                </Heading>
-              </Alert>
-              {TableComponent(
-                _.get(schedules, _.get(previewInfo, 'moveType', 0)),
-                REGISTER_INFO_TITLE,
-              )}
-            </Box>
-            <Box>
-              <Alert status='warning'>
-                <HamburgerIcon />
-                <Heading p={2} as='h5' size='md'>
-                  Công việc
-                </Heading>
-              </Alert>
-              {TableComponent(jobs, REGISTER_INFO_TITLE)}
-            </Box>
-            {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
-          </Box>
-        </GridItem>
+        <Heading
+          color={primaryColor}
+          lineHeight={1.1}
+          fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+        >
+          Đăng Ký Nhận Giấy Chứng Nhận Tình Nguyện Viên
+        </Heading>
+        {/* <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+          Chùa có cấp giấy chứng nhận cho HĐ về chùa công quả các dịp lễ ạ. HĐ là sinh viên, chuẩn
+          bị đi xin việc, hoặc có nhu cầu lấy giấy chứng nhận thì HĐ đăng ký bên dưới nhé ạ.
+        </Text> */}
+        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+          Thời gian nhận giấy chứng nhận là 12h00 - 15h00 Thứ 6 ngày 30/12/2022 tại bàn Nhân Sự Đại
+          Lễ (Sân cỏ gần phòng Bảo vệ - TTPQ)
+        </Text>
       </Stack>
       <Box mt={10}>
-        <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-          <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
-            Trở về
-          </Button>
-          <Button flexGrow={1} fontFamily={'heading'} onClick={handleRegister}>
-            {isAddNew ? 'Đăng ký' : 'Cập nhật'}
-          </Button>
-        </SimpleGrid>
+        <FormikProvider value={formik}>
+          <Form noValidate>
+            <Stack spacing={4}>
+              <Radios
+                name='certificateRegistry'
+                label='HĐ có muốn lấy giấy chứng nhận không ạ?'
+                isRequired
+              >
+                <Radio value={CertificateRegistry.YES}>Có</Radio>
+                <Radio value={CertificateRegistry.NO}>Không</Radio>
+              </Radios>
+              {certificateRegistry === CertificateRegistry.YES && (
+                <>
+                  <Text>Tên trường hoặc nơi công tác</Text>
+                  <FloatingLabel name='companyNameVIE' label='Tiếng Việt' isRequired />
+                  <FloatingLabel name='companyNameEN' label='Tiếng Anh' />
+                </>
+              )}
+            </Stack>
+            <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
+              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+                Trở về
+              </Button>
+              <Button flexGrow={1} type='submit' fontFamily={'heading'}>
+                Tiếp theo
+              </Button>
+            </SimpleGrid>
+          </Form>
+        </FormikProvider>
       </Box>
-      <SuccessRegisterModal
-        open={openSuccess}
-        onClose={() => {
-          history.push(`/${shortUri}`);
-          history.go(0);
-        }}
-      />
     </FadeInUp>
   );
-};
+}
 
 export default Step5;

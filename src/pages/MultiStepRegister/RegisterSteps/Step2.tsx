@@ -132,7 +132,7 @@ const Step2 = (props: StepProps) => {
           religiousName,
           email,
           dateOfBirth,
-          ...(ctnId && { organizationStructureId: ctnName }),
+          ...(!ctnId && { organizationStructureId: ctnName }),
         }),
       );
       nextStep();
