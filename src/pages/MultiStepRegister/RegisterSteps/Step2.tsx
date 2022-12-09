@@ -113,7 +113,7 @@ const Step2 = (props: StepProps) => {
         leaderId = '';
       }
       const { year, month, date } = dob || {};
-      const dateOfBirth = [date, month, year].join('-');
+      const dateOfBirth = [year, month, date].join('-');
       dispatch(
         fillForm({
           gender,

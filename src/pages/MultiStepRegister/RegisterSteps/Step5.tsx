@@ -64,8 +64,6 @@ function Step5(props: StepProps) {
 
   const { certificateRegistry } = formik.values;
 
-  console.log('___', formik.values);
-
   return (
     <FadeInUp>
       <Stack spacing={4}>
