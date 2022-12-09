@@ -49,12 +49,17 @@ const Step6 = (props: StepProps) => {
   } = registerInfo;
 
   const { register: registerData } = formData;
+  const { certificateRegistry } = registerData;
+  const submitData = {
+    ...formData,
+    register: { ...register, certificateRegistry: !!certificateRegistry },
+  };
 
   const handleRegister = () => {
     if (isAddNew) {
       dispatch(
         register({
-          data: formData,
+          data: submitData,
         }),
       )
         .then(unwrapResult)

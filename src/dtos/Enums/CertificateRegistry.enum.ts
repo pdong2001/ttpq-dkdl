@@ -1,4 +1,4 @@
 export enum CertificateRegistry {
-  NO = '0',
+  NO = '',
   YES = '1',
 }

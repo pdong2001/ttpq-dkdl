@@ -52,12 +52,12 @@ function Step5(props: StepProps) {
         },
       };
       dispatch(fillForm(fillData));
-      // dispatch(
-      //   fillDataPreview({
-      //     companyNameVIE,
-      //     companyNameEN,
-      //   }),
-      // );
+      dispatch(
+        fillDataPreview({
+          companyNameVIE,
+          companyNameEN,
+        }),
+      );
       nextStep();
     },
   });
