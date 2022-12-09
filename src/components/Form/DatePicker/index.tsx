@@ -48,6 +48,7 @@ const DateTimePicker = ({
   ...rest
 }: Props) => {
   const [{ value }, meta, { setValue }] = useField(name);
+
   return (
     <FormControl variant='floating' isInvalid={!!meta.error && meta.touched} {...rest}>
       <InputGroup>
@@ -57,7 +58,7 @@ const DateTimePicker = ({
           selected={value && new Date(value)}
           onChange={(value) => {
             if (value) {
-              setValue(value.toLocaleString());
+              setValue(value.toISOString());
             }
           }}
           customInput={<CustomInput label={label} />}
