@@ -11,7 +11,7 @@ import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 export type SelectData = {
-  id: string | number;
+  // id: string | number;
 };
 
 type CustomSelectProps = {

@@ -29,6 +29,7 @@ import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -144,6 +145,7 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds,
         wishDepartmentId,
         receiveCardAddressId,
+        clothingSize,
       });
       nextStep();
     },
@@ -158,6 +160,7 @@ const Step4 = (props: StepProps) => {
     expDepartmentIds,
     wishDepartmentId,
     receiveCardAddressId,
+    clothingSize,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -177,10 +180,10 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds: mapName(departments, expDepartmentIds),
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
         receiveCardAddressId: mapName(receiveCardLocationList, [+receiveCardAddressId]),
+        clothingSize: ClothingSize.toString(clothingSize),
       }),
     );
   };
-
 
   return (
     <FadeInUp>
@@ -235,10 +238,12 @@ const Step4 = (props: StepProps) => {
               {/* thêm field */}
               <Select
                 name='clothingSize'
-                data={clothingSizeList}
+                data={ClothingSize.getList()}
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired
+                valueField='value'
+                labelField='label'
               />
               <FormControl name='avatarPath' as='fieldset' border={1}>
                 <FormLabel as='legend'>Hình thẻ</FormLabel>

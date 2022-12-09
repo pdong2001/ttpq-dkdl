@@ -1,7 +1,7 @@
 export enum CarBookingType {
-  Go = 0,
-  Return = 1,
-  Both = 2,
+  Go = '0',
+  Return = '1',
+  Both = '2',
 }
 export namespace CarBookingType {
   export function toString(type: CarBookingType): string {
@@ -17,11 +17,7 @@ export namespace CarBookingType {
     }
   }
   export function getList() {
-    const types = Object.keys(CarBookingType)
-      .map((item) => Number(item))
-      .filter((item) => {
-        return !isNaN(item);
-      });
+    const types = Object.keys(CarBookingType).map((item) => item as CarBookingType);
     const result = types.map((i) => {
       return {
         value: i,

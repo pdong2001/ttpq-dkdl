@@ -7,6 +7,7 @@ import Radios from '~/components/Form/Radios';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { fillDataPreview } from '~/slices/previewInfo';
 import { StepProps } from '..';
 import { fillForm } from '../../../slices/register';
 import step5Schema from '../validationSchema/step5';
@@ -51,6 +52,12 @@ function Step5(props: StepProps) {
         },
       };
       dispatch(fillForm(fillData));
+      // dispatch(
+      //   fillDataPreview({
+      //     companyNameVIE,
+      //     companyNameEN,
+      //   }),
+      // );
       nextStep();
     },
   });

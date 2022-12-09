@@ -45,7 +45,7 @@ const step3Schema = Yup.object({
     otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
   }),
   // thêm field
-  transitType: Yup.string().when('moveType', {
+  carBookingType: Yup.string().when('moveType', {
     is: MoveType.ByPlane,
     then: Yup.string().required(),
     otherwise: Yup.string().notRequired(),

@@ -147,6 +147,7 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
+  console.log(formik.errors);
 
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
@@ -188,7 +189,6 @@ const Step3 = (props: StepProps) => {
       }),
     );
   };
-
 
   return (
     <FadeInUp>
