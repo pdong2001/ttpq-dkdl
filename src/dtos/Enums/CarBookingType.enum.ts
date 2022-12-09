@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 export enum CarBookingType {
   Go = '0',
   Return = '1',
