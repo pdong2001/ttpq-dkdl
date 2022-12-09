@@ -7,14 +7,14 @@ const step3Schema = Yup.object({
   startAddressId: Yup.string()
     .nullable()
     .when('moveType', {
-      is: MoveType.HCM,
+      is: MoveType.WithCTN,
       then: Yup.string().required('Xin hãy chọn nơi xuất phát'),
       otherwise: Yup.string().notRequired(),
     }),
   startTimeId: Yup.string()
     .nullable()
     .when('moveType', {
-      is: MoveType.HCM,
+      is: MoveType.WithCTN,
       then: Yup.string().required('Xin hãy chọn ngày giờ đi'),
       otherwise: Yup.string().notRequired(),
     }),
@@ -30,23 +30,23 @@ const step3Schema = Yup.object({
   otherStartAddress: Yup.string()
     .nullable()
     .when('moveType', {
-      is: MoveType.HCM,
+      is: MoveType.WithCTN,
       then: Yup.string().notRequired(),
       otherwise: Yup.string().required('Xin hãy chọn nơi xuất phát'),
     }),
   otherStartTime: Yup.string().when('moveType', {
-    is: MoveType.HCM,
+    is: MoveType.WithCTN,
     then: Yup.string().notRequired(),
     otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ đi'),
   }),
   otherLeaveTime: Yup.string().when('moveType', {
-    is: MoveType.HCM,
+    is: MoveType.WithCTN,
     then: Yup.string().notRequired(),
     otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
   }),
   // thêm field
   transitType: Yup.string().when('moveType', {
-    is: MoveType.OTHER,
+    is: MoveType.ByPlane,
     then: Yup.string().required(),
     otherwise: Yup.string().notRequired(),
   }),

@@ -113,10 +113,12 @@ const Step3 = (props: StepProps) => {
     validationSchema: step3Schema,
     onSubmit: (values) => {
       if (moveType != MoveType.WithCTN) {
+        // máy bay
         values.startAddressId = undefined;
         values.startTimeId = undefined;
         values.leaveAddressId = undefined;
         values.leaveTimeId = undefined;
+
         if (moveType == MoveType.Other) {
           // tự túc
           values.startPlaneCode = '';
@@ -125,7 +127,7 @@ const Step3 = (props: StepProps) => {
           values.carBookingType = '';
         }
       } else {
-        // hcm
+        // with CTN
         values.otherStartAddress = '';
         values.otherStartTime = '';
         values.otherLeaveTime = '';
@@ -276,7 +278,6 @@ const Step3 = (props: StepProps) => {
                           Chiều về (Từ chùa ra Tân Sơn Nhất)
                         </Radio>
                         <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
-                        {/* <Radio value={CarBookingType.TuTuc}>Tự túc</Radio> */}
                       </Radios>
                     </>
                   )}
