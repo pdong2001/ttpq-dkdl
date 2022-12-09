@@ -19,7 +19,7 @@ import './datePicker.css';
 type Props = InputProps &
   FormControlProps & { dateFormat?: string; showTimeSelect?: boolean; timeIntervals?: number };
 
-const customDateInput = ({ value, onClick, onChange, label }: any, ref) => {
+const CustomDateInput = ({ value, onClick, onChange, label }: any, ref) => {
   const { bgColor } = useCustomColorMode();
   return (
     <>
@@ -37,7 +37,7 @@ const customDateInput = ({ value, onClick, onChange, label }: any, ref) => {
     </>
   );
 };
-const CustomInput = forwardRef(customDateInput);
+const CustomInput = forwardRef(CustomDateInput);
 
 const DateTimePicker = ({
   name = 'datePicker',
@@ -56,7 +56,9 @@ const DateTimePicker = ({
           dateFormat={dateFormat}
           selected={value && new Date(value)}
           onChange={(value) => {
-            setValue(value?.toLocaleString());
+            if (value) {
+              setValue(value.toLocaleString());
+            }
           }}
           customInput={<CustomInput label={label} />}
           showTimeSelect={showTimeSelect}
