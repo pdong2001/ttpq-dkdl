@@ -11,6 +11,7 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Link,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
 import { useContext, useEffect } from 'react';
@@ -371,7 +372,11 @@ const RegisterInfo = () => {
                         </Tag>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
                           <TagLeftIcon boxSize='12px' as={MdPhone} />
-                          {roles1?.phoneNumber || 'Đang cập nhật'}
+                          {roles1?.phoneNumber ? (
+                            <Link href={`tel:${roles1?.phoneNumber}`}>{roles1?.phoneNumber}</Link>
+                          ) : (
+                            'Đang cập nhật'
+                          )}
                         </Tag>
                       </Box>
                     </Box>
