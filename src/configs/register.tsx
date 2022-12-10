@@ -1,18 +1,4 @@
 import _ from 'lodash';
-import { MoveType } from '~/dtos/Enums/MoveType.enum';
-import { EventExp } from '~/dtos/Enums/EventExp.enum';
-
-const MOVE_TYPE_TITLE = {
-  [MoveType.WithCTN]: 'Đi cùng xe CTN',
-  [MoveType.Other]: 'Tự túc',
-  [MoveType.ByPlane]: 'Máy bay',
-};
-
-const EVENT_EXP_TITLE = {
-  [EventExp.ChuaTungThamGia]: 'Lần đầu tiên',
-  [EventExp.Duoi3Lan]: 'Dưới 3 lần',
-  [EventExp.Tren3Lan]: 'Trên 3 lần',
-};
 
 const REGISTER_INFO_TITLE = {
   fullName: 'Họ Và Tên',
@@ -54,4 +40,4 @@ const REGISTER_INFO_TITLE = {
 //   [TransitType.TuTuc]: 'Tự túc',
 // };
 
-export { REGISTER_INFO_TITLE, MOVE_TYPE_TITLE, EVENT_EXP_TITLE };
+export { REGISTER_INFO_TITLE };

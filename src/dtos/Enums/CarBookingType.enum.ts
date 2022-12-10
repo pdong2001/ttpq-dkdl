@@ -6,7 +6,7 @@ export enum CarBookingType {
   ByYourSelf = '3',
 }
 export namespace CarBookingType {
-  export function toString(type: CarBookingType): string {
+  export function toString(type: string): string {
     switch (type) {
       case CarBookingType.Go:
         return 'Chiều đi';

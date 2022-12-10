@@ -175,6 +175,7 @@ const Step6 = (props: StepProps) => {
           history.go(0);
         }}
         title='Đăng ký thành công'
+        isSuccessPopup
       />
     </FadeInUp>
   );
