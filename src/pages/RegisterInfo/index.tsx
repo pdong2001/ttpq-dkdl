@@ -368,12 +368,10 @@ const RegisterInfo = () => {
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
                           {roles1?.fullName || 'Đang cập nhật'}
                         </Tag>
-                        {!roles1?.phoneNumber && (
-                          <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
-                            <TagLeftIcon boxSize='12px' as={MdPhone} />
-                            {roles1?.phoneNumber || 'Đang cập nhật'}
-                          </Tag>
-                        )}
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          <TagLeftIcon boxSize='12px' as={MdPhone} />
+                          {roles1?.phoneNumber || 'Đang cập nhật'}
+                        </Tag>
                       </Box>
                     </Box>
 
@@ -411,19 +409,26 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
+                      <Text as='b'>Số lần đã về chùa</Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {EVENT_EXP_TITLE[member?.exps + '']}
+                        </Tag>
+                      </Box>
                     </Box>
                     <Box>
-                      <Text as='b'>Nơi nhận thẻ:</Text>{' '}
+                      <Text as='b'>Nơi nhận thẻ</Text>{' '}
                       {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
                     </Box>
                     <Box>
-                      <Text as='b'>Size áo:</Text>
-                      {ClothingSize[clothingSize] && (
-                        <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
-                          {ClothingSize[clothingSize]}
-                        </Tag>
-                      )}
+                      <Text as='b'>Size áo</Text>
+                      <Box mt={2}>
+                        {ClothingSize[clothingSize] && (
+                          <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                            {ClothingSize[clothingSize]}
+                          </Tag>
+                        )}
+                      </Box>
                     </Box>
                   </Stack>
                 </TabPanel>
