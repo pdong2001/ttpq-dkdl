@@ -27,6 +27,8 @@ publicRequest.interceptors.request.use(
   },
   (error: AxiosError): Promise<AxiosError> => {
     // Do something with request error
+    console.log('error global', error);
+
     return Promise.reject(error);
   },
 );

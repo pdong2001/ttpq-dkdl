@@ -15,7 +15,6 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
-import { MOVE_TYPE_TITLE } from '~/configs/register';
 import { useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { convertToAppDateTime } from '~/utils/date';
@@ -91,8 +90,8 @@ const Step3 = (props: StepProps) => {
     initialValues: {
       moveType:
         moveTypeInStore ||
-        (editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.WithCTN : MoveType.Other),
+        (!!editMoveType && editMoveType + '') ||
+        (hasStartAddress ? MoveType.WithCTN : MoveType.ByPlane),
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
@@ -147,8 +146,6 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
-  console.log(formik.errors);
-
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
 
@@ -210,10 +207,10 @@ const Step3 = (props: StepProps) => {
             <Stack spacing={4}>
               <Radios label='Hình thức di chuyển' name='moveType'>
                 {startAddresses?.length && (
-                  <Radio value={MoveType.WithCTN}>{MOVE_TYPE_TITLE[MoveType.WithCTN]}</Radio>
+                  <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
-                <Radio value={MoveType.ByPlane}>{MOVE_TYPE_TITLE[MoveType.ByPlane]}</Radio>
-                <Radio value={MoveType.Other}>{MOVE_TYPE_TITLE[MoveType.Other]}</Radio>
+                <Radio value={MoveType.ByPlane}>{MoveType.toString(MoveType.ByPlane)}</Radio>
+                <Radio value={MoveType.Other}>{MoveType.toString(MoveType.Other)}</Radio>
               </Radios>
               {moveType == MoveType.WithCTN && (
                 // WithCTN
@@ -272,11 +269,11 @@ const Step3 = (props: StepProps) => {
                         name='carBookingType'
                         isRequired
                       >
+                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
                         <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
                         <Radio value={CarBookingType.Return}>
                           Chiều về (Từ chùa ra Tân Sơn Nhất)
                         </Radio>
-                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
                         <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
                       </Radios>
                     </>

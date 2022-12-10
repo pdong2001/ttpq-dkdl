@@ -52,9 +52,7 @@ function DateOfBirth(props: DateOfBirthProps) {
       isRequired={isRequired}
       isInvalid={!!meta.error && dayTouched && monthTouched && yearTouched}
     >
-      <FormLabel mb={0}>
-        {label}
-      </FormLabel>
+      <FormLabel mb={0}>{label}</FormLabel>
       <HStack align='flex-end'>
         <FloatingLabel inputMode='numeric' name={dateName} label='Ngày' hiddenErrorMessage />
         <CustomSelect placeholder='Tháng' data={monthOfBirth} name={monthName} hiddenErrorMessage />
