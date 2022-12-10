@@ -11,9 +11,10 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Link,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
@@ -33,12 +34,13 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { EVENT_EXP_TITLE } from '~/configs/register';
 import LoginPopup from '~/components/LoginPopup';
 import { AuthContext } from '~/providers/auth';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
 import { get } from 'lodash';
 import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
+import { PositionType } from '~/dtos/Enums/PositionType.enum';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -57,6 +59,7 @@ const RegisterInfo = () => {
   const { data } = useAppSelector((state) => state.registerInfo);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(
       getRegisterInfo({
         method: 'get',
@@ -183,6 +186,7 @@ const RegisterInfo = () => {
   }
 
   const groupMembers = groupData?.data || [];
+  const isOwner = authMember?.register?.id === data.id;
 
   const handleUpdateInfo = () => {
     if (isOwner) {
@@ -191,7 +195,6 @@ const RegisterInfo = () => {
       onOpenLoginModal();
     }
   };
-  const isOwner = authMember?.register?.id === data.id;
   ``;
   return (
     <Box
@@ -293,11 +296,9 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                {isOwner && (
-                  <Button onClick={handleUpdateInfo} size='sm'>
-                    Cập nhật
-                  </Button>
-                )}
+                <Button onClick={handleUpdateInfo} size='sm'>
+                  Cập nhật
+                </Button>
                 <LoginPopup
                   title={'Xác thực thông tin'}
                   isOpen={isOpenLoginModal}
@@ -366,11 +367,15 @@ const RegisterInfo = () => {
                       <Text as='b'>Trưởng Ban </Text>
                       <Box mt={2}>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
-                          {roles1?.fullName || 'Đang cập nhật'}
+                          {roles1?.religiousName || roles1?.fullName || 'Đang cập nhật'}
                         </Tag>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
                           <TagLeftIcon boxSize='12px' as={MdPhone} />
-                          {roles1?.phoneNumber || 'Đang cập nhật'}
+                          {roles1?.phoneNumber ? (
+                            <Link href={`tel:${roles1?.phoneNumber}`}>{roles1?.phoneNumber}</Link>
+                          ) : (
+                            'Đang cập nhật'
+                          )}
                         </Tag>
                       </Box>
                     </Box>
@@ -412,24 +417,24 @@ const RegisterInfo = () => {
                       <Text as='b'>Số lần đã về chùa</Text>
                       <Box mt={2}>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
-                          {EVENT_EXP_TITLE[member?.exps + '']}
+                          {EventExp.toString(member?.exps + '')}
                         </Tag>
                       </Box>
                     </Box>
-                    <Box>
-                      <Text as='b'>Nơi nhận thẻ</Text>{' '}
-                      {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
-                    </Box>
-                    <Box>
-                      <Text as='b'>Size áo</Text>
-                      <Box mt={2}>
-                        {ClothingSize[clothingSize] && (
-                          <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
-                            {ClothingSize[clothingSize]}
-                          </Tag>
-                        )}
+                    {receiveCardAddress && (
+                      <Box mt='2'>
+                        <Text as='b'>Nơi nhận thẻ</Text>{' '}
+                        {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
                       </Box>
-                    </Box>
+                    )}
+                    {clothingSize && (
+                      <Box mt='2'>
+                        <Text as='b'>Size áo</Text>{' '}
+                        <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                          {ClothingSize.toString(clothingSize)}
+                        </Tag>
+                      </Box>
+                    )}
                   </Stack>
                 </TabPanel>
                 <TabPanel px={0}>
@@ -499,9 +504,11 @@ const RegisterInfo = () => {
                           <MdDepartureBoard />
                           <Text as='b'>Đăng ký ô tô</Text>
                         </HStack>
-                        <Tag mt={2} mr={2} mb={1} colorScheme={'green'}>
-                          {CarBookingType.toString(carBookingType)}
-                        </Tag>
+                        {carBookingType && (
+                          <Tag mt={2} mr={2} mb={1} colorScheme={'green'}>
+                            {CarBookingType.toString(carBookingType)}
+                          </Tag>
+                        )}
                       </Box>
                     )}
                   </Stack>

@@ -6,7 +6,7 @@ export enum MoveType {
 }
 
 export namespace MoveType {
-  export function toString(type: MoveType): string {
+  export function toString(type: string): string {
     switch (type) {
       case MoveType.WithCTN:
         return 'Đi với CTN';

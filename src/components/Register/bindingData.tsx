@@ -1,7 +1,7 @@
 import { Tag } from '@chakra-ui/react';
 import _ from 'lodash';
 import moment from 'moment';
-import { EVENT_EXP_TITLE, MOVE_TYPE_TITLE } from '~/configs/register';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 
@@ -23,8 +23,8 @@ const mapSuccessData = (previewInfo) => {
     schedules: {
       [MoveType.WithCTN]: {
         moveType: (
-          <Tag variant='outline' colorScheme={'blue'}>
-            {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
+          <Tag variant='outline' colorScheme={'green'}>
+            {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
           </Tag>
         ),
         startAddressId: _.get(previewInfo, 'startAddressId', ''),
@@ -33,8 +33,8 @@ const mapSuccessData = (previewInfo) => {
       },
       [MoveType.ByPlane]: {
         moveType: (
-          <Tag variant='outline' colorScheme={'pink'}>
-            {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
+          <Tag variant='outline' colorScheme={'blue'}>
+            {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
           </Tag>
         ),
         otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
@@ -43,8 +43,8 @@ const mapSuccessData = (previewInfo) => {
       },
       [MoveType.Other]: {
         moveType: (
-          <Tag variant='outline' colorScheme={'green'}>
-            {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
+          <Tag variant='outline' colorScheme={'pink'}>
+            {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
           </Tag>
         ),
         otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
@@ -61,7 +61,7 @@ const mapSuccessData = (previewInfo) => {
       },
     },
     jobs: {
-      exps: EVENT_EXP_TITLE[_.get(previewInfo, 'exps', 0)],
+      exps: EventExp.toString(_.get(previewInfo, 'exps', 0) + ''),
       strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
       wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
