@@ -38,6 +38,7 @@ import LoginPopup from '~/components/LoginPopup';
 import { AuthContext } from '~/providers/auth';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
 import { get } from 'lodash';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -66,7 +67,7 @@ const RegisterInfo = () => {
   const member = data?.member;
   const note = data?.note;
   const leaderId = data?.leaderId;
-  const moveType = data?.moveType;
+  const moveType = data?.moveType?.toString();
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
@@ -74,13 +75,16 @@ const RegisterInfo = () => {
   const department = get(data, 'departmentDetail.department.name');
   const roles = get(data, 'departmentDetail.roles', []);
   const roles1 = roles.find((item) => item.role === 1);
-  console.log('🚀 ~ file: index.tsx:77 ~ RegisterInfo ~ roles1', roles1);
 
-  const clothingSize: any = data?.clothingSize;
-
+  const carBookingType = data?.carBookingType?.toString();
+  const clothingSize = data?.clothingSize;
+  const certificateRegistry = data?.certificateRegistry;
+  const companyNameEN = data?.companyNameEN;
+  const companyNameVIE = data?.companyNameVIE;
   const assignedDepartment = data.departmentDetail;
   const assignedArea = data.area;
   const assignedGroup = data.group;
+
   const permanent = [
     [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
@@ -359,6 +363,29 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
+                      <Text as='b'>Trưởng Ban </Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {roles1?.fullName || 'Đang cập nhật'}
+                        </Tag>
+                        {!roles1?.phoneNumber && (
+                          <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                            <TagLeftIcon boxSize='12px' as={MdPhone} />
+                            {roles1?.phoneNumber || 'Đang cập nhật'}
+                          </Tag>
+                        )}
+                      </Box>
+                    </Box>
+
+                    <Box>
+                      <Text as='b'>Ban đã được phân </Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {department || 'Đang cập nhật'}
+                        </Tag>
+                      </Box>
+                    </Box>
+                    <Box>
                       <Text as='b'>Kinh nghiệm làm việc tại các ban</Text>
                       <Box mt={2}>
                         {expDepartments.map((ele, idx) => (
@@ -378,22 +405,6 @@ const RegisterInfo = () => {
                         )}
                       </Box>
                     </Box>
-                    <Box>
-                      <Text as='b'>Ban đã được phân:</Text>
-                      <Box mt={2}>
-                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
-                          {department}
-                        </Tag>
-                      </Box>
-                    </Box>
-
-                    <Box>
-                      <Text as='b'>Trưởng Ban:</Text> {roles1?.fullName}
-                      <Box>
-                        {' '}
-                        <Text as='b'>Điện Thoại:</Text> {roles1?.phoneNumber}
-                      </Box>
-                    </Box>
                   </Stack>
                 </TabPanel>
 
@@ -408,14 +419,24 @@ const RegisterInfo = () => {
                     </Box>
                     <Box>
                       <Text as='b'>Size áo:</Text>
-                      <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
-                        {ClothingSize[clothingSize]}
-                      </Tag>
+                      {ClothingSize[clothingSize] && (
+                        <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                          {ClothingSize[clothingSize]}
+                        </Tag>
+                      )}
                     </Box>
                   </Stack>
                 </TabPanel>
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
+                    <Box>
+                      <Text as='b'>Hình thức di chuyển</Text>
+                      <Box mt='2'>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {MoveType.toString(moveType)}
+                        </Tag>
+                      </Box>
+                    </Box>
                     <Box>
                       <HStack>
                         <MdLocationCity />
@@ -466,6 +487,18 @@ const RegisterInfo = () => {
                         <Text>{schedule && schedule?.return_address}</Text>
                       </Box>
                     )}
+
+                    {moveType == MoveType.ByPlane && (
+                      <Box>
+                        <HStack>
+                          <MdDepartureBoard />
+                          <Text as='b'>Đăng ký ô tô</Text>
+                        </HStack>
+                        <Tag mt={2} mr={2} mb={1} colorScheme={'green'}>
+                          {CarBookingType.toString(carBookingType)}
+                        </Tag>
+                      </Box>
+                    )}
                   </Stack>
                 </TabPanel>
                 <TabPanel px={0}>
@@ -480,7 +513,7 @@ const RegisterInfo = () => {
                               groupMembers.map((ele, idx) => (
                                 <Tr key={idx}>
                                   <Td py={1} px={0}>
-                                    <Text>{ele.fullName}</Text>
+                                    <Text>{ele?.religiousName || ele?.fullName}</Text>
                                   </Td>
                                   <Td>
                                     {ele.role == 1 && (
@@ -510,6 +543,29 @@ const RegisterInfo = () => {
                         </Table>
                       </TableContainer>
                     </Box>
+
+                    <Box>
+                      <Text as='b'>Lấy giấy chứng nhận</Text>
+                      {certificateRegistry ? (
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'green'}>
+                            Bằng Tiếng Anh: {companyNameEN}
+                          </Tag>
+                          <Box mt='2'>
+                            <Tag mr={2} mb={1} colorScheme={'green'}>
+                              Bằng Tiếng Việt: {companyNameVIE}
+                            </Tag>
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'pink'}>
+                            Không
+                          </Tag>
+                        </Box>
+                      )}
+                    </Box>
+
                     <Box>
                       <Text as='b'>Ghi chú:</Text>
                       <Text>{note}</Text>
