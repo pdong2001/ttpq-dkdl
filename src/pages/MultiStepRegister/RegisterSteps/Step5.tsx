@@ -36,7 +36,7 @@ function Step5(props: StepProps) {
       certificateRegistry:
         certificateRegistryInStore ||
         CertificateRegistry.toEnum(editCertificateRegistry) ||
-        CertificateRegistry.NO,
+        CertificateRegistry.YES,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
       companyNameEN: companyNameENInStore || editCompanyNameEN,
     },
