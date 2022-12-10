@@ -59,6 +59,7 @@ const RegisterInfo = () => {
   const { data } = useAppSelector((state) => state.registerInfo);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(
       getRegisterInfo({
         method: 'get',
@@ -185,6 +186,7 @@ const RegisterInfo = () => {
   }
 
   const groupMembers = groupData?.data || [];
+  const isOwner = authMember?.register?.id === data.id;
 
   const handleUpdateInfo = () => {
     if (isOwner) {
@@ -193,7 +195,6 @@ const RegisterInfo = () => {
       onOpenLoginModal();
     }
   };
-  const isOwner = authMember?.register?.id === data.id;
   ``;
   return (
     <Box
@@ -295,11 +296,9 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                {isOwner && (
-                  <Button onClick={handleUpdateInfo} size='sm'>
-                    Cập nhật
-                  </Button>
-                )}
+                <Button onClick={handleUpdateInfo} size='sm'>
+                  Cập nhật
+                </Button>
                 <LoginPopup
                   title={'Xác thực thông tin'}
                   isOpen={isOpenLoginModal}

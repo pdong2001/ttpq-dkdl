@@ -34,7 +34,7 @@ function Step5(props: StepProps) {
     enableReinitialize: true,
     initialValues: {
       certificateRegistry:
-        certificateRegistryInStore ||
+        CertificateRegistry.toEnum(certificateRegistryInStore) ||
         CertificateRegistry.toEnum(editCertificateRegistry) ||
         CertificateRegistry.YES,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
@@ -46,7 +46,7 @@ function Step5(props: StepProps) {
       const fillData = {
         register: {
           ...previousStepData,
-          certificateRegistry,
+          certificateRegistry: CertificateRegistry.toBoolean(certificateRegistry),
           companyNameVIE,
           companyNameEN,
         },
