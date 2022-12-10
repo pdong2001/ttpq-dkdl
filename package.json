@@ -76,10 +76,5 @@
   "staticFiles": {
     "staticPath": "public",
     "watcherGlob": "**"
-  },
-  "targets": {
-    "main": {
-      "includeNodeModules": true
-    }
   }
 }
