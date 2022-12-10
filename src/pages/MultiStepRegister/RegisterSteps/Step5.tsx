@@ -34,8 +34,8 @@ function Step5(props: StepProps) {
     enableReinitialize: true,
     initialValues: {
       certificateRegistry:
-        (certificateRegistryInStore && certificateRegistryInStore + '') ||
-        (editCertificateRegistry && editCertificateRegistry + '') ||
+        certificateRegistryInStore ||
+        CertificateRegistry.toEnum(editCertificateRegistry) ||
         CertificateRegistry.NO,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
       companyNameEN: companyNameENInStore || editCompanyNameEN,
