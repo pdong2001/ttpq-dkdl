@@ -13,7 +13,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
@@ -33,11 +33,12 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { EVENT_EXP_TITLE } from '~/configs/register';
 import LoginPopup from '~/components/LoginPopup';
 import { AuthContext } from '~/providers/auth';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
 import { get } from 'lodash';
+import { PositionType } from '~/dtos/Enums/PositionType.enum';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -73,14 +74,11 @@ const RegisterInfo = () => {
   const wishDepartment = data?.wishDepartment;
   const department = get(data, 'departmentDetail.department.name');
   const roles = get(data, 'departmentDetail.roles', []);
-  const roles1 = roles.find((item) => item.role === 1);
-  console.log('🚀 ~ file: index.tsx:77 ~ RegisterInfo ~ roles1', roles1);
+  const departmentManager = roles.find((item) => item.role === PositionType.Manager);
+  console.log('🚀 ~ file: index.tsx:77 ~ RegisterInfo ~ departmentManager', departmentManager);
 
   const clothingSize: any = data?.clothingSize;
 
-  const assignedDepartment = data.departmentDetail;
-  const assignedArea = data.area;
-  const assignedGroup = data.group;
   const permanent = [
     [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
@@ -388,10 +386,10 @@ const RegisterInfo = () => {
                     </Box>
 
                     <Box>
-                      <Text as='b'>Trưởng Ban:</Text> {roles1?.fullName}
+                      <Text as='b'>Trưởng Ban:</Text>{' '}
+                      {departmentManager?.religiousName || departmentManager?.fullName}
                       <Box>
-                        {' '}
-                        <Text as='b'>Điện Thoại:</Text> {roles1?.phoneNumber}
+                        <Text as='b'>Điện Thoại:</Text> {departmentManager?.phoneNumber}
                       </Box>
                     </Box>
                   </Stack>
@@ -400,7 +398,7 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
+                      <Text as='b'>Số lần đã về chùa:</Text> {EventExp.toString(member?.exps + '')}
                     </Box>
                     <Box>
                       <Text as='b'>Nơi nhận thẻ:</Text>{' '}
