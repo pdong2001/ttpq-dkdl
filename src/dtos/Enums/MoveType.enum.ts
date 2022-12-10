@@ -6,16 +6,26 @@ export enum MoveType {
 }
 
 export namespace MoveType {
-  export function toString(moveType: string) {
-    switch (moveType) {
+  export function toString(type: string): string {
+    switch (type) {
       case MoveType.WithCTN:
-        return 'Đi cùng xe CTN';
+        return 'Đi với CTN';
       case MoveType.ByPlane:
-        return 'Máy bay';
+        return 'Máy Bay';
       case MoveType.Other:
-        return 'Tự túc';
+        return 'Tự Túc';
       default:
         return '';
     }
+  }
+  export function getList() {
+    const types = Object.keys(MoveType).map((item) => item as MoveType);
+    const result = types.map((i) => {
+      return {
+        value: i,
+        label: toString(i),
+      };
+    });
+    return result;
   }
 }
