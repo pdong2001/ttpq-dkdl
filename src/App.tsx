@@ -15,7 +15,7 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    if (shortUri) {
+    if (shortUri && shortUri !== '1') {
       dispatch(getRegisterPage({ shortUri }))
         .then(unwrapResult)
         .then(({ data }) => {

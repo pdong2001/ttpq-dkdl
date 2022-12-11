@@ -1,6 +1,9 @@
+import axios from 'axios';
 import { stat } from 'fs';
+import { get } from 'lodash';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import API from '~/apis/constants';
 import LoginPopup from '~/components/LoginPopup';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import {
@@ -9,6 +12,7 @@ import {
   getLoggedInRegister,
   logout as logoutMember,
 } from '~/slices/memberAuth';
+import { formatUrl } from '~/utils/functions';
 import { MessageContext } from '../message';
 
 export type AuthValue = {
@@ -28,7 +32,10 @@ export const AuthContext = createContext<AuthValue>({
 
 const { Provider } = AuthContext;
 
+export const arrEventId = ['1'];
+
 const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const { shortUri } = useParams<any>();
   const [openLogin, setOpenLogin] = useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -52,6 +59,45 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setMember(memberLoggedIn);
   }, [memberLoggedIn]);
+
+  useEffect(() => {
+    // check arrived
+    if (arrEventId.includes(shortUri)) {
+      if (!memberLoggedIn?.userToken) {
+        login();
+      } else {
+        dispatch(
+          getLoggedInRegister({
+            eventId: shortUri || '',
+          }),
+        ).then((item) => {
+          const id = get(item, 'payload.data.id');
+          if (id) {
+            console.log('🚀 ~ file: index.tsx:76 ~ ).then ~ id', id);
+            axios
+              .post(
+                process.env.TTPQ_BASE_URL + formatUrl(API.POST_ARRIVED, { eventId: id }),
+                {},
+                {
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    Authorization: 'Bearer ' + memberLoggedIn?.userToken,
+                  },
+                },
+              )
+              .then(({ data }) => {
+                console.log(data);
+              });
+            //check api
+            history.push(`SitbWFs/register-info/${id}`);
+          }
+        });
+      }
+    }
+  }, []);
+
+  const loadCheckArrived = async () => {};
 
   const login = () => {
     setOpenLogin(true);
