@@ -34,26 +34,37 @@ function Step5(props: StepProps) {
     enableReinitialize: true,
     initialValues: {
       certificateRegistry:
-        CertificateRegistry.toEnum(certificateRegistryInStore) ||
-        CertificateRegistry.toEnum(editCertificateRegistry) ||
+        (certificateRegistryInStore != undefined &&
+          CertificateRegistry.toEnum(certificateRegistryInStore)) ||
+        (editCertificateRegistry != undefined &&
+          CertificateRegistry.toEnum(editCertificateRegistry)) ||
         CertificateRegistry.YES,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
       companyNameEN: companyNameENInStore || editCompanyNameEN,
     },
     validationSchema: step5Schema,
     onSubmit: (values) => {
-      const { certificateRegistry, companyNameVIE, companyNameEN } = values;
+      let { certificateRegistry, companyNameVIE, companyNameEN } = values;
+
+      if (certificateRegistry == CertificateRegistry.NO) {
+        companyNameVIE = '';
+        companyNameEN = '';
+      }
+
+      const certRegBool = CertificateRegistry.toBoolean(certificateRegistry);
       const fillData = {
         register: {
           ...previousStepData,
-          certificateRegistry: CertificateRegistry.toBoolean(certificateRegistry),
+          certificateRegistry: certRegBool,
           companyNameVIE,
           companyNameEN,
         },
       };
       dispatch(fillForm(fillData));
+
       dispatch(
         fillDataPreview({
+          certificateRegistry: certRegBool,
           companyNameVIE,
           companyNameEN,
         }),
@@ -63,6 +74,8 @@ function Step5(props: StepProps) {
   });
 
   const { certificateRegistry } = formik.values;
+
+  console.log('___', formik.values);
 
   return (
     <FadeInUp>

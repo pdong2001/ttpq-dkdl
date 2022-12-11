@@ -11,4 +11,7 @@ export namespace CertificateRegistry {
   export function toEnum(value: boolean) {
     return value ? CertificateRegistry.YES : CertificateRegistry.NO;
   }
+  export function toString(value: boolean): string {
+    return value ? 'Có' : 'Không';
+  }
 }

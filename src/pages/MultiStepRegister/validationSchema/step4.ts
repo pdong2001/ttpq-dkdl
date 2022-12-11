@@ -27,6 +27,7 @@ const step4Schema = Yup.object({
   wishDepartmentId: Yup.string().required('Xin hãy chọn ban muốn tham gia'),
   // receiveCardAddressId: Yup.string().required('Xin hãy chọn nơi muốn nhận thẻ'),
   // avatarPath: Yup.string().required('Xin hãy chọn ảnh để làm thẻ công quả'),
+  clothingSize: Yup.string().required('Xin hãy chọn size áo'),
 });
 
 export default step4Schema;
