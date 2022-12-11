@@ -11,9 +11,10 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Link,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
@@ -33,9 +34,13 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { EVENT_EXP_TITLE } from '~/configs/register';
 import LoginPopup from '~/components/LoginPopup';
 import { AuthContext } from '~/providers/auth';
+import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+import { get } from 'lodash';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
+import { PositionType } from '~/dtos/Enums/PositionType.enum';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -54,6 +59,7 @@ const RegisterInfo = () => {
   const { data } = useAppSelector((state) => state.registerInfo);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(
       getRegisterInfo({
         method: 'get',
@@ -64,14 +70,24 @@ const RegisterInfo = () => {
   const member = data?.member;
   const note = data?.note;
   const leaderId = data?.leaderId;
-  const moveType = data?.moveType;
+  const moveType = data?.moveType?.toString();
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
+  const department = get(data, 'departmentDetail.department.name');
+  const roles = get(data, 'departmentDetail.roles', []);
+  const roles1 = roles.find((item) => item.role === 1);
+
+  const carBookingType = data?.carBookingType?.toString();
+  const clothingSize = data?.clothingSize;
+  const certificateRegistry = data?.certificateRegistry;
+  const companyNameEN = data?.companyNameEN;
+  const companyNameVIE = data?.companyNameVIE;
   const assignedDepartment = data.departmentDetail;
   const assignedArea = data.area;
   const assignedGroup = data.group;
+
   const permanent = [
     [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
     member?.permanentDistrict?.name,
@@ -152,7 +168,7 @@ const RegisterInfo = () => {
   const startAddress = data.startTime?.address;
   const leaveAddress = data.leaveTime?.address;
   const contactStatus = data.contactStatus?.toString();
-  if (moveType == MoveType.HCM) {
+  if (moveType == MoveType.WithCTN) {
     schedule.departure_address =
       [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
     schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
@@ -163,13 +179,14 @@ const RegisterInfo = () => {
     schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
     schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
-    if (moveType == MoveType.Other) {
+    if (moveType == MoveType.ByPlane) {
       schedule.departure_flight_code = data.startPlaneCode || '';
       schedule.return_flight_code = data.returnPlaneCode || '';
     }
   }
 
   const groupMembers = groupData?.data || [];
+  const isOwner = authMember?.register?.id === data.id;
 
   const handleUpdateInfo = () => {
     if (isOwner) {
@@ -178,7 +195,6 @@ const RegisterInfo = () => {
       onOpenLoginModal();
     }
   };
-  const isOwner = authMember?.register?.id === data.id;
   ``;
   return (
     <Box
@@ -280,11 +296,9 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                {isOwner && (
-                  <Button onClick={handleUpdateInfo} size='sm'>
-                    Cập nhật
-                  </Button>
-                )}
+                <Button onClick={handleUpdateInfo} size='sm'>
+                  Cập nhật
+                </Button>
                 <LoginPopup
                   title={'Xác thực thông tin'}
                   isOpen={isOpenLoginModal}
@@ -340,6 +354,7 @@ const RegisterInfo = () => {
 
             <Tabs isFitted variant='enclosed'>
               <TabList>
+                <Tab>Ban</Tab>
                 <Tab>Công quả</Tab>
                 <Tab>Lịch trình</Tab>
                 <Tab>Khác</Tab>
@@ -349,7 +364,29 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
+                      <Text as='b'>Trưởng Ban </Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {roles1?.religiousName || roles1?.fullName || 'Đang cập nhật'}
+                        </Tag>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          <TagLeftIcon boxSize='12px' as={MdPhone} />
+                          {roles1?.phoneNumber ? (
+                            <Link href={`tel:${roles1?.phoneNumber}`}>{roles1?.phoneNumber}</Link>
+                          ) : (
+                            'Đang cập nhật'
+                          )}
+                        </Tag>
+                      </Box>
+                    </Box>
+
+                    <Box>
+                      <Text as='b'>Ban đã được phân </Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {department || 'Đang cập nhật'}
+                        </Tag>
+                      </Box>
                     </Box>
                     <Box>
                       <Text as='b'>Kinh nghiệm làm việc tại các ban</Text>
@@ -371,23 +408,45 @@ const RegisterInfo = () => {
                         )}
                       </Box>
                     </Box>
-                    <Box>
-                      <Text as='b'>Nơi nhận thẻ:</Text>{' '}
-                      {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
-                    </Box>
                   </Stack>
-                  <Stack>
-                    <Box>
-                      <Text as='b'>Ban đã được phân:</Text>
+                </TabPanel>
 
-                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
-                        {assignedDepartment.}
-                      </Tag> */}
+                <TabPanel px={0}>
+                  <Stack spacing='30px'>
+                    <Box>
+                      <Text as='b'>Số lần đã về chùa</Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {EventExp.toString(member?.exps + '')}
+                        </Tag>
+                      </Box>
                     </Box>
+                    {receiveCardAddress && (
+                      <Box mt='2'>
+                        <Text as='b'>Nơi nhận thẻ</Text>{' '}
+                        {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
+                      </Box>
+                    )}
+                    {clothingSize && (
+                      <Box mt='2'>
+                        <Text as='b'>Size áo</Text>{' '}
+                        <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                          {ClothingSize.toString(clothingSize)}
+                        </Tag>
+                      </Box>
+                    )}
                   </Stack>
                 </TabPanel>
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
+                    <Box>
+                      <Text as='b'>Hình thức di chuyển</Text>
+                      <Box mt='2'>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {MoveType.toString(moveType)}
+                        </Tag>
+                      </Box>
+                    </Box>
                     <Box>
                       <HStack>
                         <MdLocationCity />
@@ -404,11 +463,13 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'blue'}>
                           {schedule && schedule?.departure_time}
                         </Tag>
-                        {moveType == MoveType.Other && schedule && schedule.departure_flight_code && (
-                          <Tag mr={2} mb={1} colorScheme={'blue'}>
-                            Mã chuyến bay: {schedule?.departure_flight_code}
-                          </Tag>
-                        )}
+                        {moveType == MoveType.ByPlane &&
+                          schedule &&
+                          schedule.departure_flight_code && (
+                            <Tag mr={2} mb={1} colorScheme={'blue'}>
+                              Mã chuyến bay: {schedule?.departure_flight_code}
+                            </Tag>
+                          )}
                       </Box>
                     </Box>
                     <Box>
@@ -420,20 +481,34 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
                           {schedule && schedule?.return_time}
                         </Tag>
-                        {moveType == MoveType.Other && schedule && schedule.return_flight_code && (
+                        {moveType == MoveType.ByPlane && schedule && schedule.return_flight_code && (
                           <Tag mr={2} mb={1} colorScheme={'pink'}>
                             Mã chuyến bay: {schedule?.return_flight_code}
                           </Tag>
                         )}
                       </Box>
                     </Box>
-                    {moveType == MoveType.HCM && (
+                    {moveType == MoveType.WithCTN && (
                       <Box>
                         <HStack>
                           <MdLocationCity />
                           <Text as='b'>Nơi trở về</Text>
                         </HStack>
                         <Text>{schedule && schedule?.return_address}</Text>
+                      </Box>
+                    )}
+
+                    {moveType == MoveType.ByPlane && (
+                      <Box>
+                        <HStack>
+                          <MdDepartureBoard />
+                          <Text as='b'>Đăng ký ô tô</Text>
+                        </HStack>
+                        {carBookingType && (
+                          <Tag mt={2} mr={2} mb={1} colorScheme={'green'}>
+                            {CarBookingType.toString(carBookingType)}
+                          </Tag>
+                        )}
                       </Box>
                     )}
                   </Stack>
@@ -450,7 +525,7 @@ const RegisterInfo = () => {
                               groupMembers.map((ele, idx) => (
                                 <Tr key={idx}>
                                   <Td py={1} px={0}>
-                                    <Text>{ele.fullName}</Text>
+                                    <Text>{ele?.religiousName || ele?.fullName}</Text>
                                   </Td>
                                   <Td>
                                     {ele.role == 1 && (
@@ -480,6 +555,29 @@ const RegisterInfo = () => {
                         </Table>
                       </TableContainer>
                     </Box>
+
+                    <Box>
+                      <Text as='b'>Lấy giấy chứng nhận</Text>
+                      {certificateRegistry ? (
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'green'}>
+                            Bằng Tiếng Anh: {companyNameEN}
+                          </Tag>
+                          <Box mt='2'>
+                            <Tag mr={2} mb={1} colorScheme={'green'}>
+                              Bằng Tiếng Việt: {companyNameVIE}
+                            </Tag>
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'pink'}>
+                            Không
+                          </Tag>
+                        </Box>
+                      )}
+                    </Box>
+
                     <Box>
                       <Text as='b'>Ghi chú:</Text>
                       <Text>{note}</Text>

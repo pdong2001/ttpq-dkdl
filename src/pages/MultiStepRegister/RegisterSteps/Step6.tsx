@@ -51,20 +51,12 @@ const Step6 = (props: StepProps) => {
   } = registerInfo;
 
   const { register: registerData } = formData;
-  // const { certificateRegistry } = registerData || {};
-  const submitData = {
-    ...formData,
-    register: {
-      ...registerData,
-      // certificateRegistry: !!certificateRegistry,
-    },
-  };
 
   const handleRegister = () => {
     if (isAddNew) {
       dispatch(
         register({
-          data: submitData,
+          data: formData,
         }),
       )
         .then(unwrapResult)
@@ -79,11 +71,10 @@ const Step6 = (props: StepProps) => {
         updateRegister({
           url: formatUrl(API.UPDATE_REGISTER, { id }),
           data: {
-            memberId,
-            leaderId,
-            moveType,
+            // leaderId,
+            // moveType,
             ...registerData,
-            // certificateRegistry: !!certificateRegistry,
+            // memberId,
           },
         }),
       );
@@ -107,7 +98,10 @@ const Step6 = (props: StepProps) => {
             return Promise.reject(member);
           }
           messageService.add({ title: 'Cập nhật thành công', status: 'success' });
-          history.replace(`/${shortUri}/register-info/${register?.id}`);
+          setTimeout(() => {
+            history.replace(`/${shortUri}/register-info/${register?.id}`);
+            history.go(0);
+          }, 1000);
         })
         .catch((e) => {
           messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
@@ -197,6 +191,7 @@ const Step6 = (props: StepProps) => {
           history.go(0);
         }}
         title='Đăng ký thành công'
+        isSuccessPopup
       />
     </FadeInUp>
   );

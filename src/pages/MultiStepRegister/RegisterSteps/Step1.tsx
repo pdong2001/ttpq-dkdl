@@ -17,6 +17,8 @@ const Step1 = (props: StepProps) => {
   const { path } = useRouteMatch();
   const isHomePage = path === HOME_WITH_SHORT_URI;
 
+  const { event } = useAppSelector((state) => state.registerPage.data);
+
   const {
     fullName = '',
     phoneNumber,
@@ -88,7 +90,7 @@ const Step1 = (props: StepProps) => {
   // };
   // const { registerType: localRegisterType } = formik.values;
 
-  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2023';
+  const greatCeremony = event?.name || '';
   // const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
   return (

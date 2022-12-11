@@ -33,26 +33,24 @@ function Step5(props: StepProps) {
   console.log(
     'certificateRegistryInStore',
     certificateRegistryInStore,
-    CertificateRegistry.toEnumString(certificateRegistryInStore),
+    CertificateRegistry.toEnum(certificateRegistryInStore),
   );
   console.log(
     'editCertificateRegistry',
     editCertificateRegistry,
-    CertificateRegistry.toEnumString(editCertificateRegistry),
+    CertificateRegistry.toEnum(editCertificateRegistry),
   );
   console.log(
-    (certificateRegistryInStore && CertificateRegistry.toEnumString(certificateRegistryInStore)) ||
-      (editCertificateRegistry && CertificateRegistry.toEnumString(editCertificateRegistry)),
+    CertificateRegistry.toEnum(certificateRegistryInStore) ||
+      CertificateRegistry.toEnum(editCertificateRegistry),
   );
 
-  debugger;
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       certificateRegistry:
-        (certificateRegistryInStore &&
-          CertificateRegistry.toEnumString(certificateRegistryInStore)) ||
-        (editCertificateRegistry && CertificateRegistry.toEnumString(editCertificateRegistry)) ||
+        CertificateRegistry.toEnum(certificateRegistryInStore) ||
+        CertificateRegistry.toEnum(editCertificateRegistry) ||
         CertificateRegistry.YES,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
       companyNameEN: companyNameENInStore || editCompanyNameEN,
@@ -90,8 +88,6 @@ function Step5(props: StepProps) {
   });
 
   const { certificateRegistry } = formik.values;
-
-  console.log(certificateRegistry);
 
   console.log('___', formik.values);
 

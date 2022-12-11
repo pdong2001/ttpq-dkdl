@@ -194,9 +194,11 @@ const Step4 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <Radios name='exps' label='Số lần về chùa công quả'>
-                <Radio value={EventExp.ChuaTungThamGia}>Lần đầu tiên</Radio>
-                <Radio value={EventExp.Duoi3Lan}>Dưới 3 lần</Radio>
-                <Radio value={EventExp.Tren3Lan}>Trên 3 lần</Radio>
+                <Radio value={EventExp.ChuaTungThamGia}>
+                  {EventExp.toString(EventExp.ChuaTungThamGia)}
+                </Radio>
+                <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
+                <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
               <MultiSelect
                 name='strongPointIds'
@@ -222,6 +224,7 @@ const Step4 = (props: StepProps) => {
               <Select
                 name='receiveCardAddressId'
                 data={receiveCardLocationList}
+                // labelField='address'
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
               />

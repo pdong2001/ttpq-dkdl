@@ -66,6 +66,7 @@ export default function NavBar() {
   ];
 
   const { login, logout, member } = useContext(AuthContext);
+  const { register } = member || {};
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
   const [color, setColor] = useState('blue.500');
@@ -132,7 +133,7 @@ export default function NavBar() {
                 <MenuList color={'blue.500'}>
                   <MenuItem onClick={showQR}>
                     <HStack spacing={1}>
-                      {registerPage.eventId ? (
+                      {register ? (
                         <>
                           <BiQr /> <span>Mã QR cá nhân</span>
                         </>
@@ -143,7 +144,7 @@ export default function NavBar() {
                       )}
                     </HStack>
                   </MenuItem>
-                  {registerPage.eventId && (
+                  {register && (
                     <>
                       <MenuItem
                         onClick={() => {
@@ -192,8 +193,8 @@ export default function NavBar() {
           onClose={() => {
             setOpenQR(false);
           }}
-          title={`${registerPage.eventId ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
-          isCentered={!registerPage.eventId}
+          title={`${register ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
+          isCentered={!register}
         />
       </Box>
     </>

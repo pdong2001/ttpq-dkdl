@@ -88,7 +88,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressDistrict,
       temporaryAddressWard,
 
-      organizationStructureId: ctnId == 0 ? organizationStructureId : ctnId,
+      organizationStructureId: organizationStructureId ? organizationStructureId : ctnId,
 
       registerType:
         register?.registerType ||
@@ -113,7 +113,7 @@ const Step2 = (props: StepProps) => {
         leaderId = '';
       }
       const { year, month, date } = dob || {};
-      const dateOfBirth = [date, month, year].join('-');
+      const dateOfBirth = [year, month, date].join('-');
       dispatch(
         fillForm({
           gender,
@@ -194,14 +194,14 @@ const Step2 = (props: StepProps) => {
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
-                  {ctnId == 0 && (
+                  <Box display={ctnId ? 'none' : 'block'}>
                     <CultivationPlace
                       name='organizationStructureId'
                       setDataPreview={setDataPreview}
                       className='organizationStructureId'
                       label='Địa điểm tu tập'
                     />
-                  )}
+                  </Box>
                 </Stack>
                 <Stack spacing={3}>
                   <FormInput name='email' label='Email' isRequired />
