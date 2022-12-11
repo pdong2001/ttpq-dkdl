@@ -146,6 +146,7 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
+
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
 

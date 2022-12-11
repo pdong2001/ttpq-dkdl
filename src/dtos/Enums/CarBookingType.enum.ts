@@ -1,10 +1,11 @@
-/* eslint-disable @typescript-eslint/no-namespace */
+// /* eslint-disable @typescript-eslint/no-namespace */
 export enum CarBookingType {
   Go = '0',
   Return = '1',
   Both = '2',
   ByYourSelf = '3',
 }
+
 export namespace CarBookingType {
   export function toString(type: string): string {
     switch (type) {

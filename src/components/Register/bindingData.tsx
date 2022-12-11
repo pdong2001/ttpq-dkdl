@@ -1,6 +1,14 @@
 import { Tag } from '@chakra-ui/react';
 import _ from 'lodash';
 import moment from 'moment';
+import {
+  EVENT_EXP_TITLE,
+  MOVE_TYPE_TITLE,
+  CAR_BOOKING_TYPE_TITLE,
+  CLOTHING_SIZE_TITLE,
+  CERTIFICATE_REGISTRY_TITLE,
+} from '~/configs/register';
+import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
@@ -39,7 +47,15 @@ const mapSuccessData = (previewInfo) => {
         ),
         otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
         otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
+        startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
         otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+        returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
+        // thêm field
+        carBookingType: (
+          <Tag variant='outline' colorScheme={'pink'}>
+            {CAR_BOOKING_TYPE_TITLE[_.get(previewInfo, 'carBookingType', '')]}
+          </Tag>
+        ),
       },
       [MoveType.Other]: {
         moveType: (
@@ -49,15 +65,7 @@ const mapSuccessData = (previewInfo) => {
         ),
         otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
         otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
-        startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
         otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
-        returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
-        // thêm field
-        // transitType: (
-        //   <Tag variant='outline' colorScheme={'green'}>
-        //     {TRANSIT_TYPE_TITLE[_.get(previewInfo, 'transitType', '')]}
-        //   </Tag>
-        // ),
       },
     },
     jobs: {
@@ -66,7 +74,26 @@ const mapSuccessData = (previewInfo) => {
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
       wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
       receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
+      clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
       note: _.get(previewInfo, 'note', ''),
+    },
+    certRegistry: {
+      [CertificateRegistry.NO]: {
+        certificateRegistry: (
+          <Tag variant='outline' colorScheme={'pink'}>
+            {CertificateRegistry.toString(_.get(previewInfo, 'certificateRegistry'))}
+          </Tag>
+        ),
+      },
+      [CertificateRegistry.YES]: {
+        certificateRegistry: (
+          <Tag variant='outline' colorScheme={'green'}>
+            {CertificateRegistry.toString(_.get(previewInfo, 'certificateRegistry'))}
+          </Tag>
+        ),
+        companyNameVIE: _.get(previewInfo, 'companyNameVIE', ''),
+        companyNameEN: _.get(previewInfo, 'companyNameEN', ''),
+      },
     },
     avatar: _.get(previewInfo, 'avatarPath', ''),
     fullName: _.get(previewInfo, 'fullName', ''),
