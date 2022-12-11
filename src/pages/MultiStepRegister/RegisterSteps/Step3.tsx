@@ -92,7 +92,7 @@ const Step3 = (props: StepProps) => {
       moveType:
         moveTypeInStore ||
         (editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.WithCTN : MoveType.Other),
+        (hasStartAddress ? MoveType.WithCTN : MoveType.ByPlane),
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
@@ -147,7 +147,6 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
-  console.log(formik.errors);
 
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId, leaveAddressId } = formik.values;
@@ -272,11 +271,11 @@ const Step3 = (props: StepProps) => {
                         name='carBookingType'
                         isRequired
                       >
+                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
                         <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
                         <Radio value={CarBookingType.Return}>
                           Chiều về (Từ chùa ra Tân Sơn Nhất)
                         </Radio>
-                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
                         <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
                       </Radios>
                     </>

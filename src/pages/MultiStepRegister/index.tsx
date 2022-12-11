@@ -25,7 +25,6 @@ const registerSteps = [Step1, Step2, Step3, Step4, Step5, Step6];
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(0);
-  console.log('step', step);
 
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();

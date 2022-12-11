@@ -30,30 +30,57 @@ function Step5(props: StepProps) {
     companyNameEN: editCompanyNameEN = '',
   } = useAppSelector((state) => state.registerInfo.data);
 
+  console.log(
+    'certificateRegistryInStore',
+    certificateRegistryInStore,
+    CertificateRegistry.toEnumString(certificateRegistryInStore),
+  );
+  console.log(
+    'editCertificateRegistry',
+    editCertificateRegistry,
+    CertificateRegistry.toEnumString(editCertificateRegistry),
+  );
+  console.log(
+    (certificateRegistryInStore && CertificateRegistry.toEnumString(certificateRegistryInStore)) ||
+      (editCertificateRegistry && CertificateRegistry.toEnumString(editCertificateRegistry)),
+  );
+
+  debugger;
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       certificateRegistry:
-        (certificateRegistryInStore && certificateRegistryInStore + '') ||
-        (editCertificateRegistry && editCertificateRegistry + '') ||
-        CertificateRegistry.NO,
+        (certificateRegistryInStore &&
+          CertificateRegistry.toEnumString(certificateRegistryInStore)) ||
+        (editCertificateRegistry && CertificateRegistry.toEnumString(editCertificateRegistry)) ||
+        CertificateRegistry.YES,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
       companyNameEN: companyNameENInStore || editCompanyNameEN,
     },
     validationSchema: step5Schema,
     onSubmit: (values) => {
-      const { certificateRegistry, companyNameVIE, companyNameEN } = values;
+      let { certificateRegistry, companyNameVIE, companyNameEN } = values;
+
+      if (certificateRegistry == CertificateRegistry.NO) {
+        companyNameVIE = '';
+        companyNameEN = '';
+      }
+
+      const certRegBool = CertificateRegistry.toBoolean(certificateRegistry);
+
       const fillData = {
         register: {
           ...previousStepData,
-          certificateRegistry,
+          certificateRegistry: certRegBool,
           companyNameVIE,
           companyNameEN,
         },
       };
       dispatch(fillForm(fillData));
+
       dispatch(
         fillDataPreview({
+          certificateRegistry: certRegBool,
           companyNameVIE,
           companyNameEN,
         }),
@@ -63,6 +90,8 @@ function Step5(props: StepProps) {
   });
 
   const { certificateRegistry } = formik.values;
+
+  console.log(certificateRegistry);
 
   console.log('___', formik.values);
 

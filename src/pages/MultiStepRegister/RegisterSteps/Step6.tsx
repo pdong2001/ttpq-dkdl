@@ -18,7 +18,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
-import { CalendarIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { CalendarIcon, HamburgerIcon, StarIcon } from '@chakra-ui/icons';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
@@ -27,6 +27,7 @@ import { useContext, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 
 const Step6 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
@@ -50,10 +51,13 @@ const Step6 = (props: StepProps) => {
   } = registerInfo;
 
   const { register: registerData } = formData;
-  const { certificateRegistry } = registerData || {};
+  // const { certificateRegistry } = registerData || {};
   const submitData = {
     ...formData,
-    register: { ...registerData, certificateRegistry: !!certificateRegistry },
+    register: {
+      ...registerData,
+      // certificateRegistry: !!certificateRegistry,
+    },
   };
 
   const handleRegister = () => {
@@ -79,10 +83,11 @@ const Step6 = (props: StepProps) => {
             leaderId,
             moveType,
             ...registerData,
-            certificateRegistry: !!certificateRegistry,
+            // certificateRegistry: !!certificateRegistry,
           },
         }),
       );
+
       const updateMemberInfo = dispatch(
         updateMember({
           url: formatUrl(API.UPDATE_MEMBER, { id: memberId }),
@@ -91,6 +96,7 @@ const Step6 = (props: StepProps) => {
           },
         }),
       );
+
       Promise.all([updateRegisterInfo, updateMemberInfo])
         .then((result) => result.map(unwrapResult))
         .then(([{ data: register, code: registerCode }, { data: member, code: memberCode }]) => {
@@ -108,7 +114,10 @@ const Step6 = (props: StepProps) => {
         });
     }
   };
-  const { infos, schedules, jobs, avatar, fullName } = mapSuccessData(previewInfo);
+
+  const { infos, schedules, jobs, avatar, fullName, certRegistry } = mapSuccessData(previewInfo);
+  console.log(certRegistry);
+
   return (
     <FadeInUp>
       <Stack spacing={4}>
@@ -153,6 +162,19 @@ const Step6 = (props: StepProps) => {
                 </Heading>
               </Alert>
               {TableComponent(jobs, REGISTER_INFO_TITLE)}
+            </Box>
+            <Box>
+              <Alert status='success'>
+                <StarIcon />
+                <Heading p={2} as='h5' size='md'>
+                  Chứng nhận tình nguyện viên
+                </Heading>
+              </Alert>
+              {/* {TableComponent(
+                _.get(certRegistry, _.get(previewInfo, 'certificateRegistry', '')),
+                REGISTER_INFO_TITLE,
+              )} */}
+              {TableComponent(certRegistry, REGISTER_INFO_TITLE)}
             </Box>
             {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
           </Box>
