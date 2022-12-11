@@ -68,10 +68,10 @@ const REGISTER_INFO_TITLE = {
   receiveCardAddressId: 'Nơi nhận thẻ',
   clothingSize: 'Size áo',
   note: 'Ghi chú',
-  // cert registry
-  certificateRegistry: 'Nhận giấy chứng nhận',
-  companyNameVIE: 'Trường/Nơi công tác',
-  // companyNameEN: 'Trường/Nơi công tác',
+  // certificate registry
+  certificateRegistry: 'Lấy giấy chứng nhận',
+  companyNameVIE: 'Bằng tiếng Việt',
+  companyNameEN: 'Bằng tiếng Anh',
 };
 
 export {

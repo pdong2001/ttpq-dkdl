@@ -78,40 +78,22 @@ const mapSuccessData = (previewInfo) => {
       note: _.get(previewInfo, 'note', ''),
     },
     certRegistry: {
-      // [CertificateRegistry.YES]: {
-      //   certificateRegistry: (
-      //     <Tag variant='outline' colorScheme={'blue'}>
-      //       {/* {_.get(previewInfo, 'companyNameVIE', '') != '' ? 'Có' : 'Không'} */}
-      //       {CERTIFICATE_REGISTRY_TITLE[_.get(previewInfo, 'certificateRegistry', '')]}
-      //     </Tag>
-      //   ),
-      //   companyNameVIE:
-      //     _.get(previewInfo, 'companyNameVIE', '') != ''
-      //       ? _.get(previewInfo, 'companyNameVIE', '') +
-      //         ' / ' +
-      //         _.get(previewInfo, 'companyNameEN', '')
-      //       : '',
-      // },
-      // [CertificateRegistry.NO]: {
-      //   certificateRegistry: (
-      //     <Tag variant='outline' colorScheme={'pink'}>
-      //       {_.get(previewInfo, 'companyNameVIE', '') != '' ? 'Có' : 'Không'}
-      //       {/* {CERTIFICATE_REGISTRY_TITLE[_.get(previewInfo, 'certificateRegistry', '')]} */}
-      //     </Tag>
-      //   ),
-      // },
-      certificateRegistry: (
-        <Tag variant='outline' colorScheme={'blue'}>
-          {_.get(previewInfo, 'companyNameVIE', '') != '' ? 'Có' : 'Không'}
-        </Tag>
-      ),
-      companyNameVIE:
-        _.get(previewInfo, 'companyNameVIE', '') != ''
-          ? _.get(previewInfo, 'companyNameVIE', '') +
-            ' / ' +
-            _.get(previewInfo, 'companyNameEN', '')
-          : '',
-      // companyNameEN: _.get(previewInfo, 'companyNameEN', ''),
+      [CertificateRegistry.NO]: {
+        certificateRegistry: (
+          <Tag variant='outline' colorScheme={'pink'}>
+            {CertificateRegistry.toString(_.get(previewInfo, 'certificateRegistry'))}
+          </Tag>
+        ),
+      },
+      [CertificateRegistry.YES]: {
+        certificateRegistry: (
+          <Tag variant='outline' colorScheme={'green'}>
+            {CertificateRegistry.toString(_.get(previewInfo, 'certificateRegistry'))}
+          </Tag>
+        ),
+        companyNameVIE: _.get(previewInfo, 'companyNameVIE', ''),
+        companyNameEN: _.get(previewInfo, 'companyNameEN', ''),
+      },
     },
     avatar: _.get(previewInfo, 'avatarPath', ''),
     fullName: _.get(previewInfo, 'fullName', ''),

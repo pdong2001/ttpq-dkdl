@@ -30,27 +30,14 @@ function Step5(props: StepProps) {
     companyNameEN: editCompanyNameEN = '',
   } = useAppSelector((state) => state.registerInfo.data);
 
-  console.log(
-    'certificateRegistryInStore',
-    certificateRegistryInStore,
-    CertificateRegistry.toEnum(certificateRegistryInStore),
-  );
-  console.log(
-    'editCertificateRegistry',
-    editCertificateRegistry,
-    CertificateRegistry.toEnum(editCertificateRegistry),
-  );
-  console.log(
-    CertificateRegistry.toEnum(certificateRegistryInStore) ||
-      CertificateRegistry.toEnum(editCertificateRegistry),
-  );
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       certificateRegistry:
-        CertificateRegistry.toEnum(certificateRegistryInStore) ||
-        CertificateRegistry.toEnum(editCertificateRegistry) ||
+        (certificateRegistryInStore != undefined &&
+          CertificateRegistry.toEnum(certificateRegistryInStore)) ||
+        (editCertificateRegistry != undefined &&
+          CertificateRegistry.toEnum(editCertificateRegistry)) ||
         CertificateRegistry.YES,
       companyNameVIE: companyNameVIEInStore || editCompanyNameVIE,
       companyNameEN: companyNameENInStore || editCompanyNameEN,
@@ -65,7 +52,6 @@ function Step5(props: StepProps) {
       }
 
       const certRegBool = CertificateRegistry.toBoolean(certificateRegistry);
-
       const fillData = {
         register: {
           ...previousStepData,

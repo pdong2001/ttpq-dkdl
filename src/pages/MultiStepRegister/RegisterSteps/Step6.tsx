@@ -164,11 +164,13 @@ const Step6 = (props: StepProps) => {
                   Chứng nhận tình nguyện viên
                 </Heading>
               </Alert>
-              {/* {TableComponent(
-                _.get(certRegistry, _.get(previewInfo, 'certificateRegistry', '')),
+              {TableComponent(
+                _.get(
+                  certRegistry,
+                  CertificateRegistry.toEnum(_.get(previewInfo, 'certificateRegistry')),
+                ),
                 REGISTER_INFO_TITLE,
-              )} */}
-              {TableComponent(certRegistry, REGISTER_INFO_TITLE)}
+              )}
             </Box>
             {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
           </Box>
