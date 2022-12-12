@@ -75,6 +75,8 @@ const RegisterInfo = () => {
   const receiveCardAddress = data?.receiveCardAddress;
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
+  const isArrived = data?.isArrived;
+  const arrivedAt = data?.arrivedAt;
   const department = get(data, 'departmentDetail.department.name');
   const roles = get(data, 'departmentDetail.roles', []);
   const roles1 = roles.find((item) => item.role === 1);
@@ -262,6 +264,18 @@ const RegisterInfo = () => {
               </Text>
               <Tag mt={3} textAlign='center' colorScheme={'blue'} borderRadius='full'>
                 {contactStatusMap[contactStatus ? contactStatus : 0]}
+              </Tag>
+
+              <Text mt={5} as='b' color={primaryColor}>
+                Vể Chùa
+              </Text>
+              <Tag
+                mt={3}
+                textAlign='center'
+                colorScheme={isArrived ? 'green' : 'blue'}
+                borderRadius='full'
+              >
+                {isArrived ? convertToAppDateTime(arrivedAt) : 'Đang Cập Nhật'}
               </Tag>
               {/* <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
@@ -517,69 +531,82 @@ const RegisterInfo = () => {
                   <Stack spacing='30px'>
                     <Box>
                       <Text as='b'>Thành viên nhóm</Text>
-                      <TableContainer whiteSpace={'break-spaces'} maxW={'400px'}>
-                        <Table variant='unstyled' size='sm'>
-                          <Tbody>
-                            {groupMembers &&
-                              groupMembers.length &&
-                              groupMembers.map((ele, idx) => (
-                                <Tr key={idx}>
-                                  <Td py={1} px={0}>
-                                    <Text>{ele?.religiousName || ele?.fullName}</Text>
-                                  </Td>
-                                  <Td>
-                                    {ele.role == 1 && (
-                                      <Tooltip label='Trưởng nhóm'>
-                                        <span>
-                                          <FaUserSecret />
-                                        </span>
-                                      </Tooltip>
-                                    )}
-                                    {ele.role == 2 && (
-                                      <Tooltip label='Phó nhóm'>
-                                        <span>
-                                          <FaUserTie />
-                                        </span>
-                                      </Tooltip>
-                                    )}
-                                  </Td>
-                                  <Td py={1} px={0}>
-                                    <Tag colorScheme={'blue'}>
-                                      <TagLeftIcon boxSize='12px' as={MdPhone} />
-                                      <TagLabel>{ele.phoneNumber}</TagLabel>
-                                    </Tag>
-                                  </Td>
-                                </Tr>
-                              ))}
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
-                    </Box>
-
-                    <Box>
-                      <Text as='b'>Lấy giấy chứng nhận</Text>
-                      {certificateRegistry ? (
+                      {groupMembers?.length === 0 ? (
                         <Box mt='2'>
-                          <Tag mr={2} mb={1} colorScheme={'green'}>
-                            Bằng Tiếng Anh: {companyNameEN}
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>
+                            Chưa có nhóm
                           </Tag>
-                          <Box mt='2'>
-                            <Tag mr={2} mb={1} colorScheme={'green'}>
-                              Bằng Tiếng Việt: {companyNameVIE}
-                            </Tag>
-                          </Box>
                         </Box>
                       ) : (
-                        <Box mt='2'>
-                          <Tag mr={2} mb={1} colorScheme={'pink'}>
-                            Không
-                          </Tag>
-                        </Box>
+                        <TableContainer whiteSpace={'break-spaces'} maxW={'400px'}>
+                          <Table variant='unstyled' size='sm'>
+                            <Tbody>
+                              {groupMembers &&
+                                groupMembers.length &&
+                                groupMembers.map((ele, idx) => (
+                                  <Tr key={idx}>
+                                    <Td py={1} px={0}>
+                                      <Text>{ele?.religiousName || ele?.fullName}</Text>
+                                    </Td>
+                                    <Td>
+                                      {ele.role == 1 && (
+                                        <Tooltip label='Trưởng nhóm'>
+                                          <span>
+                                            <FaUserSecret />
+                                          </span>
+                                        </Tooltip>
+                                      )}
+                                      {ele.role == 2 && (
+                                        <Tooltip label='Phó nhóm'>
+                                          <span>
+                                            <FaUserTie />
+                                          </span>
+                                        </Tooltip>
+                                      )}
+                                    </Td>
+                                    <Td py={1} px={0}>
+                                      <Tag colorScheme={'blue'}>
+                                        <TagLeftIcon boxSize='12px' as={MdPhone} />
+                                        <TagLabel>{ele.phoneNumber}</TagLabel>
+                                      </Tag>
+                                    </Td>
+                                  </Tr>
+                                ))}
+                            </Tbody>
+                          </Table>
+                        </TableContainer>
                       )}
                     </Box>
 
                     <Box>
-                      <Text as='b'>Ghi chú:</Text>
+                      <Text as='b'>Đăng Ký Nhận Giấy Chứng Nhận TNV</Text>
+                      <Box mt='2'>
+                        <Tag mr={2} mb={1} colorScheme={certificateRegistry ? 'green' : 'pink'}>
+                          {certificateRegistry ? 'Có' : 'Không'}
+                        </Tag>
+                      </Box>
+                    </Box>
+                    {certificateRegistry && (
+                      <Box>
+                        <Text as='b'>Tên trường hoặc nơi công tác</Text>
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>
+                            Tiếng Việt: {companyNameVIE}
+                          </Tag>
+
+                          {companyNameEN && (
+                            <Box mt='2'>
+                              <Tag mr={2} mb={1} colorScheme={'blue'}>
+                                Tiếng Anh: {companyNameEN}
+                              </Tag>
+                            </Box>
+                          )}
+                        </Box>
+                      </Box>
+                    )}
+
+                    <Box>
+                      <Text as='b'>Ghi chú</Text>
                       <Text>{note}</Text>
                     </Box>
                   </Stack>

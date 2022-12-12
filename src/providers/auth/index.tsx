@@ -72,11 +72,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
           }),
         ).then((item) => {
           const id = get(item, 'payload.data.id');
-          if (id) {
-            console.log('🚀 ~ file: index.tsx:76 ~ ).then ~ id', id);
+          const isArrived = get(item, 'payload.data.isArrived');
+          if (id && !isArrived) {
             axios
               .post(
-                process.env.TTPQ_BASE_URL + formatUrl(API.POST_ARRIVED, { eventId: id }),
+                process.env.TTPQ_BASE_URL + formatUrl(API.POST_ARRIVED, { eventId: shortUri }),
                 {},
                 {
                   headers: {
@@ -86,10 +86,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
                   },
                 },
               )
-              .then(({ data }) => {
-                console.log(data);
+              .then((data) => {
+                history.push(`SitbWFs/register-info/${id}`);
               });
-            //check api
+          } else {
             history.push(`SitbWFs/register-info/${id}`);
           }
         });
