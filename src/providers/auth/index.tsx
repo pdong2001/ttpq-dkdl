@@ -15,6 +15,8 @@ import {
 import { formatUrl } from '~/utils/functions';
 import { MessageContext } from '../message';
 
+import publicRequest from '~/apis/common/axios';
+
 export type AuthValue = {
   login: () => void;
   logout: () => void;
@@ -32,10 +34,8 @@ export const AuthContext = createContext<AuthValue>({
 
 const { Provider } = AuthContext;
 
-export const arrEventId = ['1'];
-
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { shortUri } = useParams<any>();
+  const { eventId: idEvent } = useParams<any>();
   const [openLogin, setOpenLogin] = useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -62,35 +62,25 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // check arrived
-    if (arrEventId.includes(shortUri)) {
+
+    if (idEvent) {
       if (!memberLoggedIn?.userToken) {
         login();
       } else {
         dispatch(
           getLoggedInRegister({
-            eventId: shortUri || '',
+            eventId: idEvent || '',
           }),
         ).then((item) => {
           const id = get(item, 'payload.data.id');
           const isArrived = get(item, 'payload.data.isArrived');
+          const eventRegistryPageId = get(item, 'payload.data.eventRegistryPageId');
           if (id && !isArrived) {
-            axios
-              .post(
-                process.env.TTPQ_BASE_URL + formatUrl(API.POST_ARRIVED, { eventId: shortUri }),
-                {},
-                {
-                  headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    Authorization: 'Bearer ' + memberLoggedIn?.userToken,
-                  },
-                },
-              )
-              .then((data) => {
-                history.push(`SitbWFs/register-info/${id}`);
-              });
+            publicRequest.post(formatUrl(API.POST_ARRIVED, { eventId: idEvent })).then((data) => {
+              history.push(`/${eventRegistryPageId}/register-info/${id}`);
+            });
           } else {
-            history.push(`SitbWFs/register-info/${id}`);
+            history.push(`/${eventRegistryPageId}/register-info/${id}`);
           }
         });
       }

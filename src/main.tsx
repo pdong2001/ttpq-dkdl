@@ -21,7 +21,7 @@ root.render(
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <MessageProvider>
-          <Route component={AppContainer} path={['/:shortUri', '/']} />
+          <Route component={AppContainer} path={['/check/:eventId', '/:shortUri', '/']} />
         </MessageProvider>
       </BrowserRouter>
     </ChakraProvider>

@@ -79,7 +79,7 @@ const RegisterInfo = () => {
   const arrivedAt = data?.arrivedAt;
   const department = get(data, 'departmentDetail.department.name');
   const roles = get(data, 'departmentDetail.roles', []);
-  const roles1 = roles.find((item) => item.role === 1);
+  const manager = roles.find((item) => item.position === PositionType.Manager);
 
   const carBookingType = data?.carBookingType?.toString();
   const clothingSize = data?.clothingSize;
@@ -381,12 +381,12 @@ const RegisterInfo = () => {
                       <Text as='b'>Trưởng Ban </Text>
                       <Box mt={2}>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
-                          {roles1?.religiousName || roles1?.fullName || 'Đang cập nhật'}
+                          {manager?.religiousName || manager?.fullName || 'Đang cập nhật'}
                         </Tag>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
                           <TagLeftIcon boxSize='12px' as={MdPhone} />
-                          {roles1?.phoneNumber ? (
-                            <Link href={`tel:${roles1?.phoneNumber}`}>{roles1?.phoneNumber}</Link>
+                          {manager?.phoneNumber ? (
+                            <Link href={`tel:${manager?.phoneNumber}`}>{manager?.phoneNumber}</Link>
                           ) : (
                             'Đang cập nhật'
                           )}

@@ -9,13 +9,13 @@ import { useAppDispatch } from './hooks/reduxHook';
 import { MessageContext } from './providers/message';
 
 function App() {
-  const { shortUri } = useParams<any>();
+  const { shortUri, eventId } = useParams<any>();
   const dispatch = useAppDispatch();
   const messageService = useContext(MessageContext);
   const history = useHistory();
 
   useEffect(() => {
-    if (shortUri && shortUri !== '1') {
+    if (shortUri && !eventId) {
       dispatch(getRegisterPage({ shortUri }))
         .then(unwrapResult)
         .then(({ data }) => {
@@ -42,7 +42,7 @@ function App() {
           history.push('/not-found');
         });
     }
-  }, [shortUri]);
+  }, [shortUri, eventId]);
   return (
     <Switch>
       {ROUTES.map((route) => (
