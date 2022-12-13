@@ -1,4 +1,4 @@
-import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, QuestionOutlineIcon } from '@chakra-ui/icons';
 import cover from '~/assets/cover/ptd-cover.jpeg';
 import {
   Modal,
@@ -23,8 +23,10 @@ import {
   Divider,
   Tag,
   HStack,
+  Flex,
+  Tooltip,
 } from '@chakra-ui/react';
-import { MdContentCopy } from 'react-icons/md';
+import { MdContentCopy, MdVerified } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
@@ -37,7 +39,7 @@ import API from '~/apis/constants';
 import { useContext } from 'react';
 import { AuthContext } from '~/providers/auth';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { EDIT_REGISTER_PATH } from '~/routes';
+import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
 
 const PATH_URL = window.location.origin;
 
@@ -61,7 +63,7 @@ export default function SuccessRegisterModal({
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const { member } = useContext(AuthContext);
   const { register } = member || {};
-  const isRegisterPopup = path === EDIT_REGISTER_PATH;
+  const isRegisterPopup = path === ADD_NEW_REGISTER_PATH;
   const organizationStructureId =
     registerResult.organizationStructureId || member.organizationStructureId;
   const { data: ctnName, cancel: ctnToken } = useAxios(
@@ -163,7 +165,16 @@ export default function SuccessRegisterModal({
             <Box px={5}>
               <Box textAlign={'center'}>
                 <Heading fontSize={['lg', 'xl', 'xl']} fontFamily={'body'} mb={2}>
-                  {fullName}
+                  <Flex justify='center' gap={2}>
+                    {member?.fullName}{' '}
+                    {register?.isArrived && (
+                      <Tooltip hasArrow rounded='md' label='Đã về chùa'>
+                        <span>
+                          <MdVerified color='green' />
+                        </span>
+                      </Tooltip>
+                    )}
+                  </Flex>
                 </Heading>
                 {isRegisterPopup && (
                   <Heading
@@ -241,7 +252,7 @@ export default function SuccessRegisterModal({
         </ModalBody>
 
         <ModalFooter>
-          {(register || isRegisterPopup) && (
+          {isShowRegisterInfo && (
             <>
               <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
                 Lưu về máy
