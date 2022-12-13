@@ -7,7 +7,17 @@ import rootReducer from '~/reducers';
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.TTPQ_NODE_ENV === 'development',
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(statusMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types
+        // ignoredActions: ['your/action/type'],
+        // Ignore these field paths in all actions
+        ignoredActionPaths: ['meta.arg', 'payload.showMessage'],
+        // Ignore these paths in the state
+        ignoredPaths: ['memberAuth.error.showMessage'],
+      },
+    }).concat(statusMiddleware),
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

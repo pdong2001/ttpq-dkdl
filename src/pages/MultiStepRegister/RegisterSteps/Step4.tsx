@@ -18,7 +18,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import API from '~/apis/constants';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, mapReceiverCardAddressDetail } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import { fillDataPreview } from '~/slices/previewInfo';
@@ -79,21 +79,7 @@ const Step4 = (props: StepProps) => {
   const { data: receiveCardLocationList } = useAxios({
     method: 'get',
     url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
-    transformResponse: ({ data }) =>
-      data.map((receiverCardLocation: ReceiveCardAddressDto) => {
-        const { ward, district, province, name } = receiverCardLocation;
-        const address = [
-          [ward.pre, ward.name],
-          [district.pre, district.name],
-          [province.pre, province.name],
-        ]
-          .map((addr) => addr.join(' '))
-          .join(', ');
-        return {
-          ...receiverCardLocation,
-          name: `${name}, ${address}`,
-        };
-      }),
+    transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
   });
 
   const formik = useFormik({

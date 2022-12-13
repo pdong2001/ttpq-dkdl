@@ -18,6 +18,7 @@ import { useContext, useState } from 'react';
 import { useAppDispatch } from '~/hooks/reduxHook';
 import { MessageContext } from '~/providers/message';
 import { getMemberAuth } from '~/slices/memberAuth';
+import { REGEX_PHONE } from '~/utils/common';
 
 type LoginProps = {
   isOpen: boolean;
@@ -97,7 +98,7 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
           </ModalBody>
 
           <ModalFooter>
-            <Button disabled={ || !identityNumber} type='submit'>
+            <Button disabled={!REGEX_PHONE.test(phone) || !identityNumber} type='submit'>
               {isLogin ? 'Đăng nhập' : 'Xác thực'}
             </Button>
           </ModalFooter>

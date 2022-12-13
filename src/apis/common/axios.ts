@@ -6,6 +6,9 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const onFullfilledRequest = (response: AxiosResponse) => response;
 export const onRejectedResponse = (error: any): any => {
+  if (process.env.TTQP_NODE_ENV === 'development') {
+    console.log('error global', error);
+  }
   if (error instanceof AxiosError) {
     return Promise.reject(getExceptionPayload(error.response?.data));
   }
@@ -27,7 +30,6 @@ publicRequest.interceptors.request.use(
   },
   (error: AxiosError): Promise<AxiosError> => {
     // Do something with request error
-    console.log('error global', error);
 
     return Promise.reject(error);
   },

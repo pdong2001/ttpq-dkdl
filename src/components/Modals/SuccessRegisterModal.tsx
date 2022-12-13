@@ -241,7 +241,7 @@ export default function SuccessRegisterModal({
         </ModalBody>
 
         <ModalFooter>
-          {register && (
+          {(register || isRegisterPopup) && (
             <>
               <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
                 Lưu về máy

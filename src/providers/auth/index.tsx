@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { stat } from 'fs';
 import { get } from 'lodash';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -87,7 +85,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const loadCheckArrived = async () => {};
+  // const loadCheckArrived = async () => {};
 
   const login = () => {
     setOpenLogin(true);

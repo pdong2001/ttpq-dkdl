@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
@@ -19,6 +19,7 @@ import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import { useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { AuthContext } from '~/providers/auth';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -27,9 +28,10 @@ export default function CaptionCarousel() {
   const [registerAvailable, setRegisterAvailable] = useState(true);
   // const messageService = useContext(MessageContext);
   const pageConfig = useAppSelector((state) => state.registerPage.data);
-
+  const { member } = useContext(AuthContext);
+  const { register } = member || {};
   useEffect(() => {
-    if (pageConfig.eventId && shortUri) {
+    if (pageConfig.eventId && shortUri && !register) {
       setRegisterAvailable(true);
     } else {
       setRegisterAvailable(false);

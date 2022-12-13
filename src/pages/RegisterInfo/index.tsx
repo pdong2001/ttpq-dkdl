@@ -21,10 +21,10 @@ import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 
-import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook } from 'react-icons/md';
+import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook, MdVerified } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, mapReceiverCardAddressDetail } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
 import useAxios from '~/hooks/useAxios';
@@ -72,7 +72,7 @@ const RegisterInfo = () => {
   const leaderId = data?.leaderId;
   const moveType = data?.moveType?.toString();
   const organizationStructureId = member?.organizationStructureId;
-  const receiveCardAddress = data?.receiveCardAddress;
+  const receiveCardAddress = mapReceiverCardAddressDetail(data?.receiveCardAddress);
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
   const isArrived = data?.isArrived;
@@ -224,7 +224,9 @@ const RegisterInfo = () => {
           >
             <Avatar size={'2xl'} src={member?.avatarPath} mb={4} pos={'relative'} />
             <Heading fontSize={'2xl'} fontFamily={'body'}>
-              {member?.fullName}
+              <Flex justify='center' gap={2}>
+                {member?.fullName} {isArrived && <MdVerified color='green' />}
+              </Flex>
             </Heading>
             <Text fontWeight={600} color={'gray.500'} mt={2} mb={5}>
               {member?.facebookAddress && (
@@ -266,17 +268,21 @@ const RegisterInfo = () => {
                 {contactStatusMap[contactStatus ? contactStatus : 0]}
               </Tag>
 
-              <Text mt={5} as='b' color={primaryColor}>
-                Vể Chùa
-              </Text>
-              <Tag
-                mt={3}
-                textAlign='center'
-                colorScheme={isArrived ? 'green' : 'blue'}
-                borderRadius='full'
-              >
-                {isArrived ? convertToAppDateTime(arrivedAt) : 'Đang Cập Nhật'}
-              </Tag>
+              {isArrived && (
+                <>
+                  <Text mt={5} as='b' color={primaryColor}>
+                    Đã về chùa lúc
+                  </Text>
+                  <Tag
+                    mt={3}
+                    textAlign='center'
+                    colorScheme={isArrived ? 'green' : 'blue'}
+                    borderRadius='full'
+                  >
+                    {isArrived ? convertToAppDateTime(arrivedAt) : 'Đang Cập Nhật'}
+                  </Tag>
+                </>
+              )}
               {/* <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
               </Text>
@@ -438,7 +444,7 @@ const RegisterInfo = () => {
                     {receiveCardAddress && (
                       <Box mt='2'>
                         <Text as='b'>Nơi nhận thẻ</Text>{' '}
-                        {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
+                        {receiveCardAddress && <Text>{receiveCardAddress.name}</Text>}
                       </Box>
                     )}
                     {clothingSize && (

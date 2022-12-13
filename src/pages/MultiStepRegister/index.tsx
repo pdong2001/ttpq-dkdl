@@ -10,8 +10,6 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import Step5 from './RegisterSteps/Step5';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { getRegisterPage } from '~/slices/registerPage';
 import Step6 from './RegisterSteps/Step6';
 
 type Step = (props: StepProps) => JSX.Element;
