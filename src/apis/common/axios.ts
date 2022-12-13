@@ -6,7 +6,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const onFullfilledRequest = (response: AxiosResponse) => response;
 export const onRejectedResponse = (error: any): any => {
-  if (process.env.TTQP_NODE_ENV === 'development') {
+  if (import.meta.env.TTQP_NODE_ENV === 'development') {
     console.log('error global', error);
   }
   if (error instanceof AxiosError) {
@@ -16,7 +16,7 @@ export const onRejectedResponse = (error: any): any => {
 };
 
 const publicRequest = axios.create({
-  baseURL: `${process.env.TTPQ_BASE_URL}`,
+  baseURL: `${import.meta.env.TTPQ_BASE_URL}`,
 });
 
 publicRequest.interceptors.response.use(onFullfilledRequest, onRejectedResponse);
