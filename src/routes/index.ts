@@ -25,6 +25,7 @@ export const HOME_WITH_SHORT_URI = '/:shortUri';
 export const EVENT_INFO = '/great-ceremony-info';
 export const TIMELINE = '/timeline';
 export const DEPARTMENT_INFO = '/department-info';
+export const CHECK_IN_PATH = '/check-in/:eventId';
 
 export const NavBarLink = [
   { title: 'Trang chủ', to: '/' },
@@ -67,7 +68,7 @@ const ROUTES: RouteType[] = [
     layout: MainLayout,
   },
   {
-    path: ['/', HOME_WITH_SHORT_URI],
+    path: ['/', HOME_WITH_SHORT_URI, CHECK_IN_PATH],
     exact: true,
     component: Home,
     layout: MainLayout,
