@@ -16,10 +16,11 @@ const GET_REGISTER_INFO = api('/EventRegistry/GetById/:id');
 const GET_MEMBER_IN_GROUP = api('/EventRegistry/group/:leaderId');
 const LOGIN_MEMBER = api('/Auth/login-member');
 const GET_MEMBER_BY_ID = api('/Member/get-by-id/:id');
-const UPDATE_MEMBER = api('/Member/update/:id');
+const UPDATE_MEMBER = api('/Member/update');
 const REGISTER = api('/Member/add');
 const SEARCH_MEMBER = api('/Member/search');
 const GET_REGISTER_BY_EVENT = api('/EventRegistry/event/:eventId');
+const POST_ARRIVED = api('/eventregistry/arrived/event/:eventId');
 
 /* API from app Nhân sự */
 const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
@@ -53,7 +54,8 @@ const API = {
   UPLOAD_PHOTO,
   GET_PHOTO,
   GET_MEMBER,
-  GET_REGISTER_BY_EVENT
+  GET_REGISTER_BY_EVENT,
+  POST_ARRIVED,
 };
 
 export default API;

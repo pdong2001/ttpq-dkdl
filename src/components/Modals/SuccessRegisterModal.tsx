@@ -46,19 +46,21 @@ export default function SuccessRegisterModal({
   onClose,
   title,
   isCentered,
+  isSuccessPopup,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   isCentered?: boolean;
+  isSuccessPopup?: boolean;
 }) {
   const history = useHistory();
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
-  const { eventId } = useAppSelector((state) => state.registerPage.data);
   const { member } = useContext(AuthContext);
+  const { register } = member || {};
   const isRegisterPopup = path === EDIT_REGISTER_PATH;
   const organizationStructureId =
     registerResult.organizationStructureId || member.organizationStructureId;
@@ -83,7 +85,7 @@ export default function SuccessRegisterModal({
       email: registerResult?.email || member.email,
     },
     avatar: registerResult.avatarPath || member.avatarPath,
-    LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
+    LinkQrCode: `${PATH_URL}/${shortUri}/register-info/${registerId}`,
     registerInfoPath: `/${shortUri}/register-info/${registerId}`,
     fullName: registerResult.fullName || member.fullName,
   };
@@ -116,6 +118,9 @@ export default function SuccessRegisterModal({
       eleAlert.style.display = 'none';
     }, 1000);
   };
+
+  const isShowRegisterInfo = register || isSuccessPopup;
+
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -177,14 +182,14 @@ export default function SuccessRegisterModal({
                 <Divider borderBottomWidth={'2px'} />
                 <Box>
                   <HStack>
-                    <Box w={eventId ? '70%' : '100%'} pt={3}>
+                    <Box w={isShowRegisterInfo ? '70%' : '100%'} pt={3}>
                       {OtherInfo({
                         isLeader: false,
                         title: registerResult?.religiousName || member.religiousName,
                         subTitle: previewInfo.organizationStructureId || ctnName,
                       })}
                     </Box>
-                    {eventId && (
+                    {isShowRegisterInfo && (
                       <Box w='30%' pt={3} textAlign='center'>
                         <QRCode
                           id='QRCode'
@@ -196,7 +201,7 @@ export default function SuccessRegisterModal({
                       </Box>
                     )}
                   </HStack>
-                  {eventId && (
+                  {isShowRegisterInfo && (
                     <Box w='100%' pt={3} textAlign={'center'} float={'right'}>
                       <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
                         <InputGroup size='md'>
@@ -236,7 +241,7 @@ export default function SuccessRegisterModal({
         </ModalBody>
 
         <ModalFooter>
-          {eventId && (
+          {register && (
             <>
               <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
                 Lưu về máy
@@ -245,7 +250,7 @@ export default function SuccessRegisterModal({
                 colorScheme='yellow'
                 onClick={() => {
                   // historyLinkQrCode;
-                  history.push(registerInfoPath);
+                  history.replace(registerInfoPath);
                 }}
               >
                 Thông tin đăng ký

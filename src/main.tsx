@@ -4,10 +4,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 import { ChakraProvider, extendTheme, withDefaultColorScheme } from '@chakra-ui/react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import App from './App';
-import Loading from './components/Loading';
 import MessageProvider from './providers/message';
-import AuthProvider from './providers/auth';
+import AppContainer from './AppContainer';
 
 const theme = extendTheme(
   primaryColor,
@@ -23,10 +21,7 @@ root.render(
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <MessageProvider>
-          <AuthProvider>
-            <Route component={App} path={['/:shortUri', '/']} />
-            <Loading />
-          </AuthProvider>
+          <Route component={AppContainer} path={['/check/:eventId', '/:shortUri', '/']} />
         </MessageProvider>
       </BrowserRouter>
     </ChakraProvider>

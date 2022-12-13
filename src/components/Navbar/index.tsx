@@ -14,7 +14,6 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  MenuIcon,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Logo from '../Logo';
@@ -26,8 +25,6 @@ import { BiLogOutCircle, BiQr, BiUserCircle } from 'react-icons/bi';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { AuthContext } from '~/providers/auth';
 import SuccessRegisterModal from '../Modals/SuccessRegisterModal';
-import API from '~/apis/constants';
-import { formatUrl } from '~/utils/functions';
 
 const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; onClick?: any }) => (
   <Link
@@ -69,6 +66,7 @@ export default function NavBar() {
   ];
 
   const { login, logout, member } = useContext(AuthContext);
+  const { register } = member || {};
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
   const [color, setColor] = useState('blue.500');
@@ -128,14 +126,14 @@ export default function NavBar() {
               <Menu>
                 <MenuButton cursor={'pointer'} minW={0}>
                   <HStack color='white'>
-                    <Text>{`Xin chào, ${member.fullName}`}</Text>
+                    <Text>{`Xin chào, ${member.fullName || ''}`}</Text>
                     <Avatar size={'sm'} src={member.avatarPath} />
                   </HStack>
                 </MenuButton>
                 <MenuList color={'blue.500'}>
                   <MenuItem onClick={showQR}>
                     <HStack spacing={1}>
-                      {registerPage.eventId ? (
+                      {register ? (
                         <>
                           <BiQr /> <span>Mã QR cá nhân</span>
                         </>
@@ -146,12 +144,12 @@ export default function NavBar() {
                       )}
                     </HStack>
                   </MenuItem>
-                  {registerPage.eventId && (
+                  {register && (
                     <>
                       <MenuItem
                         onClick={() => {
-                          const registerInfoPath = `${shortUri}/register-info/${member.register?.id}`;
-                          history.push(registerInfoPath);
+                          const registerInfoPath = `/${shortUri}/register-info/${member.register?.id}`;
+                          history.replace(registerInfoPath);
                         }}
                       >
                         <HStack spacing={1}>
@@ -195,8 +193,8 @@ export default function NavBar() {
           onClose={() => {
             setOpenQR(false);
           }}
-          title={`${registerPage.eventId ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
-          isCentered={!registerPage.eventId}
+          title={`${register ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
+          isCentered={!register}
         />
       </Box>
     </>

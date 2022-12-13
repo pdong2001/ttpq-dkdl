@@ -1,3 +1,4 @@
+import { QuestionOutlineIcon } from '@chakra-ui/icons';
 import {
   Modal,
   ModalOverlay,
@@ -10,10 +11,10 @@ import {
   Input,
   ModalFooter,
   Button,
+  Tooltip,
 } from '@chakra-ui/react';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useContext, useState } from 'react';
-import API from '~/apis/constants';
 import { useAppDispatch } from '~/hooks/reduxHook';
 import { MessageContext } from '~/providers/message';
 import { getMemberAuth } from '~/slices/memberAuth';
@@ -23,9 +24,10 @@ type LoginProps = {
   onClose: () => void;
   title: string;
   onSuccess?: () => void;
+  isLogin?: boolean;
 };
 
-const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
+const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) => {
   const [phone, setPhone] = useState('');
   const [identityNumber, setIdentityNumber] = useState('');
   const dispatch = useAppDispatch();
@@ -42,7 +44,6 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
   const login = () => {
     dispatch(
       getMemberAuth({
-
         data: {
           phoneNumber: phone,
           identityCard: identityNumber,
@@ -62,33 +63,46 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess }: LoginProps) => {
         }
       });
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login();
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+      <form onSubmit={handleSubmit}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{title}</ModalHeader>
 
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-          <FormControl isRequired>
-            <FormLabel>Số điện thoại</FormLabel>
-            <Input placeholder='Số điện thoại' value={phone} onChange={handlePhoneChange} />
-          </FormControl>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl isRequired>
+              <FormLabel>
+                Số điện thoại{' '}
+                <Tooltip label='Số điện thoại phải đủ 10 số ạ'>
+                  <QuestionOutlineIcon />
+                </Tooltip>
+              </FormLabel>
+              <Input placeholder='Số điện thoại' value={phone} onChange={handlePhoneChange} />
+            </FormControl>
 
-          <FormControl mt={4} isRequired>
-            <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
-            <Input
-              placeholder='Số CCCD/CMT'
-              value={identityNumber}
-              onChange={handleIdentityNumberChange}
-            />
-          </FormControl>
-        </ModalBody>
+            <FormControl mt={4} isRequired>
+              <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
+              <Input
+                placeholder='Số CCCD/CMT'
+                value={identityNumber}
+                onChange={handleIdentityNumberChange}
+              />
+            </FormControl>
+          </ModalBody>
 
-        <ModalFooter>
-          <Button onClick={login}>Gửi</Button>
-        </ModalFooter>
-      </ModalContent>
+          <ModalFooter>
+            <Button disabled={ || !identityNumber} type='submit'>
+              {isLogin ? 'Đăng nhập' : 'Xác thực'}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </form>
     </Modal>
   );
 };

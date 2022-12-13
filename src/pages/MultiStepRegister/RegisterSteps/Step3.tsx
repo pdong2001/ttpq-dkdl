@@ -15,13 +15,13 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
-import { MOVE_TYPE_TITLE } from '~/configs/register';
 import { useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -60,6 +60,8 @@ const Step3 = (props: StepProps) => {
     returnPlaneCode: editReturnPlaneCode,
     leaveTime,
     startTime,
+    //thêm field
+    carBookingType: editCarBookingType,
   } = useAppSelector((state) => state.registerInfo.data);
   const { addressId: editStartAddressId } = startTime || {};
   const { addressId: editLeaveAddressId } = leaveTime || {};
@@ -76,6 +78,8 @@ const Step3 = (props: StepProps) => {
     otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
+    // thêm field
+    carBookingType: carBookingTypeInStore,
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
@@ -86,8 +90,8 @@ const Step3 = (props: StepProps) => {
     initialValues: {
       moveType:
         moveTypeInStore ||
-        (editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.HCM : MoveType.OTHER),
+        (!!editMoveType && editMoveType + '') ||
+        (hasStartAddress ? MoveType.WithCTN : MoveType.ByPlane),
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
@@ -95,28 +99,41 @@ const Step3 = (props: StepProps) => {
       leaveTimeId: leaveTimeIdInStore || editLeaveTimeId,
 
       otherStartAddress: otherStartAddress || editOtherStartAddress,
-      otherStartTime: otherStartTime || (editOtherStartTime && new Date(editOtherStartTime)),
-      otherLeaveTime: otherLeaveTime || (editOtherLeaveTime && new Date(editOtherLeaveTime)),
+      otherStartTime: otherStartTime || editOtherStartTime,
+      otherLeaveTime: otherLeaveTime || editOtherLeaveTime,
       startPlaneCode: startPlaneCode || editStartPlaneCode,
       returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
+      // thêm field
+      carBookingType:
+        carBookingTypeInStore ||
+        (editCarBookingType && editCarBookingType + '') ||
+        CarBookingType.Both,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
-      if (moveType != MoveType.HCM) {
+      if (moveType != MoveType.WithCTN) {
+        // máy bay
         values.startAddressId = undefined;
         values.startTimeId = undefined;
         values.leaveAddressId = undefined;
         values.leaveTimeId = undefined;
-        if (moveType == MoveType.BY_YOUR_SELF) {
+
+        if (moveType == MoveType.Other) {
+          // tự túc
           values.startPlaneCode = '';
           values.returnPlaneCode = '';
+          // thêm field
+          values.carBookingType = '';
         }
       } else {
+        // with CTN
         values.otherStartAddress = '';
         values.otherStartTime = '';
         values.otherLeaveTime = '';
         values.startPlaneCode = '';
         values.returnPlaneCode = '';
+        // thêm field
+        values.carBookingType = '';
       }
       dispatch(
         fillForm({
@@ -191,16 +208,13 @@ const Step3 = (props: StepProps) => {
             <Stack spacing={4}>
               <Radios label='Hình thức di chuyển' name='moveType'>
                 {startAddresses?.length && (
-                  <Radio value={MoveType.HCM}>{MOVE_TYPE_TITLE[MoveType.HCM]}</Radio>
+                  <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
-                []
-                <Radio value={MoveType.OTHER}>{MOVE_TYPE_TITLE[MoveType.OTHER]}</Radio>
-                <Radio value={MoveType.BY_YOUR_SELF}>
-                  {MOVE_TYPE_TITLE[MoveType.BY_YOUR_SELF]}
-                </Radio>
+                <Radio value={MoveType.ByPlane}>{MoveType.toString(MoveType.ByPlane)}</Radio>
+                <Radio value={MoveType.Other}>{MoveType.toString(MoveType.Other)}</Radio>
               </Radios>
-              {moveType == MoveType.HCM && (
-                // HCM
+              {moveType == MoveType.WithCTN && (
+                // WithCTN
                 <>
                   <Select
                     name='startAddressId'
@@ -236,17 +250,34 @@ const Step3 = (props: StepProps) => {
                   />
                 </>
               )}
-              {moveType !== MoveType.HCM && (
+              {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
                   <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
                   <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
-                  {moveType === MoveType.OTHER && (
+                  {moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
                   )}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
-                  {moveType === MoveType.OTHER && (
-                    <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                  {moveType === MoveType.ByPlane && (
+                    <>
+                      <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                      {/* thêm field */}
+                      <Radios
+                        spacing={2}
+                        direction='column'
+                        label='Đăng ký ô tô'
+                        name='carBookingType'
+                        isRequired
+                      >
+                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
+                        <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
+                        <Radio value={CarBookingType.Return}>
+                          Chiều về (Từ chùa ra Tân Sơn Nhất)
+                        </Radio>
+                        <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
+                      </Radios>
+                    </>
                   )}
                 </>
               )}

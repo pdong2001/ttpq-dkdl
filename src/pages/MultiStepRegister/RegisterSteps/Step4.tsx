@@ -29,7 +29,10 @@ import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
+
 const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
@@ -41,14 +44,22 @@ const Step4 = (props: StepProps) => {
     wishDepartment,
     member,
     receiveCardAddressId: editReceiverCardId,
+    // thêm field
+    clothingSize: editClothingSize,
     note: editNote,
   } = useAppSelector((state) => state.registerInfo.data);
   const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
 
   const { strongPointIds, avatarPath, exps } = previousStepData;
-  const { expDepartmentIds, wishDepartmentId, receiveCardAddressId, note } =
-    previousStepData.register || {};
+  const {
+    expDepartmentIds,
+    wishDepartmentId,
+    receiveCardAddressId,
+    // thêm field
+    clothingSize,
+    note,
+  } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
   const { data: strongPointList } = useAxios(
@@ -78,6 +89,8 @@ const Step4 = (props: StepProps) => {
       expDepartmentIds: expDepartmentIds || mapObjectArrayToIds(expDepartments) || [],
       wishDepartmentId: wishDepartmentId || wishDepartment?.id || '',
       receiveCardAddressId: receiveCardAddressId || editReceiverCardId || '',
+      // thêm field
+      clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
       note: note || editNote || '',
     },
@@ -91,6 +104,8 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId,
         receiveCardAddressId,
         note,
+        // thêm field
+        clothingSize,
       } = values;
       const fillData = {
         strongPointIds,
@@ -106,6 +121,8 @@ const Step4 = (props: StepProps) => {
           eventRegistryPageId: id,
           ctnId,
           type,
+          // thêm field
+          clothingSize,
         },
       };
       dispatch(fillForm(fillData));
@@ -118,6 +135,7 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds,
         wishDepartmentId,
         receiveCardAddressId,
+        clothingSize,
       });
       nextStep();
     },
@@ -132,6 +150,7 @@ const Step4 = (props: StepProps) => {
     expDepartmentIds,
     wishDepartmentId,
     receiveCardAddressId,
+    clothingSize,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -151,11 +170,10 @@ const Step4 = (props: StepProps) => {
         expDepartmentIds: mapName(departments, expDepartmentIds),
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
         receiveCardAddressId: mapName(receiveCardLocationList, [+receiveCardAddressId]),
+        clothingSize,
       }),
     );
   };
-
-  // console.log('___', formik.values);
 
   return (
     <FadeInUp>
@@ -176,9 +194,11 @@ const Step4 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <Radios name='exps' label='Số lần về chùa công quả'>
-                <Radio value={EventExp.ChuaTungThamGia}>Lần đầu tiên</Radio>
-                <Radio value={EventExp.Duoi3Lan}>Dưới 3 lần</Radio>
-                <Radio value={EventExp.Tren3Lan}>Trên 3 lần</Radio>
+                <Radio value={EventExp.ChuaTungThamGia}>
+                  {EventExp.toString(EventExp.ChuaTungThamGia)}
+                </Radio>
+                <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
+                <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
               <MultiSelect
                 name='strongPointIds'
@@ -204,9 +224,19 @@ const Step4 = (props: StepProps) => {
               <Select
                 name='receiveCardAddressId'
                 data={receiveCardLocationList}
+                // labelField='address'
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
+              />
+              {/* thêm field */}
+              <Select
+                name='clothingSize'
+                data={ClothingSize.getList()}
+                label='Size áo'
+                placeholder='Chọn size áo'
                 isRequired
+                valueField='value'
+                labelField='label'
               />
               <FormControl name='avatarPath' as='fieldset' border={1}>
                 <FormLabel as='legend'>Hình thẻ</FormLabel>

@@ -29,14 +29,12 @@ export default function CaptionCarousel() {
   const pageConfig = useAppSelector((state) => state.registerPage.data);
 
   useEffect(() => {
-    console.log('config', pageConfig);
-
-    if (!pageConfig.eventId) {
-      setRegisterAvailable(false);
-    } else {
+    if (pageConfig.eventId && shortUri) {
       setRegisterAvailable(true);
+    } else {
+      setRegisterAvailable(false);
     }
-  }, [pageConfig]);
+  }, [pageConfig, shortUri]);
 
   // As we have used custom buttons, we need a reference variable to
   // change the state

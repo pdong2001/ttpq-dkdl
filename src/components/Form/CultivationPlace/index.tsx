@@ -35,7 +35,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
   );
 
   useEffect(() => {
-    const placeName = _.get(_.filter(groups, (g) => g.Id == id)[0], 'Name', '');
+    const placeName = _.get(_.filter(groups, (g) => g.id == id)[0], 'name', '');
     setDataPreview({ [`${name}`]: placeName });
   }, [id, loaded]);
 

@@ -1,6 +1,9 @@
+import axios from 'axios';
 import { stat } from 'fs';
+import { get } from 'lodash';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import API from '~/apis/constants';
 import LoginPopup from '~/components/LoginPopup';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import {
@@ -9,7 +12,10 @@ import {
   getLoggedInRegister,
   logout as logoutMember,
 } from '~/slices/memberAuth';
+import { formatUrl } from '~/utils/functions';
 import { MessageContext } from '../message';
+
+import publicRequest from '~/apis/common/axios';
 
 export type AuthValue = {
   login: () => void;
@@ -29,6 +35,7 @@ export const AuthContext = createContext<AuthValue>({
 const { Provider } = AuthContext;
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const { eventId: idEvent } = useParams<any>();
   const [openLogin, setOpenLogin] = useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -52,6 +59,35 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setMember(memberLoggedIn);
   }, [memberLoggedIn]);
+
+  useEffect(() => {
+    // check arrived
+
+    if (idEvent) {
+      if (!memberLoggedIn?.userToken) {
+        login();
+      } else {
+        dispatch(
+          getLoggedInRegister({
+            eventId: idEvent || '',
+          }),
+        ).then((item) => {
+          const id = get(item, 'payload.data.id');
+          const isArrived = get(item, 'payload.data.isArrived');
+          const eventRegistryPageId = get(item, 'payload.data.eventRegistryPageId');
+          if (id && !isArrived) {
+            publicRequest.post(formatUrl(API.POST_ARRIVED, { eventId: idEvent })).then((data) => {
+              history.push(`/${eventRegistryPageId}/register-info/${id}`);
+            });
+          } else {
+            history.push(`/${eventRegistryPageId}/register-info/${id}`);
+          }
+        });
+      }
+    }
+  }, []);
+
+  const loadCheckArrived = async () => {};
 
   const login = () => {
     setOpenLogin(true);
@@ -83,7 +119,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <Provider value={contextValue}>
       {children}
-      <LoginPopup isOpen={openLogin} title='Đăng nhập' onSuccess={onSuccess} onClose={onClose} />
+      <LoginPopup
+        isOpen={openLogin}
+        title='Đăng nhập'
+        onSuccess={onSuccess}
+        onClose={onClose}
+        isLogin
+      />
     </Provider>
   );
 };
