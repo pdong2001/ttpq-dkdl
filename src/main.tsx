@@ -6,6 +6,7 @@ import { ChakraProvider, extendTheme, withDefaultColorScheme } from '@chakra-ui/
 import { BrowserRouter, Route } from 'react-router-dom';
 import MessageProvider from './providers/message';
 import AppContainer from './AppContainer';
+import { CHECK_IN_PATH, HOME_WITH_SHORT_URI } from './routes';
 
 const theme = extendTheme(
   primaryColor,
@@ -21,7 +22,7 @@ root.render(
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <MessageProvider>
-          <Route component={AppContainer} path={['/check/:eventId', '/:shortUri', '/']} />
+          <Route component={AppContainer} path={[CHECK_IN_PATH, HOME_WITH_SHORT_URI, '/']} />
         </MessageProvider>
       </BrowserRouter>
     </ChakraProvider>

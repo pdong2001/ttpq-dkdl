@@ -1,20 +1,14 @@
 import { ToastId, useToast, UseToastOptions } from '@chakra-ui/toast';
 import { createContext, ReactNode, useRef } from 'react';
 
-export const MessageContext = createContext({
-  close: () => {
-    return;
-  },
-  closeAll: () => {
-    return;
-  },
-  add: (options: UseToastOptions) => {
-    options;
-  },
-  updateLast: (options: UseToastOptions) => {
-    options;
-  },
-});
+export type MessageServiceProps = {
+  close: () => void;
+  closeAll: () => void;
+  add: (options: UseToastOptions) => void;
+  updateLast: (options: UseToastOptions) => void;
+};
+
+export const MessageContext = createContext({} as MessageServiceProps);
 
 const { Provider } = MessageContext;
 
