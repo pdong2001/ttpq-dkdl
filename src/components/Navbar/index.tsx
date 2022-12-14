@@ -126,7 +126,7 @@ export default function NavBar() {
               <Menu>
                 <MenuButton cursor={'pointer'} minW={0}>
                   <HStack color='white'>
-                    <Text>{`Xin chào, ${member.fullName || ''}`}</Text>
+                    <Text>{`Xin chào, ${member.religiousName || member.fullName || ''}`}</Text>
                     <Avatar size={'sm'} src={member.avatarPath} />
                   </HStack>
                 </MenuButton>
