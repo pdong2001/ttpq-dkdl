@@ -1,3 +1,4 @@
+import { getMemberAuth } from '~/slices/memberAuth';
 import { UpSertEventRegistryDto } from './../../dtos/EventRegistries/UpSertEventRegistryDto.model';
 import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
@@ -67,6 +68,12 @@ const slice = createAppSlice<typeof initialState>(
       action: updateRegister,
       onFullfilled: (_, action) => {
         return action.payload.data;
+      },
+    },
+    {
+      action: getMemberAuth,
+      onFullfilled: (state, action) => {
+        return { ...state, ...action.payload.data?.member };
       },
     },
   ],

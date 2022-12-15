@@ -145,6 +145,7 @@ const Step2 = (props: StepProps) => {
   const { registerType: localRegisterType } = formik.values;
 
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+  console.log('___', formik.values.registerType);
 
   const setLeaderPreview = (leader) => {
     if (_.get(leader, 'success', false)) {
@@ -221,13 +222,16 @@ const Step2 = (props: StepProps) => {
                     <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                     <Radio value={RegisterType.GROUP}>Nhóm</Radio>
                   </Radios>
-                  {isRegisterFollowGroup && (
-                    <SearchLeader
-                      name='leaderId'
-                      getLeader={(leader) => setLeaderPreview(leader)}
-                      label='Trưởng nhóm'
-                    />
-                  )}
+                  <SearchLeader
+                    name='leaderId'
+                    getLeader={(leader) => {
+                      if (formik.values.registerType === RegisterType.GROUP) {
+                        setLeaderPreview(leader);
+                      }
+                    }}
+                    label='Trưởng nhóm'
+                    registerTypeFieldName='registerType'
+                  />
                 </Stack>
               </SimpleGrid>
             </Stack>

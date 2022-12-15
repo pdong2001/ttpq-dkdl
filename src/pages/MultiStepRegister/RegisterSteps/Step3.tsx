@@ -83,7 +83,6 @@ const Step3 = (props: StepProps) => {
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
-  const isAddNew = path === ADD_NEW_REGISTER_PATH;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -106,8 +105,7 @@ const Step3 = (props: StepProps) => {
       // thêm field
       carBookingType:
         carBookingTypeInStore ||
-        (editCarBookingType && editCarBookingType + '') ||
-        CarBookingType.Both,
+        (editCarBookingType ? editCarBookingType + '' : CarBookingType.Both),
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
