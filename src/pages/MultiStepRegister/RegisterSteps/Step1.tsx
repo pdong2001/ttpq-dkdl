@@ -7,7 +7,7 @@ import { fillDataPreview } from '~/slices/previewInfo';
 import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import FormInput from '~/components/Form/FormInput';
-import { useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -25,6 +25,8 @@ const Step1 = (props: StepProps) => {
   const messageService = useContext(MessageContext);
   const dispatch = useAppDispatch();
   const { path } = useRouteMatch();
+  const { shortUri } = useParams<any>();
+  const history = useHistory();
   const isHomePage = path === HOME_WITH_SHORT_URI;
 
   const { event, eventId } = useAppSelector((state) => state.registerPage.data);
@@ -54,6 +56,16 @@ const Step1 = (props: StepProps) => {
     validationSchema: step1Schema,
     onSubmit: (values) => {
       const { fullName, identityCard, /*registerType*/ phoneNumber } = values;
+      const handleNext = () => {
+        dispatch(
+          fillDataPreview({
+            fullName,
+            identityCard,
+            phoneNumber,
+          }),
+        );
+        nextStep();
+      };
       // let { leaderId } = values;
       // if (registerType === RegisterType.SINGLE) {
       //   leaderId = '';
@@ -79,18 +91,30 @@ const Step1 = (props: StepProps) => {
         }),
       )
         .then(unwrapResult)
-        .catch(() => {
-          // alert('Chưa đăng ký');
+        .then(({ data }) => {
+          const { member } = data || {};
+          if (member?.id) {
+            publicRequest
+              .get(formatUrl(API.CHECK_EXIST_REGISTER, { eventId }), {
+                params: { memberId: member.id },
+              })
+              .then(({ data }) => {
+                if (data.data) {
+                  messageService.add({
+                    title: 'Bạn đã đăng ký lễ này rồi ạ',
+                    status: 'error',
+                  });
+                  history.replace(`/${shortUri}/register-info/${data.data}`);
+                  history.go(0);
+                } else {
+                  handleNext();
+                }
+              })
+              .catch(() => {
+                handleNext();
+              });
+          }
         });
-
-      dispatch(
-        fillDataPreview({
-          fullName,
-          identityCard,
-          phoneNumber,
-        }),
-      );
-      nextStep();
     },
   });
 

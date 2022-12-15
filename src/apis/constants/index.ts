@@ -21,6 +21,7 @@ const REGISTER = api('/Member/add');
 const SEARCH_MEMBER = api('/Member/search');
 const GET_REGISTER_BY_EVENT = api('/EventRegistry/event/:eventId');
 const POST_ARRIVED = api('/eventregistry/arrived/event/:eventId');
+const CHECK_EXIST_REGISTER = api('/EventRegistry/check/:eventId');
 
 /* API from app Nhân sự */
 const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
@@ -56,6 +57,7 @@ const API = {
   GET_MEMBER,
   GET_REGISTER_BY_EVENT,
   POST_ARRIVED,
+  CHECK_EXIST_REGISTER,
 };
 
 export default API;
