@@ -47,11 +47,6 @@ const Step1 = (props: StepProps) => {
       fullName: fullName || member?.fullName,
       phoneNumber: phoneNumber || member?.phoneNumber,
       identityCard: identityCard || member?.identityCard,
-      // registerType:
-      //   register?.registerType ||
-      //   (registerInfo?.registerType && registerInfo.registerType + '') ||
-      //   RegisterType.SINGLE,
-      // leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {
@@ -66,10 +61,6 @@ const Step1 = (props: StepProps) => {
         );
         nextStep();
       };
-      // let { leaderId } = values;
-      // if (registerType === RegisterType.SINGLE) {
-      //   leaderId = '';
-      // }
       dispatch(
         fillForm({
           fullName,
@@ -120,19 +111,7 @@ const Step1 = (props: StepProps) => {
     },
   });
 
-  // const setLeaderPreview = (leader) => {
-  //   if (_.get(leader, 'success', false)) {
-  //     dispatch(
-  //       fillDataPreview({
-  //         leader: _.get(leader, 'data', {}),
-  //       }),
-  //     );
-  //   }
-  // };
-  // const { registerType: localRegisterType } = formik.values;
-
   const greatCeremony = event?.name || '';
-  // const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
 
   return (
     <FadeInUp>
@@ -175,22 +154,6 @@ const Step1 = (props: StepProps) => {
                   inputMode='numeric'
                   type='number'
                 />
-                {/* <Radios
-                {...(isHomePage && { color: 'white' })}
-                label='Hình thức đăng ký'
-                name='registerType'
-              >
-                <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
-                <Radio value={RegisterType.GROUP}>Nhóm</Radio>
-              </Radios> */}
-                {/* {isRegisterFollowGroup && (
-                <SearchLeader
-                  {...(isHomePage && { color: 'white' })}
-                  name='leaderId'
-                  getLeader={(leader) => setLeaderPreview(leader)}
-                  label='Trưởng nhóm'
-                />
-              )} */}
               </Stack>
               <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
                 Tiếp theo
