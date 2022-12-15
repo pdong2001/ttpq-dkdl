@@ -10,14 +10,24 @@ import FormInput from '~/components/Form/FormInput';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
+import { MemberDto } from '~/dtos/Members/MemberDto.model';
+import publicRequest from '~/apis/common/axios';
+import { formatUrl } from '~/utils/functions';
+import API from '~/apis/constants';
+import { useContext } from 'react';
+import { MessageContext } from '~/providers/message';
+import { getMemberAuth } from '~/slices/memberAuth';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
+  const messageService = useContext(MessageContext);
   const dispatch = useAppDispatch();
   const { path } = useRouteMatch();
   const isHomePage = path === HOME_WITH_SHORT_URI;
 
-  const { event } = useAppSelector((state) => state.registerPage.data);
+  const { event, eventId } = useAppSelector((state) => state.registerPage.data);
 
   const {
     fullName = '',
@@ -61,13 +71,18 @@ const Step1 = (props: StepProps) => {
         }),
       );
       dispatch(
-        searchMember({
+        getMemberAuth({
           data: {
             phoneNumber,
             identityCard,
           },
         }),
-      );
+      )
+        .then(unwrapResult)
+        .catch(() => {
+          alert('Chưa đăng ký');
+        });
+
       dispatch(
         fillDataPreview({
           fullName,
