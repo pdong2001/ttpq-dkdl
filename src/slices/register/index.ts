@@ -76,7 +76,7 @@ const slice = createAppSlice<typeof initialState>(
     {
       action: getMemberAuth,
       onFullfilled: (state, action) => {
-        return { ...state, ...action.payload.data?.member };
+        return { ...action.payload.data?.member, ...state };
       },
     },
   ],
