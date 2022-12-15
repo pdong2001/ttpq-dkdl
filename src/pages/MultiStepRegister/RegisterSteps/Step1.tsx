@@ -104,8 +104,10 @@ const Step1 = (props: StepProps) => {
                     title: 'Bạn đã đăng ký lễ này rồi ạ',
                     status: 'error',
                   });
-                  history.replace(`/${shortUri}/register-info/${data.data}`);
-                  history.go(0);
+                  setTimeout(() => {
+                    history.replace(`/${shortUri}/register-info/${data.data}`);
+                    history.go(0);
+                  }, 1000);
                 } else {
                   handleNext();
                 }
