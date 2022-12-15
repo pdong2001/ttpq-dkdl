@@ -1,14 +1,6 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Select,
-  SelectProps,
-  Text,
-} from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Select, SelectProps } from '@chakra-ui/react';
 import { nanoid } from '@reduxjs/toolkit';
 import { useField } from 'formik';
-import useCustomColorMode from '~/hooks/useColorMode';
 
 export type SelectData = {
   // id: string | number;

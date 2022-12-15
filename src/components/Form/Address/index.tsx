@@ -15,7 +15,6 @@ import API from '~/apis/constants';
 import { useField } from 'formik';
 import { useState, useEffect } from 'react';
 import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
-import useCustomColorMode from '~/hooks/useColorMode';
 
 type AddressProps = SelectProps &
   FormControlProps &
