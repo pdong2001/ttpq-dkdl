@@ -46,8 +46,8 @@ const slice = createAppSlice<typeof initialState>(
     onlyKeep: (state, action) => {
       state.data = { ...action.payload };
     },
-    resetRegister: (state) => {
-      state.data = initialState.data;
+    resetRegister: (state, action) => {
+      state.data = action.payload;
     },
   },
   [

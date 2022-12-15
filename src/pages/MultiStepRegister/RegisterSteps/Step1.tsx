@@ -107,7 +107,7 @@ const Step1 = (props: StepProps) => {
           }
         })
         .catch(() => {
-          dispatch(resetRegister({}));
+          dispatch(resetRegister({ fullName, identityCard, phoneNumber }));
           handleNext();
         });
     },
