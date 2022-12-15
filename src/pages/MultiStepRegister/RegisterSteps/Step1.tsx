@@ -80,7 +80,7 @@ const Step1 = (props: StepProps) => {
       )
         .then(unwrapResult)
         .catch(() => {
-          alert('Chưa đăng ký');
+          // alert('Chưa đăng ký');
         });
 
       dispatch(
