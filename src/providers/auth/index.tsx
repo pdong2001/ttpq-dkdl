@@ -14,6 +14,8 @@ import { formatUrl } from '~/utils/functions';
 import { MessageContext } from '../message';
 
 import publicRequest from '~/apis/common/axios';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 
 export type AuthValue = {
   login: () => void;
@@ -37,23 +39,32 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [openLogin, setOpenLogin] = useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const { shortUri } = useParams<any>();
   const memberLoggedIn = useAppSelector((state) => state.memberAuth.data);
   const [member, setMember] = useState(memberLoggedIn);
   const messageService = useContext(MessageContext);
   const { eventId } = useAppSelector((state) => state.registerPage.data);
+
+  const getRegister = () => {
+    return dispatch(
+      getLoggedInRegister({
+        eventId: eventId || '',
+      }),
+    ).then(unwrapResult);
+    // .then((data) => {
+    //   console.log('data', data);
+    // });
+  };
+
   useEffect(() => {
     if (memberLoggedIn.userToken) {
       dispatch(getLoggedInMember({}));
-
       if (eventId) {
-        dispatch(
-          getLoggedInRegister({
-            eventId: eventId || '',
-          }),
-        );
+        getRegister();
       }
     }
   }, [eventId]);
+
   useEffect(() => {
     setMember(memberLoggedIn);
   }, [memberLoggedIn]);
@@ -103,7 +114,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       status: 'success',
     });
     setOpenLogin(false);
-    reload();
+    getRegister().then(({ data }) => {
+      const { id, eventRegistryPageId = shortUri } = (data as EventRegistryDto) || {};
+      if (id && eventRegistryPageId) {
+        history.push(`/${eventRegistryPageId}/register-info/${data.id}`);
+      }
+    });
+    // reload();
   };
   const onClose = () => {
     setOpenLogin(false);

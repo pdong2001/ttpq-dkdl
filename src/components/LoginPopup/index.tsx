@@ -50,7 +50,6 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
     setIdentityNumber(value);
   };
   const login = () => {
-    // if (isMemberRole) {
     const request = dispatch(
       getMemberAuth({
         data: {
@@ -59,9 +58,6 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
         },
       }),
     );
-    // } else {
-    // request = dispatch()
-    // }
 
     request
       .then(unwrapResult)
