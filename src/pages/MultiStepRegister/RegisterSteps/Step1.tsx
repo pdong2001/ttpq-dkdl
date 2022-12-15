@@ -107,6 +107,9 @@ const Step1 = (props: StepProps) => {
                 handleNext();
               });
           }
+        })
+        .catch(() => {
+          handleNext();
         });
     },
   });
