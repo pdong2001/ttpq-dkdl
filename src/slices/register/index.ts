@@ -46,6 +46,9 @@ const slice = createAppSlice<typeof initialState>(
     onlyKeep: (state, action) => {
       state.data = { ...action.payload };
     },
+    resetRegister: (state) => {
+      state.data = initialState.data;
+    },
   },
   [
     {
@@ -80,5 +83,5 @@ const slice = createAppSlice<typeof initialState>(
 );
 
 const registerReducer = slice.reducer;
-export const { fillForm, onlyKeep } = slice.actions;
+export const { fillForm, onlyKeep, resetRegister } = slice.actions;
 export default registerReducer;
