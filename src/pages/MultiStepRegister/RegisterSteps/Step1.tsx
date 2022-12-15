@@ -8,7 +8,7 @@ import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import FormInput from '~/components/Form/FormInput';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { HOME_WITH_SHORT_URI } from '~/routes';
+import { EDIT_REGISTER_PATH, HOME_WITH_SHORT_URI } from '~/routes';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
@@ -28,6 +28,7 @@ const Step1 = (props: StepProps) => {
   const { shortUri } = useParams<any>();
   const history = useHistory();
   const isHomePage = path === HOME_WITH_SHORT_URI;
+  const isEditRegisterPage = path === EDIT_REGISTER_PATH;
 
   const { event, eventId } = useAppSelector((state) => state.registerPage.data);
 
@@ -90,7 +91,7 @@ const Step1 = (props: StepProps) => {
                 params: { memberId: member.id },
               })
               .then(({ data }) => {
-                if (data.data) {
+                if (data.data && !isEditRegisterPage) {
                   messageService.add({
                     title: 'Bạn đã đăng ký lễ này rồi ạ',
                     status: 'error',
