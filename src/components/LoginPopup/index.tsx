@@ -12,13 +12,16 @@ import {
   ModalFooter,
   Button,
   Tooltip,
+  Text,
 } from '@chakra-ui/react';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useContext, useState } from 'react';
+import { LoginRole } from '~/dtos/Enums/LoginRole';
 import { useAppDispatch } from '~/hooks/reduxHook';
 import { MessageContext } from '~/providers/message';
 import { getMemberAuth } from '~/slices/memberAuth';
 import { REGEX_PHONE } from '~/utils/common';
+import RadioButtonGroup from '../RadioButtonGroup';
 
 type LoginProps = {
   isOpen: boolean;
@@ -33,6 +36,10 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
   const [identityNumber, setIdentityNumber] = useState('');
   const dispatch = useAppDispatch();
   const messageService = useContext(MessageContext);
+  const [loginRole] = useState(LoginRole.MEMBER);
+  const isMemberRole = loginRole === LoginRole.MEMBER;
+  const passwordLabel = isMemberRole ? 'Số căn cước hoặc chứng minh thư' : 'Mật khẩu';
+  const userLabel = isMemberRole ? 'Số điện thoại ' : 'Tài khoản';
 
   const handlePhoneChange = (e) => {
     const { value } = e.target;
@@ -43,14 +50,16 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
     setIdentityNumber(value);
   };
   const login = () => {
-    dispatch(
+    const request = dispatch(
       getMemberAuth({
         data: {
           phoneNumber: phone,
           identityCard: identityNumber,
         },
       }),
-    )
+    );
+
+    request
       .then(unwrapResult)
       .then(() => {
         onSuccess?.();
@@ -68,6 +77,7 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
     e.preventDefault();
     login();
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <form onSubmit={handleSubmit}>
@@ -79,22 +89,40 @@ const LoginPopup = ({ isOpen, onClose, title, onSuccess, isLogin }: LoginProps) 
           <ModalBody pb={6}>
             <FormControl isRequired>
               <FormLabel>
-                Số điện thoại{' '}
-                <Tooltip label='Số điện thoại phải đủ 10 số ạ'>
-                  <QuestionOutlineIcon />
-                </Tooltip>
+                {isMemberRole ? (
+                  <>
+                    <span>{userLabel}</span>
+                    <Tooltip rounded='md' hasArrow label='Hãy nhập số điện thoại hợp lệ'>
+                      <QuestionOutlineIcon />
+                    </Tooltip>
+                  </>
+                ) : (
+                  userLabel
+                )}
               </FormLabel>
-              <Input placeholder='Số điện thoại' value={phone} onChange={handlePhoneChange} />
+              <Input placeholder={userLabel} value={phone} onChange={handlePhoneChange} />
             </FormControl>
 
             <FormControl mt={4} isRequired>
-              <FormLabel>Số căn cước hoặc chứng minh thư</FormLabel>
+              <FormLabel>{passwordLabel}</FormLabel>
               <Input
-                placeholder='Số CCCD/CMT'
+                placeholder={passwordLabel}
                 value={identityNumber}
                 onChange={handleIdentityNumberChange}
               />
             </FormControl>
+            {/* <RadioButtonGroup
+              onChange={(value) => {
+                setLoginRole(value);
+              }}
+              options={[
+                { value: LoginRole.MEMBER, label: 'Thành viên' },
+                { value: LoginRole.ADMIN, label: 'Quản lý' },
+              ]}
+              defaultValue={loginRole}
+              justify='center'
+              mt='3'
+            /> */}
           </ModalBody>
 
           <ModalFooter>

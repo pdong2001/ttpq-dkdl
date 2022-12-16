@@ -30,7 +30,6 @@ import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
-import { ReceiveCardAddressDto } from '~/dtos/ReceiveCardLocations/ReceiveCardAddressDto.model';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -76,11 +75,12 @@ const Step4 = (props: StepProps) => {
   const { departments } = registerPage;
 
   // lấy nơi nhận thẻ
-  const { data: receiveCardLocationList } = useAxios({
-    method: 'get',
-    url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
-    transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
-  });
+  const { receiveCardAddresses = [] } = useAppSelector((state) => state.registerPage.data);
+  // const { data: receiveCardLocationList } = useAxios({
+  //   method: 'get',
+  //   url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
+  //   transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
+  // });
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -170,7 +170,7 @@ const Step4 = (props: StepProps) => {
         strongPointIds: mapName(strongPointList, strongPointIds),
         expDepartmentIds: mapName(departments, expDepartmentIds),
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
-        receiveCardAddressId: mapName(receiveCardLocationList, [+receiveCardAddressId]),
+        receiveCardAddressId: mapName(receiveCardAddresses, [+receiveCardAddressId]),
         clothingSize,
       }),
     );
@@ -224,7 +224,7 @@ const Step4 = (props: StepProps) => {
               />
               <Select
                 name='receiveCardAddressId'
-                data={receiveCardLocationList}
+                data={receiveCardAddresses}
                 // labelField='address'
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'

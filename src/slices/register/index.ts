@@ -1,3 +1,4 @@
+import { getMemberAuth } from '~/slices/memberAuth';
 import { UpSertEventRegistryDto } from './../../dtos/EventRegistries/UpSertEventRegistryDto.model';
 import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
@@ -45,6 +46,9 @@ const slice = createAppSlice<typeof initialState>(
     onlyKeep: (state, action) => {
       state.data = { ...action.payload };
     },
+    resetRegister: (state, action) => {
+      state.data = action.payload;
+    },
   },
   [
     {
@@ -69,9 +73,15 @@ const slice = createAppSlice<typeof initialState>(
         return action.payload.data;
       },
     },
+    {
+      action: getMemberAuth,
+      onFullfilled: (state, action) => {
+        return { ...action.payload.data?.member, ...state };
+      },
+    },
   ],
 );
 
 const registerReducer = slice.reducer;
-export const { fillForm, onlyKeep } = slice.actions;
+export const { fillForm, onlyKeep, resetRegister } = slice.actions;
 export default registerReducer;

@@ -1,13 +1,10 @@
 import MainLayout from '~/components/containers/layouts/MainLayout';
-import DepartmentInfos from '~/pages/DeparmentInfos';
 import GreatCeremonyInfo from '~/pages/GreatCeremonyInfo';
 import Home from '~/pages/Home';
 import MultiStepRegister from '~/pages/MultiStepRegister';
 import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
-import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
-import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 import NoFooterLayout from '~/components/containers/layouts/NoFooterLayout';
 
 export type RouteType = {

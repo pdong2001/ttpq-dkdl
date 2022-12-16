@@ -30,6 +30,7 @@ export default function UploadFile(props: UploadFileProps) {
   const [data, setData] = useState<any>();
   const [field, _, helpers] = useField(name);
   const { primaryColor } = useCustomColorMode();
+  const [imgSrc, setImgSrc] = useState(field.value);
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
@@ -46,7 +47,11 @@ export default function UploadFile(props: UploadFileProps) {
   }, [file]);
 
   /* Upload file */
-  const { cancel, data: uploadResponse } = useAxios<UploadResponse>(
+  const {
+    cancel,
+    data: uploadResponse,
+    loaded: isUploaded,
+  } = useAxios<UploadResponse>(
     {
       url: API.UPLOAD_PHOTO,
       method: 'post',
@@ -63,13 +68,17 @@ export default function UploadFile(props: UploadFileProps) {
 
   useEffect(() => {
     if (uploadResponse?.data) {
-      helpers.setValue(
-        formatUrl(API.GET_PHOTO, {
-          key: uploadResponse.data[0]?.storedFileName,
-        }),
-      );
+      const src = formatUrl(API.GET_PHOTO, {
+        key: uploadResponse.data[0]?.storedFileName,
+        scale: 200,
+      });
+      if (isUploaded) {
+        const directSrc = URL.createObjectURL(file as Blob);
+        helpers.setValue(src);
+        setImgSrc(directSrc);
+      }
     }
-  }, [uploadResponse]);
+  }, [uploadResponse, isUploaded]);
 
   return (
     <Container my='2' centerContent>
@@ -110,7 +119,7 @@ export default function UploadFile(props: UploadFileProps) {
               >
                 {field.value ? (
                   <Box position='relative'>
-                    <Image src={field.value} />
+                    <Image src={imgSrc} />
                   </Box>
                 ) : (
                   <Stack p='8' textAlign='center' spacing='1'>

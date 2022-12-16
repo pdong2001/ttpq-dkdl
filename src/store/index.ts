@@ -6,7 +6,7 @@ import rootReducer from '~/reducers';
 
 const store = configureStore({
   reducer: rootReducer,
-  devTools: process.env.TTPQ_NODE_ENV === 'development',
+  devTools: import.meta.env.TTPQ_NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

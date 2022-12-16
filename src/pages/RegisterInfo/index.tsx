@@ -225,7 +225,14 @@ const RegisterInfo = () => {
             <Avatar size={'2xl'} src={member?.avatarPath} mb={4} pos={'relative'} />
             <Heading fontSize={'2xl'} fontFamily={'body'}>
               <Flex justify='center' gap={2}>
-                {member?.fullName} {isArrived && <MdVerified color='green' />}
+                {member?.fullName}{' '}
+                {isArrived && (
+                  <Tooltip hasArrow rounded='md' label='Đã về chùa'>
+                    <span>
+                      <MdVerified color='green' />
+                    </span>
+                  </Tooltip>
+                )}
               </Flex>
             </Heading>
             <Text fontWeight={600} color={'gray.500'} mt={2} mb={5}>

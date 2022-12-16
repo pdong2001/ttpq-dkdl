@@ -1,4 +1,4 @@
-const API_PREFIX = process.env.TTPQ_API_PREFIX;
+const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
 
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
@@ -21,6 +21,7 @@ const REGISTER = api('/Member/add');
 const SEARCH_MEMBER = api('/Member/search');
 const GET_REGISTER_BY_EVENT = api('/EventRegistry/event/:eventId');
 const POST_ARRIVED = api('/eventregistry/arrived/event/:eventId');
+const CHECK_EXIST_REGISTER = api('/EventRegistry/check/:eventId');
 
 /* API from app Nhân sự */
 const GET_PROVINCE = 'https://ctnpq.com/apis/address/Province';
@@ -28,7 +29,7 @@ const GET_DISTRICT = 'https://ctnpq.com/apis/address/District';
 const GET_WARD = 'https://ctnpq.com/apis/address/Ward';
 const UPLOAD_PHOTO = 'https://ctnpq.com/apis/photo/upload';
 const GET_CTN = 'https://ctnpq.com/apis/ctn/list';
-const GET_PHOTO = `https://ctnpq.com/apis/photo?key=:key`;
+const GET_PHOTO = `https://ctnpq.com/apis/photo?key=:key&scale=:scale`;
 
 const API = {
   REGISTER,
@@ -56,6 +57,7 @@ const API = {
   GET_MEMBER,
   GET_REGISTER_BY_EVENT,
   POST_ARRIVED,
+  CHECK_EXIST_REGISTER,
 };
 
 export default API;
