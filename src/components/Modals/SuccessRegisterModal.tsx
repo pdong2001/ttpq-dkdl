@@ -25,6 +25,8 @@ import {
   HStack,
   Flex,
   Tooltip,
+  CircularProgress,
+  useToast,
 } from '@chakra-ui/react';
 import { MdContentCopy, MdVerified } from 'react-icons/md';
 import QRCode from 'react-qr-code';
@@ -36,7 +38,7 @@ import { REGISTER_INFO_TITLE } from '~/configs/register';
 import * as htmlToImage from 'html-to-image';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '~/providers/auth';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
@@ -56,12 +58,16 @@ export default function SuccessRegisterModal({
   isCentered?: boolean;
   isSuccessPopup?: boolean;
 }) {
+  const toast = useToast();
   const history = useHistory();
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const { member } = useContext(AuthContext);
+  const [isDownloading, setDownloading] = useState(false);
+
+
   const { register } = member || {};
   const isRegisterPopup = path === ADD_NEW_REGISTER_PATH;
   const organizationStructureId =
@@ -94,7 +100,16 @@ export default function SuccessRegisterModal({
 
   const { infosSuccess, LinkQrCode, avatar, fullName, registerInfoPath } = dataSuccess;
 
-  const onImageDownload = async (fullName) => {
+  const onImageDownload = async (fullName = '') => {
+    toast({
+      title: 'Đang tải xuống',
+      description: "Qúy phật tử vui lòng chờ trong giây lát!",
+      status: 'success',
+      duration: 10000,
+      isClosable: true,
+      // zIn
+    })
+    setDownloading(true);
     function coverName(string) {
       return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     }
@@ -106,6 +121,10 @@ export default function SuccessRegisterModal({
     link.download = `${coverName(fullName)}_thong-tin-dang-ky.png`;
     link.href = dataUrl;
     link.click();
+    setDownloading(false);
+    setTimeout(() => {
+      toast.closeAll();
+    }, 1000);
   };
 
   const copyLinkQR = () => {
@@ -140,8 +159,9 @@ export default function SuccessRegisterModal({
           </Heading>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody px={0} background={'#FFFFFF'}>
-          {/* <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}> */}
+        <ModalBody px={0} background={'#FFFFFF'} position={'relative'}>
+
+          {/* {isDownloading && DownloadingRender()} */}
           <Stack>
             <Box position={'relative'} pb={[8, 12]}>
               <Box
@@ -254,8 +274,8 @@ export default function SuccessRegisterModal({
         <ModalFooter>
           {isShowRegisterInfo && (
             <>
-              <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
-                Lưu về máy
+              <Button isLoading={isDownloading} disabled={isDownloading} variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
+                {isDownloading ? 'Đang tải xuống...' : 'Tải về máy'}
               </Button>
               <Button
                 colorScheme='yellow'
