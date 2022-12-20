@@ -41,9 +41,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const history = useHistory();
   const { shortUri } = useParams<any>();
   const memberLoggedIn = useAppSelector((state) => state.memberAuth.data);
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
   const [member, setMember] = useState(memberLoggedIn);
   const messageService = useContext(MessageContext);
   const { eventId } = useAppSelector((state) => state.registerPage.data);
+
+  useEffect(() => {
+    if (!memberLoggedIn?.avatarPath && registerInfo?.member) {
+      setMember({ ...member, ...registerInfo?.member });
+    }
+  }, [member.avatarPath, registerInfo?.member?.avatarPath]);
 
   const getRegister = () => {
     return dispatch(
@@ -114,13 +121,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       status: 'success',
     });
     setOpenLogin(false);
+
     getRegister().then(({ data }) => {
       const { id, eventRegistryPageId = shortUri } = (data as EventRegistryDto) || {};
       if (id && eventRegistryPageId) {
         history.push(`/${eventRegistryPageId}/register-info/${data.id}`);
       }
     });
-    // reload();
+    setTimeout(() => {
+      reload();
+    }, 1000);
   };
   const onClose = () => {
     setOpenLogin(false);

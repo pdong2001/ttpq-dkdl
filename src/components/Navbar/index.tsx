@@ -55,6 +55,7 @@ const delta = window.innerHeight / 1.5;
 export default function NavBar() {
   const history = useHistory();
   const registerPage = useAppSelector((state) => state.registerPage.data);
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shortUri = '' } = useParams<any>();
   const { path } = useRouteMatch();
@@ -67,8 +68,13 @@ export default function NavBar() {
     { title: 'Chương trình', to: `/${shortUri}#timeline` },
   ];
 
-  const { login, logout, member } = useContext(AuthContext);
+  const { login, logout } = useContext(AuthContext);
+  let { member } = useContext(AuthContext);
+  if (!member?.avatarPath) {
+    member = { ...member, ...registerInfo?.member };
+  }
   const { register } = member || {};
+  console.log('🚀 ~ file: index.tsx:73 ~ NavBar ~ member', member);
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
   const [color, setColor] = useState('blue.500');
