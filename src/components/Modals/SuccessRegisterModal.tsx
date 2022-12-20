@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, QuestionOutlineIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 import cover from '~/assets/cover/ptd-cover.jpeg';
 import {
   Modal,
@@ -41,8 +41,8 @@ import API from '~/apis/constants';
 import { useContext, useState } from 'react';
 import { AuthContext } from '~/providers/auth';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
-import { formatUrl, getImageSrc } from '~/utils/functions';
+import { ADD_NEW_REGISTER_PATH } from '~/routes';
+import { getImageSrc } from '~/utils/functions';
 
 const PATH_URL = window.location.origin;
 
