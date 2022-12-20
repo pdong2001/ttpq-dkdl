@@ -24,7 +24,7 @@ import { useHistory } from 'react-router-dom';
 import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook, MdVerified } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { formatUrl, mapReceiverCardAddressDetail } from '~/utils/functions';
+import { formatUrl, getImageSrc, mapReceiverCardAddressDetail } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
 import useAxios from '~/hooks/useAxios';
@@ -222,7 +222,12 @@ const RegisterInfo = () => {
             rounded={'lg'}
             textAlign={'center'}
           >
-            <Avatar size={'2xl'} src={member?.avatarPath} mb={4} pos={'relative'} />
+            <Avatar
+              size={'2xl'}
+              src={getImageSrc(member?.avatarPath, 120)}
+              mb={4}
+              pos={'relative'}
+            />
             <Heading fontSize={'2xl'} fontFamily={'body'}>
               <Flex justify='center' gap={2}>
                 {member?.fullName}{' '}
