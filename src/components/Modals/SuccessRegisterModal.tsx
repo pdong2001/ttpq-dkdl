@@ -40,6 +40,7 @@ import { useContext } from 'react';
 import { AuthContext } from '~/providers/auth';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH, EDIT_REGISTER_PATH } from '~/routes';
+import { formatUrl, getImageSrc } from '~/utils/functions';
 
 const PATH_URL = window.location.origin;
 
@@ -159,7 +160,7 @@ export default function SuccessRegisterModal({
                 transform='translate(-50%, -50%)'
                 left='50%'
               >
-                <Avatar size={['lg', 'xl']} src={avatar} backgroundColor={'#c7ced6'} />
+                <Avatar size={['lg', 'xl']} src={getImageSrc(avatar)} backgroundColor={'#c7ced6'} />
               </Box>
             </Box>
             <Box px={5}>

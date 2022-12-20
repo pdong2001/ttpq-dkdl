@@ -25,6 +25,8 @@ import { BiLogOutCircle, BiQr, BiUserCircle } from 'react-icons/bi';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { AuthContext } from '~/providers/auth';
 import SuccessRegisterModal from '../Modals/SuccessRegisterModal';
+import { formatUrl, getImageSrc } from '~/utils/functions';
+import API from '~/apis/constants';
 
 const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; onClick?: any }) => (
   <Link
@@ -127,7 +129,7 @@ export default function NavBar() {
                 <MenuButton cursor={'pointer'} minW={0}>
                   <HStack color='white'>
                     <Text>{`Xin chào, ${member.religiousName || member.fullName || ''}`}</Text>
-                    <Avatar size={'sm'} src={member.avatarPath} />
+                    <Avatar size={'sm'} src={getImageSrc(member.avatarPath, 120)} />
                   </HStack>
                 </MenuButton>
                 <MenuList color={'blue.500'}>

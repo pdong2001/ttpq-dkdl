@@ -1,3 +1,4 @@
+import API from '~/apis/constants';
 import { ReceiveCardAddressDto } from '~/dtos/ReceiveCardLocations/ReceiveCardAddressDto.model';
 const printByPattern = (pattern) => (format, data) =>
   format.replace(pattern, (match) => data[match.replace(/\W/g, '')]);
@@ -18,3 +19,24 @@ export const mapReceiverCardAddressDetail = (receiverCardAddress?: ReceiveCardAd
 };
 
 export const formatUrl = printByPattern(/:(\w+)/g);
+
+export const getImageSrc = (value?: string, scale?: number): string => {
+  if (value) {
+    if (value.startsWith('ImageUpload')) {
+      return getImageSrcFromCtnpqServer(value, scale);
+    }
+    if (!value.startsWith('http') && !value.startsWith('assets')) {
+      while (value.indexOf('/') === 0) {
+        value = value.slice(1);
+      }
+      value = API.CANLOC_MEDIA_SERVER + '/' + value;
+    }
+    return value;
+  }
+
+  return getImageSrcFromCtnpqServer('');
+};
+
+const getImageSrcFromCtnpqServer = (key: string, scale = -1) => {
+  return formatUrl(API.GET_PHOTO, { key, scale });
+};

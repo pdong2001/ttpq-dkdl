@@ -68,10 +68,7 @@ export default function UploadFile(props: UploadFileProps) {
 
   useEffect(() => {
     if (uploadResponse?.data) {
-      const src = formatUrl(API.GET_PHOTO, {
-        key: uploadResponse.data[0]?.storedFileName,
-        scale: 200,
-      });
+      const src = uploadResponse.data[0]?.storedFileName;
       if (isUploaded) {
         const directSrc = URL.createObjectURL(file as Blob);
         helpers.setValue(src);
