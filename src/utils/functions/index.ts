@@ -24,12 +24,11 @@ export const getImageSrc = (value?: string, scale?: number): string => {
   if (value) {
     if (value.startsWith('ImageUpload')) {
       return getImageSrcFromCtnpqServer(value, scale);
-    }
-    if (!value.startsWith('http') && !value.startsWith('assets')) {
+    } else if (!value.startsWith('http') && !value.startsWith('assets')) {
       while (value.indexOf('/') === 0) {
         value = value.slice(1);
       }
-      value = API.CANLOC_MEDIA_SERVER + '/' + value;
+      value = import.meta.env.TTPQ_MEDIA_SERVER + '/avatars' + '/' + value;
     }
     return value;
   }
