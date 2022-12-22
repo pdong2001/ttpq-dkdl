@@ -1,4 +1,3 @@
-import { getMemberAuth } from '~/slices/memberAuth';
 import { UpSertEventRegistryDto } from './../../dtos/EventRegistries/UpSertEventRegistryDto.model';
 import createAppSlice from '~/slices/common/slice';
 import { ReduxState } from '~/apis/common/type';
@@ -6,6 +5,7 @@ import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 import API from '~/apis/constants';
 import { MemberDto } from '~/dtos/Members/MemberDto.model';
 import { createAsyncRequest } from '~/slices/common/action';
+import { MemberLoginRequest } from '~/dtos/Members/MemberLoginRequest.model';
 
 export const register = createAsyncRequest('register', {
   method: 'post',
@@ -34,6 +34,11 @@ const initialState: ReduxState<Data> = {
     register: {},
   },
 };
+
+export const getExistMember = createAsyncRequest<MemberLoginRequest>('member/getExist', {
+  method: 'post',
+  url: API.LOGIN_MEMBER,
+});
 
 const slice = createAppSlice<typeof initialState>(
   'register',
@@ -74,7 +79,7 @@ const slice = createAppSlice<typeof initialState>(
       },
     },
     {
-      action: getMemberAuth,
+      action: getExistMember,
       onFullfilled: (state, action) => {
         return { ...action.payload.data?.member, ...state };
       },

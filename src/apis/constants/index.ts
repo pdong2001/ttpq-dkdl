@@ -1,6 +1,9 @@
 const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
 
+const CTNPQ_MEDIA_SERVER = 'https://ctnpq.com/apis/photo';
+const CANLOC_MEDIA_SERVER = 'https://ctn.multiservices.tk/api';
+
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
 const GET_MEMBER = api('/Auth/member');
@@ -58,6 +61,8 @@ const API = {
   GET_REGISTER_BY_EVENT,
   POST_ARRIVED,
   CHECK_EXIST_REGISTER,
+  CTNPQ_MEDIA_SERVER,
+  CANLOC_MEDIA_SERVER,
 };
 
 export default API;

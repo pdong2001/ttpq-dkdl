@@ -2,7 +2,7 @@ import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm, resetRegister } from '~/slices/register';
+import { fillForm, getExistMember, resetRegister } from '~/slices/register';
 import { fillDataPreview } from '~/slices/previewInfo';
 import step1Schema from '../validationSchema/step1';
 import FormInput from '~/components/Form/FormInput';
@@ -72,7 +72,7 @@ const Step1 = (props: StepProps) => {
         }),
       );
       dispatch(
-        getMemberAuth({
+        getExistMember({
           data: {
             phoneNumber,
             identityCard,

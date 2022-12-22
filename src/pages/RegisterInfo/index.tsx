@@ -24,7 +24,7 @@ import { useHistory } from 'react-router-dom';
 import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook, MdVerified } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { formatUrl, mapReceiverCardAddressDetail } from '~/utils/functions';
+import { formatUrl, getImageSrc, mapReceiverCardAddressDetail } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
 import useAxios from '~/hooks/useAxios';
@@ -90,20 +90,24 @@ const RegisterInfo = () => {
   const assignedArea = data.area;
   const assignedGroup = data.group;
 
-  const permanent = [
-    [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
-    member?.permanentDistrict?.name,
-    member?.permanentProvince?.name,
-  ]
-    .filter((e) => !!e)
-    .join(', ');
-  const temporary = [
-    [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
-    member?.temporaryDistrict?.name,
-    member?.temporaryProvince?.name,
-  ]
-    .filter((e) => !!e)
-    .join(', ');
+  const permanent =
+    member?.permanentAddress ||
+    [
+      [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
+      member?.permanentDistrict?.name,
+      member?.permanentProvince?.name,
+    ]
+      .filter((e) => !!e)
+      .join(', ');
+  const temporary =
+    member?.temporaryAddress ||
+    [
+      [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
+      member?.temporaryDistrict?.name,
+      member?.temporaryProvince?.name,
+    ]
+      .filter((e) => !!e)
+      .join(', ');
 
   const { data: groupData, cancel: groupToken } = useAxios(
     {
@@ -222,7 +226,12 @@ const RegisterInfo = () => {
             rounded={'lg'}
             textAlign={'center'}
           >
-            <Avatar size={'2xl'} src={member?.avatarPath} mb={4} pos={'relative'} />
+            <Avatar
+              size={'2xl'}
+              src={getImageSrc(member?.avatarPath, 120)}
+              mb={4}
+              pos={'relative'}
+            />
             <Heading fontSize={'2xl'} fontFamily={'body'}>
               <Flex justify='center' gap={2}>
                 {member?.fullName}{' '}
