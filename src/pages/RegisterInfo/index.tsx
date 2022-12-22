@@ -90,20 +90,24 @@ const RegisterInfo = () => {
   const assignedArea = data.area;
   const assignedGroup = data.group;
 
-  const permanent = [
-    [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
-    member?.permanentDistrict?.name,
-    member?.permanentProvince?.name,
-  ]
-    .filter((e) => !!e)
-    .join(', ');
-  const temporary = [
-    [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
-    member?.temporaryDistrict?.name,
-    member?.temporaryProvince?.name,
-  ]
-    .filter((e) => !!e)
-    .join(', ');
+  const permanent =
+    member?.permanentAddress ||
+    [
+      [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
+      member?.permanentDistrict?.name,
+      member?.permanentProvince?.name,
+    ]
+      .filter((e) => !!e)
+      .join(', ');
+  const temporary =
+    member?.temporaryAddress ||
+    [
+      [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
+      member?.temporaryDistrict?.name,
+      member?.temporaryProvince?.name,
+    ]
+      .filter((e) => !!e)
+      .join(', ');
 
   const { data: groupData, cancel: groupToken } = useAxios(
     {
