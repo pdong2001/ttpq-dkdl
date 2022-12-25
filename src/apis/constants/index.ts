@@ -2,7 +2,7 @@ const API_PREFIX = import.meta.env.TTPQ_API_PREFIX;
 const api = (api: string) => `${API_PREFIX}${api}`;
 
 const CTNPQ_MEDIA_SERVER = 'https://ctnpq.com/apis/photo';
-const CANLOC_MEDIA_SERVER = 'https://ctn.multiservices.tk/api';
+const CANLOC_MEDIA_SERVER = 'https://ctn.multiservices.tk/avatars';
 
 const UPDATE_REGISTER = api('/EventRegistry/Update/:id');
 const LOGIN = api('/Auth/login');
