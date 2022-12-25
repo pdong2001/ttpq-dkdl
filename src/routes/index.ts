@@ -44,7 +44,7 @@ const ROUTES: RouteType[] = [
   //   layout: MainLayout,
   // },
   {
-    path: ['/:shortUri/register-info/:id'],
+    path: ['/:shortUri/register-info/:id', '/register-info/:id'],
     component: RegisterInfo,
     layout: MainLayout,
   },

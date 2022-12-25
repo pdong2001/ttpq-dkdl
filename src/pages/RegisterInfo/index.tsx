@@ -332,9 +332,11 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                <Button onClick={handleUpdateInfo} size='sm'>
-                  Cập nhật
-                </Button>
+                {shortUri && (
+                  <Button onClick={handleUpdateInfo} size='sm'>
+                    Cập nhật
+                  </Button>
+                )}
                 <LoginPopup
                   title={'Xác thực thông tin'}
                   isOpen={isOpenLoginModal}
