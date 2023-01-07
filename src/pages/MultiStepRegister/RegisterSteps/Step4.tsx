@@ -106,7 +106,7 @@ const Step4 = (props: StepProps) => {
       avatarPath: avatarPath || editAvatarPath || '',
       identityCardImagePathFront: '',
       identityCardImagePathBack: '',
-      identityCardImagePath: '',
+      identityCardImagePaths: '',
       note: note || editNote || '',
       registeredDays: [],
     },
@@ -126,12 +126,12 @@ const Step4 = (props: StepProps) => {
         identityCardImagePathBack,
         registeredDays,
       } = values;
-      const identityCardImagePath = [identityCardImagePathFront, identityCardImagePathBack];
+      const identityCardImagePaths = [identityCardImagePathFront, identityCardImagePathBack];
       const fillData = {
         strongPointIds,
         exps,
         avatarPath,
-        identityCardImagePath,
+        identityCardImagePaths,
         register: {
           ...previousStepData.register,
           expDepartmentIds,

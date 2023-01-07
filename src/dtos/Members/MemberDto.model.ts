@@ -18,7 +18,7 @@ export type MemberDto = {
   facebookAddress?: string;
   permanentAddress?: string;
   temporaryAddress?: string;
-  identityCardImagePath?: string[];
+  identityCardImagePaths?: string[];
   exps?: EventExp;
   ctnType?: PhanLoaiThanhNien;
   dateOfBirth?: string;
