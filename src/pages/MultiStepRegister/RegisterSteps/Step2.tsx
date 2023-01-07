@@ -122,7 +122,7 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
-          organizationStructureId: organizationStructureId_group ?? organizationStructureId,
+          organizationStructureId: organizationStructureId_group || organizationStructureId,
           dateOfBirth,
           temporaryAddress,
           permanentAddress,
