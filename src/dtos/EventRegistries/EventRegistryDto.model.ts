@@ -1,3 +1,4 @@
+import { NamedTimeDto } from './../NamedTimes/NamedTimeDto.model';
 import { StartTimeDto } from '../StartTimes/StartTimeDto.model';
 import { LeaveTimeDto } from '../TimeToLeaves/LeaveTimeDto.model';
 import { ReceiveCardAddressDto } from '../ReceiveCardLocations/ReceiveCardAddressDto.model';
@@ -69,4 +70,5 @@ export type EventRegistryDto = {
   departmentDetail?: DepartmentDetailDto;
   eventRegistryPage?: EventRegistryPageDto;
   receiveCardAddress?: ReceiveCardAddressDto;
+  registeredDays?: NamedTimeDto[];
 };

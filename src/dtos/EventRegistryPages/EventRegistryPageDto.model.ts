@@ -1,3 +1,4 @@
+import { NamedTimeDto } from './../NamedTimes/NamedTimeDto.model';
 import { ReceiveCardAddressDto } from '~/dtos/ReceiveCardLocations/ReceiveCardAddressDto.model';
 import { EventRegistryPageContentDto } from './../EventRegistryPageContents/EventRegistryPageContentDto.model';
 import { StartAddressDto } from './../Addresses/StartAddressDto.model';
@@ -24,4 +25,5 @@ export type EventRegistryPageDto = {
   leaveAddresses?: LeaveAddressDto[];
   pageContent?: EventRegistryPageContentDto;
   receiveCardAddresses?: ReceiveCardAddressDto[];
+  days?: NamedTimeDto[];
 };

@@ -74,7 +74,6 @@ export default function NavBar() {
     member = { ...member, ...registerInfo?.member };
   }
   const { register } = member || {};
-  console.log('🚀 ~ file: index.tsx:73 ~ NavBar ~ member', member);
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
   const [color, setColor] = useState('blue.500');

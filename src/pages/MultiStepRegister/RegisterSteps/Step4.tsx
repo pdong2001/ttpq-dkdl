@@ -30,6 +30,8 @@ import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+import moment from 'moment';
+import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -47,6 +49,7 @@ const Step4 = (props: StepProps) => {
     // thêm field
     clothingSize: editClothingSize,
     note: editNote,
+    registeredDays: editServeDays,
   } = useAppSelector((state) => state.registerInfo.data);
   const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
@@ -72,7 +75,15 @@ const Step4 = (props: StepProps) => {
   );
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { departments } = registerPage;
+  const { departments, days } = registerPage;
+  const serveDates = days?.map((date) => {
+    const newDate = { ...date };
+    const formattedDate = moment(date.time).format('DD-MM-yyyy');
+    if (newDate?.name && newDate.name != formattedDate) {
+      newDate.name = `${newDate.name} (${formattedDate})`;
+    }
+    return newDate;
+  });
 
   // lấy nơi nhận thẻ
   const { receiveCardAddresses = [] } = useAppSelector((state) => state.registerPage.data);
@@ -93,7 +104,11 @@ const Step4 = (props: StepProps) => {
       // thêm field
       clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
+      identityCardImagePathFront: '',
+      identityCardImagePathBack: '',
+      identityCardImagePath: '',
       note: note || editNote || '',
+      registeredDays: [],
     },
     validationSchema: step4Schema,
     onSubmit: (values) => {
@@ -107,11 +122,16 @@ const Step4 = (props: StepProps) => {
         note,
         // thêm field
         clothingSize,
+        identityCardImagePathFront,
+        identityCardImagePathBack,
+        registeredDays,
       } = values;
+      const identityCardImagePath = [identityCardImagePathFront, identityCardImagePathBack];
       const fillData = {
         strongPointIds,
         exps,
         avatarPath,
+        identityCardImagePath,
         register: {
           ...previousStepData.register,
           expDepartmentIds,
@@ -124,7 +144,8 @@ const Step4 = (props: StepProps) => {
           type,
           // thêm field
           clothingSize,
-        },
+          registeredDays,
+        } as EventRegistryDto,
       };
       dispatch(fillForm(fillData));
       mapMultiTitle({
@@ -202,6 +223,15 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
               <MultiSelect
+                name='registeredDays'
+                options={serveDates}
+                label='Thời gian công quả ở chùa'
+                valueField='id'
+                labelField='name'
+                closeMenuOnSelect={false}
+                isRequired
+              />
+              <MultiSelect
                 name='strongPointIds'
                 options={strongPointList}
                 label='Kỹ năng, sở trường'
@@ -239,10 +269,23 @@ const Step4 = (props: StepProps) => {
                 valueField='value'
                 labelField='label'
               />
-              <FormControl name='avatarPath' as='fieldset' border={1}>
-                <FormLabel as='legend'>Hình thẻ</FormLabel>
-                <UploadFile name='avatarPath' />
-              </FormControl>
+
+              <Stack direction={{ base: 'column', lg: 'row' }}>
+                <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>Hình thẻ</FormLabel>
+                  <UploadFile name='avatarPath' />
+                </FormControl>
+
+                <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>CCCD mặt trước</FormLabel>
+                  <UploadFile name='identityCardImagePathFront' />
+                </FormControl>
+
+                <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>CCCD mặt sau</FormLabel>
+                  <UploadFile name='identityCardImagePathBack' />
+                </FormControl>
+              </Stack>
               <FormInput
                 name='note'
                 label='Ghi chú'

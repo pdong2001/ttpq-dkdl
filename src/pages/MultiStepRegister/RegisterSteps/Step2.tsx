@@ -145,7 +145,6 @@ const Step2 = (props: StepProps) => {
   const { registerType: localRegisterType } = formik.values;
 
   const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-  console.log('___', formik.values.registerType);
 
   const setLeaderPreview = (leader) => {
     if (_.get(leader, 'success', false)) {

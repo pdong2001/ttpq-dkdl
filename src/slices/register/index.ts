@@ -24,10 +24,11 @@ export const updateMember = createAsyncRequest('member/update', {
   method: 'post',
 });
 
-type Data = MemberDto & UpSertMemberDto;
+type Data = MemberDto & UpSertMemberDto & { isChecked: boolean };
 
 const initialState: ReduxState<Data> = {
   data: {
+    isChecked: false,
     fullName: '',
     identityCard: '',
     phoneNumber: '',
@@ -81,7 +82,7 @@ const slice = createAppSlice<typeof initialState>(
     {
       action: getExistMember,
       onFullfilled: (state, action) => {
-        return { ...action.payload.data?.member, ...state };
+        return { ...action.payload.data?.member, ...state, isChecked: true };
       },
     },
   ],

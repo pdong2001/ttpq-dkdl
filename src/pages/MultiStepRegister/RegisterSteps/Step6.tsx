@@ -21,7 +21,7 @@ import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon, StarIcon } from '@chakra-ui/icons';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, getImageSrc } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useContext, useState } from 'react';
 import { MessageContext } from '~/providers/message';
@@ -42,13 +42,7 @@ const Step6 = (props: StepProps) => {
   const messageService = useContext(MessageContext);
   const history = useHistory();
   const { shortUri } = useParams<any>();
-  const {
-    id,
-    moveType,
-
-    memberId,
-    leaderId,
-  } = registerInfo;
+  const { id, memberId } = registerInfo;
 
   const { register: registerData } = formData;
 
@@ -71,10 +65,7 @@ const Step6 = (props: StepProps) => {
         updateRegister({
           url: formatUrl(API.UPDATE_REGISTER, { id }),
           data: {
-            // leaderId,
-            // moveType,
             ...registerData,
-            // memberId,
           },
         }),
       );
@@ -110,7 +101,6 @@ const Step6 = (props: StepProps) => {
   };
 
   const { infos, schedules, jobs, avatar, fullName, certRegistry } = mapSuccessData(previewInfo);
-  console.log(certRegistry);
 
   return (
     <FadeInUp>
@@ -130,7 +120,7 @@ const Step6 = (props: StepProps) => {
         <GridItem>
           <Box>
             <Box textAlign={'center'}>
-              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
+              <Avatar size={'2xl'} src={getImageSrc(avatar)} mb={4} pos={'relative'} />
               <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
                 {fullName}
               </Heading>

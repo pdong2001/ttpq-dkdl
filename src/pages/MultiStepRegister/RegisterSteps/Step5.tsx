@@ -44,7 +44,8 @@ function Step5(props: StepProps) {
     },
     validationSchema: step5Schema,
     onSubmit: (values) => {
-      let { certificateRegistry, companyNameVIE, companyNameEN } = values;
+      const { certificateRegistry } = values;
+      let { companyNameVIE, companyNameEN } = values;
 
       if (certificateRegistry == CertificateRegistry.NO) {
         companyNameVIE = '';
@@ -74,8 +75,6 @@ function Step5(props: StepProps) {
   });
 
   const { certificateRegistry } = formik.values;
-
-  console.log('___', formik.values);
 
   return (
     <FadeInUp>
