@@ -45,6 +45,7 @@ const Step2 = (props: StepProps) => {
     temporaryWard,
 
     organizationStructureId = '',
+
     dateOfBirth,
     register,
   } = useAppSelector((state) => state.register.data) || {};
@@ -89,6 +90,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressWard,
 
       organizationStructureId: organizationStructureId ? organizationStructureId : ctnId,
+      organizationStructureId_group: '',
 
       registerType:
         register?.registerType ||
@@ -106,6 +108,7 @@ const Step2 = (props: StepProps) => {
         permanentAddress,
         temporaryAddress,
         organizationStructureId,
+        organizationStructureId_group,
         registerType,
       } = values;
       let { leaderId } = values;
@@ -119,7 +122,7 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
-          organizationStructureId,
+          organizationStructureId: organizationStructureId_group ?? organizationStructureId,
           dateOfBirth,
           temporaryAddress,
           permanentAddress,
@@ -142,10 +145,6 @@ const Step2 = (props: StepProps) => {
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));
   };
-  const { registerType: localRegisterType } = formik.values;
-
-  const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-
   const setLeaderPreview = (leader) => {
     if (_.get(leader, 'success', false)) {
       dispatch(
