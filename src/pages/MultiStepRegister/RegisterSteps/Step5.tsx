@@ -1,6 +1,6 @@
 import { Box, Button, Heading, Radio, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Form, FormikProvider, useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import Radios from '~/components/Form/Radios';
@@ -116,7 +116,12 @@ function Step5(props: StepProps) {
               )}
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+              <Button
+                colorScheme='gray'
+                flexGrow={1}
+                fontFamily={'heading'}
+                onClick={() => previousStep()}
+              >
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>

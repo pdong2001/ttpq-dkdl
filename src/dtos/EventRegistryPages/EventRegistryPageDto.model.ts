@@ -26,4 +26,6 @@ export type EventRegistryPageDto = {
   pageContent?: EventRegistryPageContentDto;
   receiveCardAddresses?: ReceiveCardAddressDto[];
   days?: NamedTimeDto[];
+  canMoveByPlane: boolean;
+  receiveVolunteeCert: boolean;
 };

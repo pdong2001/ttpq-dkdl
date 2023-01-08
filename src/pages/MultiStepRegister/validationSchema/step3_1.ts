@@ -39,17 +39,6 @@ const step3Schema = Yup.object({
     then: Yup.string().notRequired(),
     otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ đi'),
   }),
-  otherLeaveTime: Yup.string().when('moveType', {
-    is: MoveType.WithCTN,
-    then: Yup.string().notRequired(),
-    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
-  }),
-  // thêm field
-  carBookingType: Yup.string().when('moveType', {
-    is: MoveType.ByPlane,
-    then: Yup.string().required(),
-    otherwise: Yup.string().notRequired(),
-  }),
 });
 
 export default step3Schema;

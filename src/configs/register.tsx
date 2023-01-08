@@ -52,9 +52,10 @@ const REGISTER_INFO_TITLE = {
   // schedules
   moveType: 'Hình thức di chuyển',
   startAddressId: 'Nơi xuất phát',
-  startTimeId: 'Nơi xuất phát',
+  startTimeId: 'Thời gian xuất phát',
   leaveTimeId: 'Thời gian trở về',
   otherStartAddress: 'Nơi xuất phát',
+  otherLeaveAddress: 'Nơi trở về',
   otherStartTime: 'Ngày giờ đi',
   otherLeaveTime: 'Ngày giờ về',
   startPlaneCode: 'Mã chuyến bay đi',

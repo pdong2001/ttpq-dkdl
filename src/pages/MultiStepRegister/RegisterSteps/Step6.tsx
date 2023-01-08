@@ -1,14 +1,4 @@
-import {
-  Stack,
-  Heading,
-  Button,
-  Box,
-  Text,
-  SimpleGrid,
-  Avatar,
-  GridItem,
-  Alert,
-} from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, SimpleGrid, Avatar, GridItem, Alert } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
@@ -37,6 +27,7 @@ const Step6 = (props: StepProps) => {
   const formData = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
+  const { receiveVolunteeCert } = useAppSelector((state) => state.registerPage.data);
   const { path } = useRouteMatch();
   const isAddNew = path === ADD_NEW_REGISTER_PATH;
   const messageService = useContext(MessageContext);
@@ -111,11 +102,8 @@ const Step6 = (props: StepProps) => {
             lineHeight={1.1}
             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
           >
-            {`Xác nhận ${isAddNew ? 'đăng ký' : 'chỉnh sửa'}`}
+            {`Xác nhận ${isAddNew ? 'thông tin' : 'chỉnh sửa'}`}
           </Heading>
-          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            PL.2565 - DL.2022
-          </Text>
         </Box>
         <GridItem>
           <Box>
@@ -168,7 +156,18 @@ const Step6 = (props: StepProps) => {
       </Stack>
       <Box mt={10}>
         <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-          <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+          <Button
+            colorScheme='gray'
+            flexGrow={1}
+            fontFamily={'heading'}
+            onClick={() => {
+              if (receiveVolunteeCert) {
+                previousStep();
+              } else {
+                previousStep(4);
+              }
+            }}
+          >
             Trở về
           </Button>
           <Button flexGrow={1} fontFamily={'heading'} onClick={handleRegister}>

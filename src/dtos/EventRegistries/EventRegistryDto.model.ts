@@ -27,6 +27,7 @@ export type EventRegistryDto = {
   eventId: number;
   code?: string;
   note?: string;
+  question?: string;
   companyNameEN?: string;
   startPlaneCode?: string;
   companyNameVIE?: string;

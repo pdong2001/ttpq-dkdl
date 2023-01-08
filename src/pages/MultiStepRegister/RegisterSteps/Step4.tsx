@@ -39,7 +39,9 @@ const Step4 = (props: StepProps) => {
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
-  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
+  const { eventId, id, type, ctnId, receiveVolunteeCert } = useAppSelector(
+    (state) => state.registerPage.data,
+  );
   const {
     expDepartments,
     wishDepartment,
@@ -47,7 +49,7 @@ const Step4 = (props: StepProps) => {
     receiveCardAddressId: editReceiverCardId,
     // thêm field
     clothingSize: editClothingSize,
-    note: editNote,
+    question: editNote,
     registeredDays: editServeDays,
   } = useAppSelector((state) => state.registerInfo.data);
   const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
@@ -60,7 +62,7 @@ const Step4 = (props: StepProps) => {
     receiveCardAddressId,
     // thêm field
     clothingSize,
-    note,
+    question,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
@@ -106,7 +108,7 @@ const Step4 = (props: StepProps) => {
       identityCardImagePathFront: '',
       identityCardImagePathBack: '',
       identityCardImagePaths: '',
-      note: note || editNote || '',
+      question: question || editNote || '',
       registeredDays: [],
     },
     validationSchema: step4Schema,
@@ -118,7 +120,7 @@ const Step4 = (props: StepProps) => {
         exps,
         wishDepartmentId,
         receiveCardAddressId,
-        note,
+        question,
         // thêm field
         clothingSize,
         identityCardImagePathFront,
@@ -134,7 +136,7 @@ const Step4 = (props: StepProps) => {
         register: {
           ...previousStepData.register,
           expDepartmentIds,
-          note,
+          question,
           receiveCardAddressId,
           wishDepartmentId,
           eventId,
@@ -149,7 +151,7 @@ const Step4 = (props: StepProps) => {
       dispatch(fillForm(fillData));
       mapMultiTitle({
         avatarPath,
-        note,
+        question,
         type,
         exps,
         strongPointIds,
@@ -158,13 +160,17 @@ const Step4 = (props: StepProps) => {
         receiveCardAddressId,
         clothingSize,
       });
-      nextStep();
+      if (receiveVolunteeCert) {
+        nextStep();
+      } else {
+        nextStep(6);
+      }
     },
   });
 
   const mapMultiTitle = ({
     avatarPath,
-    note,
+    question,
     type,
     exps,
     strongPointIds,
@@ -183,7 +189,7 @@ const Step4 = (props: StepProps) => {
     }
     dispatch(
       fillDataPreview({
-        note,
+        question,
         type,
         avatarPath,
         exps,
@@ -206,9 +212,6 @@ const Step4 = (props: StepProps) => {
         >
           Công việc
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
-        </Text>
       </Stack>
       <Box mt={10}>
         <FormikProvider value={formik}>
@@ -229,7 +232,7 @@ const Step4 = (props: StepProps) => {
                 optionValue='id'
                 optionLabel='name'
                 closeMenuOnSelect={false}
-                isRequired
+                isRequired={!!serveDates?.length}
               />
               <OurSelect
                 isMulti
@@ -290,14 +293,19 @@ const Step4 = (props: StepProps) => {
                 </FormControl> */}
               </Stack>
               <FormInput
-                name='note'
+                name='question'
                 label='Ghi chú'
                 as={Textarea}
                 placeholder='Huynh đệ có thắc mắc gì không ạ?'
               />
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+              <Button
+                colorScheme='gray'
+                flexGrow={1}
+                fontFamily={'heading'}
+                onClick={() => previousStep()}
+              >
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>
