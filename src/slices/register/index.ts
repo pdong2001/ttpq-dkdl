@@ -82,6 +82,7 @@ const slice = createAppSlice<typeof initialState>(
     {
       action: getExistMember,
       onFullfilled: (state, action) => {
+        sessionStorage.setItem('userToken', action.payload.data.token);
         return { ...action.payload.data?.member, ...state, isChecked: true };
       },
     },

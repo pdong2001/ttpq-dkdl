@@ -177,8 +177,9 @@ const RegisterInfo = () => {
   if (moveType == MoveType.WithCTN) {
     schedule.departure_address =
       [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
-    schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
-    schedule.return_time = convertToAppDateTime(data.leaveTime?.time) || '';
+    schedule.departure_time =
+      data.startTime?.name || convertToAppDateTime(data.startTime?.time) || '';
+    schedule.return_time = data.leaveTime?.name || convertToAppDateTime(data.leaveTime?.time) || '';
     schedule.return_address =
       [leaveAddress?.name, leaveAddress?.address].filter((e) => !!e).join(', ') || '';
   } else {
