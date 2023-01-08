@@ -4,6 +4,7 @@ import {
   FormErrorMessage,
   FormControlProps,
   InputProps,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import { useField } from 'formik';
@@ -22,6 +23,7 @@ type Props = InputProps &
     closeMenuOnSelect?: boolean;
     isMulti?: boolean;
     hiddenErrorMessage?: boolean;
+    helperText?: string;
   } & { options?: Record<string, any> };
 
 const OurSelect = (props: Props) => {
@@ -37,6 +39,7 @@ const OurSelect = (props: Props) => {
     isMulti,
     hiddenErrorMessage,
     placeholder,
+    helperText,
   } = props;
   const { primaryColor } = useCustomColorMode();
   const validOptions: MultiSelectOption[] =
@@ -74,6 +77,7 @@ const OurSelect = (props: Props) => {
           helpers.setTouched(true);
         }}
       />
+      {helperText && <FormHelperText color='red'>{helperText}</FormHelperText>}
       {!hiddenErrorMessage && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
