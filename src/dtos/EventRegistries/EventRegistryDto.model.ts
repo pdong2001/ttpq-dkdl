@@ -40,6 +40,7 @@ export type EventRegistryDto = {
   event?: EventDto;
   group?: GroupDto;
   moveType: MoveType;
+  returnMoveType: MoveType;
   member?: MemberDto;
   areaId?: number;
   endDate?: string;
