@@ -234,6 +234,7 @@ const Step4 = (props: StepProps) => {
                 optionLabel='name'
                 closeMenuOnSelect={false}
                 isRequired={!!serveDates?.length}
+                placeholder='Thời gian công quả'
               />
               <OurSelect
                 isMulti
@@ -242,6 +243,7 @@ const Step4 = (props: StepProps) => {
                 label='Kỹ năng, sở trường'
                 optionValue='id'
                 optionLabel='name'
+                placeholder='Chọn kỹ năng, sở trường'
               />
               <OurSelect
                 name='expDepartmentIds'
@@ -249,12 +251,13 @@ const Step4 = (props: StepProps) => {
                 label='Kinh nghiệm ở ban'
                 optionValue='id'
                 optionLabel='name'
+                placeholder='Chọn ban kinh nghiệm'
               />
               <OurSelect
                 name='wishDepartmentId'
                 options={departments}
                 label='Nguyện vọng vào ban'
-                placeholder='Chọn ban'
+                placeholder='Chọn ban nguyện vọng'
                 optionValue='id'
                 optionLabel='name'
                 isRequired
@@ -264,7 +267,6 @@ const Step4 = (props: StepProps) => {
                 options={receiveCardAddresses}
                 optionValue='id'
                 optionLabel='name'
-                // labelField='address'
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
               />
