@@ -76,10 +76,11 @@ const Step4 = (props: StepProps) => {
   );
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { departments, days } = registerPage;
+  const { departments, event } = registerPage;
+  const { days } = event || {};
   const serveDates = days?.map((date) => {
     const newDate = { ...date };
-    const formattedDate = moment(date.time).format('DD-MM-yyyy');
+    const formattedDate = moment(date.time).format('DD/MM/yyyy');
     if (newDate?.name && newDate.name != formattedDate) {
       newDate.name = `${newDate.name} (${formattedDate})`;
     }
