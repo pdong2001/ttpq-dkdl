@@ -121,8 +121,7 @@ const Step3 = (props: StepProps) => {
 
   useEffect(() => {
     const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
-    const mappingTimes = mappingTime(times);
-    setStartTimes(mappingTimes);
+    setStartTimes(times);
   }, [startAddresses, startAddressId]);
 
   useEffect(() => {
@@ -140,7 +139,7 @@ const Step3 = (props: StepProps) => {
     dispatch(
       fillDataPreview({
         ...values,
-        startAddressId: `${filterTitle(mappingAddress(startAddresses), values.startAddressId)}`,
+        startAddressId: `${filterTitle(startAddresses, values.startAddressId)}`,
         startTimeId: `${filterTitle(startTimes, values.startTimeId)}`,
       }),
     );
@@ -178,7 +177,7 @@ const Step3 = (props: StepProps) => {
                 <>
                   <OurSelect
                     name='startAddressId'
-                    options={mappingAddress(startAddresses)}
+                    options={startAddresses}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired

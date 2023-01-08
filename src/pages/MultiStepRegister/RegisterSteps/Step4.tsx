@@ -263,14 +263,16 @@ const Step4 = (props: StepProps) => {
                 optionLabel='name'
                 isRequired
               />
-              <OurSelect
-                name='receiveCardAddressId'
-                options={receiveCardAddresses}
-                optionValue='id'
-                optionLabel='name'
-                label='Nơi nhận thẻ'
-                placeholder='Chọn nơi nhận thẻ'
-              />
+              {!!receiveCardAddresses.length && (
+                <OurSelect
+                  name='receiveCardAddressId'
+                  options={receiveCardAddresses}
+                  optionValue='id'
+                  optionLabel='name'
+                  label='Nơi nhận thẻ'
+                  placeholder='Chọn nơi nhận thẻ'
+                />
+              )}
               {/* thêm field */}
               <OurSelect
                 name='clothingSize'

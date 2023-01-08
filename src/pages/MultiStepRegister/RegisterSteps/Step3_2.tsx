@@ -134,8 +134,7 @@ const Step3 = (props: StepProps) => {
 
   useEffect(() => {
     const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
-    const mappingTimes = mappingTime(times);
-    setLeaveTimes(mappingTimes);
+    setLeaveTimes(times);
   }, [leaveAddresses, leaveAddressId]);
 
   useEffect(() => {
@@ -153,7 +152,7 @@ const Step3 = (props: StepProps) => {
     dispatch(
       fillDataPreview({
         ...values,
-        leaveAddressId: `${filterTitle(mappingAddress(leaveAddresses), values.leaveAddressId)}`,
+        leaveAddressId: `${filterTitle(leaveAddresses, values.leaveAddressId)}`,
         leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
       }),
     );
@@ -191,7 +190,7 @@ const Step3 = (props: StepProps) => {
                 <>
                   <OurSelect
                     name='leaveAddressId'
-                    options={mappingAddress(leaveAddresses)}
+                    options={leaveAddresses}
                     label='Địa điểm trở về'
                     placeholder='Địa điểm trở về'
                     optionValue='id'

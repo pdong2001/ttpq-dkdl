@@ -135,21 +135,24 @@ const Step6 = (props: StepProps) => {
               </Alert>
               {TableComponent(jobs, REGISTER_INFO_TITLE)}
             </Box>
-            <Box>
-              <Alert status='success'>
-                <StarIcon />
-                <Heading p={2} as='h5' size='md'>
-                  Chứng nhận tình nguyện viên
-                </Heading>
-              </Alert>
-              {TableComponent(
-                _.get(
-                  certRegistry,
-                  CertificateRegistry.toEnum(_.get(previewInfo, 'certificateRegistry')),
-                ),
-                REGISTER_INFO_TITLE,
-              )}
-            </Box>
+            {receiveVolunteeCert && (
+              <Box>
+                <Alert status='success'>
+                  <StarIcon />
+                  <Heading p={2} as='h5' size='md'>
+                    Chứng nhận tình nguyện viên
+                  </Heading>
+                </Alert>
+                {TableComponent(
+                  _.get(
+                    certRegistry,
+                    CertificateRegistry.toEnum(_.get(previewInfo, 'certificateRegistry')),
+                  ),
+                  REGISTER_INFO_TITLE,
+                )}
+              </Box>
+            )}
+
             {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
           </Box>
         </GridItem>
