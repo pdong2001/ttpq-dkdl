@@ -15,7 +15,6 @@ import { formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useContext } from 'react';
 import { MessageContext } from '~/providers/message';
-import { getMemberAuth } from '~/slices/memberAuth';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
@@ -34,6 +33,7 @@ const Step1 = (props: StepProps) => {
     phoneNumber,
     identityCard,
     register,
+    isChecked,
   } = useAppSelector((state) => state.register.data) || {};
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
 
@@ -71,45 +71,49 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
-      dispatch(
-        getExistMember({
-          data: {
-            phoneNumber,
-            identityCard,
-          },
-        }),
-      )
-        .then(unwrapResult)
-        .then(({ data }) => {
-          const { member } = data || {};
-          if (member?.id) {
-            publicRequest
-              .get(formatUrl(API.CHECK_EXIST_REGISTER, { eventId }), {
-                params: { memberId: member.id },
-              })
-              .then(({ data }) => {
-                if (data.data && !isEditRegisterPage) {
-                  messageService.add({
-                    title: 'Bạn đã đăng ký lễ này rồi ạ',
-                    status: 'error',
-                  });
-                  setTimeout(() => {
-                    history.replace(`/${shortUri}/register-info/${data.data}`);
-                    history.go(0);
-                  }, 1000);
-                } else {
+      if (!isChecked) {
+        dispatch(
+          getExistMember({
+            data: {
+              phoneNumber,
+              identityCard,
+            },
+          }),
+        )
+          .then(unwrapResult)
+          .then(({ data }) => {
+            const { member } = data || {};
+            if (member?.id) {
+              publicRequest
+                .get(formatUrl(API.CHECK_EXIST_REGISTER, { eventId }), {
+                  params: { memberId: member.id },
+                })
+                .then(({ data }) => {
+                  if (data.data && !isEditRegisterPage) {
+                    messageService.add({
+                      title: 'Bạn đã đăng ký lễ này rồi ạ',
+                      status: 'error',
+                    });
+                    setTimeout(() => {
+                      history.replace(`/${shortUri}/register-info/${data.data}`);
+                      history.go(0);
+                    }, 1000);
+                  } else {
+                    handleNext();
+                  }
+                })
+                .catch(() => {
                   handleNext();
-                }
-              })
-              .catch(() => {
-                handleNext();
-              });
-          }
-        })
-        .catch(() => {
-          dispatch(resetRegister({ fullName, identityCard, phoneNumber }));
-          handleNext();
-        });
+                });
+            }
+          })
+          .catch(() => {
+            dispatch(resetRegister({ fullName, identityCard, phoneNumber }));
+            handleNext();
+          });
+      } else {
+        handleNext();
+      }
     },
   });
 

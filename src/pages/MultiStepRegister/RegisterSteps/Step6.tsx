@@ -1,14 +1,4 @@
-import {
-  Stack,
-  Heading,
-  Button,
-  Box,
-  Text,
-  SimpleGrid,
-  Avatar,
-  GridItem,
-  Alert,
-} from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, SimpleGrid, Avatar, GridItem, Alert } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
@@ -21,7 +11,7 @@ import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon, StarIcon } from '@chakra-ui/icons';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, getImageSrc } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useContext, useState } from 'react';
 import { MessageContext } from '~/providers/message';
@@ -37,18 +27,13 @@ const Step6 = (props: StepProps) => {
   const formData = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
+  const { receiveVolunteeCert } = useAppSelector((state) => state.registerPage.data);
   const { path } = useRouteMatch();
   const isAddNew = path === ADD_NEW_REGISTER_PATH;
   const messageService = useContext(MessageContext);
   const history = useHistory();
   const { shortUri } = useParams<any>();
-  const {
-    id,
-    moveType,
-
-    memberId,
-    leaderId,
-  } = registerInfo;
+  const { id, memberId } = registerInfo;
 
   const { register: registerData } = formData;
 
@@ -71,10 +56,7 @@ const Step6 = (props: StepProps) => {
         updateRegister({
           url: formatUrl(API.UPDATE_REGISTER, { id }),
           data: {
-            // leaderId,
-            // moveType,
             ...registerData,
-            // memberId,
           },
         }),
       );
@@ -110,7 +92,6 @@ const Step6 = (props: StepProps) => {
   };
 
   const { infos, schedules, jobs, avatar, fullName, certRegistry } = mapSuccessData(previewInfo);
-  console.log(certRegistry);
 
   return (
     <FadeInUp>
@@ -121,16 +102,13 @@ const Step6 = (props: StepProps) => {
             lineHeight={1.1}
             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
           >
-            {`Xác nhận ${isAddNew ? 'đăng ký' : 'chỉnh sửa'}`}
+            {`Xác nhận ${isAddNew ? 'thông tin' : 'chỉnh sửa'}`}
           </Heading>
-          <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-            PL.2565 - DL.2022
-          </Text>
         </Box>
         <GridItem>
           <Box>
             <Box textAlign={'center'}>
-              <Avatar size={'2xl'} src={avatar} mb={4} pos={'relative'} />
+              <Avatar size={'2xl'} src={getImageSrc(avatar)} mb={4} pos={'relative'} />
               <Heading fontSize={'2xl'} fontFamily={'body'} mb={4}>
                 {fullName}
               </Heading>
@@ -178,7 +156,18 @@ const Step6 = (props: StepProps) => {
       </Stack>
       <Box mt={10}>
         <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-          <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+          <Button
+            colorScheme='gray'
+            flexGrow={1}
+            fontFamily={'heading'}
+            onClick={() => {
+              if (receiveVolunteeCert) {
+                previousStep();
+              } else {
+                previousStep(4);
+              }
+            }}
+          >
             Trở về
           </Button>
           <Button flexGrow={1} fontFamily={'heading'} onClick={handleRegister}>

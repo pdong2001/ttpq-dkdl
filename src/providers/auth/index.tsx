@@ -58,9 +58,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         eventId: eventId || '',
       }),
     ).then(unwrapResult);
-    // .then((data) => {
-    //   console.log('data', data);
-    // });
   };
 
   useEffect(() => {

@@ -1,13 +1,7 @@
 import { Tag } from '@chakra-ui/react';
 import _ from 'lodash';
 import moment from 'moment';
-import {
-  EVENT_EXP_TITLE,
-  MOVE_TYPE_TITLE,
-  CAR_BOOKING_TYPE_TITLE,
-  CLOTHING_SIZE_TITLE,
-  CERTIFICATE_REGISTRY_TITLE,
-} from '~/configs/register';
+import { CAR_BOOKING_TYPE_TITLE, CLOTHING_SIZE_TITLE } from '~/configs/register';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';

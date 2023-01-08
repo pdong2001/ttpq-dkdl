@@ -1,6 +1,12 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Switch, useHistory, useLocation, useParams } from 'react-router-dom';
+
+import 'primereact/resources/themes/saga-orange/theme.css'; //theme
+import 'primereact/resources/primereact.min.css'; //core css
+import 'primeicons/primeicons.css';
+
+import { Switch, useHistory, useParams } from 'react-router-dom';
+
 import { ROUTES, AppRoute } from './routes';
 import { nanoid, unwrapResult } from '@reduxjs/toolkit';
 import { useContext, useEffect } from 'react';

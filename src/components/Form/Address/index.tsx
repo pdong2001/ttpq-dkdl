@@ -16,6 +16,7 @@ import { useField } from 'formik';
 import { useState, useEffect } from 'react';
 import { UpsertAddressDto } from '~/dtos/Addresses/UpsertAddressDto.model';
 import { Dropdown } from 'primereact/dropdown';
+import OurSelect from '../MultiSelect';
 
 type AddressProps = SelectProps &
   FormControlProps &
@@ -111,10 +112,12 @@ function Address(props: AddressProps) {
     <FormControl isInvalid={!!errorMessage && pTouch && dTouch && vTouch} {...rest}>
       <FormLabel mb={0}>{label}</FormLabel>
       <Stack direction={direction} spacing={spacing}>
-        <Select
+        <OurSelect
           placeholder='Tỉnh'
           name={provinceName}
-          data={provinces}
+          options={provinces}
+          optionValue='id'
+          optionLabel='name'
           hiddenErrorMessage
           onChange={() => {
             setDTouched(false);
@@ -122,10 +125,12 @@ function Address(props: AddressProps) {
             setWard('');
           }}
         />
-        <Select
+        <OurSelect
           placeholder='Huyện'
           name={districtName}
-          data={districts}
+          options={districts}
+          optionValue='id'
+          optionLabel='name'
           isDisabled={!provinceId}
           hiddenErrorMessage
           onChange={(e) => {
@@ -133,10 +138,12 @@ function Address(props: AddressProps) {
             setWard('');
           }}
         />
-        <Select
+        <OurSelect
           placeholder='Xã'
           name={wardName}
-          data={wards}
+          options={wards}
+          optionValue='id'
+          optionLabel='name'
           isDisabled={!districtId}
           hiddenErrorMessage
         />
