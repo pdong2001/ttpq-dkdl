@@ -246,6 +246,7 @@ const Step4 = (props: StepProps) => {
                 placeholder='Chọn kỹ năng, sở trường'
               />
               <OurSelect
+                isMulti
                 name='expDepartmentIds'
                 options={departments}
                 label='Kinh nghiệm ở ban'
