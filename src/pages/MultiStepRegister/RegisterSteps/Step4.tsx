@@ -59,7 +59,12 @@ const Step4 = (props: StepProps) => {
     question: editNote,
     registeredDays: editServeDays,
   } = useAppSelector((state) => state.registerInfo.data);
-  const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
+  const {
+    strongPoints,
+    avatarPath: editAvatarPath,
+    exps: editExps,
+    identityCardImagePaths: editIdentityCardPaths,
+  } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
 
   const { strongPointIds, avatarPath, exps } = previousStepData;
@@ -254,6 +259,7 @@ const Step4 = (props: StepProps) => {
                 closeMenuOnSelect={false}
                 isRequired={!!serveDates?.length}
                 placeholder='Thời gian công quả'
+                helperText='HD vui lòng chọn ĐẨY ĐỦ ngày công quả tại chùa'
               />
               <OurSelect
                 isMulti
