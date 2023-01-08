@@ -1,5 +1,7 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import cover from '~/assets/cover/ptd-cover.jpeg';
+import PTD_cover from '~/assets/cover/ptd-cover.jpeg';
+import Tet_cover from '~/assets/cover/Tet-cover.jpeg';
+import cqhn_cover from '~/assets/cover/cqhn-cover.jpeg';
 import {
   Modal,
   ModalOverlay,
@@ -43,6 +45,7 @@ import { AuthContext } from '~/providers/auth';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { getImageSrc } from '~/utils/functions';
+import { EventType } from '~/dtos/event/EventType.enum';
 
 const PATH_URL = window.location.origin;
 
@@ -65,11 +68,26 @@ export default function SuccessRegisterModal({
   const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
+  const { event } = useAppSelector((state) => state.registerPage.data);
   const { member } = useContext(AuthContext);
   const [isDownloading, setDownloading] = useState(false);
 
-
   const { register } = member || {};
+  const { type: eventType } = event || {};
+  let cover;
+  switch (eventType) {
+    case EventType.DaiLe:
+      cover = PTD_cover;
+      break;
+    case EventType.Tet:
+      cover = Tet_cover;
+      break;
+    case EventType.CCHN:
+      cover = cqhn_cover;
+      break;
+    default:
+      cover = cqhn_cover;
+  }
   const isRegisterPopup = path === ADD_NEW_REGISTER_PATH;
   const organizationStructureId =
     registerResult.organizationStructureId || member.organizationStructureId;
@@ -104,12 +122,12 @@ export default function SuccessRegisterModal({
   const onImageDownload = async (fullName = '') => {
     toast({
       title: 'Đang tải xuống',
-      description: "Qúy phật tử vui lòng chờ trong giây lát!",
+      description: 'Qúy phật tử vui lòng chờ trong giây lát!',
       status: 'success',
       duration: 10000,
       isClosable: true,
       // zIn
-    })
+    });
     setDownloading(true);
     function coverName(string) {
       return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -161,7 +179,6 @@ export default function SuccessRegisterModal({
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody px={0} background={'#FFFFFF'} position={'relative'}>
-
           {/* {isDownloading && DownloadingRender()} */}
           <Stack>
             <Box position={'relative'} pb={[8, 12]}>
@@ -275,7 +292,13 @@ export default function SuccessRegisterModal({
         <ModalFooter>
           {isShowRegisterInfo && (
             <>
-              <Button isLoading={isDownloading} disabled={isDownloading} variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
+              <Button
+                isLoading={isDownloading}
+                disabled={isDownloading}
+                variant='ghost'
+                onClick={() => onImageDownload(fullName || '')}
+                mr={3}
+              >
                 {isDownloading ? 'Đang tải xuống...' : 'Tải về máy'}
               </Button>
               <Button

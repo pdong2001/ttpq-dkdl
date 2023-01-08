@@ -29,7 +29,6 @@ const mapSuccessData = (previewInfo) => {
             {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
           </Tag>
         ),
-        startAddressId: _.get(previewInfo, 'startAddressId', ''),
         startTimeId: _.get(previewInfo, 'startTimeId', ''),
         leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
       },

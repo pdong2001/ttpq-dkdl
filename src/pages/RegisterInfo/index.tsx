@@ -57,6 +57,7 @@ const RegisterInfo = () => {
   const { member: authMember } = useContext(AuthContext);
 
   const { data } = useAppSelector((state) => state.registerInfo);
+  const { receiveVolunteeCert } = useAppSelector((state) => state.registerPage.data);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -71,6 +72,7 @@ const RegisterInfo = () => {
   const note = data?.note;
   const leaderId = data?.leaderId;
   const moveType = data?.moveType?.toString();
+  const returnMoveType = data?.returnMoveType?.toString();
   const organizationStructureId = member?.organizationStructureId;
   const receiveCardAddress = mapReceiverCardAddressDetail(data?.receiveCardAddress);
   const expDepartments = data?.expDepartments || [];
@@ -86,9 +88,6 @@ const RegisterInfo = () => {
   const certificateRegistry = data?.certificateRegistry;
   const companyNameEN = data?.companyNameEN;
   const companyNameVIE = data?.companyNameVIE;
-  const assignedDepartment = data.departmentDetail;
-  const assignedArea = data.area;
-  const assignedGroup = data.group;
 
   const permanent =
     member?.permanentAddress ||
@@ -477,7 +476,7 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Hình thức di chuyển</Text>
+                      <Text as='b'>Về chùa</Text>
                       <Box mt='2'>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
                           {MoveType.toString(moveType)}
@@ -510,6 +509,14 @@ const RegisterInfo = () => {
                       </Box>
                     </Box>
                     <Box>
+                      <Text as='b'>Rời chùa</Text>
+                      <Box mt='2'>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {MoveType.toString(returnMoveType)}
+                        </Tag>
+                      </Box>
+                    </Box>
+                    <Box>
                       <HStack>
                         <MdDepartureBoard />
                         <Text as='b'>Thời gian trở về</Text>
@@ -518,14 +525,16 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
                           {schedule && schedule?.return_time}
                         </Tag>
-                        {moveType == MoveType.ByPlane && schedule && schedule.return_flight_code && (
-                          <Tag mr={2} mb={1} colorScheme={'pink'}>
-                            Mã chuyến bay: {schedule?.return_flight_code}
-                          </Tag>
-                        )}
+                        {returnMoveType == MoveType.ByPlane &&
+                          schedule &&
+                          schedule.return_flight_code && (
+                            <Tag mr={2} mb={1} colorScheme={'pink'}>
+                              Mã chuyến bay: {schedule?.return_flight_code}
+                            </Tag>
+                          )}
                       </Box>
                     </Box>
-                    {moveType == MoveType.WithCTN && (
+                    {returnMoveType == MoveType.WithCTN && (
                       <Box>
                         <HStack>
                           <MdLocationCity />
@@ -535,7 +544,7 @@ const RegisterInfo = () => {
                       </Box>
                     )}
 
-                    {moveType == MoveType.ByPlane && (
+                    {(moveType == MoveType.ByPlane || returnMoveType == MoveType.ByPlane) && (
                       <Box>
                         <HStack>
                           <MdDepartureBoard />
@@ -601,14 +610,16 @@ const RegisterInfo = () => {
                       )}
                     </Box>
 
-                    <Box>
-                      <Text as='b'>Đăng Ký Nhận Giấy Chứng Nhận TNV</Text>
-                      <Box mt='2'>
-                        <Tag mr={2} mb={1} colorScheme={certificateRegistry ? 'green' : 'pink'}>
-                          {certificateRegistry ? 'Có' : 'Không'}
-                        </Tag>
+                    {receiveVolunteeCert && (
+                      <Box>
+                        <Text as='b'>Đăng Ký Nhận Giấy Chứng Nhận TNV</Text>
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={certificateRegistry ? 'green' : 'pink'}>
+                            {certificateRegistry ? 'Có' : 'Không'}
+                          </Tag>
+                        </Box>
                       </Box>
-                    </Box>
+                    )}
                     {certificateRegistry && (
                       <Box>
                         <Text as='b'>Tên trường hoặc nơi công tác</Text>

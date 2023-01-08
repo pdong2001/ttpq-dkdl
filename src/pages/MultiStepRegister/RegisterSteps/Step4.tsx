@@ -67,7 +67,7 @@ const Step4 = (props: StepProps) => {
   } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
 
-  const { strongPointIds, avatarPath, exps } = previousStepData;
+  const { strongPointIds, avatarPath, exps, identityCardImagePaths } = previousStepData;
   const {
     expDepartmentIds,
     wishDepartmentId,
@@ -118,13 +118,13 @@ const Step4 = (props: StepProps) => {
       // thêm field
       clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
-      identityCardImagePathFront: '',
-      identityCardImagePathBack: '',
+      identityCardImagePathFront: identityCardImagePaths?.[0] || editIdentityCardPaths?.[0] || '',
+      // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
       registeredDays: [],
     },
-    validationSchema: step4Schema,
+    validationSchema: step4Schema(days),
     onSubmit: (values) => {
       const {
         strongPointIds,

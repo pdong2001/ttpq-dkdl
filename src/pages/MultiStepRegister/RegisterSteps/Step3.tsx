@@ -114,9 +114,6 @@ const Step3 = (props: StepProps) => {
 
   const { moveType } = formik.values;
 
-  // thời gian khởi hành theo địa điểm xuất phát
-  const { startAddressId } = formik.values;
-
   const [startTimes, setStartTimes] = useState<(StartTimeDto | undefined)[]>();
 
   useEffect(() => {
@@ -174,7 +171,7 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios label='Hình thức di chuyển' name='moveType'>
+              <Radios label='Về chùa' name='moveType'>
                 {!!startAddresses?.length && (
                   <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
