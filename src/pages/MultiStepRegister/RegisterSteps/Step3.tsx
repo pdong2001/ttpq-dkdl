@@ -21,6 +21,7 @@ import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
+import OurSelect from '~/components/Form/MultiSelect';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -204,7 +205,7 @@ const Step3 = (props: StepProps) => {
           <Form noValidate>
             <Stack spacing={4}>
               <Radios label='Hình thức di chuyển' name='moveType'>
-                {startAddresses?.length && (
+                {!!startAddresses?.length && (
                   <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
                 <Radio value={MoveType.ByPlane}>{MoveType.toString(MoveType.ByPlane)}</Radio>
@@ -213,38 +214,50 @@ const Step3 = (props: StepProps) => {
               {moveType == MoveType.WithCTN && (
                 // WithCTN
                 <>
-                  <Select
+                  <OurSelect
                     name='startAddressId'
-                    data={mappingAddress(startAddresses)}
+                    options={mappingAddress(startAddresses)}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
                     onChange={() => {
                       formik.setFieldValue('startTimeId', '');
                     }}
+                    optionValue='id'
+                    optionLabel='name'
                   />
-                  <Select
+                  <OurSelect
                     name='startTimeId'
-                    data={startTimes}
+                    options={startTimes}
                     label='Thời gian khởi hành'
                     placeholder='Thời gian khởi hành'
+                    optionValue='id'
+                    optionLabel='name'
                     isRequired
                   />
-                  <Select
-                    name='leaveAddressId'
-                    data={mappingAddress(leaveAddresses)}
-                    label='Địa điểm trở về'
-                    placeholder='Địa điểm trở về'
-                    onChange={() => {
-                      formik.setFieldValue('leaveTimeId', '');
-                    }}
-                  />
-                  <Select
-                    name='leaveTimeId'
-                    data={leaveTimes}
-                    label='Thời gian trở về'
-                    placeholder='Thời gian trở về'
-                  />
+                  {!!leaveAddresses?.length && (
+                    <>
+                      <OurSelect
+                        name='leaveAddressId'
+                        options={mappingAddress(leaveAddresses)}
+                        label='Địa điểm trở về'
+                        placeholder='Địa điểm trở về'
+                        optionValue='id'
+                        optionLabel='name'
+                        onChange={() => {
+                          formik.setFieldValue('leaveTimeId', '');
+                        }}
+                      />
+                      <OurSelect
+                        name='leaveTimeId'
+                        options={leaveTimes}
+                        label='Thời gian trở về'
+                        placeholder='Thời gian trở về'
+                        optionValue='id'
+                        optionLabel='name'
+                      />
+                    </>
+                  )}
                 </>
               )}
               {moveType !== MoveType.WithCTN && (
@@ -252,6 +265,7 @@ const Step3 = (props: StepProps) => {
                 <>
                   <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
                   <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
+
                   {moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
                   )}
