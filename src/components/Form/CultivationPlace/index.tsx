@@ -6,12 +6,12 @@ import {
   InputProps,
   StackProps,
 } from '@chakra-ui/react';
-import CustomSelect from '~/components/Form/CustomSelect';
 import _ from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useField } from 'formik';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
+import OurSelect from '../MultiSelect';
 
 type CultivationPlaceProps = InputProps &
   FormControlProps &
@@ -21,11 +21,15 @@ type CultivationPlaceProps = InputProps &
 
 function CultivationPlace(props: CultivationPlaceProps) {
   const { name, label, isRequired, setDataPreview } = props;
+  const groupName = `${name}_group`;
 
   //@ts-ignore
-  const [field, { value: id }, { error, touched }] = useField(name);
+  const [field, { value: id }, { error, touched, setValue }] = useField(name);
+  const [groupField, , { setValue: setGroup }] = useField(groupName);
+  const [groups, setGroups] = useState([]);
+  const [CTNs, setCTNs] = useState([]);
 
-  const { data: groups, loaded } = useAxios(
+  const { data, loaded } = useAxios(
     {
       method: 'get',
       url: API.GET_CTN,
@@ -35,19 +39,46 @@ function CultivationPlace(props: CultivationPlaceProps) {
   );
 
   useEffect(() => {
-    const placeName = _.get(_.filter(groups, (g) => g.id == id)[0], 'name', '');
+    const placeName = _.get(_.filter(CTNs, (g) => g.id == id)[0], 'name', '');
     setDataPreview({ [`${name}`]: placeName });
+    if (id && loaded) {
+      const parent = CTNs.find((ctn) => ctn.id == id);
+      const groups = data
+        ?.filter((ctn) => ctn.parentId == id)
+        .map((group) => {
+          group.name = `${group.name} - ${parent?.name}`;
+          return group;
+        });
+      setGroups(groups);
+    }
+    if (loaded) {
+      const CTNs = data.filter((ctn) => ctn.parentId == 0);
+      setCTNs(CTNs);
+    }
   }, [id, loaded]);
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>
       <FormLabel mb={0}>{label}</FormLabel>
-      <CustomSelect
+      <OurSelect
         {...field}
-        valueField='id'
-        labelField='name'
-        data={groups}
-        placeholder='Nơi sinh hoạt'
+        name={field.name}
+        optionValue='id'
+        optionLabel='name'
+        options={CTNs}
+        placeholder='Chúng thanh niên'
+        hiddenErrorMessage
+        onChange={(e) => {
+          field.onChange(e);
+          setGroup(undefined);
+        }}
+      />
+      <OurSelect
+        {...groupField}
+        optionValue='id'
+        optionLabel='name'
+        options={groups}
+        placeholder='Tổ'
         hiddenErrorMessage
       />
       <FormErrorMessage>{error}</FormErrorMessage>

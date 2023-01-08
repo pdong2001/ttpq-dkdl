@@ -9,7 +9,7 @@ import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { useEffect, useState } from 'react';
 import { fillForm } from '../../../slices/register';
-import step3Schema from '../validationSchema/step3_1';
+import step3Schema from '../validationSchema/step3_2';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
@@ -19,6 +19,7 @@ import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 import OurSelect from '~/components/Form/MultiSelect';
 
 type Time = StartTimeDto | LeaveTimeDto;
@@ -48,59 +49,71 @@ const Step3 = (props: StepProps) => {
 
   const { register } = useAppSelector((state) => state.register.data);
   const {
-    moveType: editMoveType,
-    startTimeId: editStartTimeId,
-    otherStartAddress: editOtherStartAddress,
-    otherStartTime: editOtherStartTime,
-    startPlaneCode: editStartPlaneCode,
-    startTime,
+    returnMoveType: editMoveType,
+    leaveTimeId: editLeaveTimeId,
+    otherLeaveAddress: editOtherLeaveAddress,
+    otherLeaveTime: editOtherLeaveTime,
+    returnPlaneCode: editReturnPlaneCode,
+    leaveTime,
+    //thêm field
+    carBookingType: editCarBookingType,
   } = useAppSelector((state) => state.registerInfo.data);
-  const { addressId: editStartAddressId } = startTime || {};
+  const { addressId: editLeaveAddressId } = leaveTime || {};
   const {
-    moveType: moveTypeInStore,
-    startAddressId: startAddressIdInStore = '',
+    returnMoveType: moveTypeInStore,
+    leaveAddressId: leaveAddressIdInStore = '',
 
-    startTimeId = '',
+    leaveTimeId: leaveTimeIdInStore = '',
 
-    startPlaneCode = '',
-    otherStartTime = '',
-    otherStartAddress = '',
+    returnPlaneCode = '',
+    otherLeaveTime = '',
+    otherLeaveAddress = '',
+    // thêm field
+    carBookingType: carBookingTypeInStore,
   } = register || {};
 
-  const hasStartAddress = !!startAddresses?.length;
+  const hasLeaveAddress = !!leaveAddresses?.length;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      moveType:
+      returnMoveType:
         moveTypeInStore ||
         (!!editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.WithCTN : MoveType.ByPlane) ||
+        (hasLeaveAddress ? MoveType.WithCTN : canMoveByPlane && MoveType.ByPlane) ||
         MoveType.Other,
 
-      startAddressId: startAddressIdInStore || editStartAddressId,
-      startTimeId: startTimeId || editStartTimeId,
+      leaveAddressId: leaveAddressIdInStore || editLeaveAddressId,
+      leaveTimeId: leaveTimeIdInStore || editLeaveTimeId,
 
-      otherStartAddress: otherStartAddress || editOtherStartAddress,
-      otherStartTime: otherStartTime || editOtherStartTime,
-      startPlaneCode: startPlaneCode || editStartPlaneCode,
+      otherLeaveAddress: otherLeaveAddress || editOtherLeaveAddress,
+      otherLeaveTime: otherLeaveTime || editOtherLeaveTime,
+      returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
+      // thêm field
+      carBookingType:
+        carBookingTypeInStore ||
+        (editCarBookingType ? editCarBookingType + '' : CarBookingType.Both),
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
-      if (moveType != MoveType.WithCTN) {
+      if (returnMoveType != MoveType.WithCTN) {
         // máy bay
-        values.startAddressId = undefined;
-        values.startTimeId = undefined;
+        values.leaveAddressId = undefined;
+        values.leaveTimeId = undefined;
 
-        if (moveType == MoveType.Other) {
+        if (returnMoveType == MoveType.Other) {
           // tự túc
-          values.startPlaneCode = '';
+          values.returnPlaneCode = '';
+          // thêm field
+          values.carBookingType = '';
         }
       } else {
         // with CTN
-        values.otherStartAddress = '';
-        values.otherStartTime = '';
-        values.startPlaneCode = '';
+        values.otherLeaveAddress = '';
+        values.otherLeaveTime = '';
+        values.returnPlaneCode = '';
+        // thêm field
+        values.carBookingType = '';
       }
       dispatch(
         fillForm({
@@ -112,22 +125,22 @@ const Step3 = (props: StepProps) => {
     },
   });
 
-  const { moveType } = formik.values;
+  const { returnMoveType } = formik.values;
 
   // thời gian khởi hành theo địa điểm xuất phát
-  const { startAddressId } = formik.values;
+  const { leaveAddressId } = formik.values;
 
-  const [startTimes, setStartTimes] = useState<Time[] | never[]>();
+  const [leaveTimes, setLeaveTimes] = useState<Time[] | never[]>();
 
   useEffect(() => {
-    const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
+    const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
     const mappingTimes = mappingTime(times);
-    setStartTimes(mappingTimes);
-  }, [startAddresses, startAddressId]);
+    setLeaveTimes(mappingTimes);
+  }, [leaveAddresses, leaveAddressId]);
 
   useEffect(() => {
     formik.setTouched({});
-  }, [moveType]);
+  }, [returnMoveType]);
 
   const mapTitle = (values) => {
     function filterTitle(array, id) {
@@ -140,8 +153,8 @@ const Step3 = (props: StepProps) => {
     dispatch(
       fillDataPreview({
         ...values,
-        startAddressId: `${filterTitle(mappingAddress(startAddresses), values.startAddressId)}`,
-        startTimeId: `${filterTitle(startTimes, values.startTimeId)}`,
+        leaveAddressId: `${filterTitle(mappingAddress(leaveAddresses), values.leaveAddressId)}`,
+        leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
       }),
     );
   };
@@ -164,8 +177,8 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios label='Hình thức di chuyển' name='moveType'>
-                {!!startAddresses?.length && (
+              <Radios label='Hình thức di chuyển' name='returnMoveType'>
+                {hasLeaveAddress && (
                   <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
                 {canMoveByPlane && (
@@ -173,40 +186,54 @@ const Step3 = (props: StepProps) => {
                 )}
                 <Radio value={MoveType.Other}>{MoveType.toString(MoveType.Other)}</Radio>
               </Radios>
-              {moveType == MoveType.WithCTN && (
+              {returnMoveType == MoveType.WithCTN && hasLeaveAddress && (
                 // WithCTN
                 <>
                   <OurSelect
-                    name='startAddressId'
-                    options={mappingAddress(startAddresses)}
-                    label='Nơi xuất phát'
-                    placeholder='Nơi xuất phát'
-                    isRequired
-                    onChange={() => {
-                      formik.setFieldValue('startTimeId', '');
-                    }}
+                    name='leaveAddressId'
+                    options={mappingAddress(leaveAddresses)}
+                    label='Địa điểm trở về'
+                    placeholder='Địa điểm trở về'
                     optionValue='id'
                     optionLabel='name'
+                    onChange={() => {
+                      formik.setFieldValue('leaveTimeId', '');
+                    }}
                   />
                   <OurSelect
-                    name='startTimeId'
-                    options={startTimes}
-                    label='Thời gian khởi hành'
-                    placeholder='Thời gian khởi hành'
+                    name='leaveTimeId'
+                    options={leaveTimes}
+                    label='Thời gian trở về'
+                    placeholder='Thời gian trở về'
                     optionValue='id'
                     optionLabel='name'
-                    isRequired
                   />
                 </>
               )}
-              {moveType !== MoveType.WithCTN && (
+              {returnMoveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
-
-                  <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
-                  {canMoveByPlane && moveType === MoveType.ByPlane && (
-                    <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
+                  <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' />
+                  <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' />
+                  {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
+                    <>
+                      <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
+                      {/* thêm field */}
+                      <Radios
+                        spacing={2}
+                        direction='column'
+                        label='Đăng ký ô tô'
+                        name='carBookingType'
+                        isRequired
+                      >
+                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
+                        <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
+                        <Radio value={CarBookingType.Return}>
+                          Chiều về (Từ chùa ra Tân Sơn Nhất)
+                        </Radio>
+                        <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
+                      </Radios>
+                    </>
                   )}
                 </>
               )}

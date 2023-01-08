@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, getImageSrc } from '~/utils/functions';
 
 type UploadFileProps = InputProps & { dropLabel?: string };
 type ImageResponse = {
@@ -30,7 +30,7 @@ export default function UploadFile(props: UploadFileProps) {
   const [data, setData] = useState<any>();
   const [field, _, helpers] = useField(name);
   const { primaryColor } = useCustomColorMode();
-  const [imgSrc, setImgSrc] = useState(field.value);
+  const [imgSrc, setImgSrc] = useState(getImageSrc(field.value));
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
@@ -79,7 +79,7 @@ export default function UploadFile(props: UploadFileProps) {
 
   return (
     <Container my='2' centerContent>
-      <AspectRatio width='64' ratio={1}>
+      <AspectRatio width='32' ratio={3 / 4}>
         <Box
           borderColor='gray.300'
           borderStyle='dashed'
@@ -120,10 +120,12 @@ export default function UploadFile(props: UploadFileProps) {
                   </Box>
                 ) : (
                   <Stack p='8' textAlign='center' spacing='1'>
-                    <Heading fontSize='lg' color={primaryColor} fontWeight='bold'>
+                    <Heading fontSize={14} color={primaryColor} fontWeight='bold'>
                       {label}
                     </Heading>
-                    <Text fontWeight='light'>hoặc bấm để chọn ảnh</Text>
+                    <Text fontSize={12} fontWeight='light'>
+                      hoặc bấm để chọn ảnh
+                    </Text>
                   </Stack>
                 )}
               </Stack>

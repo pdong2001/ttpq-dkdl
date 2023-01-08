@@ -78,7 +78,6 @@ const SearchLeader = (props: Props) => {
     },
     searchValue,
   );
-  console.log(registerTypeField);
 
   useEffect(() => {
     const { data: leader } = data || {};

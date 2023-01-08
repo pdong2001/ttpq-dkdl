@@ -18,18 +18,19 @@ import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import API from '~/apis/constants';
-import { formatUrl, mapReceiverCardAddressDetail } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import { fillDataPreview } from '~/slices/previewInfo';
 import UploadFile from '~/components/Form/UploadFile';
-import MultiSelect from '~/components/Form/MultiSelect';
+import OurSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+import moment from 'moment';
+import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -38,7 +39,9 @@ const Step4 = (props: StepProps) => {
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
-  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
+  const { eventId, id, type, ctnId, receiveVolunteeCert } = useAppSelector(
+    (state) => state.registerPage.data,
+  );
   const {
     expDepartments,
     wishDepartment,
@@ -46,7 +49,8 @@ const Step4 = (props: StepProps) => {
     receiveCardAddressId: editReceiverCardId,
     // thêm field
     clothingSize: editClothingSize,
-    note: editNote,
+    question: editNote,
+    registeredDays: editServeDays,
   } = useAppSelector((state) => state.registerInfo.data);
   const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
@@ -58,7 +62,7 @@ const Step4 = (props: StepProps) => {
     receiveCardAddressId,
     // thêm field
     clothingSize,
-    note,
+    question,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
@@ -72,7 +76,15 @@ const Step4 = (props: StepProps) => {
   );
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { departments } = registerPage;
+  const { departments, days } = registerPage;
+  const serveDates = days?.map((date) => {
+    const newDate = { ...date };
+    const formattedDate = moment(date.time).format('DD-MM-yyyy');
+    if (newDate?.name && newDate.name != formattedDate) {
+      newDate.name = `${newDate.name} (${formattedDate})`;
+    }
+    return newDate;
+  });
 
   // lấy nơi nhận thẻ
   const { receiveCardAddresses = [] } = useAppSelector((state) => state.registerPage.data);
@@ -93,7 +105,11 @@ const Step4 = (props: StepProps) => {
       // thêm field
       clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
-      note: note || editNote || '',
+      identityCardImagePathFront: '',
+      identityCardImagePathBack: '',
+      identityCardImagePaths: '',
+      question: question || editNote || '',
+      registeredDays: [],
     },
     validationSchema: step4Schema,
     onSubmit: (values) => {
@@ -104,18 +120,23 @@ const Step4 = (props: StepProps) => {
         exps,
         wishDepartmentId,
         receiveCardAddressId,
-        note,
+        question,
         // thêm field
         clothingSize,
+        identityCardImagePathFront,
+        // identityCardImagePathBack,
+        registeredDays,
       } = values;
+      const identityCardImagePaths = [identityCardImagePathFront];
       const fillData = {
         strongPointIds,
         exps,
         avatarPath,
+        identityCardImagePaths,
         register: {
           ...previousStepData.register,
           expDepartmentIds,
-          note,
+          question,
           receiveCardAddressId,
           wishDepartmentId,
           eventId,
@@ -124,12 +145,13 @@ const Step4 = (props: StepProps) => {
           type,
           // thêm field
           clothingSize,
-        },
+          registeredDays,
+        } as EventRegistryDto,
       };
       dispatch(fillForm(fillData));
       mapMultiTitle({
         avatarPath,
-        note,
+        question,
         type,
         exps,
         strongPointIds,
@@ -138,13 +160,17 @@ const Step4 = (props: StepProps) => {
         receiveCardAddressId,
         clothingSize,
       });
-      nextStep();
+      if (receiveVolunteeCert) {
+        nextStep();
+      } else {
+        nextStep(6);
+      }
     },
   });
 
   const mapMultiTitle = ({
     avatarPath,
-    note,
+    question,
     type,
     exps,
     strongPointIds,
@@ -163,7 +189,7 @@ const Step4 = (props: StepProps) => {
     }
     dispatch(
       fillDataPreview({
-        note,
+        question,
         type,
         avatarPath,
         exps,
@@ -186,9 +212,6 @@ const Step4 = (props: StepProps) => {
         >
           Công việc
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
-        </Text>
       </Stack>
       <Box mt={10}>
         <FormikProvider value={formik}>
@@ -201,57 +224,88 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
-              <MultiSelect
+              <OurSelect
+                isMulti
+                name='registeredDays'
+                options={serveDates}
+                label='Thời gian công quả ở chùa'
+                optionValue='id'
+                optionLabel='name'
+                closeMenuOnSelect={false}
+                isRequired={!!serveDates?.length}
+              />
+              <OurSelect
+                isMulti
                 name='strongPointIds'
                 options={strongPointList}
                 label='Kỹ năng, sở trường'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
               />
-              <MultiSelect
+              <OurSelect
                 name='expDepartmentIds'
                 options={departments}
                 label='Kinh nghiệm ở ban'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
               />
-              <Select
+              <OurSelect
                 name='wishDepartmentId'
-                data={departments}
+                options={departments}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'
+                optionValue='id'
+                optionLabel='name'
                 isRequired
               />
-              <Select
+              <OurSelect
                 name='receiveCardAddressId'
-                data={receiveCardAddresses}
+                options={receiveCardAddresses}
+                optionValue='id'
+                optionLabel='name'
                 // labelField='address'
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
               />
               {/* thêm field */}
-              <Select
+              <OurSelect
                 name='clothingSize'
-                data={ClothingSize.getList()}
+                options={ClothingSize.getList()}
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired
-                valueField='value'
-                labelField='label'
               />
-              <FormControl name='avatarPath' as='fieldset' border={1}>
-                <FormLabel as='legend'>Hình thẻ</FormLabel>
-                <UploadFile name='avatarPath' />
-              </FormControl>
+
+              <Stack direction={{ base: 'column', lg: 'row' }}>
+                <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>Hình thẻ</FormLabel>
+                  <UploadFile name='avatarPath' />
+                </FormControl>
+
+                <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>CCCD mặt trước</FormLabel>
+                  <UploadFile name='identityCardImagePathFront' />
+                </FormControl>
+
+                {/* <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>CCCD mặt sau</FormLabel>
+                  <UploadFile name='identityCardImagePathBack' />
+                </FormControl> */}
+              </Stack>
               <FormInput
-                name='note'
+                name='question'
                 label='Ghi chú'
                 as={Textarea}
                 placeholder='Huynh đệ có thắc mắc gì không ạ?'
               />
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+              <Button
+                colorScheme='gray'
+                flexGrow={1}
+                fontFamily={'heading'}
+                onClick={() => previousStep()}
+              >
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>
