@@ -64,8 +64,6 @@ const OurSelect = (props: Props) => {
         value={value}
         closeMenuOnSelect={closeMenuOnSelect ?? true}
         onChange={(e) => {
-          console.log(name, 'change');
-
           if (isMulti) {
             helpers.setValue(e?.map((item) => item.value));
           } else {
