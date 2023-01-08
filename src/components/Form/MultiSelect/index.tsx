@@ -14,14 +14,17 @@ type MultiSelectOption = {
   value: any;
   colorScheme?: string;
 };
-type Props = (InputProps & FormControlProps & { options?: Object[] }) & {
-  tagColorScheme?: string;
-  valueField?: string;
-  labelField?: string;
-  closeMenuOnSelect?: boolean;
-};
+type Props = InputProps &
+  FormControlProps & {
+    tagColorScheme?: string;
+    optionLabel?: string;
+    optionValue?: string;
+    closeMenuOnSelect?: boolean;
+    isMulti?: boolean;
+    hiddenErrorMessage?: boolean;
+  } & { options?: Record<string, any> };
 
-const MultiSelect = (props: Props) => {
+const OurSelect = (props: Props) => {
   const {
     name,
     tagColorScheme,
@@ -29,25 +32,32 @@ const MultiSelect = (props: Props) => {
     label,
     isRequired,
     closeMenuOnSelect,
-    valueField = 'value',
-    labelField = 'label',
+    optionLabel = 'label',
+    optionValue = 'value',
+    isMulti,
+    hiddenErrorMessage,
+    placeholder,
   } = props;
   const { primaryColor } = useCustomColorMode();
   const validOptions: MultiSelectOption[] =
-    options?.map((option) => ({
-      value: option[valueField],
-      label: option[labelField],
+    options?.map((option: any) => ({
+      value: option[optionValue],
+      label: option[optionLabel],
     })) || [];
   //@ts-ignore
   const [field, { error, touched }, helpers] = useField(name);
   const isInvalid = !!error && touched;
-  const value = validOptions.filter((item) => field.value?.includes(item.value));
+  const value = isMulti
+    ? validOptions.filter((item) => field.value?.includes?.(item.value))
+    : validOptions.find((item) => field.value === item.value);
+  console.log('render select');
 
   return (
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
       <Select
-        isMulti
+        placeholder={placeholder}
+        isMulti={isMulti}
         focusBorderColor={primaryColor}
         colorScheme={tagColorScheme}
         options={validOptions}
@@ -55,15 +65,19 @@ const MultiSelect = (props: Props) => {
         value={value}
         closeMenuOnSelect={closeMenuOnSelect ?? true}
         onChange={(e) => {
-          helpers.setValue(e.map((e) => e.value));
+          if (isMulti) {
+            helpers.setValue(e?.map((item) => item.value));
+          } else {
+            helpers.setValue(e.value);
+          }
         }}
         onBlur={() => {
           helpers.setTouched(true);
         }}
       />
-      <FormErrorMessage>{error}</FormErrorMessage>
+      {!hiddenErrorMessage && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
 };
 
-export default MultiSelect;
+export default OurSelect;

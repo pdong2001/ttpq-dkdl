@@ -18,12 +18,11 @@ import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import API from '~/apis/constants';
-import { formatUrl, mapReceiverCardAddressDetail } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import { fillDataPreview } from '~/slices/previewInfo';
 import UploadFile from '~/components/Form/UploadFile';
-import MultiSelect from '~/components/Form/MultiSelect';
+import OurSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
@@ -222,37 +221,39 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
-              <MultiSelect
+              <OurSelect
+                isMulti
                 name='registeredDays'
                 options={serveDates}
                 label='Thời gian công quả ở chùa'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
                 closeMenuOnSelect={false}
                 isRequired
               />
-              <MultiSelect
+              <OurSelect
+                isMulti
                 name='strongPointIds'
                 options={strongPointList}
                 label='Kỹ năng, sở trường'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
               />
-              <MultiSelect
+              <OurSelect
                 name='expDepartmentIds'
                 options={departments}
                 label='Kinh nghiệm ở ban'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
               />
-              <Select
+              <OurSelect
                 name='wishDepartmentId'
                 data={departments}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'
                 isRequired
               />
-              <Select
+              <OurSelect
                 name='receiveCardAddressId'
                 data={receiveCardAddresses}
                 // labelField='address'
@@ -260,7 +261,7 @@ const Step4 = (props: StepProps) => {
                 placeholder='Chọn nơi nhận thẻ'
               />
               {/* thêm field */}
-              <Select
+              <OurSelect
                 name='clothingSize'
                 data={ClothingSize.getList()}
                 label='Size áo'
