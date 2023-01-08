@@ -9,6 +9,9 @@ import {
   FormLabel,
   SimpleGrid,
   Radio,
+  Image,
+  AspectRatio,
+  Flex,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -31,6 +34,9 @@ import FadeInUp from '~/components/Animation/FadeInUp';
 import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
 import moment from 'moment';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
+import { useContext } from 'react';
+import { MessageContext } from '~/providers/message';
+import sampleAvatar from '~/assets/misc/avatar_temp.png';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -38,6 +44,7 @@ const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+  const messageService = useContext(MessageContext);
 
   const { eventId, id, type, ctnId, receiveVolunteeCert } = useAppSelector(
     (state) => state.registerPage.data,
@@ -128,6 +135,18 @@ const Step4 = (props: StepProps) => {
         // identityCardImagePathBack,
         registeredDays,
       } = values;
+      if (!identityCardImagePathFront) {
+        return messageService.add({
+          title: 'HD vui lòng bổ sung CCCD để hoàn tất thủ tục đăng ký',
+          status: 'error',
+        });
+      }
+      if (!avatarPath) {
+        return messageService.add({
+          title: 'HD vui lòng bổ sung ảnh thẻ theo hình mẫu',
+          status: 'error',
+        });
+      }
       const identityCardImagePaths = [identityCardImagePathFront];
       const fillData = {
         strongPointIds,
@@ -281,14 +300,16 @@ const Step4 = (props: StepProps) => {
                 placeholder='Chọn size áo'
                 isRequired
               />
-
+              <Flex justifyContent='center'>
+                <Image srcSet={sampleAvatar} width={[64, 80]} />
+              </Flex>
               <Stack direction={{ base: 'column', lg: 'row' }}>
                 <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
                   <UploadFile name='avatarPath' />
                 </FormControl>
 
-                <FormControl name='avatarPath' as='fieldset' border={1}>
+                <FormControl name='identityCardImagePathFront' as='fieldset' border={1}>
                   <FormLabel as='legend'>CCCD mặt trước</FormLabel>
                   <UploadFile name='identityCardImagePathFront' />
                 </FormControl>

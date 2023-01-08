@@ -4,13 +4,13 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 const step3Schema = Yup.object({
   moveType: Yup.string().nullable().required(),
   // HCM
-  startAddressId: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: MoveType.WithCTN,
-      then: Yup.string().required('Xin hãy chọn nơi xuất phát'),
-      otherwise: Yup.string().notRequired(),
-    }),
+  // startAddressId: Yup.string()
+  //   .nullable()
+  //   .when('moveType', {
+  //     is: MoveType.WithCTN,
+  //     then: Yup.string().required('Xin hãy chọn nơi xuất phát'),
+  //     otherwise: Yup.string().notRequired(),
+  //   }),
   startTimeId: Yup.string()
     .nullable()
     .when('moveType', {

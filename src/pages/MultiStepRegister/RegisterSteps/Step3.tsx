@@ -117,12 +117,22 @@ const Step3 = (props: StepProps) => {
   // thời gian khởi hành theo địa điểm xuất phát
   const { startAddressId } = formik.values;
 
-  const [startTimes, setStartTimes] = useState<Time[] | never[]>();
+  const [startTimes, setStartTimes] = useState<(StartTimeDto | undefined)[]>();
 
   useEffect(() => {
-    const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
+    const times = startAddresses
+      ?.map((address) => {
+        const newAddress = { ...address } as StartAddressDto;
+        newAddress.times = address.times?.map((time) => {
+          const newTime = { ...time };
+          newTime.name = `${time.name} tại ${address.name}`;
+          return newTime;
+        });
+        return newAddress || [];
+      })
+      .flatMap((address) => address.times);
     setStartTimes(times);
-  }, [startAddresses, startAddressId]);
+  }, [startAddresses]);
 
   useEffect(() => {
     formik.setTouched({});
@@ -175,7 +185,7 @@ const Step3 = (props: StepProps) => {
               {moveType == MoveType.WithCTN && (
                 // WithCTN
                 <>
-                  <OurSelect
+                  {/* <OurSelect
                     name='startAddressId'
                     options={startAddresses}
                     label='Nơi xuất phát'
@@ -186,7 +196,7 @@ const Step3 = (props: StepProps) => {
                     }}
                     optionValue='id'
                     optionLabel='name'
-                  />
+                  /> */}
                   <OurSelect
                     name='startTimeId'
                     options={startTimes}

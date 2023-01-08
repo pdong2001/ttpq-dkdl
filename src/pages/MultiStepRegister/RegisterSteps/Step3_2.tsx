@@ -130,12 +130,22 @@ const Step3 = (props: StepProps) => {
   // thời gian khởi hành theo địa điểm xuất phát
   const { leaveAddressId } = formik.values;
 
-  const [leaveTimes, setLeaveTimes] = useState<Time[] | never[]>();
+  const [leaveTimes, setLeaveTimes] = useState<(LeaveTimeDto | undefined)[] | never[]>();
 
   useEffect(() => {
-    const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
+    const times = leaveAddresses
+      ?.map((address) => {
+        const newAddress = { ...address } as LeaveAddressDto;
+        newAddress.times = address.times?.map((time) => {
+          const newTime = { ...time };
+          newTime.name = `${time.name} tại ${address.name}`;
+          return newTime;
+        });
+        return newAddress || [];
+      })
+      .flatMap((address) => address.times);
     setLeaveTimes(times);
-  }, [leaveAddresses, leaveAddressId]);
+  }, [leaveAddresses]);
 
   useEffect(() => {
     formik.setTouched({});
@@ -188,7 +198,7 @@ const Step3 = (props: StepProps) => {
               {returnMoveType == MoveType.WithCTN && hasLeaveAddress && (
                 // WithCTN
                 <>
-                  <OurSelect
+                  {/* <OurSelect
                     name='leaveAddressId'
                     options={leaveAddresses}
                     label='Địa điểm trở về'
@@ -198,7 +208,7 @@ const Step3 = (props: StepProps) => {
                     onChange={() => {
                       formik.setFieldValue('leaveTimeId', '');
                     }}
-                  />
+                  /> */}
                   <OurSelect
                     name='leaveTimeId'
                     options={leaveTimes}
