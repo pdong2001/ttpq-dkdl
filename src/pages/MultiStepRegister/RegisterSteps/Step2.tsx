@@ -108,7 +108,7 @@ const Step2 = (props: StepProps) => {
         permanentAddress,
         temporaryAddress,
         organizationStructureId,
-        organizationStructureId_group,
+        // organizationStructureId_group,
         registerType,
       } = values;
       let { leaderId } = values;
@@ -122,7 +122,8 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
-          organizationStructureId: organizationStructureId_group || organizationStructureId,
+          // organizationStructureId: organizationStructureId_group || organizationStructureId,
+          organizationStructureId,
           dateOfBirth,
           temporaryAddress,
           permanentAddress,

@@ -187,7 +187,7 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios label='Hình thức di chuyển' name='returnMoveType'>
+              <Radios label='Rời chùa' name='returnMoveType'>
                 {hasLeaveAddress && (
                   <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}

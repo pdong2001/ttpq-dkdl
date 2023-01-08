@@ -21,12 +21,12 @@ type CultivationPlaceProps = InputProps &
 
 function CultivationPlace(props: CultivationPlaceProps) {
   const { name, label, isRequired, setDataPreview } = props;
-  const groupName = `${name}_group`;
+  // const groupName = `${name}_group`;
 
   //@ts-ignore
   const [field, { value: id }, { error, touched, setValue }] = useField(name);
-  const [groupField, , { setValue: setGroup }] = useField(groupName);
-  const [groups, setGroups] = useState([]);
+  // const [groupField, , { setValue: setGroup }] = useField(groupName);
+  // const [groups, setGroups] = useState([]);
   const [CTNs, setCTNs] = useState([]);
 
   const { data, loaded } = useAxios(
@@ -43,13 +43,13 @@ function CultivationPlace(props: CultivationPlaceProps) {
     setDataPreview({ [`${name}`]: placeName });
     if (id && loaded) {
       const parent = CTNs.find((ctn) => ctn.id == id);
-      const groups = data
-        ?.filter((ctn) => ctn.parentId == id)
-        .map((group) => {
-          group.name = `${group.name} - ${parent?.name}`;
-          return group;
-        });
-      setGroups(groups);
+      // const groups = data
+      //   ?.filter((ctn) => ctn.parentId == id)
+      //   .map((group) => {
+      //     group.name = `${group.name} - ${parent?.name}`;
+      //     return group;
+      //   });
+      // setGroups(groups);
     }
     if (loaded) {
       const CTNs = data.filter((ctn) => ctn.parentId == 0);
@@ -68,19 +68,19 @@ function CultivationPlace(props: CultivationPlaceProps) {
         options={CTNs}
         placeholder='Chúng thanh niên'
         hiddenErrorMessage
-        onChange={(e) => {
-          field.onChange(e);
-          setGroup(undefined);
-        }}
+        // onChange={(e) => {
+        //   field.onChange(e);
+        //   // setGroup(undefined);
+        // }}
       />
-      <OurSelect
+      {/* <OurSelect
         {...groupField}
         optionValue='id'
         optionLabel='name'
         options={groups}
         placeholder='Tổ'
         hiddenErrorMessage
-      />
+      /> */}
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
