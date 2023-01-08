@@ -6,6 +6,7 @@ import 'primereact/resources/primereact.min.css'; //core css
 import 'primeicons/primeicons.css';
 
 import { Switch, useHistory, useParams } from 'react-router-dom';
+
 import { ROUTES, AppRoute } from './routes';
 import { nanoid, unwrapResult } from '@reduxjs/toolkit';
 import { useContext, useEffect } from 'react';
@@ -18,6 +19,7 @@ function App() {
   const dispatch = useAppDispatch();
   const messageService = useContext(MessageContext);
   const history = useHistory();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (shortUri && !eventId) {
@@ -44,7 +46,12 @@ function App() {
           }
         })
         .catch(() => {
-          history.push('/not-found');
+          if (shortUri != 'register-info') {
+            const redirectUrl = pathname.replace('/' + shortUri, '');
+            history.replace(redirectUrl);
+            history.go(0);
+            console.log('🚀 ~ file: App.tsx:45 ~ useEffect ~ redirectUrl', redirectUrl);
+          }
         });
     }
   }, [shortUri, eventId]);
