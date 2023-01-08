@@ -23,7 +23,7 @@ const registerSteps = [Step1, Step2, Step31, Step32, Step4, Step5, Step6];
 
 const MultiStepRegister = () => {
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(2);
+  const [step, setStep] = useState<number>(0);
 
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
@@ -38,7 +38,6 @@ const MultiStepRegister = () => {
   }, []);
   const nextStep = (step?: number) => {
     if (step) {
-      debugger;
       setStep(step);
     } else {
       setStep((currentStep) => currentStep + 1);
