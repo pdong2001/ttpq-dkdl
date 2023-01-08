@@ -57,6 +57,7 @@ const RegisterInfo = () => {
   const { member: authMember } = useContext(AuthContext);
 
   const { data } = useAppSelector((state) => state.registerInfo);
+  const { receiveVolunteeCert } = useAppSelector((state) => state.registerPage.data);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -86,9 +87,6 @@ const RegisterInfo = () => {
   const certificateRegistry = data?.certificateRegistry;
   const companyNameEN = data?.companyNameEN;
   const companyNameVIE = data?.companyNameVIE;
-  const assignedDepartment = data.departmentDetail;
-  const assignedArea = data.area;
-  const assignedGroup = data.group;
 
   const permanent =
     member?.permanentAddress ||
@@ -601,14 +599,16 @@ const RegisterInfo = () => {
                       )}
                     </Box>
 
-                    <Box>
-                      <Text as='b'>Đăng Ký Nhận Giấy Chứng Nhận TNV</Text>
-                      <Box mt='2'>
-                        <Tag mr={2} mb={1} colorScheme={certificateRegistry ? 'green' : 'pink'}>
-                          {certificateRegistry ? 'Có' : 'Không'}
-                        </Tag>
+                    {receiveVolunteeCert && (
+                      <Box>
+                        <Text as='b'>Đăng Ký Nhận Giấy Chứng Nhận TNV</Text>
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={certificateRegistry ? 'green' : 'pink'}>
+                            {certificateRegistry ? 'Có' : 'Không'}
+                          </Tag>
+                        </Box>
                       </Box>
-                    </Box>
+                    )}
                     {certificateRegistry && (
                       <Box>
                         <Text as='b'>Tên trường hoặc nơi công tác</Text>

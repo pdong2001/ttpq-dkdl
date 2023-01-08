@@ -1,3 +1,4 @@
+import { EventType } from './event/EventType.enum';
 import { NamedTimeDto } from './NamedTimes/NamedTimeDto.model';
 export type EventDto = {
   id: number;
@@ -9,4 +10,5 @@ export type EventDto = {
   endDate?: string;
   startDate?: string;
   days?: NamedTimeDto[];
+  type: EventType;
 };
