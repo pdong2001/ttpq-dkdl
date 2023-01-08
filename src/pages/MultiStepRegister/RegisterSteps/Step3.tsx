@@ -130,7 +130,8 @@ const Step3 = (props: StepProps) => {
         });
         return newAddress || [];
       })
-      .flatMap((address) => address.times);
+      .flatMap((address) => address.times)
+      .sort((t1, t2) => new Date(t1?.time || '').getTime() - new Date(t2?.time || '').getTime());
     setStartTimes(times);
   }, [startAddresses]);
 
