@@ -63,7 +63,7 @@ function DateOfBirth(props: DateOfBirthProps) {
     >
       <FormLabel mb={0}>{label}</FormLabel>
       <HStack align='flex-end'>
-        <MultiSelect name={dateName} options={dayOfMonths} placeholder='Ngày' />
+        <MultiSelect name={dateName} options={dayOfMonths} placeholder='Ngày' hiddenErrorMessage />
         <MultiSelect
           placeholder='Tháng'
           options={monthOfBirth}

@@ -50,7 +50,6 @@ const OurSelect = (props: Props) => {
   const value = isMulti
     ? validOptions.filter((item) => field.value?.includes?.(item.value))
     : validOptions.find((item) => field.value === item.value);
-  console.log('render select');
 
   return (
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
@@ -65,6 +64,8 @@ const OurSelect = (props: Props) => {
         value={value}
         closeMenuOnSelect={closeMenuOnSelect ?? true}
         onChange={(e) => {
+          console.log(name, 'change');
+
           if (isMulti) {
             helpers.setValue(e?.map((item) => item.value));
           } else {

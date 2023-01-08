@@ -122,10 +122,10 @@ const Step4 = (props: StepProps) => {
         // thêm field
         clothingSize,
         identityCardImagePathFront,
-        identityCardImagePathBack,
+        // identityCardImagePathBack,
         registeredDays,
       } = values;
-      const identityCardImagePaths = [identityCardImagePathFront, identityCardImagePathBack];
+      const identityCardImagePaths = [identityCardImagePathFront];
       const fillData = {
         strongPointIds,
         exps,
@@ -248,14 +248,18 @@ const Step4 = (props: StepProps) => {
               />
               <OurSelect
                 name='wishDepartmentId'
-                data={departments}
+                options={departments}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban'
+                optionValue='id'
+                optionLabel='name'
                 isRequired
               />
               <OurSelect
                 name='receiveCardAddressId'
-                data={receiveCardAddresses}
+                options={receiveCardAddresses}
+                optionValue='id'
+                optionLabel='name'
                 // labelField='address'
                 label='Nơi nhận thẻ'
                 placeholder='Chọn nơi nhận thẻ'
@@ -263,12 +267,10 @@ const Step4 = (props: StepProps) => {
               {/* thêm field */}
               <OurSelect
                 name='clothingSize'
-                data={ClothingSize.getList()}
+                options={ClothingSize.getList()}
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired
-                valueField='value'
-                labelField='label'
               />
 
               <Stack direction={{ base: 'column', lg: 'row' }}>
@@ -282,10 +284,10 @@ const Step4 = (props: StepProps) => {
                   <UploadFile name='identityCardImagePathFront' />
                 </FormControl>
 
-                <FormControl name='avatarPath' as='fieldset' border={1}>
+                {/* <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>CCCD mặt sau</FormLabel>
                   <UploadFile name='identityCardImagePathBack' />
-                </FormControl>
+                </FormControl> */}
               </Stack>
               <FormInput
                 name='note'

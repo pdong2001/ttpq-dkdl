@@ -6,12 +6,12 @@ import {
   InputProps,
   StackProps,
 } from '@chakra-ui/react';
-import CustomSelect from '~/components/Form/CustomSelect';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useField } from 'formik';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
+import OurSelect from '../MultiSelect';
 
 type CultivationPlaceProps = InputProps &
   FormControlProps &
@@ -25,7 +25,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
 
   //@ts-ignore
   const [field, { value: id }, { error, touched, setValue }] = useField(name);
-  const [groupField] = useField(groupName);
+  const [groupField, , { setValue: setGroup }] = useField(groupName);
   const [groups, setGroups] = useState([]);
   const [CTNs, setCTNs] = useState([]);
 
@@ -60,19 +60,24 @@ function CultivationPlace(props: CultivationPlaceProps) {
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>
       <FormLabel mb={0}>{label}</FormLabel>
-      <CustomSelect
+      <OurSelect
         {...field}
-        valueField='id'
-        labelField='name'
-        data={CTNs}
+        name={field.name}
+        optionValue='id'
+        optionLabel='name'
+        options={CTNs}
         placeholder='Chúng thanh niên'
         hiddenErrorMessage
+        onChange={(e) => {
+          field.onChange(e);
+          setGroup(undefined);
+        }}
       />
-      <CustomSelect
+      <OurSelect
         {...groupField}
-        valueField='id'
-        labelField='name'
-        data={groups}
+        optionValue='id'
+        optionLabel='name'
+        options={groups}
         placeholder='Tổ'
         hiddenErrorMessage
       />
