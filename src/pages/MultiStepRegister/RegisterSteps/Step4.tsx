@@ -303,6 +303,7 @@ const Step4 = (props: StepProps) => {
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired
+                isSearchable={false}
               />
               <Flex justifyContent='center'>
                 <Image srcSet={sampleAvatar} width={[64, 80]} />

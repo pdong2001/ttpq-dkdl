@@ -24,6 +24,7 @@ type Props = InputProps &
     isMulti?: boolean;
     hiddenErrorMessage?: boolean;
     helperText?: string;
+    isSearchable?: boolean;
   } & { options?: Record<string, any> };
 
 const OurSelect = (props: Props) => {
@@ -40,6 +41,7 @@ const OurSelect = (props: Props) => {
     hiddenErrorMessage,
     placeholder,
     helperText,
+    isSearchable,
   } = props;
   const { primaryColor } = useCustomColorMode();
   const validOptions: MultiSelectOption[] =
@@ -58,6 +60,7 @@ const OurSelect = (props: Props) => {
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
       <Select
+        isSearchable={isSearchable}
         placeholder={placeholder}
         isMulti={isMulti}
         focusBorderColor={primaryColor}
