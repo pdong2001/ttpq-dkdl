@@ -12,13 +12,13 @@ const step3Schema = Yup.object({
   //     otherwise: Yup.string().notRequired(),
   //   }),
 
-  // leaveTimeId: Yup.string()
-  //   .nullable()
-  //   .when('moveType', {
-  //     is: MoveType.WithCTN,
-  //     then: Yup.string().required('Xin hãy chọn ngày giờ về HCM'),
-  //     otherwise: Yup.string().notRequired(),
-  //   }),
+  leaveTimeId: Yup.string()
+    .nullable()
+    .when('returnMoveType', {
+      is: MoveType.WithCTN,
+      then: Yup.string().required('Xin hãy chọn ngày giờ về cùng CTN'),
+      otherwise: Yup.string().notRequired(),
+    }),
 
   // Tỉnh khác / Tự túc
   // otherLeaveTime: Yup.string().when('moveType', {

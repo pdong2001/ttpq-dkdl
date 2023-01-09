@@ -39,6 +39,7 @@ import { useContext } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import { NamedTimeDto } from '~/dtos/NamedTimes/NamedTimeDto.model';
+import CropImage from '~/components/Form/CropImage';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -319,16 +320,16 @@ const Step4 = (props: StepProps) => {
               <Stack direction={{ base: 'column', lg: 'row' }}>
                 <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
-                  <UploadFile name='avatarPath' />
-                  <FormHelperText color='red' fontSize={10}>
+                  <CropImage aspect={3 / 4} name='avatarPath' />
+                  <FormHelperText color='red' fontSize={12}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
                   </FormHelperText>
                 </FormControl>
 
                 <FormControl name='identityCardImagePathFront' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
-                  <UploadFile ratio={16 / 9} width={64} name='identityCardImagePathFront' />
-                  <FormHelperText color='red' fontSize={10}>
+                  <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  <FormHelperText color='red' fontSize={12}>
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
                     Chùa
                   </FormHelperText>

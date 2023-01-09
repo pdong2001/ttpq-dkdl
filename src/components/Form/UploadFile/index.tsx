@@ -2,9 +2,9 @@ import {
   AspectRatio,
   AspectRatioProps,
   Box,
+  Button,
   Container,
   Heading,
-  Image,
   Input,
   InputProps,
   Stack,
@@ -17,29 +17,47 @@ import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { getImageSrc } from '~/utils/functions';
+import { Image as PrimeImage } from 'primereact/image';
 
-type UploadFileProps = InputProps & {
-  dropLabel?: string;
-} & AspectRatioProps;
+type UploadFileProps = InputProps &
+  AspectRatioProps & {
+    dropLabel?: string;
+    ratio?: number;
+    onSelectFile?: (file: File) => void;
+    file: File;
+    setOpenCrop: (value: boolean) => void;
+  };
 type ImageResponse = {
   fileName: string;
   storedFileName: string;
 };
 type UploadResponse = { data?: ImageResponse[] };
 export default function UploadFile(props: UploadFileProps) {
-  const { name = '', placeholder, dropLabel, ratio, width } = props;
+  const {
+    name = '',
+    placeholder,
+    dropLabel,
+    ratio,
+    width,
+    onSelectFile,
+    file,
+    setOpenCrop,
+  } = props;
   const [label, setLabel] = useState(placeholder);
-  const [file, setFile] = useState<File | undefined>();
   const [data, setData] = useState<any>();
   const [field, _, helpers] = useField(name);
   const { primaryColor } = useCustomColorMode();
   const [imgSrc, setImgSrc] = useState(getImageSrc(field.value));
 
   const handleChange = (e) => {
-    setFile(e.target.files[0]);
+    // setFile(e.target.files[0]);
+    onSelectFile?.(e.target.files[0]);
+    setOpenCrop(true);
   };
   const handleDrop = (e) => {
-    setFile(e.dataTransfer.files[0]);
+    // setFile(e.dataTransfer.files[0]);
+    onSelectFile?.(e.dataTransfer.files[0]);
+    setOpenCrop(true);
   };
   useEffect(() => {
     if (file) {
@@ -119,7 +137,7 @@ export default function UploadFile(props: UploadFileProps) {
               >
                 {field.value ? (
                   <Box position='relative'>
-                    <Image src={imgSrc} />
+                    <PrimeImage preview src={imgSrc} />
                   </Box>
                 ) : (
                   <Stack p='8' textAlign='center' spacing='1'>
@@ -148,6 +166,7 @@ export default function UploadFile(props: UploadFileProps) {
               onDragEnter={() => setLabel(dropLabel)}
               onDrop={handleDrop}
               onChange={handleChange}
+              onClick={handleChange}
             />
           </Box>
         </Box>
