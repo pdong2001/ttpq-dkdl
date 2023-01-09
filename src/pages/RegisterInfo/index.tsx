@@ -41,6 +41,7 @@ import { get } from 'lodash';
 import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 import { PositionType } from '~/dtos/Enums/PositionType.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
+import { nanoid } from '@reduxjs/toolkit';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -57,8 +58,8 @@ const RegisterInfo = () => {
   const { member: authMember } = useContext(AuthContext);
 
   const { data } = useAppSelector((state) => state.registerInfo);
+  const { registeredDays } = data || {};
   const { receiveVolunteeCert } = useAppSelector((state) => state.registerPage.data);
-
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(
@@ -457,6 +458,29 @@ const RegisterInfo = () => {
                         </Tag>
                       </Box>
                     </Box>
+                    {!!registeredDays?.length && (
+                      <Box>
+                        <Text as='b'>Ngày công quả tại chùa</Text>
+                        <Flex flexWrap='wrap' gap={2} mt={2}>
+                          {registeredDays?.map((day) => (
+                            <Tag
+                              key={nanoid()}
+                              colorScheme={[
+                                'blue',
+                                'cyan',
+                                'green',
+                                'orange',
+                                'pink',
+                                'purple',
+                                'teal',
+                              ].at(registeredDays?.indexOf?.(day) % 7 || 0)}
+                            >
+                              {day.name}
+                            </Tag>
+                          ))}
+                        </Flex>
+                      </Box>
+                    )}
                     {receiveCardAddress && (
                       <Box mt='2'>
                         <Text as='b'>Nơi nhận thẻ</Text>{' '}
@@ -473,6 +497,7 @@ const RegisterInfo = () => {
                     )}
                   </Stack>
                 </TabPanel>
+
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
@@ -559,6 +584,7 @@ const RegisterInfo = () => {
                     )}
                   </Stack>
                 </TabPanel>
+
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
