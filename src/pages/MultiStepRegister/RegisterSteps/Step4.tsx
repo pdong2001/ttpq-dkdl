@@ -311,7 +311,13 @@ const Step4 = (props: StepProps) => {
               <Stack direction={{ base: 'column', lg: 'row' }}>
                 <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
-                  <CropImage aspect={3 / 4} name='avatarPath' />
+                  <Box display={{ base: 'none', lg: 'none' }}>
+                    <CropImage aspect={3 / 4} name='avatarPath' />
+                  </Box>
+
+                  <Box display={{ base: 'block', lg: 'block' }}>
+                    <UploadFile ratio={3 / 4} name='avatarPath' />
+                  </Box>
                   <FormHelperText color='red' fontSize={12}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
                   </FormHelperText>
@@ -319,7 +325,13 @@ const Step4 = (props: StepProps) => {
 
                 <FormControl name='identityCardImagePathFront' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
-                  <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  <Box display={{ base: 'none', lg: 'none' }}>
+                    <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  </Box>
+
+                  <Box display={{ base: 'block', lg: 'block' }}>
+                    <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  </Box>
                   <FormHelperText color='red' fontSize={12}>
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
                     Chùa

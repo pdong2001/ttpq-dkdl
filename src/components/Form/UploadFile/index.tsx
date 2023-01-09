@@ -48,24 +48,36 @@ export default function UploadFile(props: UploadFileProps) {
   const [field, _, helpers] = useField(name);
   const { primaryColor } = useCustomColorMode();
   const [imgSrc, setImgSrc] = useState(getImageSrc(field.value));
+  const [innerFile, setInnerFile] = useState<File>();
 
   const handleChange = (e) => {
-    // setFile(e.target.files[0]);
-    onSelectFile?.(e.target.files[0]);
-    setOpenCrop(true);
+    if (!onSelectFile) {
+      debugger;
+      setInnerFile(e.target.files[0]);
+    } else {
+      onSelectFile?.(e.target.files[0]);
+      setOpenCrop(true);
+    }
   };
   const handleDrop = (e) => {
-    // setFile(e.dataTransfer.files[0]);
-    onSelectFile?.(e.dataTransfer.files[0]);
-    setOpenCrop(true);
+    if (!onSelectFile) {
+      // setInnerFile(e.dataTransfer.files[0]);
+    } else {
+      onSelectFile?.(e.dataTransfer.files[0]);
+      setOpenCrop(true);
+    }
   };
   useEffect(() => {
+    const formData = new FormData();
     if (file) {
-      const formData = new FormData();
       formData.append('files', file);
       setData(formData);
     }
-  }, [file]);
+    if (innerFile) {
+      formData.append('files', innerFile);
+      setData(formData);
+    }
+  }, [file, innerFile]);
 
   /* Upload file */
   const {
@@ -83,17 +95,23 @@ export default function UploadFile(props: UploadFileProps) {
     },
     [data],
   );
-  if (!file && cancel) {
+  if (!(file || innerFile) && cancel) {
     cancel.cancel();
   }
 
   useEffect(() => {
     if (uploadResponse?.data) {
       const src = encodeURIComponent(uploadResponse.data[0]?.storedFileName);
+      let directSrc;
       if (isUploaded) {
-        const directSrc = URL.createObjectURL(file as Blob);
-        helpers.setValue(src);
+        if (file) {
+          directSrc = URL.createObjectURL(file as Blob);
+        }
+        if (innerFile) {
+          directSrc = URL.createObjectURL(innerFile as Blob);
+        }
         setImgSrc(directSrc);
+        helpers.setValue(src);
       }
     }
   }, [uploadResponse, isUploaded]);

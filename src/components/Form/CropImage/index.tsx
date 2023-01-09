@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, ComponentProps } from 'react';
 
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-image-crop';
-import { canvasPreview, dataURItoBlob } from '~/utils/functions';
+import { canvasPreview } from '~/utils/functions';
 import { useDebounceEffect } from '~/hooks/useDebounceEffect';
 
 import 'react-image-crop/dist/ReactCrop.css';
@@ -44,6 +44,7 @@ type Props = {
 export default function CropImage(props: Props) {
   const { aspect = 3 / 4, width, name } = props;
   const [cropFile, setCropFile] = useState<File>();
+  const [file, setFile] = useState<File>();
   const [confirmCropFile, setConfirmCropFile] = useState<File>();
 
   const [imgSrc, setImgSrc] = useState('');
@@ -57,6 +58,7 @@ export default function CropImage(props: Props) {
 
   function onSelectFile(file: File) {
     if (file) {
+      setFile(file);
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() || '');
@@ -91,7 +93,30 @@ export default function CropImage(props: Props) {
 
   useEffect(() => {
     if (imgSrc && previewCanvasRef.current?.toDataURL?.()) {
-      setCropFile(dataURItoBlob(previewCanvasRef.current?.toDataURL()) as File);
+      const cropFile = dataURLtoFile(
+        previewCanvasRef.current?.toDataURL(),
+        file?.name || 'croppedImage.png',
+      );
+      // const b: any = blob;
+      // b.lastModifiedDate = new Date();
+      // b.name = 'newImage.png';
+      // setCropFile(b as File);
+
+      // const dataUrl = previewCanvasRef.current?.toDataURL();
+      // const buffer = Buffer.from(dataUrl.slice(dataUrl.indexOf('base64,') + 7), 'base64');
+      // let type = 'image/png';
+      // let name = 'newimage.png';
+      // if (file) {
+      //   type = file.type;
+      //   name = file.name;
+      // }
+      // const blob = new Blob([buffer], {
+      //   type: type,
+      // });
+      // const b: any = blob;
+      // b.lastModifiedDate = new Date();
+      // b.name = name;
+      setCropFile(cropFile);
     }
   }, [previewCanvasRef.current, completedCrop]);
 
