@@ -73,6 +73,7 @@ const REGISTER_INFO_TITLE = {
   certificateRegistry: 'Lấy giấy chứng nhận',
   companyNameVIE: 'Bằng tiếng Việt',
   companyNameEN: 'Bằng tiếng Anh',
+  registeredDays: 'Thời gian công quả ở chùa',
 };
 
 export {

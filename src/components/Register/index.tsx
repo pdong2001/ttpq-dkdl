@@ -17,6 +17,7 @@ import {
 import _ from 'lodash';
 import { Card, CardBody } from '@chakra-ui/card';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { getImageSrc } from '~/utils/functions';
 
 const TableComponent = (infos, mapTitles): JSX.Element => {
   return (
@@ -55,7 +56,7 @@ const LeaderComponent = (leader): JSX.Element => {
         <Image
           boxSize={{ base: '60px', sm: '70px', md: '100px' }}
           objectFit='cover'
-          src={avatarPath}
+          src={getImageSrc(avatarPath)}
           alt={fullName}
         />
         <Stack>

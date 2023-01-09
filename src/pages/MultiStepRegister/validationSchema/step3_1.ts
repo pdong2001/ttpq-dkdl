@@ -27,13 +27,13 @@ const step3Schema = Yup.object({
   //   }),
 
   // Tỉnh khác / Tự túc
-  otherStartAddress: Yup.string()
-    .nullable()
-    .when('moveType', {
-      is: MoveType.WithCTN,
-      then: Yup.string().notRequired(),
-      otherwise: Yup.string().required('Xin hãy chọn nơi xuất phát'),
-    }),
+  // otherStartAddress: Yup.string()
+  //   .nullable()
+  //   .when('moveType', {
+  //     is: MoveType.WithCTN,
+  //     then: Yup.string().notRequired(),
+  //     otherwise: Yup.string().required('Xin hãy chọn nơi xuất phát'),
+  //   }),
   otherStartTime: Yup.string().when('moveType', {
     is: MoveType.WithCTN,
     then: Yup.string().notRequired(),

@@ -77,7 +77,7 @@ function Step5(props: StepProps) {
   const { certificateRegistry } = formik.values;
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}

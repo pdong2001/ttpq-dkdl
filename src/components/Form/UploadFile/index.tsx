@@ -1,5 +1,6 @@
 import {
   AspectRatio,
+  AspectRatioProps,
   Box,
   Container,
   Heading,
@@ -15,16 +16,18 @@ import { useEffect, useState } from 'react';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { formatUrl, getImageSrc } from '~/utils/functions';
+import { getImageSrc } from '~/utils/functions';
 
-type UploadFileProps = InputProps & { dropLabel?: string };
+type UploadFileProps = InputProps & {
+  dropLabel?: string;
+} & AspectRatioProps;
 type ImageResponse = {
   fileName: string;
   storedFileName: string;
 };
 type UploadResponse = { data?: ImageResponse[] };
 export default function UploadFile(props: UploadFileProps) {
-  const { name = '', placeholder, dropLabel } = props;
+  const { name = '', placeholder, dropLabel, ratio, width } = props;
   const [label, setLabel] = useState(placeholder);
   const [file, setFile] = useState<File | undefined>();
   const [data, setData] = useState<any>();
@@ -79,7 +82,7 @@ export default function UploadFile(props: UploadFileProps) {
 
   return (
     <Container my='2' centerContent>
-      <AspectRatio width='32' ratio={3 / 4}>
+      <AspectRatio width={width} ratio={ratio}>
         <Box
           borderColor='gray.300'
           borderStyle='dashed'
@@ -156,4 +159,6 @@ export default function UploadFile(props: UploadFileProps) {
 UploadFile.defaultProps = {
   placeholder: 'Kéo ảnh vào',
   dropLabel: 'Thả vào đây ạ',
+  ratio: 3 / 4,
+  width: '32',
 } as UploadFileProps;

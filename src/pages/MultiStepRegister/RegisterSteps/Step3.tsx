@@ -154,7 +154,7 @@ const Step3 = (props: StepProps) => {
   };
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -209,7 +209,7 @@ const Step3 = (props: StepProps) => {
               {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
+                  <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' />
 
                   <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
                   {canMoveByPlane && moveType === MoveType.ByPlane && (
