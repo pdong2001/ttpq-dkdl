@@ -1,4 +1,5 @@
-import { Tag } from '@chakra-ui/react';
+import { Flex, Stack, Tag } from '@chakra-ui/react';
+import { nanoid } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
 import { CAR_BOOKING_TYPE_TITLE, CLOTHING_SIZE_TITLE } from '~/configs/register';
@@ -66,6 +67,22 @@ const mapSuccessData = (previewInfo) => {
       strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
       wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
+      registeredDays: (
+        <Flex gap={2} flexWrap='wrap'>
+          {_.map(_.get(previewInfo, 'registeredDays', []), (day) => {
+            return (
+              <Tag
+                key={nanoid()}
+                colorScheme={['blue', 'cyan', 'green', 'orange', 'pink', 'purple', 'teal'].at(
+                  previewInfo?.registeredDays?.indexOf?.(day) % 7 || 0,
+                )}
+              >
+                {day}
+              </Tag>
+            );
+          })}
+        </Flex>
+      ),
       receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
       clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
       note: _.get(previewInfo, 'note', ''),

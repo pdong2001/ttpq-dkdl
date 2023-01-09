@@ -12,6 +12,7 @@ import {
   Image,
   AspectRatio,
   Flex,
+  FormHelperText,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -37,6 +38,7 @@ import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model'
 import { useContext } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
+import { NamedTimeDto } from '~/dtos/NamedTimes/NamedTimeDto.model';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -184,6 +186,7 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId,
         receiveCardAddressId,
         clothingSize,
+        registeredDays,
       });
       if (receiveVolunteeCert) {
         nextStep();
@@ -203,6 +206,7 @@ const Step4 = (props: StepProps) => {
     wishDepartmentId,
     receiveCardAddressId,
     clothingSize,
+    registeredDays,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -223,12 +227,15 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
         receiveCardAddressId: mapName(receiveCardAddresses, [+receiveCardAddressId]),
         clothingSize,
+        registeredDays: registeredDays.map(
+          (dayId) => serveDates?.find((date) => date.id == dayId)?.name,
+        ),
       }),
     );
   };
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -259,7 +266,7 @@ const Step4 = (props: StepProps) => {
                 closeMenuOnSelect={false}
                 isRequired={!!serveDates?.length}
                 placeholder='Thời gian công quả'
-                helperText='HD vui lòng chọn ĐẨY ĐỦ ngày công quả tại chùa'
+                helperText='HD vui lòng chọn ĐẦY ĐỦ ngày công quả tại chùa'
               />
               <OurSelect
                 isMulti
@@ -313,11 +320,18 @@ const Step4 = (props: StepProps) => {
                 <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
                   <UploadFile name='avatarPath' />
+                  <FormHelperText color='red' fontSize={10}>
+                    HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
+                  </FormHelperText>
                 </FormControl>
 
                 <FormControl name='identityCardImagePathFront' as='fieldset' border={1}>
-                  <FormLabel as='legend'>CCCD mặt trước</FormLabel>
-                  <UploadFile name='identityCardImagePathFront' />
+                  <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
+                  <UploadFile ratio={16 / 9} width={64} name='identityCardImagePathFront' />
+                  <FormHelperText color='red' fontSize={10}>
+                    HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
+                    Chùa
+                  </FormHelperText>
                 </FormControl>
 
                 {/* <FormControl name='avatarPath' as='fieldset' border={1}>
@@ -327,7 +341,7 @@ const Step4 = (props: StepProps) => {
               </Stack>
               <FormInput
                 name='question'
-                label='Ghi chú'
+                label='Ghi chú/ thắc mắc của HĐ'
                 as={Textarea}
                 placeholder='Huynh đệ có thắc mắc gì không ạ?'
               />

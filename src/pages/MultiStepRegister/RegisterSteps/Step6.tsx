@@ -94,7 +94,7 @@ const Step6 = (props: StepProps) => {
   const { infos, schedules, jobs, avatar, fullName, certRegistry } = mapSuccessData(previewInfo);
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4}>
         <Box textAlign={'center'}>
           <Heading

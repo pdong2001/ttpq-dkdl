@@ -120,7 +120,7 @@ const Step1 = (props: StepProps) => {
   const greatCeremony = event?.name || '';
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Box>
         <Stack spacing={4}>
           <Heading

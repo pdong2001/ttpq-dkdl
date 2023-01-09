@@ -156,7 +156,7 @@ const Step2 = (props: StepProps) => {
     }
   };
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
         <Heading
           color={primaryColor}
