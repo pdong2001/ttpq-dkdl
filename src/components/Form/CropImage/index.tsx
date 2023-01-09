@@ -7,20 +7,16 @@ import { useDebounceEffect } from '~/hooks/useDebounceEffect';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Dialog } from 'primereact/dialog';
 import {
-  AspectRatio,
   Box,
   Button,
   Center,
-  Flex,
   SimpleGrid,
   Slider,
-  SliderFilledTrack,
   SliderMark,
   SliderThumb,
   SliderTrack,
-  Stack,
 } from '@chakra-ui/react';
-import { BiRotateLeft, BiRotateRight } from 'react-icons/bi';
+import { BiRotateRight } from 'react-icons/bi';
 import UploadFile from '../UploadFile';
 import { MdGraphicEq } from 'react-icons/md';
 
@@ -57,12 +53,10 @@ export default function CropImage(props: Props) {
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
-  // const [aspect, setAspect] = useState<number | undefined>(16 / 9);
   const [openCrop, setOpenCrop] = useState(false);
 
   function onSelectFile(file: File) {
     if (file) {
-      // setCrop(undefined); // Makes crop preview update between images.
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() || '');
@@ -95,28 +89,11 @@ export default function CropImage(props: Props) {
     [completedCrop, scale, rotate],
   );
 
-  // useEffect(() => {
-  //   if (imgSrc) {
-  //     setCrop(undefined);
-  //   }
-  // }, [imgSrc]);
-
   useEffect(() => {
     if (imgSrc && previewCanvasRef.current?.toDataURL?.()) {
       setCropFile(dataURItoBlob(previewCanvasRef.current?.toDataURL()) as File);
     }
   }, [previewCanvasRef.current, completedCrop]);
-
-  // function handleToggleAspectClick() {
-  //   if (aspect) {
-  //     setAspect(undefined);
-  //   } else if (imgRef.current) {
-  //     const { width, height } = imgRef.current;
-  //     // setAspect(16 / 9);
-  //     setCrop(centerAspectCrop(width, height, 16 / 9));
-  //   }
-  // }
-  console.log('open crop', openCrop);
 
   return (
     <>

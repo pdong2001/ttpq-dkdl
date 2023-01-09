@@ -203,6 +203,7 @@ const Step3 = (props: StepProps) => {
                     optionValue='id'
                     optionLabel='name'
                     isRequired
+                    isSearchable={false}
                   />
                 </>
               )}
