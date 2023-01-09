@@ -93,14 +93,6 @@ const Step4 = (props: StepProps) => {
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { departments, event } = registerPage;
   const { days } = event || {};
-  const serveDates = days?.map((date) => {
-    const newDate = { ...date };
-    const formattedDate = moment(date.time).format('DD/MM/yyyy');
-    if (newDate?.name && newDate.name != formattedDate) {
-      newDate.name = `${newDate.name} (${formattedDate})`;
-    }
-    return newDate;
-  });
 
   // lấy nơi nhận thẻ
   const { receiveCardAddresses = [] } = useAppSelector((state) => state.registerPage.data);
@@ -228,9 +220,7 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
         receiveCardAddressId: mapName(receiveCardAddresses, [+receiveCardAddressId]),
         clothingSize,
-        registeredDays: registeredDays.map(
-          (dayId) => serveDates?.find((date) => date.id == dayId)?.name,
-        ),
+        registeredDays: registeredDays.map((dayId) => days?.find((date) => date.id == dayId)?.name),
       }),
     );
   };
@@ -260,12 +250,12 @@ const Step4 = (props: StepProps) => {
               <OurSelect
                 isMulti
                 name='registeredDays'
-                options={serveDates}
+                options={days}
                 label='Thời gian công quả ở chùa'
                 optionValue='id'
                 optionLabel='name'
                 closeMenuOnSelect={false}
-                isRequired={!!serveDates?.length}
+                isRequired={!!days?.length}
                 placeholder='Thời gian công quả'
                 helperText='HD vui lòng chọn ĐẦY ĐỦ ngày công quả tại chùa'
               />
