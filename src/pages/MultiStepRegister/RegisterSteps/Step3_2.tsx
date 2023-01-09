@@ -217,6 +217,7 @@ const Step3 = (props: StepProps) => {
                     placeholder='Thời gian trở về'
                     optionValue='id'
                     optionLabel='name'
+                    isRequired
                   />
                 </>
               )}
