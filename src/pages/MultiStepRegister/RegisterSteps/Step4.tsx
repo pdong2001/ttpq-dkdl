@@ -312,7 +312,7 @@ const Step4 = (props: StepProps) => {
                 <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
                   <Box display={{ base: 'none', lg: 'none' }}>
-                    <CropImage aspect={3 / 4} name='avatarPath' />
+                    {/* <CropImage aspect={3 / 4} name='avatarPath' /> */}
                   </Box>
 
                   <Box display={{ base: 'block', lg: 'block' }}>
@@ -326,7 +326,7 @@ const Step4 = (props: StepProps) => {
                 <FormControl name='identityCardImagePathFront' as='fieldset' border={1}>
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
                   <Box display={{ base: 'none', lg: 'none' }}>
-                    <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                    {/* <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' /> */}
                   </Box>
 
                   <Box display={{ base: 'block', lg: 'block' }}>
