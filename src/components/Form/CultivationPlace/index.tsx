@@ -24,7 +24,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
   // const groupName = `${name}_group`;
 
   //@ts-ignore
-  const [field, { value: id }, { error, touched, setValue }] = useField(name);
+  const [field, { value: id, error, touched }, { setValue }] = useField(name);
   // const [groupField, , { setValue: setGroup }] = useField(groupName);
   // const [groups, setGroups] = useState([]);
   const [CTNs, setCTNs] = useState([]);
@@ -56,6 +56,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
       setCTNs(CTNs);
     }
   }, [id, loaded]);
+  console.log('ctn error', error, touched);
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>
@@ -66,8 +67,9 @@ function CultivationPlace(props: CultivationPlaceProps) {
         optionValue='id'
         optionLabel='name'
         options={CTNs}
-        placeholder='Chúng thanh niên'
+        placeholder='Chọn điểm tu tập'
         hiddenErrorMessage
+        isSearchable
         // onChange={(e) => {
         //   field.onChange(e);
         //   // setGroup(undefined);

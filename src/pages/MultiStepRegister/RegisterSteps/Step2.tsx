@@ -98,7 +98,7 @@ const Step2 = (props: StepProps) => {
         RegisterType.SINGLE,
       leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
-    validationSchema: step2Schema,
+    validationSchema: step2Schema(organizationStructureId || ctnId),
     onSubmit: (values) => {
       const {
         gender,
@@ -200,6 +200,7 @@ const Step2 = (props: StepProps) => {
                       setDataPreview={setDataPreview}
                       className='organizationStructureId'
                       label='Địa điểm tu tập'
+                      isRequired={!ctnId}
                     />
                   </Box>
                 </Stack>
