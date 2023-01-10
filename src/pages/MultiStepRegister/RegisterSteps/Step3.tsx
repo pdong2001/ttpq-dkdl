@@ -75,7 +75,7 @@ const Step3 = (props: StepProps) => {
       moveType:
         moveTypeInStore ||
         (!!editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.WithCTN : MoveType.ByPlane) ||
+        (hasStartAddress ? MoveType.WithCTN : canMoveByPlane && MoveType.ByPlane) ||
         MoveType.Other,
 
       startAddressId: startAddressIdInStore || editStartAddressId,
