@@ -13,9 +13,8 @@ import {
   Divider,
   Th,
   Thead,
-  AccordionItem,
 } from '@chakra-ui/react';
-import _ from 'lodash';
+import _ from 'lodash';s
 import { Card, CardBody } from '@chakra-ui/card';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { getImageSrc } from '~/utils/functions';
@@ -46,7 +45,7 @@ const TableComponent = (infos, mapTitles): JSX.Element => {
 const LeaderComponent = (leader): JSX.Element => {
   const { fullName, religiousName, avatarPath, phoneNumber } = leader;
   return (
-    <AccordionItem>
+    <>
       <Alert status='info'>
         <InfoOutlineIcon />
         <Heading p={2} as='h5' size='md'>
@@ -71,13 +70,13 @@ const LeaderComponent = (leader): JSX.Element => {
           </CardBody>
         </Stack>
       </Card>
-    </AccordionItem>
+    </>
   );
 };
 
 const OtherInfo = ({ isLeader, title, subTitle }) => {
   return (
-    <AccordionItem>
+    <>
       <Card direction={{ base: 'column', sm: 'column' }} overflow='hidden' pr={5}>
         <TableContainer>
           <Table variant='simple' colorScheme={'gray'} size='md'>
@@ -102,7 +101,7 @@ const OtherInfo = ({ isLeader, title, subTitle }) => {
           </Table>
         </TableContainer>
       </Card>
-    </AccordionItem>
+    </>
   );
 };
 
