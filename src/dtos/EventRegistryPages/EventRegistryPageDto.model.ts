@@ -28,4 +28,5 @@ export type EventRegistryPageDto = {
   days?: NamedTimeDto[];
   canMoveByPlane: boolean;
   receiveVolunteeCert: boolean;
+  hotline?: string;
 };
