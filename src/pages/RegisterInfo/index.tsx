@@ -534,7 +534,7 @@ const RegisterInfo = () => {
                       </Box>
                     </Box>
                     <Box>
-                      <Text as='b'>Rời chùa</Text>
+                      <Text as='b'>Về lại địa phương</Text>
                       <Box mt='2'>
                         <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
                           {MoveType.toString(returnMoveType)}
@@ -559,7 +559,7 @@ const RegisterInfo = () => {
                           )}
                       </Box>
                     </Box>
-                    {returnMoveType == MoveType.WithCTN && (
+                    {/* {returnMoveType == MoveType.WithCTN && (
                       <Box>
                         <HStack>
                           <MdLocationCity />
@@ -567,7 +567,7 @@ const RegisterInfo = () => {
                         </HStack>
                         <Text>{schedule && schedule?.return_address}</Text>
                       </Box>
-                    )}
+                    )} */}
 
                     {(moveType == MoveType.ByPlane || returnMoveType == MoveType.ByPlane) && (
                       <Box>

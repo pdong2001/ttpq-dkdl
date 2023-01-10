@@ -15,7 +15,7 @@ const step3Schema = Yup.object({
     .nullable()
     .when('moveType', {
       is: MoveType.WithCTN,
-      then: Yup.string().required('Xin hãy chọn ngày giờ đi'),
+      then: Yup.string().required('Xin hãy chọn đợt đi'),
       otherwise: Yup.string().notRequired(),
     }),
   // leaveTimeId: Yup.string()
@@ -37,7 +37,7 @@ const step3Schema = Yup.object({
   otherStartTime: Yup.string().when('moveType', {
     is: MoveType.WithCTN,
     then: Yup.string().notRequired(),
-    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ đi'),
+    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ có mặt tại chùa'),
   }),
 });
 

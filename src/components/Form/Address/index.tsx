@@ -113,6 +113,7 @@ function Address(props: AddressProps) {
       <FormLabel mb={0}>{label}</FormLabel>
       <Stack direction={direction} spacing={spacing}>
         <OurSelect
+          isSearchable
           placeholder='Tỉnh'
           name={provinceName}
           options={provinces}
@@ -126,6 +127,7 @@ function Address(props: AddressProps) {
           }}
         />
         <OurSelect
+          isSearchable
           placeholder='Huyện'
           name={districtName}
           options={districts}
@@ -139,6 +141,7 @@ function Address(props: AddressProps) {
           }}
         />
         <OurSelect
+          isSearchable
           placeholder='Xã'
           name={wardName}
           options={wards}
