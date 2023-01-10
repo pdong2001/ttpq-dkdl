@@ -221,7 +221,10 @@ export default function SuccessRegisterModal({
                     fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
                     color={'red'}
                   >
-                    <Tag>Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ</Tag>
+                    <Tag colorScheme={'green'}>
+                      Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
+                      thời gian sớm nhất ạ
+                    </Tag>
                   </Heading>
                 )}
               </Box>

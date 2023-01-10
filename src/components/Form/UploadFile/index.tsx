@@ -52,7 +52,6 @@ export default function UploadFile(props: UploadFileProps) {
 
   const handleChange = (e) => {
     if (!onSelectFile) {
-      debugger;
       setInnerFile(e.target.files[0]);
     } else {
       onSelectFile?.(e.target.files[0]);

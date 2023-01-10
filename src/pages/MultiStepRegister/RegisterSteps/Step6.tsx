@@ -1,4 +1,20 @@
-import { Stack, Heading, Button, Box, SimpleGrid, Avatar, GridItem, Alert } from '@chakra-ui/react';
+import {
+  Stack,
+  Heading,
+  Button,
+  Box,
+  SimpleGrid,
+  Avatar,
+  GridItem,
+  Alert,
+  Text,
+  Tag,
+  Accordion,
+  AccordionItem,
+  AccordionPanel,
+  AccordionButton,
+  AccordionIcon,
+} from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
 import { StepProps } from '..';
@@ -9,15 +25,17 @@ import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon, StarIcon } from '@chakra-ui/icons';
-import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl, getImageSrc } from '~/utils/functions';
 import API from '~/apis/constants';
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
+import { HashLink } from 'react-router-hash-link';
+import { BiUser, BiUserCircle } from 'react-icons/bi';
 
 const Step6 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
@@ -34,7 +52,7 @@ const Step6 = (props: StepProps) => {
   const history = useHistory();
   const { shortUri } = useParams<any>();
   const { id, memberId } = registerInfo;
-
+  const submitButtonRef = useRef<HTMLElement>();
   const { register: registerData } = formData;
 
   const handleRegister = () => {
@@ -101,9 +119,20 @@ const Step6 = (props: StepProps) => {
             color={primaryColor}
             lineHeight={1.1}
             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+            textTransform='uppercase'
           >
             {`Xác nhận ${isAddNew ? 'thông tin' : 'chỉnh sửa'}`}
           </Heading>
+          <Box mt={3}>
+            <Text>
+              Huynh đệ vui lòng <Tag colorScheme={'green'}>KIỂM TRA</Tag> lại thông tin và{' '}
+              <Tag colorScheme={'red'}>NHẤN</Tag> nút{' '}
+              <Tag cursor={'pointer'} onClick={() => submitButtonRef.current?.focus?.()}>
+                {isAddNew ? 'Đăng ký' : 'Cập nhật'}
+              </Tag>{' '}
+              bên dưới để hoàn tất thủ tục đăng ký
+            </Text>
+          </Box>
         </Box>
         <GridItem>
           <Box>
@@ -113,47 +142,69 @@ const Step6 = (props: StepProps) => {
                 {fullName}
               </Heading>
             </Box>
-            <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
-            <Box>
-              <Alert status='success'>
-                <CalendarIcon />
-                <Heading p={2} as='h5' size='md'>
-                  Lịch trình di chuyển
-                </Heading>
-              </Alert>
-              {TableComponent(
-                _.get(schedules, _.get(previewInfo, 'moveType', 0)),
-                REGISTER_INFO_TITLE,
-              )}
-            </Box>
-            <Box>
-              <Alert status='warning'>
-                <HamburgerIcon />
-                <Heading p={2} as='h5' size='md'>
-                  Công việc
-                </Heading>
-              </Alert>
-              {TableComponent(jobs, REGISTER_INFO_TITLE)}
-            </Box>
-            {receiveVolunteeCert && (
-              <Box>
-                <Alert status='success'>
-                  <StarIcon />
-                  <Heading p={2} as='h5' size='md'>
-                    Chứng nhận tình nguyện viên
-                  </Heading>
-                </Alert>
-                {TableComponent(
-                  _.get(
-                    certRegistry,
-                    CertificateRegistry.toEnum(_.get(previewInfo, 'certificateRegistry')),
-                  ),
-                  REGISTER_INFO_TITLE,
-                )}
-              </Box>
-            )}
+            <Accordion defaultIndex={[1]} allowMultiple>
+              <AccordionItem>
+                <AccordionButton p={0}>
+                  <Alert status='error'>
+                    <BiUser />
+                    <Heading p={2} as='h5' size='md'>
+                      Thông tin cá nhân
+                    </Heading>
+                  </Alert>
+                </AccordionButton>
+                <AccordionPanel>
+                  <Box>{TableComponent(infos, REGISTER_INFO_TITLE)}</Box>
+                </AccordionPanel>
+              </AccordionItem>
+              <AccordionItem>
+                <AccordionButton p={0}>
+                  <Alert status='success'>
+                    <CalendarIcon />
+                    <Heading p={2} as='h5' size='md'>
+                      Lịch trình di chuyển
+                    </Heading>
+                  </Alert>
+                </AccordionButton>
+                <AccordionPanel>
+                  {TableComponent(
+                    _.get(schedules, _.get(previewInfo, 'moveType', 0)),
+                    REGISTER_INFO_TITLE,
+                  )}
+                </AccordionPanel>
+              </AccordionItem>
 
-            {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
+              <AccordionItem>
+                <AccordionButton p={0}>
+                  <Alert status='warning'>
+                    <HamburgerIcon />
+                    <Heading p={2} as='h5' size='md'>
+                      Công việc
+                    </Heading>
+                  </Alert>
+                </AccordionButton>
+                <AccordionPanel>{TableComponent(jobs, REGISTER_INFO_TITLE)}</AccordionPanel>
+              </AccordionItem>
+
+              {receiveVolunteeCert && (
+                <Box>
+                  <Alert status='success'>
+                    <StarIcon />
+                    <Heading p={2} as='h5' size='md'>
+                      Chứng nhận tình nguyện viên
+                    </Heading>
+                  </Alert>
+                  {TableComponent(
+                    _.get(
+                      certRegistry,
+                      CertificateRegistry.toEnum(_.get(previewInfo, 'certificateRegistry')),
+                    ),
+                    REGISTER_INFO_TITLE,
+                  )}
+                </Box>
+              )}
+
+              {_.get(previewInfo, 'leader', null) && LeaderComponent(_.get(previewInfo, 'leader'))}
+            </Accordion>
           </Box>
         </GridItem>
       </Stack>
@@ -173,7 +224,12 @@ const Step6 = (props: StepProps) => {
           >
             Trở về
           </Button>
-          <Button flexGrow={1} fontFamily={'heading'} onClick={handleRegister}>
+          <Button
+            ref={submitButtonRef}
+            flexGrow={1}
+            fontFamily={'heading'}
+            onClick={handleRegister}
+          >
             {isAddNew ? 'Đăng ký' : 'Cập nhật'}
           </Button>
         </SimpleGrid>
