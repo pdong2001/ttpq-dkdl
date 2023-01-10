@@ -50,7 +50,8 @@ const REGISTER_INFO_TITLE = {
   permanentAddress: 'Địa chỉ thường trú',
   temporaryAddress: 'Địa chỉ tạm trú',
   // schedules
-  moveType: 'Hình thức di chuyển',
+  moveType: 'Về chùa',
+  returnMoveType: 'Về lại địa phương',
   startAddressId: 'Nơi xuất phát',
   startTimeId: 'Thời gian xuất phát',
   leaveTimeId: 'Thời gian trở về',

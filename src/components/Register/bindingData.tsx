@@ -24,42 +24,73 @@ const mapSuccessData = (previewInfo) => {
       gender: _.get(previewInfo, 'gender') == 0 ? 'Nam' : 'Nữ',
     },
     schedules: {
-      [MoveType.WithCTN]: {
-        moveType: (
-          <Tag variant='outline' colorScheme={'green'}>
-            {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
-          </Tag>
-        ),
-        startTimeId: _.get(previewInfo, 'startTimeId', ''),
-        leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
+      go: {
+        [MoveType.WithCTN]: {
+          moveType: (
+            <Tag variant='outline' colorScheme={'green'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          startTimeId: _.get(previewInfo, 'startTimeId', ''),
+        },
+        [MoveType.ByPlane]: {
+          moveType: (
+            <Tag variant='outline' colorScheme={'blue'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
+          otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
+          startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
+          // thêm field
+          carBookingType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {CAR_BOOKING_TYPE_TITLE[_.get(previewInfo, 'carBookingType', '')]}
+            </Tag>
+          ),
+        },
+        [MoveType.Other]: {
+          moveType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
+          otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
+        },
       },
-      [MoveType.ByPlane]: {
-        moveType: (
-          <Tag variant='outline' colorScheme={'blue'}>
-            {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
-          </Tag>
-        ),
-        otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
-        otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
-        startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
-        otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
-        returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
-        // thêm field
-        carBookingType: (
-          <Tag variant='outline' colorScheme={'pink'}>
-            {CAR_BOOKING_TYPE_TITLE[_.get(previewInfo, 'carBookingType', '')]}
-          </Tag>
-        ),
-      },
-      [MoveType.Other]: {
-        moveType: (
-          <Tag variant='outline' colorScheme={'pink'}>
-            {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
-          </Tag>
-        ),
-        otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
-        otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
-        otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+      return: {
+        [MoveType.WithCTN]: {
+          returnMoveType: (
+            <Tag variant='outline' colorScheme={'green'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
+        },
+        [MoveType.ByPlane]: {
+          returnMoveType: (
+            <Tag variant='outline' colorScheme={'blue'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+          returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
+          // thêm field
+          carBookingType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {CAR_BOOKING_TYPE_TITLE[_.get(previewInfo, 'carBookingType', '')]}
+            </Tag>
+          ),
+        },
+        [MoveType.Other]: {
+          returnMoveType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+        },
       },
     },
     jobs: {

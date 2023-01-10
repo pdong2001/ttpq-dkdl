@@ -167,7 +167,11 @@ const Step6 = (props: StepProps) => {
                 </AccordionButton>
                 <AccordionPanel>
                   {TableComponent(
-                    _.get(schedules, _.get(previewInfo, 'moveType', 0)),
+                    _.get(schedules.go, _.get(previewInfo, 'moveType', 0)),
+                    REGISTER_INFO_TITLE,
+                  )}
+                  {TableComponent(
+                    _.get(schedules.return, _.get(previewInfo, 'moveType', 0)),
                     REGISTER_INFO_TITLE,
                   )}
                 </AccordionPanel>
