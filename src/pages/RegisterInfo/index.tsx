@@ -181,7 +181,7 @@ const RegisterInfo = () => {
     schedule.return_time = data.leaveTime?.name || convertToAppDateTime(data.leaveTime?.time) || '';
     schedule.return_address = leaveAddress?.name || leaveAddress?.address || '';
   } else {
-    schedule.departure_address = data.otherStartAddress || '';
+    // schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
     schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
     if (moveType == MoveType.ByPlane) {
@@ -559,7 +559,7 @@ const RegisterInfo = () => {
                           )}
                       </Box>
                     </Box>
-                    {/* {returnMoveType == MoveType.WithCTN && (
+                    {schedule?.return_address && returnMoveType == MoveType.WithCTN && (
                       <Box>
                         <HStack>
                           <MdLocationCity />
@@ -567,7 +567,7 @@ const RegisterInfo = () => {
                         </HStack>
                         <Text>{schedule && schedule?.return_address}</Text>
                       </Box>
-                    )} */}
+                    )}
 
                     {(moveType == MoveType.ByPlane || returnMoveType == MoveType.ByPlane) && (
                       <Box>
