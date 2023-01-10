@@ -8,6 +8,7 @@ import {
   InputProps,
 } from '@chakra-ui/react';
 import { useField } from 'formik';
+import { useEffect, useRef } from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 type FormInputProps = {
@@ -34,6 +35,13 @@ const FormInput = (props: FormInputProps) => {
   const [field, meta] = useField(name);
   field.value ??= defaultValue; // set default value on props
 
+  const inputRef = useRef<HTMLElement>();
+  const isInvalid = !!meta.error && meta.touched;
+  useEffect(() => {
+    if (isInvalid && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isInvalid]);
   return (
     <FormControl isInvalid={!!meta.error && meta.touched} {...{ color }}>
       <FormLabel tabIndex={-1}>{label}</FormLabel>

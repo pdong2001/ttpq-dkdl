@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import { useField } from 'formik';
+import { useEffect, useRef } from 'react';
 import useCustomColorMode from '~/hooks/useColorMode';
 
 type MultiSelectOption = {
@@ -15,17 +16,17 @@ type MultiSelectOption = {
   value: any;
   colorScheme?: string;
 };
-type Props = InputProps &
-  FormControlProps & {
-    tagColorScheme?: string;
-    optionLabel?: string;
-    optionValue?: string;
-    closeMenuOnSelect?: boolean;
-    isMulti?: boolean;
-    hiddenErrorMessage?: boolean;
-    helperText?: string;
-    isSearchable?: boolean;
-  } & { options?: Record<string, any> };
+type Props = InputProps & {
+  tagColorScheme?: string;
+  optionLabel?: string;
+  optionValue?: string;
+  closeMenuOnSelect?: boolean;
+  isMulti?: boolean;
+  hiddenErrorMessage?: boolean;
+  helperText?: any;
+  isSearchable?: boolean;
+  label?: any;
+} & { options?: Record<string, any> };
 
 const OurSelect = (props: Props) => {
   const {
@@ -41,7 +42,7 @@ const OurSelect = (props: Props) => {
     hiddenErrorMessage,
     placeholder,
     helperText,
-    isSearchable,
+    isSearchable = false,
   } = props;
   const { primaryColor } = useCustomColorMode();
   const validOptions: MultiSelectOption[] =
@@ -56,10 +57,18 @@ const OurSelect = (props: Props) => {
     ? validOptions.filter((item) => field.value?.includes?.(item.value))
     : validOptions.find((item) => field.value === item.value);
 
+  const selectRef = useRef<any>();
+  useEffect(() => {
+    if (isInvalid && selectRef.current) {
+      selectRef.current.focus();
+    }
+  }, [isInvalid]);
+
   return (
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
       <Select
+        ref={selectRef}
         isSearchable={isSearchable}
         placeholder={placeholder}
         isMulti={isMulti}
@@ -80,7 +89,7 @@ const OurSelect = (props: Props) => {
           helpers.setTouched(true);
         }}
       />
-      {helperText && <FormHelperText color='red'>{helperText}</FormHelperText>}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
       {!hiddenErrorMessage && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );

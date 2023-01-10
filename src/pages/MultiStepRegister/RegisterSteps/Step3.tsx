@@ -203,16 +203,17 @@ const Step3 = (props: StepProps) => {
                     optionValue='id'
                     optionLabel='name'
                     isRequired
-                    isSearchable={false}
                   />
                 </>
               )}
               {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' />
-
-                  <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
+                  <DateTimePicker
+                    name='otherStartTime'
+                    label='Ngày giờ có mặt tại chùa'
+                    isRequired
+                  />
                   {canMoveByPlane && moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
                   )}

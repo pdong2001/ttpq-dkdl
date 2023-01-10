@@ -10,13 +10,10 @@ import {
   SimpleGrid,
   Radio,
   Image,
-  AspectRatio,
-  Flex,
   FormHelperText,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import Select from '~/components/Form/CustomSelect';
 import _ from 'lodash';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
@@ -32,14 +29,11 @@ import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
-import moment from 'moment';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 import { useContext } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
-import { NamedTimeDto } from '~/dtos/NamedTimes/NamedTimeDto.model';
-import CropImage from '~/components/Form/CropImage';
+import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -251,13 +245,19 @@ const Step4 = (props: StepProps) => {
                 isMulti
                 name='registeredDays'
                 options={days}
-                label='Thời gian công quả ở chùa'
+                label={
+                  <>
+                    <Text>Thời gian công quả ở chùa</Text>
+                    <FormHelperText color={primaryColor}>
+                      HD vui lòng chọn ĐẦY ĐỦ các ngày công quả tại chùa
+                    </FormHelperText>
+                  </>
+                }
                 optionValue='id'
                 optionLabel='name'
                 closeMenuOnSelect={false}
                 isRequired={!!days?.length}
                 placeholder='Thời gian công quả'
-                helperText='HD vui lòng chọn ĐẦY ĐỦ ngày công quả tại chùa'
               />
               <OurSelect
                 isMulti
@@ -297,20 +297,30 @@ const Step4 = (props: StepProps) => {
                 />
               )}
               {/* thêm field */}
-              <OurSelect
+              {/* <OurSelect
                 name='clothingSize'
                 options={ClothingSize.getList()}
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired
-                isSearchable={false}
-              />
-              <Flex justifyContent='center'>
-                <Image srcSet={sampleAvatar} width={[64, 80]} />
-              </Flex>
+              /> */}
               <Stack direction={{ base: 'column', lg: 'row' }}>
-                <FormControl name='avatarPath' as='fieldset' border={1}>
+                <FormControl
+                  name='avatarPath'
+                  as='fieldset'
+                  border={1}
+                  display='flex'
+                  justifyContent={'center'}
+                  flexDirection='column'
+                  alignItems={'center'}
+                  isRequired
+                >
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
+                  <Image srcSet={sampleAvatar} height={[64, 80]} />
+
+                  <FormHelperText color={primaryColor}>
+                    HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
+                  </FormHelperText>
                   <Box display={{ base: 'none', lg: 'none' }}>
                     {/* <CropImage aspect={3 / 4} name='avatarPath' /> */}
                   </Box>
@@ -318,13 +328,25 @@ const Step4 = (props: StepProps) => {
                   <Box display={{ base: 'block', lg: 'block' }}>
                     <UploadFile ratio={3 / 4} name='avatarPath' />
                   </Box>
-                  <FormHelperText color='red' fontSize={12}>
-                    HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
-                  </FormHelperText>
                 </FormControl>
-
-                <FormControl name='identityCardImagePathFront' as='fieldset' border={1}>
+                <FormControl
+                  name='identityCardImagePathFront'
+                  as='fieldset'
+                  border={1}
+                  display='flex'
+                  justifyContent={'center'}
+                  flexDirection='column'
+                  alignItems={'center'}
+                  isRequired
+                >
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
+
+                  <Image srcSet={cccdTemplate} height={[64, 80]} />
+
+                  <FormHelperText color={primaryColor}>
+                    HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
+                    Chùa
+                  </FormHelperText>
                   <Box display={{ base: 'none', lg: 'none' }}>
                     {/* <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' /> */}
                   </Box>
@@ -332,10 +354,6 @@ const Step4 = (props: StepProps) => {
                   <Box display={{ base: 'block', lg: 'block' }}>
                     <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
                   </Box>
-                  <FormHelperText color='red' fontSize={12}>
-                    HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
-                    Chùa
-                  </FormHelperText>
                 </FormControl>
 
                 {/* <FormControl name='avatarPath' as='fieldset' border={1}>

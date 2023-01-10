@@ -187,7 +187,7 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios label='Rời chùa' name='returnMoveType'>
+              <Radios label='Về lại địa phương' name='returnMoveType'>
                 {hasLeaveAddress && (
                   <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
@@ -218,14 +218,13 @@ const Step3 = (props: StepProps) => {
                     optionValue='id'
                     optionLabel='name'
                     isRequired
-                    isSearchable={false}
                   />
                 </>
               )}
               {returnMoveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' />
+                  {/* <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' /> */}
                   <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' />
                   {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
                     <>
