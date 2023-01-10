@@ -73,6 +73,7 @@ const Step4 = (props: StepProps) => {
     // thêm field
     clothingSize,
     question,
+    registeredDays,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
@@ -121,7 +122,7 @@ const Step4 = (props: StepProps) => {
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
-      registeredDays: [],
+      registeredDays: registeredDays || editServeDays || [],
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
@@ -229,6 +230,8 @@ const Step4 = (props: StepProps) => {
     );
   };
 
+  console.log('____', registeredDays);
+
   return (
     <FadeInUp delay={0}>
       <Stack spacing={4}>
@@ -282,7 +285,7 @@ const Step4 = (props: StepProps) => {
               <OurSelect
                 isMulti
                 name='expDepartmentIds'
-                options={customDepartments}
+                options={departments}
                 label='Kinh nghiệm ở ban'
                 optionValue='id'
                 optionLabel='name'
