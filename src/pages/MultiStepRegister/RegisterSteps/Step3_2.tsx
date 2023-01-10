@@ -225,7 +225,10 @@ const Step3 = (props: StepProps) => {
                 // tỉnh khác and tự túc
                 <>
                   {/* <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' /> */}
-                  <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' />
+                  <DateTimePicker
+                    name='otherLeaveTime'
+                    label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
+                  />
                   {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
                     <>
                       <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />

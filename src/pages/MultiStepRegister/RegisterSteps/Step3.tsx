@@ -211,7 +211,9 @@ const Step3 = (props: StepProps) => {
                 <>
                   <DateTimePicker
                     name='otherStartTime'
-                    label='Ngày giờ có mặt tại chùa'
+                    label={
+                      moveType === MoveType.ByPlane ? 'Ngày giờ bay đi' : 'Ngày giờ có mặt tại chùa'
+                    }
                     isRequired
                   />
                   {canMoveByPlane && moveType === MoveType.ByPlane && (
