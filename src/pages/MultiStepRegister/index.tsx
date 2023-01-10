@@ -22,6 +22,20 @@ export type StepProps = {
 const registerSteps = [Step1, Step2, Step31, Step32, Step4, Step5, Step6];
 
 const MultiStepRegister = () => {
+  useEffect(() => {
+    window.addEventListener('beforeunload', function (e) {
+      const confirmationMessage = 'o/';
+      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+      return confirmationMessage; //Webkit, Safari, Chrome
+    });
+    return () => {
+      window.removeEventListener('beforeunload', () => {
+        console.log('close tab');
+      });
+    };
+  });
+
+  // });
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(0);
 

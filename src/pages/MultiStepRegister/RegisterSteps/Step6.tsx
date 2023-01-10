@@ -52,7 +52,7 @@ const Step6 = (props: StepProps) => {
   const history = useHistory();
   const { shortUri } = useParams<any>();
   const { id, memberId } = registerInfo;
-  const submitButtonRef = useRef<HTMLElement>();
+  const submitButtonRef = useRef<any>();
   const { register: registerData } = formData;
 
   const handleRegister = () => {
