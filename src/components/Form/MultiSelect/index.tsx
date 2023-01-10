@@ -26,6 +26,7 @@ type Props = InputProps & {
   helperText?: any;
   isSearchable?: boolean;
   label?: any;
+  isClearable;
 } & { options?: Record<string, any> };
 
 const OurSelect = (props: Props) => {
@@ -43,6 +44,7 @@ const OurSelect = (props: Props) => {
     placeholder,
     helperText,
     isSearchable = false,
+    isClearable = false,
   } = props;
   const { primaryColor } = useCustomColorMode();
   const validOptions: MultiSelectOption[] =
@@ -68,6 +70,7 @@ const OurSelect = (props: Props) => {
     <FormControl isRequired={isRequired} isInvalid={isInvalid}>
       <FormLabel>{label}</FormLabel>
       <Select
+        isClearable={isClearable}
         ref={selectRef}
         isSearchable={isSearchable}
         placeholder={placeholder}
@@ -82,7 +85,7 @@ const OurSelect = (props: Props) => {
           if (isMulti) {
             helpers.setValue(e?.map((item) => item.value));
           } else {
-            helpers.setValue(e.value);
+            helpers.setValue(e?.value);
           }
         }}
         onBlur={() => {
