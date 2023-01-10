@@ -11,6 +11,7 @@ import {
   Radio,
   Image,
   FormHelperText,
+  Tag,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -30,7 +31,7 @@ import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
@@ -75,7 +76,8 @@ const Step4 = (props: StepProps) => {
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
-  const { data: strongPointList } = useAxios(
+  const [strongPointOptions, setStrongPointOptions] = useState<any[]>([]);
+  const { loaded: strongPointLoaded, data: strongPointList } = useAxios(
     {
       method: 'get',
       url: API.GET_STRONG_POINT,
@@ -84,8 +86,16 @@ const Step4 = (props: StepProps) => {
     [],
   );
 
+  useEffect(() => {
+    if (strongPointLoaded) {
+      const strongPoints = [{ id: 0, name: 'Không có' }, ...(strongPointList || [])];
+      setStrongPointOptions(strongPoints);
+    }
+  }, [strongPointLoaded]);
+
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { departments, event } = registerPage;
+  const customDepartments = [{ id: 0, name: 'Theo sự sắp xếp của CTN' }, ...(departments || [])];
   const { days } = event || {};
 
   // lấy nơi nhận thẻ
@@ -246,12 +256,13 @@ const Step4 = (props: StepProps) => {
                 name='registeredDays'
                 options={days}
                 label={
-                  <>
-                    <Text>Thời gian công quả ở chùa</Text>
-                    <FormHelperText color={primaryColor}>
-                      HD vui lòng chọn ĐẦY ĐỦ các ngày công quả tại chùa
-                    </FormHelperText>
-                  </>
+                  <Box display={'inline-block'}>
+                    <Text>Thời gian công quả ở chùa </Text>
+                    <Text color={primaryColor}>
+                      HD vui lòng chọn <Tag colorScheme={'red'}>ĐẦY ĐỦ</Tag> các ngày công quả tại
+                      chùa
+                    </Text>
+                  </Box>
                 }
                 optionValue='id'
                 optionLabel='name'
@@ -262,7 +273,7 @@ const Step4 = (props: StepProps) => {
               <OurSelect
                 isMulti
                 name='strongPointIds'
-                options={strongPointList}
+                options={strongPointOptions}
                 label='Kỹ năng, sở trường'
                 optionValue='id'
                 optionLabel='name'
@@ -271,7 +282,7 @@ const Step4 = (props: StepProps) => {
               <OurSelect
                 isMulti
                 name='expDepartmentIds'
-                options={departments}
+                options={customDepartments}
                 label='Kinh nghiệm ở ban'
                 optionValue='id'
                 optionLabel='name'
@@ -279,7 +290,7 @@ const Step4 = (props: StepProps) => {
               />
               <OurSelect
                 name='wishDepartmentId'
-                options={departments}
+                options={customDepartments}
                 label='Nguyện vọng vào ban'
                 placeholder='Chọn ban nguyện vọng'
                 optionValue='id'
