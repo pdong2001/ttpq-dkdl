@@ -14,7 +14,7 @@ import {
   Th,
   Thead,
 } from '@chakra-ui/react';
-import _ from 'lodash';s
+import _ from 'lodash';
 import { Card, CardBody } from '@chakra-ui/card';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { getImageSrc } from '~/utils/functions';
