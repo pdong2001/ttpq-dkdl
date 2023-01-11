@@ -63,7 +63,7 @@ const mapSuccessData = (previewInfo) => {
         [MoveType.WithCTN]: {
           returnMoveType: (
             <Tag variant='outline' colorScheme={'green'}>
-              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
           leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
@@ -71,7 +71,7 @@ const mapSuccessData = (previewInfo) => {
         [MoveType.ByPlane]: {
           returnMoveType: (
             <Tag variant='outline' colorScheme={'blue'}>
-              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
           otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
@@ -86,18 +86,12 @@ const mapSuccessData = (previewInfo) => {
         [MoveType.Other]: {
           returnMoveType: (
             <Tag variant='outline' colorScheme={'pink'}>
-              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
           otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
         },
       },
-    },
-    jobs: {
-      exps: EventExp.toString(_.get(previewInfo, 'exps', 0) + ''),
-      strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
-      expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
-      wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
       registeredDays: (
         <Flex gap={2} flexWrap='wrap'>
           {_.map(_.get(previewInfo, 'registeredDays', []), (day) => {
@@ -114,6 +108,13 @@ const mapSuccessData = (previewInfo) => {
           })}
         </Flex>
       ),
+    },
+    jobs: {
+      exps: EventExp.toString(_.get(previewInfo, 'exps', 0) + ''),
+      strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
+      expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
+      wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
+
       receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
       clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
       note: _.get(previewInfo, 'note', ''),
