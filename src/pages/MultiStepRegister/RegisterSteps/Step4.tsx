@@ -35,6 +35,7 @@ import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
+import CropImage from '~/components/Form/CropImage/EasyCrop';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -335,13 +336,13 @@ const Step4 = (props: StepProps) => {
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
                   </FormHelperText>
-                  <Box display={{ base: 'none', lg: 'none' }}>
-                    {/* <CropImage aspect={3 / 4} name='avatarPath' /> */}
-                  </Box>
+                  {/* <Box display={{ base: 'none', lg: 'none' }}> */}
+                  <CropImage aspect={3 / 4} name='avatarPath' />
+                  {/* </Box> */}
 
-                  <Box display={{ base: 'block', lg: 'block' }}>
+                  {/* <Box display={{ base: 'block', lg: 'block' }}>
                     <UploadFile ratio={3 / 4} name='avatarPath' />
-                  </Box>
+                  </Box> */}
                 </FormControl>
                 <FormControl
                   name='identityCardImagePathFront'
@@ -361,13 +362,13 @@ const Step4 = (props: StepProps) => {
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
                     Chùa
                   </FormHelperText>
-                  <Box display={{ base: 'none', lg: 'none' }}>
-                    {/* <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' /> */}
-                  </Box>
+                  {/* <Box display={{ base: 'none', lg: 'none' }}> */}
+                  <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  {/* </Box> */}
 
-                  <Box display={{ base: 'block', lg: 'block' }}>
+                  {/* <Box display={{ base: 'block', lg: 'block' }}>
                     <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
-                  </Box>
+                  </Box> */}
                 </FormControl>
 
                 {/* <FormControl name='avatarPath' as='fieldset' border={1}>
