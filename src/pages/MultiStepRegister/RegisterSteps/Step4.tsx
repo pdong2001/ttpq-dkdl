@@ -35,7 +35,7 @@ import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
-import PrimeDropdown from '~/components/Form/Dropdown';
+import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -262,10 +262,13 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
-              <OurSelect
-                isMulti
-                name='registeredDayIds'
+              <PrimeMultiSelect
                 options={days}
+                optionValue='id'
+                optionLabel='name'
+                name='registeredDayIds'
+                isRequired
+                placeholder='Chọn ngày công quả'
                 label={
                   <Box display={'inline-block'}>
                     <Text>Thời gian công quả ở chùa </Text>
@@ -275,13 +278,7 @@ const Step4 = (props: StepProps) => {
                     </Text>
                   </Box>
                 }
-                optionValue='id'
-                optionLabel='name'
-                closeMenuOnSelect={false}
-                isRequired={!!days?.length}
-                placeholder='Thời gian công quả'
               />
-              <PrimeDropdown options={days} optionValue='id' optionLabel='name' />
 
               <OurSelect
                 isMulti
