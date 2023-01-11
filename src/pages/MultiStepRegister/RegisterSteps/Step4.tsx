@@ -90,7 +90,7 @@ const Step4 = (props: StepProps) => {
 
   useEffect(() => {
     if (strongPointLoaded) {
-      const strongPoints = [{ id: '', name: 'Không có' }, ...(strongPointList || [])];
+      const strongPoints = [{ id: undefined, name: 'Không có' }, ...(strongPointList || [])];
       setStrongPointOptions(strongPoints);
     }
   }, [strongPointLoaded]);

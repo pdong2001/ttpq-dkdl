@@ -21,17 +21,17 @@ const step3Schema = Yup.object({
     }),
 
   // Tỉnh khác / Tự túc
-  // otherLeaveTime: Yup.string().when('moveType', {
-  //   is: MoveType.WithCTN,
-  //   then: Yup.string().notRequired(),
-  //   otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
-  // }),
-  // thêm field
-  carBookingType: Yup.string().when('moveType', {
-    is: MoveType.ByPlane,
-    then: Yup.string().required(),
-    otherwise: Yup.string().notRequired(),
+  otherLeaveTime: Yup.string().when('returnMoveType', {
+    is: MoveType.WithCTN,
+    then: Yup.string().notRequired(),
+    otherwise: Yup.string().nullable().required('Xin hãy chọn ngày giờ về'),
   }),
+  // thêm field
+  // carBookingType: Yup.string().when('moveType', {
+  //   is: MoveType.ByPlane,
+  //   then: Yup.string().required(),
+  //   otherwise: Yup.string().notRequired(),
+  // }),
 });
 
 export default step3Schema;

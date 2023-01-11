@@ -55,7 +55,6 @@ const mapSuccessData = (previewInfo) => {
               {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
             </Tag>
           ),
-          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
           otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
         },
       },
