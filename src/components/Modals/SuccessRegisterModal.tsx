@@ -217,31 +217,24 @@ export default function SuccessRegisterModal({
                 </Heading>
                 {isRegisterPopup ||
                   (true && (
-                    <Heading
-                      mb={2}
-                      as='h5'
-                      fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
-                      color={'red'}
-                    >
-                      <Tag colorScheme={'green'}>
+                    <Heading mb={2} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'md' }}>
+                      <Tag colorScheme={'green'} rounded='md'>
                         Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
                         thời gian sớm nhất ạ
                       </Tag>
                     </Heading>
                   ))}
                 {hotline && (
-                  <Text fontWeight={'bold'} mb={2}>
-                    <Tag colorScheme={'pink'}>
-                      Mọi thắc mắc xin liên hệ: Ban Nhân Sự -
-                      <Link
-                        ms={'1'}
-                        fontWeight={'bold'}
-                        colorScheme={'green'}
-                        href={`tel:${hotline}`}
-                      >
-                        {hotline}
-                      </Link>
-                    </Tag>
+                  <Text bgColor={'pink.100'} rounded='md' mb={2}>
+                    Mọi thắc mắc xin liên hệ: Ban Nhân Sự -
+                    <Link
+                      ms={'1'}
+                      fontWeight={'bold'}
+                      colorScheme={'green'}
+                      href={`tel:${hotline}`}
+                    >
+                      {hotline}
+                    </Link>
                   </Text>
                 )}
               </Box>
