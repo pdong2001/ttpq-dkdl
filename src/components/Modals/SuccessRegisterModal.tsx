@@ -29,6 +29,7 @@ import {
   Tooltip,
   useToast,
   Text,
+  Link,
 } from '@chakra-ui/react';
 import { MdContentCopy, MdVerified } from 'react-icons/md';
 import QRCode from 'react-qr-code';
@@ -68,7 +69,7 @@ export default function SuccessRegisterModal({
   const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
-  const { event, hotline } = useAppSelector((state) => state.registerPage.data);
+  const { event, hotline = '0866.884.669' } = useAppSelector((state) => state.registerPage.data);
   const { member } = useContext(AuthContext);
   const [isDownloading, setDownloading] = useState(false);
 
@@ -214,22 +215,33 @@ export default function SuccessRegisterModal({
                     )}
                   </Flex>
                 </Heading>
-                {isRegisterPopup && (
-                  <Heading
-                    mb={2}
-                    as='h5'
-                    fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
-                    color={'red'}
-                  >
-                    <Tag colorScheme={'green'}>
-                      Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
-                      thời gian sớm nhất ạ
-                    </Tag>
-                  </Heading>
-                )}
+                {isRegisterPopup ||
+                  (true && (
+                    <Heading
+                      mb={2}
+                      as='h5'
+                      fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
+                      color={'red'}
+                    >
+                      <Tag colorScheme={'green'}>
+                        Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
+                        thời gian sớm nhất ạ
+                      </Tag>
+                    </Heading>
+                  ))}
                 {hotline && (
-                  <Text fontWeight={'bold'}>
-                    <Tag>{`Mọi thắc mắc xin liên hệ: Ban Nhân Sự - ${hotline}`}</Tag>
+                  <Text fontWeight={'bold'} mb={2}>
+                    <Tag colorScheme={'pink'}>
+                      Mọi thắc mắc xin liên hệ: Ban Nhân Sự -
+                      <Link
+                        ms={'1'}
+                        fontWeight={'bold'}
+                        colorScheme={'green'}
+                        href={`tel:${hotline}`}
+                      >
+                        {hotline}
+                      </Link>
+                    </Tag>
                   </Text>
                 )}
               </Box>
