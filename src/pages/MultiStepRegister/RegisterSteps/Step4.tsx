@@ -160,7 +160,7 @@ const Step4 = (props: StepProps) => {
       }
       const identityCardImagePaths = [identityCardImagePathFront];
       const fillData = {
-        strongPointIds,
+        strongPointIds: strongPointIds?.filter((stp) => stp) || [],
         exps,
         avatarPath,
         identityCardImagePaths,
