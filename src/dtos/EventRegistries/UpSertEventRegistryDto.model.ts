@@ -38,4 +38,5 @@ export type UpSertEventRegistryDto = {
   // certificateRegistry?: CertificateRegistry;
   companyNameVIE?: string;
   companyNameEN?: string;
+  registeredDays?: number[];
 };

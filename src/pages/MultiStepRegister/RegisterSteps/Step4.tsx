@@ -74,8 +74,7 @@ const Step4 = (props: StepProps) => {
     // thêm field
     clothingSize,
     question,
-    registeredDays,
-    registeredDayIds,
+    registeredDays: prevRegisterdDays,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
@@ -112,7 +111,7 @@ const Step4 = (props: StepProps) => {
   //   transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
   // });
 
-  const serveDateIds = (registeredDays || editServeDays || []).map((date) => date?.id);
+  const serveDateIds = prevRegisterdDays || (editServeDays || []).map((date) => date?.id);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -129,7 +128,7 @@ const Step4 = (props: StepProps) => {
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
-      registeredDayIds: registeredDayIds || serveDateIds,
+      registeredDays: serveDateIds,
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
@@ -145,7 +144,7 @@ const Step4 = (props: StepProps) => {
         clothingSize,
         identityCardImagePathFront,
         // identityCardImagePathBack,
-        registeredDayIds,
+        registeredDays,
       } = values;
       if (!identityCardImagePathFront) {
         return messageService.add({
@@ -177,7 +176,7 @@ const Step4 = (props: StepProps) => {
           type,
           // thêm field
           clothingSize,
-          registeredDayIds,
+          registeredDays,
         },
       };
       dispatch(fillForm(fillData));
@@ -191,7 +190,7 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId,
         receiveCardAddressId,
         clothingSize,
-        registeredDayIds,
+        registeredDays,
       });
       if (receiveVolunteeCert) {
         nextStep();
@@ -211,7 +210,7 @@ const Step4 = (props: StepProps) => {
     wishDepartmentId,
     receiveCardAddressId,
     clothingSize,
-    registeredDayIds,
+    registeredDays,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -221,7 +220,7 @@ const Step4 = (props: StepProps) => {
         (a) => a.name,
       ).join(', ');
     }
-    const dates = days?.filter((day) => registeredDayIds.includes(day.id));
+    const dates = days?.filter((day) => registeredDays.includes(day.id));
     dispatch(
       fillDataPreview({
         question,
@@ -266,7 +265,7 @@ const Step4 = (props: StepProps) => {
                 options={days}
                 optionValue='id'
                 optionLabel='name'
-                name='registeredDayIds'
+                name='registeredDays'
                 isRequired
                 placeholder='Chọn ngày công quả'
                 label={

@@ -25,7 +25,7 @@ const step4Schema = (serveDates) =>
     //       return true;
     //     },
     //   }),
-    registeredDayIds: Yup.array()
+    registeredDays: Yup.array()
       .nullable()
       .test({
         name: 'registeredDays',
