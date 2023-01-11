@@ -104,7 +104,7 @@ const GreatCeremonyInfo = () => {
     if (startDate.getTime() > new Date().getTime()) {
       coundown(startTime);
     }
-  }, []);
+  }, [startTime]);
 
   const handleViewDetail = () => {};
 
