@@ -74,6 +74,7 @@ const Step4 = (props: StepProps) => {
     clothingSize,
     question,
     registeredDays,
+    registeredDayIds,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
@@ -89,14 +90,17 @@ const Step4 = (props: StepProps) => {
 
   useEffect(() => {
     if (strongPointLoaded) {
-      const strongPoints = [{ id: 0, name: 'Không có' }, ...(strongPointList || [])];
+      const strongPoints = [{ id: '', name: 'Không có' }, ...(strongPointList || [])];
       setStrongPointOptions(strongPoints);
     }
   }, [strongPointLoaded]);
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { departments, event } = registerPage;
-  const customDepartments = [{ id: 0, name: 'Theo sự sắp xếp của CTN' }, ...(departments || [])];
+  const customDepartments = [
+    { id: undefined, name: 'Theo sự sắp xếp của CTN' },
+    ...(departments || []),
+  ];
   const { days } = event || {};
 
   // lấy nơi nhận thẻ
@@ -107,7 +111,7 @@ const Step4 = (props: StepProps) => {
   //   transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
   // });
 
-  const serveDates = (registeredDays || editServeDays || []).map((date) => date?.id);
+  const serveDateIds = (registeredDays || editServeDays || []).map((date) => date?.id);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -124,7 +128,7 @@ const Step4 = (props: StepProps) => {
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
-      registeredDays: serveDates,
+      registeredDayIds: registeredDayIds || serveDateIds,
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
@@ -140,7 +144,7 @@ const Step4 = (props: StepProps) => {
         clothingSize,
         identityCardImagePathFront,
         // identityCardImagePathBack,
-        registeredDays,
+        registeredDayIds,
       } = values;
       if (!identityCardImagePathFront) {
         return messageService.add({
@@ -172,8 +176,8 @@ const Step4 = (props: StepProps) => {
           type,
           // thêm field
           clothingSize,
-          registeredDays,
-        } as EventRegistryDto,
+          registeredDayIds,
+        },
       };
       dispatch(fillForm(fillData));
       mapMultiTitle({
@@ -186,7 +190,7 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId,
         receiveCardAddressId,
         clothingSize,
-        registeredDays,
+        registeredDayIds,
       });
       if (receiveVolunteeCert) {
         nextStep();
@@ -206,7 +210,7 @@ const Step4 = (props: StepProps) => {
     wishDepartmentId,
     receiveCardAddressId,
     clothingSize,
-    registeredDays,
+    registeredDayIds,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -216,6 +220,8 @@ const Step4 = (props: StepProps) => {
         (a) => a.name,
       ).join(', ');
     }
+    const dates = days?.filter((day) => registeredDayIds.includes(day.id));
+    debugger;
     dispatch(
       fillDataPreview({
         question,
@@ -224,10 +230,10 @@ const Step4 = (props: StepProps) => {
         exps,
         strongPointIds: mapName(strongPointList, strongPointIds),
         expDepartmentIds: mapName(departments, expDepartmentIds),
-        wishDepartmentId: mapName(departments, [+wishDepartmentId]),
+        wishDepartmentId: mapName(departments, [+wishDepartmentId]) || 'Theo sự sắp xếp của CTN',
         receiveCardAddressId: mapName(receiveCardAddresses, [+receiveCardAddressId]),
         clothingSize,
-        registeredDays: registeredDays.map((dayId) => days?.find((date) => date.id == dayId)?.name),
+        registeredDays: dates,
       }),
     );
   };
@@ -258,7 +264,7 @@ const Step4 = (props: StepProps) => {
               </Radios>
               <OurSelect
                 isMulti
-                name='registeredDays'
+                name='registeredDayIds'
                 options={days}
                 label={
                   <Box display={'inline-block'}>
@@ -287,7 +293,7 @@ const Step4 = (props: StepProps) => {
               <OurSelect
                 isMulti
                 name='expDepartmentIds'
-                options={customDepartments}
+                options={departments}
                 label='Kinh nghiệm ở ban'
                 optionValue='id'
                 optionLabel='name'
