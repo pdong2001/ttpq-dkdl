@@ -24,8 +24,8 @@ type UploadFileProps = InputProps &
     dropLabel?: string;
     ratio?: number;
     onSelectFile?: (file: File) => void;
-    file: File;
-    setOpenCrop: (value: boolean) => void;
+    file?: File;
+    setOpenCrop?: (value: boolean) => void;
   };
 type ImageResponse = {
   fileName: string;
@@ -55,7 +55,7 @@ export default function UploadFile(props: UploadFileProps) {
       setInnerFile(e.target.files[0]);
     } else {
       onSelectFile?.(e.target.files[0]);
-      setOpenCrop(true);
+      setOpenCrop?.(true);
     }
   };
   const handleDrop = (e) => {
@@ -63,7 +63,7 @@ export default function UploadFile(props: UploadFileProps) {
       // setInnerFile(e.dataTransfer.files[0]);
     } else {
       onSelectFile?.(e.dataTransfer.files[0]);
-      setOpenCrop(true);
+      setOpenCrop?.(true);
     }
   };
   useEffect(() => {
