@@ -102,7 +102,7 @@ const mapSuccessData = (previewInfo) => {
                   previewInfo?.registeredDays?.indexOf?.(day) % 7 || 0,
                 )}
               >
-                {day}
+                {day.name}
               </Tag>
             );
           })}
