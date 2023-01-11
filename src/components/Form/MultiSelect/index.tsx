@@ -26,7 +26,7 @@ type Props = InputProps & {
   helperText?: any;
   isSearchable?: boolean;
   label?: any;
-  isClearable;
+  isClearable?: boolean;
 } & { options?: Record<string, any> };
 
 const OurSelect = (props: Props) => {
