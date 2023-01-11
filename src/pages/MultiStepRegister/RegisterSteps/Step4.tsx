@@ -35,6 +35,7 @@ import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
+import PrimeDropdown from '~/components/Form/Dropdown';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -221,7 +222,6 @@ const Step4 = (props: StepProps) => {
       ).join(', ');
     }
     const dates = days?.filter((day) => registeredDayIds.includes(day.id));
-    debugger;
     dispatch(
       fillDataPreview({
         question,
@@ -281,6 +281,8 @@ const Step4 = (props: StepProps) => {
                 isRequired={!!days?.length}
                 placeholder='Thời gian công quả'
               />
+              <PrimeDropdown options={days} optionValue='id' optionLabel='name' />
+
               <OurSelect
                 isMulti
                 name='strongPointIds'

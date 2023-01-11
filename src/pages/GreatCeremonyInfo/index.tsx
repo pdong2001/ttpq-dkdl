@@ -93,7 +93,9 @@ const eventImgages = [
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
   const { event } = useAppSelector((state) => state.registerPage.data);
-  const { startDate: startTime } = event || { startDate: BuddhaEnlightenmentStartTime };
+  const { startDate: startTime, name: eventName } = event || {
+    startDate: BuddhaEnlightenmentStartTime,
+  };
   const { shortUri } = useParams<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -145,14 +147,18 @@ const GreatCeremonyInfo = () => {
                     fontSize={{ base: '2xl', md: '2xl', lg: '2xl' }}
                     mb={2}
                   >
-                    Đại lễ Phật Thành Đạo
+                    {eventName}
                   </Heading>
                 </FadeInUp>
                 <FadeInUp>
                   <Box textAlign='justify'>
                     <Text mb={2}>
-                      “Vui vì Tết được về chùa Được quỳ bên Phật đón mùa xuân sang Hoa đào thắm, sắc
-                      mai vàng Trong tình huynh đệ lòng càng thêm xuân"
+                      <Text fontStyle={'italic'}>
+                        <Text>“Vui vì Tết được về chùa</Text>
+                        <Text>Được quỳ bên Phật đón mùa xuân sang</Text>
+                        <Text>Hoa đào thắm, sắc mai vàng</Text>
+                        <Text>Trong tình huynh đệ lòng càng thêm xuân&quot;</Text>
+                      </Text>
                     </Text>
                     <Text mb={2}>
                       Tết Nguyên Đán là lúc mọi người được đoàn viên, ôn lại câu chuyện năm cũ và
