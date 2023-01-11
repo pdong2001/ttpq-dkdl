@@ -193,7 +193,7 @@ const GreatCeremonyInfo = () => {
                   >
                     Tìm hiểu thêm
                   </Button> */}
-                  <Button onClick={onOpen}>Tìm hiểu thêm</Button>
+                  {/* <Button onClick={onOpen}>Tìm hiểu thêm</Button> */}
                 </FadeInUp>
               </Box>
             </VStack>
