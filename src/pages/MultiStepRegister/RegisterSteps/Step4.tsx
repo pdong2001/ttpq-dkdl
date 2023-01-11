@@ -107,6 +107,8 @@ const Step4 = (props: StepProps) => {
   //   transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
   // });
 
+  const serveDates = (registeredDays || editServeDays || []).map((date) => date?.id);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -122,7 +124,7 @@ const Step4 = (props: StepProps) => {
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
-      registeredDays: registeredDays || editServeDays || [],
+      registeredDays: serveDates,
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
@@ -230,7 +232,7 @@ const Step4 = (props: StepProps) => {
     );
   };
 
-  console.log('____', registeredDays);
+  console.log('____', formik.values);
 
   return (
     <FadeInUp delay={0}>
