@@ -1,13 +1,10 @@
 import MainLayout from '~/components/containers/layouts/MainLayout';
-import DepartmentInfos from '~/pages/DeparmentInfos';
 import GreatCeremonyInfo from '~/pages/GreatCeremonyInfo';
 import Home from '~/pages/Home';
 import MultiStepRegister from '~/pages/MultiStepRegister';
 import NotFound from '~/pages/NotFound';
 import RegisterInfo from '~/pages/RegisterInfo';
-import Timeline from '~/pages/Timeline';
 import { AppRoute } from './AppRoute';
-import GreatCeremonyInfoDetails from '~/pages/GreatCeremonyInfo/details';
 import NoFooterLayout from '~/components/containers/layouts/NoFooterLayout';
 
 export type RouteType = {
@@ -25,6 +22,7 @@ export const HOME_WITH_SHORT_URI = '/:shortUri';
 export const EVENT_INFO = '/great-ceremony-info';
 export const TIMELINE = '/timeline';
 export const DEPARTMENT_INFO = '/department-info';
+export const CHECK_IN_PATH = '/check-in/:eventId';
 
 export const NavBarLink = [
   { title: 'Trang chủ', to: '/' },
@@ -46,7 +44,7 @@ const ROUTES: RouteType[] = [
   //   layout: MainLayout,
   // },
   {
-    path: ['/:shortUri/register-info/:id'],
+    path: ['/:shortUri/register-info/:id', '/register-info/:id'],
     component: RegisterInfo,
     layout: MainLayout,
   },
@@ -67,7 +65,7 @@ const ROUTES: RouteType[] = [
     layout: MainLayout,
   },
   {
-    path: ['/', HOME_WITH_SHORT_URI],
+    path: ['/', HOME_WITH_SHORT_URI, CHECK_IN_PATH],
     exact: true,
     component: Home,
     layout: MainLayout,

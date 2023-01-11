@@ -2,7 +2,8 @@ import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Step1 from './RegisterSteps/Step1';
 import Step2 from './RegisterSteps/Step2';
-import Step3 from './RegisterSteps/Step3';
+import Step31 from './RegisterSteps/Step3';
+import Step32 from './RegisterSteps/Step3_2';
 import Step4 from './RegisterSteps/Step4';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useAppSelector } from '~/hooks/reduxHook';
@@ -10,21 +11,34 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import Step5 from './RegisterSteps/Step5';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { getRegisterPage } from '~/slices/registerPage';
 import Step6 from './RegisterSteps/Step6';
 
 type Step = (props: StepProps) => JSX.Element;
 export type StepProps = {
-  nextStep: () => void;
-  previousStep: () => void;
+  nextStep: (step?: number) => void;
+  previousStep: (step?: number) => void;
 };
 
-const registerSteps = [Step1, Step2, Step3, Step4, Step5, Step6];
+const registerSteps = [Step1, Step2, Step31, Step32, Step4, Step5, Step6];
 
 const MultiStepRegister = () => {
+  useEffect(() => {
+    window.addEventListener('beforeunload', function (e) {
+      const confirmationMessage = 'o/';
+      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+      return confirmationMessage; //Webkit, Safari, Chrome
+    });
+    return () => {
+      window.removeEventListener('beforeunload', () => {
+        console.log('close tab');
+      });
+    };
+  });
+
+  // });
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(0);
+
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const history = useHistory();
@@ -36,20 +50,29 @@ const MultiStepRegister = () => {
       setStep(1);
     }
   }, []);
-  const nextStep = () => {
-    setStep((currentStep) => currentStep + 1);
-    if (step === 0 && path === HOME_WITH_SHORT_URI) {
-      history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri }));
+  const nextStep = (step?: number) => {
+    if (step) {
+      setStep(step);
+    } else {
+      setStep((currentStep) => currentStep + 1);
+      if (step === 0 && path === HOME_WITH_SHORT_URI) {
+        history.push(formatUrl(ADD_NEW_REGISTER_PATH, { shortUri }));
+      }
     }
     window.scrollTo(0, 0);
   };
-  const previousStep = () => {
-    setStep((currentStep) => {
-      if (currentStep === 0) {
-        return 0;
-      }
-      return currentStep - 1;
-    });
+  const previousStep = (step?: number) => {
+    if (step) {
+      setStep(step);
+    } else {
+      setStep((currentStep) => {
+        if (currentStep === 0) {
+          return 0;
+        }
+        return currentStep - 1;
+      });
+    }
+
     window.scrollTo(0, 0);
   };
   const { bgColor } = useCustomColorMode();

@@ -45,6 +45,7 @@ const Step2 = (props: StepProps) => {
     temporaryWard,
 
     organizationStructureId = '',
+
     dateOfBirth,
     register,
   } = useAppSelector((state) => state.register.data) || {};
@@ -88,7 +89,8 @@ const Step2 = (props: StepProps) => {
       temporaryAddressDistrict,
       temporaryAddressWard,
 
-      organizationStructureId: ctnId == 0 ? organizationStructureId : ctnId,
+      organizationStructureId: organizationStructureId ? organizationStructureId : ctnId,
+      organizationStructureId_group: '',
 
       registerType:
         register?.registerType ||
@@ -96,7 +98,7 @@ const Step2 = (props: StepProps) => {
         RegisterType.SINGLE,
       leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
-    validationSchema: step2Schema,
+    validationSchema: step2Schema(organizationStructureId || ctnId),
     onSubmit: (values) => {
       const {
         gender,
@@ -106,6 +108,7 @@ const Step2 = (props: StepProps) => {
         permanentAddress,
         temporaryAddress,
         organizationStructureId,
+        // organizationStructureId_group,
         registerType,
       } = values;
       let { leaderId } = values;
@@ -113,12 +116,13 @@ const Step2 = (props: StepProps) => {
         leaderId = '';
       }
       const { year, month, date } = dob || {};
-      const dateOfBirth = [date, month, year].join('-');
+      const dateOfBirth = [year, month, date].join('-');
       dispatch(
         fillForm({
           gender,
           religiousName,
           email,
+          // organizationStructureId: organizationStructureId_group || organizationStructureId,
           organizationStructureId,
           dateOfBirth,
           temporaryAddress,
@@ -142,10 +146,6 @@ const Step2 = (props: StepProps) => {
   const setDataPreview = (dataFillForm) => {
     dispatch(fillDataPreview(dataFillForm));
   };
-  const { registerType: localRegisterType } = formik.values;
-
-  const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
-
   const setLeaderPreview = (leader) => {
     if (_.get(leader, 'success', false)) {
       dispatch(
@@ -156,7 +156,7 @@ const Step2 = (props: StepProps) => {
     }
   };
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
         <Heading
           color={primaryColor}
@@ -194,14 +194,15 @@ const Step2 = (props: StepProps) => {
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
-                  {ctnId == 0 && (
+                  <Box display={ctnId ? 'none' : 'block'}>
                     <CultivationPlace
                       name='organizationStructureId'
                       setDataPreview={setDataPreview}
                       className='organizationStructureId'
                       label='Địa điểm tu tập'
+                      isRequired={!ctnId}
                     />
-                  )}
+                  </Box>
                 </Stack>
                 <Stack spacing={3}>
                   <FormInput name='email' label='Email' isRequired />
@@ -221,18 +222,26 @@ const Step2 = (props: StepProps) => {
                     <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
                     <Radio value={RegisterType.GROUP}>Nhóm</Radio>
                   </Radios>
-                  {isRegisterFollowGroup && (
-                    <SearchLeader
-                      name='leaderId'
-                      getLeader={(leader) => setLeaderPreview(leader)}
-                      label='Trưởng nhóm'
-                    />
-                  )}
+                  <SearchLeader
+                    name='leaderId'
+                    getLeader={(leader) => {
+                      if (formik.values.registerType === RegisterType.GROUP) {
+                        setLeaderPreview(leader);
+                      }
+                    }}
+                    label='Trưởng nhóm'
+                    registerTypeFieldName='registerType'
+                  />
                 </Stack>
               </SimpleGrid>
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+              <Button
+                colorScheme='gray'
+                flexGrow={1}
+                fontFamily={'heading'}
+                onClick={() => previousStep()}
+              >
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>

@@ -1,3 +1,4 @@
+import { MessageServiceProps } from './../../providers/message/index';
 import { PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import { createAsyncRequest } from '~/slices/common/action';
 
@@ -11,6 +12,7 @@ export enum APIStatus {
 export type APIError = {
   message: string;
   code: number;
+  showMessage?: (messageService: MessageServiceProps) => void;
 };
 
 export type ReduxState<Data = any> = {

@@ -11,19 +11,20 @@ import {
   TagLeftIcon,
   TagLabel,
   HStack,
+  Link,
 } from '@chakra-ui/react';
 import { Heading, Text, useColorModeValue, Tooltip } from '@chakra-ui/react';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
 import { Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 
-import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook } from 'react-icons/md';
+import { MdPhone, MdDepartureBoard, MdLocationCity, MdFacebook, MdVerified } from 'react-icons/md';
 import { FaUserSecret, FaUserTie } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, getImageSrc, mapReceiverCardAddressDetail } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useParams } from 'react-router-dom';
 import useAxios from '~/hooks/useAxios';
@@ -33,9 +34,14 @@ import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 import { EDIT_REGISTER_PATH } from '~/routes';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { EVENT_EXP_TITLE } from '~/configs/register';
 import LoginPopup from '~/components/LoginPopup';
 import { AuthContext } from '~/providers/auth';
+import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+import { get } from 'lodash';
+import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
+import { PositionType } from '~/dtos/Enums/PositionType.enum';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
+import { nanoid } from '@reduxjs/toolkit';
 // type Props = {};
 
 const RegisterInfo = () => {
@@ -52,8 +58,10 @@ const RegisterInfo = () => {
   const { member: authMember } = useContext(AuthContext);
 
   const { data } = useAppSelector((state) => state.registerInfo);
-
+  const { registeredDays } = data || {};
+  const { receiveVolunteeCert } = useAppSelector((state) => state.registerPage.data);
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(
       getRegisterInfo({
         method: 'get',
@@ -64,28 +72,42 @@ const RegisterInfo = () => {
   const member = data?.member;
   const note = data?.note;
   const leaderId = data?.leaderId;
-  const moveType = data?.moveType;
+  const moveType = data?.moveType?.toString();
+  const returnMoveType = data?.returnMoveType?.toString();
   const organizationStructureId = member?.organizationStructureId;
-  const receiveCardAddress = data?.receiveCardAddress;
+  const receiveCardAddress = mapReceiverCardAddressDetail(data?.receiveCardAddress);
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
-  const assignedDepartment = data.departmentDetail;
-  const assignedArea = data.area;
-  const assignedGroup = data.group;
-  const permanent = [
-    [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
-    member?.permanentDistrict?.name,
-    member?.permanentProvince?.name,
-  ]
-    .filter((e) => !!e)
-    .join(', ');
-  const temporary = [
-    [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
-    member?.temporaryDistrict?.name,
-    member?.temporaryProvince?.name,
-  ]
-    .filter((e) => !!e)
-    .join(', ');
+  const isArrived = data?.isArrived;
+  const arrivedAt = data?.arrivedAt;
+  const department = get(data, 'departmentDetail.department.name');
+  const roles = get(data, 'departmentDetail.roles', []);
+  const manager = roles.find((item) => item.position === PositionType.Manager);
+
+  const carBookingType = data?.carBookingType?.toString();
+  const clothingSize = data?.clothingSize;
+  const certificateRegistry = data?.certificateRegistry;
+  const companyNameEN = data?.companyNameEN;
+  const companyNameVIE = data?.companyNameVIE;
+
+  const permanent =
+    member?.permanentAddress ||
+    [
+      [member?.permanentWard?.pre, member?.permanentWard?.name].join(' '),
+      member?.permanentDistrict?.name,
+      member?.permanentProvince?.name,
+    ]
+      .filter((e) => !!e)
+      .join(', ');
+  const temporary =
+    member?.temporaryAddress ||
+    [
+      [member?.temporaryWard?.pre, member?.temporaryWard?.name].join(' '),
+      member?.temporaryDistrict?.name,
+      member?.temporaryProvince?.name,
+    ]
+      .filter((e) => !!e)
+      .join(', ');
 
   const { data: groupData, cancel: groupToken } = useAxios(
     {
@@ -152,24 +174,24 @@ const RegisterInfo = () => {
   const startAddress = data.startTime?.address;
   const leaveAddress = data.leaveTime?.address;
   const contactStatus = data.contactStatus?.toString();
-  if (moveType == MoveType.HCM) {
-    schedule.departure_address =
-      [startAddress?.name, startAddress?.address].filter((e) => !!e).join(', ') || '';
-    schedule.departure_time = convertToAppDateTime(data.startTime?.time) || '';
-    schedule.return_time = convertToAppDateTime(data.leaveTime?.time) || '';
-    schedule.return_address =
-      [leaveAddress?.name, leaveAddress?.address].filter((e) => !!e).join(', ') || '';
+  if (moveType == MoveType.WithCTN) {
+    schedule.departure_address = startAddress?.name || startAddress?.address || '';
+    schedule.departure_time =
+      data.startTime?.name || convertToAppDateTime(data.startTime?.time) || '';
+    schedule.return_time = data.leaveTime?.name || convertToAppDateTime(data.leaveTime?.time) || '';
+    schedule.return_address = leaveAddress?.name || leaveAddress?.address || '';
   } else {
-    schedule.departure_address = data.otherStartAddress || '';
+    // schedule.departure_address = data.otherStartAddress || '';
     schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
     schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
-    if (moveType == MoveType.Other) {
+    if (moveType == MoveType.ByPlane) {
       schedule.departure_flight_code = data.startPlaneCode || '';
       schedule.return_flight_code = data.returnPlaneCode || '';
     }
   }
 
   const groupMembers = groupData?.data || [];
+  const isOwner = authMember?.register?.id === data.id;
 
   const handleUpdateInfo = () => {
     if (isOwner) {
@@ -178,7 +200,6 @@ const RegisterInfo = () => {
       onOpenLoginModal();
     }
   };
-  const isOwner = authMember?.register?.id === data.id;
   ``;
   return (
     <Box
@@ -204,9 +225,23 @@ const RegisterInfo = () => {
             rounded={'lg'}
             textAlign={'center'}
           >
-            <Avatar size={'2xl'} src={member?.avatarPath} mb={4} pos={'relative'} />
+            <Avatar
+              size={'2xl'}
+              src={getImageSrc(member?.avatarPath, 120)}
+              mb={4}
+              pos={'relative'}
+            />
             <Heading fontSize={'2xl'} fontFamily={'body'}>
-              {member?.fullName}
+              <Flex justify='center' gap={2}>
+                {member?.fullName}{' '}
+                {isArrived && (
+                  <Tooltip hasArrow rounded='md' label='Đã về chùa'>
+                    <span>
+                      <MdVerified color='green' />
+                    </span>
+                  </Tooltip>
+                )}
+              </Flex>
             </Heading>
             <Text fontWeight={600} color={'gray.500'} mt={2} mb={5}>
               {member?.facebookAddress && (
@@ -247,6 +282,22 @@ const RegisterInfo = () => {
               <Tag mt={3} textAlign='center' colorScheme={'blue'} borderRadius='full'>
                 {contactStatusMap[contactStatus ? contactStatus : 0]}
               </Tag>
+
+              {isArrived && (
+                <>
+                  <Text mt={5} as='b' color={primaryColor}>
+                    Đã về chùa lúc
+                  </Text>
+                  <Tag
+                    mt={3}
+                    textAlign='center'
+                    colorScheme={isArrived ? 'green' : 'blue'}
+                    borderRadius='full'
+                  >
+                    {isArrived ? convertToAppDateTime(arrivedAt) : 'Đang Cập Nhật'}
+                  </Tag>
+                </>
+              )}
               {/* <Text as='b' color={primaryColor}>
                 Đường dẫn vào nhóm
               </Text>
@@ -280,7 +331,7 @@ const RegisterInfo = () => {
                 <Text w={'full'} as='b' color={primaryColor} fontSize='xl'>
                   Thông tin
                 </Text>
-                {isOwner && (
+                {shortUri && (
                   <Button onClick={handleUpdateInfo} size='sm'>
                     Cập nhật
                   </Button>
@@ -340,6 +391,7 @@ const RegisterInfo = () => {
 
             <Tabs isFitted variant='enclosed'>
               <TabList>
+                <Tab>Ban</Tab>
                 <Tab>Công quả</Tab>
                 <Tab>Lịch trình</Tab>
                 <Tab>Khác</Tab>
@@ -349,7 +401,29 @@ const RegisterInfo = () => {
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
-                      <Text as='b'>Số lần đã về chùa:</Text> {EVENT_EXP_TITLE[member?.exps + '']}
+                      <Text as='b'>Trưởng Ban </Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {manager?.religiousName || manager?.fullName || 'Đang cập nhật'}
+                        </Tag>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          <TagLeftIcon boxSize='12px' as={MdPhone} />
+                          {manager?.phoneNumber ? (
+                            <Link href={`tel:${manager?.phoneNumber}`}>{manager?.phoneNumber}</Link>
+                          ) : (
+                            'Đang cập nhật'
+                          )}
+                        </Tag>
+                      </Box>
+                    </Box>
+
+                    <Box>
+                      <Text as='b'>Ban đã được phân </Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {department || 'Đang cập nhật'}
+                        </Tag>
+                      </Box>
                     </Box>
                     <Box>
                       <Text as='b'>Kinh nghiệm làm việc tại các ban</Text>
@@ -371,23 +445,69 @@ const RegisterInfo = () => {
                         )}
                       </Box>
                     </Box>
-                    <Box>
-                      <Text as='b'>Nơi nhận thẻ:</Text>{' '}
-                      {receiveCardAddress && <Text>{receiveCardAddress.address}</Text>}
-                    </Box>
-                  </Stack>
-                  <Stack>
-                    <Box>
-                      <Text as='b'>Ban đã được phân:</Text>
-
-                      {/* <Tag key={idx} colorScheme={'blue'} mr={2} mb={1} borderRadius='full'>
-                        {assignedDepartment.}
-                      </Tag> */}
-                    </Box>
                   </Stack>
                 </TabPanel>
+
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
+                    <Box>
+                      <Text as='b'>Số lần đã về chùa</Text>
+                      <Box mt={2}>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {EventExp.toString(member?.exps + '')}
+                        </Tag>
+                      </Box>
+                    </Box>
+                    {!!registeredDays?.length && (
+                      <Box>
+                        <Text as='b'>Ngày công quả tại chùa</Text>
+                        <Flex flexWrap='wrap' gap={2} mt={2}>
+                          {registeredDays?.map((day) => (
+                            <Tag
+                              key={nanoid()}
+                              colorScheme={[
+                                'blue',
+                                'cyan',
+                                'green',
+                                'orange',
+                                'pink',
+                                'purple',
+                                'teal',
+                              ].at(registeredDays?.indexOf?.(day) % 7 || 0)}
+                            >
+                              {day.name}
+                            </Tag>
+                          ))}
+                        </Flex>
+                      </Box>
+                    )}
+                    {receiveCardAddress && (
+                      <Box mt='2'>
+                        <Text as='b'>Nơi nhận thẻ</Text>{' '}
+                        {receiveCardAddress && <Text>{receiveCardAddress.name}</Text>}
+                      </Box>
+                    )}
+                    {clothingSize && (
+                      <Box mt='2'>
+                        <Text as='b'>Size áo</Text>{' '}
+                        <Tag colorScheme={'pink'} mr={2} mb={1} borderRadius='full'>
+                          {ClothingSize.toString(clothingSize)}
+                        </Tag>
+                      </Box>
+                    )}
+                  </Stack>
+                </TabPanel>
+
+                <TabPanel px={0}>
+                  <Stack spacing='30px'>
+                    <Box>
+                      <Text as='b'>Về chùa</Text>
+                      <Box mt='2'>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {MoveType.toString(moveType)}
+                        </Tag>
+                      </Box>
+                    </Box>
                     <Box>
                       <HStack>
                         <MdLocationCity />
@@ -404,11 +524,21 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'blue'}>
                           {schedule && schedule?.departure_time}
                         </Tag>
-                        {moveType == MoveType.Other && schedule && schedule.departure_flight_code && (
-                          <Tag mr={2} mb={1} colorScheme={'blue'}>
-                            Mã chuyến bay: {schedule?.departure_flight_code}
-                          </Tag>
-                        )}
+                        {moveType == MoveType.ByPlane &&
+                          schedule &&
+                          schedule.departure_flight_code && (
+                            <Tag mr={2} mb={1} colorScheme={'blue'}>
+                              Mã chuyến bay: {schedule?.departure_flight_code}
+                            </Tag>
+                          )}
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Text as='b'>Về lại địa phương</Text>
+                      <Box mt='2'>
+                        <Tag colorScheme={'green'} mr={2} mb={1} borderRadius='full'>
+                          {MoveType.toString(returnMoveType)}
+                        </Tag>
                       </Box>
                     </Box>
                     <Box>
@@ -420,14 +550,16 @@ const RegisterInfo = () => {
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
                           {schedule && schedule?.return_time}
                         </Tag>
-                        {moveType == MoveType.Other && schedule && schedule.return_flight_code && (
-                          <Tag mr={2} mb={1} colorScheme={'pink'}>
-                            Mã chuyến bay: {schedule?.return_flight_code}
-                          </Tag>
-                        )}
+                        {returnMoveType == MoveType.ByPlane &&
+                          schedule &&
+                          schedule.return_flight_code && (
+                            <Tag mr={2} mb={1} colorScheme={'pink'}>
+                              Mã chuyến bay: {schedule?.return_flight_code}
+                            </Tag>
+                          )}
                       </Box>
                     </Box>
-                    {moveType == MoveType.HCM && (
+                    {schedule?.return_address && returnMoveType == MoveType.WithCTN && (
                       <Box>
                         <HStack>
                           <MdLocationCity />
@@ -436,52 +568,105 @@ const RegisterInfo = () => {
                         <Text>{schedule && schedule?.return_address}</Text>
                       </Box>
                     )}
+
+                    {(moveType == MoveType.ByPlane || returnMoveType == MoveType.ByPlane) && (
+                      <Box>
+                        <HStack>
+                          <MdDepartureBoard />
+                          <Text as='b'>Đăng ký ô tô</Text>
+                        </HStack>
+                        {carBookingType && (
+                          <Tag mt={2} mr={2} mb={1} colorScheme={'green'}>
+                            {CarBookingType.toString(carBookingType)}
+                          </Tag>
+                        )}
+                      </Box>
+                    )}
                   </Stack>
                 </TabPanel>
+
                 <TabPanel px={0}>
                   <Stack spacing='30px'>
                     <Box>
                       <Text as='b'>Thành viên nhóm</Text>
-                      <TableContainer whiteSpace={'break-spaces'} maxW={'400px'}>
-                        <Table variant='unstyled' size='sm'>
-                          <Tbody>
-                            {groupMembers &&
-                              groupMembers.length &&
-                              groupMembers.map((ele, idx) => (
-                                <Tr key={idx}>
-                                  <Td py={1} px={0}>
-                                    <Text>{ele.fullName}</Text>
-                                  </Td>
-                                  <Td>
-                                    {ele.role == 1 && (
-                                      <Tooltip label='Trưởng nhóm'>
-                                        <span>
-                                          <FaUserSecret />
-                                        </span>
-                                      </Tooltip>
-                                    )}
-                                    {ele.role == 2 && (
-                                      <Tooltip label='Phó nhóm'>
-                                        <span>
-                                          <FaUserTie />
-                                        </span>
-                                      </Tooltip>
-                                    )}
-                                  </Td>
-                                  <Td py={1} px={0}>
-                                    <Tag colorScheme={'blue'}>
-                                      <TagLeftIcon boxSize='12px' as={MdPhone} />
-                                      <TagLabel>{ele.phoneNumber}</TagLabel>
-                                    </Tag>
-                                  </Td>
-                                </Tr>
-                              ))}
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
+                      {groupMembers?.length === 0 ? (
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>
+                            Chưa có nhóm
+                          </Tag>
+                        </Box>
+                      ) : (
+                        <TableContainer whiteSpace={'break-spaces'} maxW={'400px'}>
+                          <Table variant='unstyled' size='sm'>
+                            <Tbody>
+                              {groupMembers &&
+                                groupMembers.length &&
+                                groupMembers.map((ele, idx) => (
+                                  <Tr key={idx}>
+                                    <Td py={1} px={0}>
+                                      <Text>{ele?.religiousName || ele?.fullName}</Text>
+                                    </Td>
+                                    <Td>
+                                      {ele.role == 1 && (
+                                        <Tooltip label='Trưởng nhóm'>
+                                          <span>
+                                            <FaUserSecret />
+                                          </span>
+                                        </Tooltip>
+                                      )}
+                                      {ele.role == 2 && (
+                                        <Tooltip label='Phó nhóm'>
+                                          <span>
+                                            <FaUserTie />
+                                          </span>
+                                        </Tooltip>
+                                      )}
+                                    </Td>
+                                    <Td py={1} px={0}>
+                                      <Tag colorScheme={'blue'}>
+                                        <TagLeftIcon boxSize='12px' as={MdPhone} />
+                                        <TagLabel>{ele.phoneNumber}</TagLabel>
+                                      </Tag>
+                                    </Td>
+                                  </Tr>
+                                ))}
+                            </Tbody>
+                          </Table>
+                        </TableContainer>
+                      )}
                     </Box>
+
+                    {receiveVolunteeCert && (
+                      <Box>
+                        <Text as='b'>Đăng Ký Nhận Giấy Chứng Nhận TNV</Text>
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={certificateRegistry ? 'green' : 'pink'}>
+                            {certificateRegistry ? 'Có' : 'Không'}
+                          </Tag>
+                        </Box>
+                      </Box>
+                    )}
+                    {certificateRegistry && (
+                      <Box>
+                        <Text as='b'>Tên trường hoặc nơi công tác</Text>
+                        <Box mt='2'>
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>
+                            Tiếng Việt: {companyNameVIE}
+                          </Tag>
+
+                          {companyNameEN && (
+                            <Box mt='2'>
+                              <Tag mr={2} mb={1} colorScheme={'blue'}>
+                                Tiếng Anh: {companyNameEN}
+                              </Tag>
+                            </Box>
+                          )}
+                        </Box>
+                      </Box>
+                    )}
+
                     <Box>
-                      <Text as='b'>Ghi chú:</Text>
+                      <Text as='b'>Ghi chú</Text>
                       <Text>{note}</Text>
                     </Box>
                   </Stack>

@@ -5,6 +5,7 @@ import { UpSertMemberDto } from '~/dtos/Members/UpSertMemberDto.model';
 import API from '~/apis/constants';
 import { MemberDto } from '~/dtos/Members/MemberDto.model';
 import { createAsyncRequest } from '~/slices/common/action';
+import { MemberLoginRequest } from '~/dtos/Members/MemberLoginRequest.model';
 
 export const register = createAsyncRequest('register', {
   method: 'post',
@@ -23,16 +24,22 @@ export const updateMember = createAsyncRequest('member/update', {
   method: 'post',
 });
 
-type Data = MemberDto & UpSertMemberDto;
+type Data = MemberDto & UpSertMemberDto & { isChecked: boolean };
 
 const initialState: ReduxState<Data> = {
   data: {
+    isChecked: false,
     fullName: '',
     identityCard: '',
     phoneNumber: '',
     register: {},
   },
 };
+
+export const getExistMember = createAsyncRequest<MemberLoginRequest>('member/getExist', {
+  method: 'post',
+  url: API.LOGIN_MEMBER,
+});
 
 const slice = createAppSlice<typeof initialState>(
   'register',
@@ -44,6 +51,9 @@ const slice = createAppSlice<typeof initialState>(
     },
     onlyKeep: (state, action) => {
       state.data = { ...action.payload };
+    },
+    resetRegister: (state, action) => {
+      state.data = action.payload;
     },
   },
   [
@@ -69,9 +79,16 @@ const slice = createAppSlice<typeof initialState>(
         return action.payload.data;
       },
     },
+    {
+      action: getExistMember,
+      onFullfilled: (state, action) => {
+        sessionStorage.setItem('userToken', action.payload.data.token);
+        return { ...action.payload.data?.member, ...state, isChecked: true };
+      },
+    },
   ],
 );
 
 const registerReducer = slice.reducer;
-export const { fillForm, onlyKeep } = slice.actions;
+export const { fillForm, onlyKeep, resetRegister } = slice.actions;
 export default registerReducer;

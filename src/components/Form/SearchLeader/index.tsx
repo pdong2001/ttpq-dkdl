@@ -27,12 +27,14 @@ import { formatUrl } from '~/utils/functions';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
+import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 
 type Props = {
   name: string;
   label: string;
   getLeader: (leader: any) => void;
   color?: string;
+  registerTypeFieldName: string;
 };
 type LeaderData = {
   id: string;
@@ -44,14 +46,16 @@ type LeaderData = {
 const SearchLeader = (props: Props) => {
   const { path } = useRouteMatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { name, label, getLeader, color } = props;
+  const { name, label, getLeader, color, registerTypeFieldName } = props;
   const [field, { error, touched }, { setValue }] = useField(name);
+  const [registerTypeField] = useField(registerTypeFieldName);
 
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { primaryColor } = useCustomColorMode();
   // const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
-  const { leaderId } = useAppSelector((state) => state.register.data.register);
+  const { register } = useAppSelector((state) => state.register.data);
+  const { leaderId } = register || {};
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
       url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
@@ -75,8 +79,6 @@ const SearchLeader = (props: Props) => {
     searchValue,
   );
 
-  getLeader(data || editLeader);
-
   useEffect(() => {
     const { data: leader } = data || {};
     if (leader || editLeader) {
@@ -84,14 +86,19 @@ const SearchLeader = (props: Props) => {
     } else {
       setValue('');
     }
-  }, [data, editLeader]);
-
+    if (registerTypeField.value === RegisterType.GROUP) {
+      getLeader(data || editLeader);
+    } else {
+      getLeader({});
+    }
+  }, [data, editLeader, registerTypeField.value]);
+  const isShow = registerTypeField.value === RegisterType.GROUP;
   const isInvalid = !!error && touched;
   const isValidSearchValue = inputValue?.length >= 8;
 
   const isHomePage = path === HOME_WITH_SHORT_URI;
   return (
-    <FormControl isInvalid={isInvalid}>
+    <FormControl display={isShow ? 'block' : 'none'} isInvalid={isInvalid}>
       <FormLabel color={color}>{label}</FormLabel>
       <SimpleGrid
         columns={{ base: 1, md: isHomePage ? 1 : 2 }}

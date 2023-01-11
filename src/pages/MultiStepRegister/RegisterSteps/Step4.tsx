@@ -9,27 +9,32 @@ import {
   FormLabel,
   SimpleGrid,
   Radio,
+  Image,
+  FormHelperText,
+  Tag,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import Select from '~/components/Form/CustomSelect';
 import _ from 'lodash';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import API from '~/apis/constants';
-import { formatUrl } from '~/utils/functions';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import { fillDataPreview } from '~/slices/previewInfo';
 import UploadFile from '~/components/Form/UploadFile';
-import MultiSelect from '~/components/Form/MultiSelect';
+import OurSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import { ClothingSize } from '~/dtos/Enums/ClothingSize.enum';
+import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
+import { useContext, useEffect, useState } from 'react';
+import { MessageContext } from '~/providers/message';
+import sampleAvatar from '~/assets/misc/avatar_temp.png';
+import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -37,8 +42,11 @@ const Step4 = (props: StepProps) => {
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
+  const messageService = useContext(MessageContext);
 
-  const { eventId, id, type, ctnId } = useAppSelector((state) => state.registerPage.data);
+  const { eventId, id, type, ctnId, receiveVolunteeCert } = useAppSelector(
+    (state) => state.registerPage.data,
+  );
   const {
     expDepartments,
     wishDepartment,
@@ -46,23 +54,31 @@ const Step4 = (props: StepProps) => {
     receiveCardAddressId: editReceiverCardId,
     // thêm field
     clothingSize: editClothingSize,
-    note: editNote,
+    question: editNote,
+    registeredDays: editServeDays,
   } = useAppSelector((state) => state.registerInfo.data);
-  const { strongPoints, avatarPath: editAvatarPath, exps: editExps } = member || {};
+  const {
+    strongPoints,
+    avatarPath: editAvatarPath,
+    exps: editExps,
+    identityCardImagePaths: editIdentityCardPaths,
+  } = member || {};
   const previousStepData = useAppSelector((state) => state.register.data);
 
-  const { strongPointIds, avatarPath, exps } = previousStepData;
+  const { strongPointIds, avatarPath, exps, identityCardImagePaths } = previousStepData;
   const {
     expDepartmentIds,
     wishDepartmentId,
     receiveCardAddressId,
     // thêm field
     clothingSize,
-    note,
+    question,
+    registeredDays,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
-  const { data: strongPointList } = useAxios(
+  const [strongPointOptions, setStrongPointOptions] = useState<any[]>([]);
+  const { loaded: strongPointLoaded, data: strongPointList } = useAxios(
     {
       method: 'get',
       url: API.GET_STRONG_POINT,
@@ -71,25 +87,27 @@ const Step4 = (props: StepProps) => {
     [],
   );
 
+  useEffect(() => {
+    if (strongPointLoaded) {
+      const strongPoints = [{ id: 0, name: 'Không có' }, ...(strongPointList || [])];
+      setStrongPointOptions(strongPoints);
+    }
+  }, [strongPointLoaded]);
+
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { departments } = registerPage;
+  const { departments, event } = registerPage;
+  const customDepartments = [{ id: 0, name: 'Theo sự sắp xếp của CTN' }, ...(departments || [])];
+  const { days } = event || {};
 
   // lấy nơi nhận thẻ
-  const { data: receiveCardLocationList } = useAxios({
-    method: 'get',
-    url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
-    transformResponse: ({ data }) => data,
-  });
+  const { receiveCardAddresses = [] } = useAppSelector((state) => state.registerPage.data);
+  // const { data: receiveCardLocationList } = useAxios({
+  //   method: 'get',
+  //   url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
+  //   transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
+  // });
 
-  // thêm field
-  // size áo
-  const clothingSizeList = [
-    { id: 1, name: 'S' },
-    { id: 2, name: 'M' },
-    { id: 3, name: 'L' },
-    { id: 4, name: 'XL' },
-    { id: 5, name: 'XXL' },
-  ];
+  const serveDates = (registeredDays || editServeDays || []).map((date) => date?.id);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -102,9 +120,13 @@ const Step4 = (props: StepProps) => {
       // thêm field
       clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
-      note: note || editNote || '',
+      identityCardImagePathFront: identityCardImagePaths?.[0] || editIdentityCardPaths?.[0] || '',
+      // identityCardImagePathBack: '',
+      identityCardImagePaths: '',
+      question: question || editNote || '',
+      registeredDays: serveDates,
     },
-    validationSchema: step4Schema,
+    validationSchema: step4Schema(days),
     onSubmit: (values) => {
       const {
         strongPointIds,
@@ -113,18 +135,35 @@ const Step4 = (props: StepProps) => {
         exps,
         wishDepartmentId,
         receiveCardAddressId,
-        note,
+        question,
         // thêm field
         clothingSize,
+        identityCardImagePathFront,
+        // identityCardImagePathBack,
+        registeredDays,
       } = values;
+      if (!identityCardImagePathFront) {
+        return messageService.add({
+          title: 'HD vui lòng bổ sung CCCD để hoàn tất thủ tục đăng ký',
+          status: 'error',
+        });
+      }
+      if (!avatarPath) {
+        return messageService.add({
+          title: 'HD vui lòng bổ sung ảnh thẻ theo hình mẫu',
+          status: 'error',
+        });
+      }
+      const identityCardImagePaths = [identityCardImagePathFront];
       const fillData = {
         strongPointIds,
         exps,
         avatarPath,
+        identityCardImagePaths,
         register: {
           ...previousStepData.register,
           expDepartmentIds,
-          note,
+          question,
           receiveCardAddressId,
           wishDepartmentId,
           eventId,
@@ -133,12 +172,13 @@ const Step4 = (props: StepProps) => {
           type,
           // thêm field
           clothingSize,
-        },
+          registeredDays,
+        } as EventRegistryDto,
       };
       dispatch(fillForm(fillData));
       mapMultiTitle({
         avatarPath,
-        note,
+        question,
         type,
         exps,
         strongPointIds,
@@ -146,14 +186,19 @@ const Step4 = (props: StepProps) => {
         wishDepartmentId,
         receiveCardAddressId,
         clothingSize,
+        registeredDays,
       });
-      nextStep();
+      if (receiveVolunteeCert) {
+        nextStep();
+      } else {
+        nextStep(6);
+      }
     },
   });
 
   const mapMultiTitle = ({
     avatarPath,
-    note,
+    question,
     type,
     exps,
     strongPointIds,
@@ -161,6 +206,7 @@ const Step4 = (props: StepProps) => {
     wishDepartmentId,
     receiveCardAddressId,
     clothingSize,
+    registeredDays,
   }) => {
     function mapName(array, ids) {
       return _.map(
@@ -172,21 +218,24 @@ const Step4 = (props: StepProps) => {
     }
     dispatch(
       fillDataPreview({
-        note,
+        question,
         type,
         avatarPath,
         exps,
         strongPointIds: mapName(strongPointList, strongPointIds),
         expDepartmentIds: mapName(departments, expDepartmentIds),
         wishDepartmentId: mapName(departments, [+wishDepartmentId]),
-        receiveCardAddressId: mapName(receiveCardLocationList, [+receiveCardAddressId]),
-        clothingSize: ClothingSize.toString(clothingSize),
+        receiveCardAddressId: mapName(receiveCardAddresses, [+receiveCardAddressId]),
+        clothingSize,
+        registeredDays: registeredDays.map((dayId) => days?.find((date) => date.id == dayId)?.name),
       }),
     );
   };
 
+  console.log('____', formik.values);
+
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -195,69 +244,153 @@ const Step4 = (props: StepProps) => {
         >
           Công việc
         </Heading>
-        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-          PL.2565 - DL.2022
-        </Text>
       </Stack>
       <Box mt={10}>
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
               <Radios name='exps' label='Số lần về chùa công quả'>
-                <Radio value={EventExp.ChuaTungThamGia}>Lần đầu tiên</Radio>
-                <Radio value={EventExp.Duoi3Lan}>Dưới 3 lần</Radio>
-                <Radio value={EventExp.Tren3Lan}>Trên 3 lần</Radio>
+                <Radio value={EventExp.ChuaTungThamGia}>
+                  {EventExp.toString(EventExp.ChuaTungThamGia)}
+                </Radio>
+                <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
+                <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
-              <MultiSelect
+              <OurSelect
+                isMulti
+                name='registeredDays'
+                options={days}
+                label={
+                  <Box display={'inline-block'}>
+                    <Text>Thời gian công quả ở chùa </Text>
+                    <Text color={primaryColor}>
+                      HD vui lòng chọn <Tag colorScheme={'red'}>ĐẦY ĐỦ</Tag> các ngày công quả tại
+                      chùa
+                    </Text>
+                  </Box>
+                }
+                optionValue='id'
+                optionLabel='name'
+                closeMenuOnSelect={false}
+                isRequired={!!days?.length}
+                placeholder='Thời gian công quả'
+              />
+              <OurSelect
+                isMulti
                 name='strongPointIds'
-                options={strongPointList}
+                options={strongPointOptions}
                 label='Kỹ năng, sở trường'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
+                placeholder='Chọn kỹ năng, sở trường'
               />
-              <MultiSelect
+              <OurSelect
+                isMulti
                 name='expDepartmentIds'
-                options={departments}
+                options={customDepartments}
                 label='Kinh nghiệm ở ban'
-                valueField='id'
-                labelField='name'
+                optionValue='id'
+                optionLabel='name'
+                placeholder='Chọn ban kinh nghiệm'
               />
-              <Select
+              <OurSelect
                 name='wishDepartmentId'
-                data={departments}
+                options={customDepartments}
                 label='Nguyện vọng vào ban'
-                placeholder='Chọn ban'
+                placeholder='Chọn ban nguyện vọng'
+                optionValue='id'
+                optionLabel='name'
                 isRequired
               />
-              <Select
-                name='receiveCardAddressId'
-                data={receiveCardLocationList}
-                label='Nơi nhận thẻ'
-                placeholder='Chọn nơi nhận thẻ'
-              />
+              {!!receiveCardAddresses.length && (
+                <OurSelect
+                  name='receiveCardAddressId'
+                  options={receiveCardAddresses}
+                  optionValue='id'
+                  optionLabel='name'
+                  label='Nơi nhận thẻ'
+                  placeholder='Chọn nơi nhận thẻ'
+                />
+              )}
               {/* thêm field */}
-              <Select
+              {/* <OurSelect
                 name='clothingSize'
-                data={ClothingSize.getList()}
+                options={ClothingSize.getList()}
                 label='Size áo'
                 placeholder='Chọn size áo'
                 isRequired
-                valueField='value'
-                labelField='label'
-              />
-              <FormControl name='avatarPath' as='fieldset' border={1}>
-                <FormLabel as='legend'>Hình thẻ</FormLabel>
-                <UploadFile name='avatarPath' />
-              </FormControl>
+              /> */}
+              <Stack direction={{ base: 'column', lg: 'row' }}>
+                <FormControl
+                  name='avatarPath'
+                  as='fieldset'
+                  border={1}
+                  display='flex'
+                  justifyContent={'center'}
+                  flexDirection='column'
+                  alignItems={'center'}
+                  isRequired
+                >
+                  <FormLabel as='legend'>Hình thẻ</FormLabel>
+                  <Image srcSet={sampleAvatar} height={[64, 80]} />
+
+                  <FormHelperText color={primaryColor}>
+                    HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
+                  </FormHelperText>
+                  <Box display={{ base: 'none', lg: 'none' }}>
+                    {/* <CropImage aspect={3 / 4} name='avatarPath' /> */}
+                  </Box>
+
+                  <Box display={{ base: 'block', lg: 'block' }}>
+                    <UploadFile ratio={3 / 4} name='avatarPath' />
+                  </Box>
+                </FormControl>
+                <FormControl
+                  name='identityCardImagePathFront'
+                  as='fieldset'
+                  border={1}
+                  display='flex'
+                  justifyContent={'center'}
+                  flexDirection='column'
+                  alignItems={'center'}
+                  isRequired
+                >
+                  <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
+
+                  <Image srcSet={cccdTemplate} height={[64, 80]} />
+
+                  <FormHelperText color={primaryColor}>
+                    HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
+                    Chùa
+                  </FormHelperText>
+                  <Box display={{ base: 'none', lg: 'none' }}>
+                    {/* <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' /> */}
+                  </Box>
+
+                  <Box display={{ base: 'block', lg: 'block' }}>
+                    <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  </Box>
+                </FormControl>
+
+                {/* <FormControl name='avatarPath' as='fieldset' border={1}>
+                  <FormLabel as='legend'>CCCD mặt sau</FormLabel>
+                  <UploadFile name='identityCardImagePathBack' />
+                </FormControl> */}
+              </Stack>
               <FormInput
-                name='note'
-                label='Ghi chú'
+                name='question'
+                label='Ghi chú/ thắc mắc của HĐ'
                 as={Textarea}
                 placeholder='Huynh đệ có thắc mắc gì không ạ?'
               />
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+              <Button
+                colorScheme='gray'
+                flexGrow={1}
+                fontFamily={'heading'}
+                onClick={() => previousStep()}
+              >
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>

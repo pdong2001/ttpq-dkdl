@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '@chakra-ui/react';
 // And react-slick as our Carousel Lib
 import Slider from 'react-slick';
+import { DeferredContent } from 'primereact/deferredcontent';
 
 import cover00 from '~/assets/cover-hero/cover-00.jpg';
 import cover01 from '~/assets/cover-ctn/cover-1.jpg';
@@ -19,6 +20,7 @@ import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
 import { formatUrl } from '~/utils/functions';
 import { useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
+import { AuthContext } from '~/providers/auth';
 export default function CaptionCarousel() {
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -27,9 +29,10 @@ export default function CaptionCarousel() {
   const [registerAvailable, setRegisterAvailable] = useState(true);
   // const messageService = useContext(MessageContext);
   const pageConfig = useAppSelector((state) => state.registerPage.data);
-
+  const { member } = useContext(AuthContext);
+  const { register } = member || {};
   useEffect(() => {
-    if (pageConfig.eventId && shortUri) {
+    if (pageConfig.eventId && shortUri && !register) {
       setRegisterAvailable(true);
     } else {
       setRegisterAvailable(false);
@@ -152,48 +155,49 @@ export default function CaptionCarousel() {
       {/* Slider */}
       <Slider {...settings} ref={(slider) => setSlider(slider)}>
         {cards.map((card, index) => (
-          <Box
-            key={index}
-            backgroundImage={`url(${card.image})`}
-            backgroundPosition={{ base: 'center' }}
-            backgroundRepeat='no-repeat'
-            backgroundSize='cover'
-            transitionDuration={'2s'}
-          >
-            <Box>
-              <Container maxW='6xl' position='relative' px={[3, 5, 16, 20, 0]}>
-                {/* This is the block you need to change, to customize the caption */}
-                <Box height='100vh' position='relative' justifyContent={'start'}>
-                  <Show {...(isHomePage ? { above: 'md' } : {})}>
-                    <Stack
-                      color='white'
-                      spacing={6}
-                      w={isHomePage ? { base: '40%', md: '35%', lg: '45%' } : { base: '80%' }}
-                      maxW={'640px'}
-                      position='absolute'
-                      top='50%'
-                      transform='translate(0, -50%)'
-                    >
-                      {fade_index == index && (
-                        <Box>
-                          <FadeInUp duration={1.5}>
-                            <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
-                              {card.title}
-                            </Heading>
-                          </FadeInUp>
-                          <FadeInUp delay={0.6} duration={1.5}>
-                            <Text my={5} fontSize={{ base: 'md', lg: 'lg' }}>
-                              {card.text}
-                            </Text>
-                          </FadeInUp>
-                        </Box>
-                      )}
-                    </Stack>
-                  </Show>
-                </Box>
-              </Container>
+          <DeferredContent key={index}>
+            <Box
+              backgroundImage={`url(${card.image})`}
+              backgroundPosition={{ base: 'center' }}
+              backgroundRepeat='no-repeat'
+              backgroundSize='cover'
+              transitionDuration={'2s'}
+            >
+              <Box>
+                <Container maxW='6xl' position='relative' px={[3, 5, 16, 20, 0]}>
+                  {/* This is the block you need to change, to customize the caption */}
+                  <Box height='100vh' position='relative' justifyContent={'start'}>
+                    <Show {...(isHomePage ? { above: 'md' } : {})}>
+                      <Stack
+                        color='white'
+                        spacing={6}
+                        w={isHomePage ? { base: '40%', md: '35%', lg: '45%' } : { base: '80%' }}
+                        maxW={'640px'}
+                        position='absolute'
+                        top='50%'
+                        transform='translate(0, -50%)'
+                      >
+                        {fade_index == index && (
+                          <Box>
+                            <FadeInUp duration={1.5}>
+                              <Heading fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}>
+                                {card.title}
+                              </Heading>
+                            </FadeInUp>
+                            <FadeInUp delay={0.6} duration={1.5}>
+                              <Text my={5} fontSize={{ base: 'md', lg: 'lg' }}>
+                                {card.text}
+                              </Text>
+                            </FadeInUp>
+                          </Box>
+                        )}
+                      </Stack>
+                    </Show>
+                  </Box>
+                </Container>
+              </Box>
             </Box>
-          </Box>
+          </DeferredContent>
         ))}
       </Slider>
       {registerAvailable && (

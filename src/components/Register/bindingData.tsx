@@ -1,7 +1,10 @@
-import { Tag } from '@chakra-ui/react';
+import { Flex, Stack, Tag } from '@chakra-ui/react';
+import { nanoid } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
-import { EVENT_EXP_TITLE, MOVE_TYPE_TITLE } from '~/configs/register';
+import { CAR_BOOKING_TYPE_TITLE, CLOTHING_SIZE_TITLE } from '~/configs/register';
+import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
+import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import { convertToAppDateTime } from '~/utils/date';
 
@@ -21,52 +24,118 @@ const mapSuccessData = (previewInfo) => {
       gender: _.get(previewInfo, 'gender') == 0 ? 'Nam' : 'Nữ',
     },
     schedules: {
-      [MoveType.WithCTN]: {
-        moveType: (
-          <Tag variant='outline' colorScheme={'blue'}>
-            {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
-          </Tag>
-        ),
-        startAddressId: _.get(previewInfo, 'startAddressId', ''),
-        startTimeId: _.get(previewInfo, 'startTimeId', ''),
-        leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
+      go: {
+        [MoveType.WithCTN]: {
+          moveType: (
+            <Tag variant='outline' colorScheme={'green'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          startTimeId: _.get(previewInfo, 'startTimeId', ''),
+        },
+        [MoveType.ByPlane]: {
+          moveType: (
+            <Tag variant='outline' colorScheme={'blue'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
+          otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
+          startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
+          // thêm field
+          carBookingType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {CAR_BOOKING_TYPE_TITLE[_.get(previewInfo, 'carBookingType', '')]}
+            </Tag>
+          ),
+        },
+        [MoveType.Other]: {
+          moveType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+            </Tag>
+          ),
+          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
+          otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
+        },
       },
-      [MoveType.ByPlane]: {
-        moveType: (
-          <Tag variant='outline' colorScheme={'pink'}>
-            {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
-          </Tag>
-        ),
-        otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
-        otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
-        otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+      return: {
+        [MoveType.WithCTN]: {
+          returnMoveType: (
+            <Tag variant='outline' colorScheme={'green'}>
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
+            </Tag>
+          ),
+          leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
+        },
+        [MoveType.ByPlane]: {
+          returnMoveType: (
+            <Tag variant='outline' colorScheme={'blue'}>
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
+            </Tag>
+          ),
+          otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+          returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
+          // thêm field
+          carBookingType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {CAR_BOOKING_TYPE_TITLE[_.get(previewInfo, 'carBookingType', '')]}
+            </Tag>
+          ),
+        },
+        [MoveType.Other]: {
+          returnMoveType: (
+            <Tag variant='outline' colorScheme={'pink'}>
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
+            </Tag>
+          ),
+          otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+        },
       },
-      [MoveType.Other]: {
-        moveType: (
-          <Tag variant='outline' colorScheme={'green'}>
-            {MOVE_TYPE_TITLE[_.get(previewInfo, 'moveType', 0)]}
-          </Tag>
-        ),
-        otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
-        otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
-        startPlaneCode: _.get(previewInfo, 'startPlaneCode', ''),
-        otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
-        returnPlaneCode: _.get(previewInfo, 'returnPlaneCode', ''),
-        // thêm field
-        // transitType: (
-        //   <Tag variant='outline' colorScheme={'green'}>
-        //     {TRANSIT_TYPE_TITLE[_.get(previewInfo, 'transitType', '')]}
-        //   </Tag>
-        // ),
-      },
+      registeredDays: (
+        <Flex gap={2} flexWrap='wrap'>
+          {_.map(_.get(previewInfo, 'registeredDays', []), (day) => {
+            return (
+              <Tag
+                key={nanoid()}
+                colorScheme={['blue', 'cyan', 'green', 'orange', 'pink', 'purple', 'teal'].at(
+                  previewInfo?.registeredDays?.indexOf?.(day) % 7 || 0,
+                )}
+              >
+                {day}
+              </Tag>
+            );
+          })}
+        </Flex>
+      ),
     },
     jobs: {
-      exps: EVENT_EXP_TITLE[_.get(previewInfo, 'exps', 0)],
+      exps: EventExp.toString(_.get(previewInfo, 'exps', 0) + ''),
       strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
       wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
+
       receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
+      clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
       note: _.get(previewInfo, 'note', ''),
+    },
+    certRegistry: {
+      [CertificateRegistry.NO]: {
+        certificateRegistry: (
+          <Tag variant='outline' colorScheme={'pink'}>
+            {CertificateRegistry.toString(_.get(previewInfo, 'certificateRegistry'))}
+          </Tag>
+        ),
+      },
+      [CertificateRegistry.YES]: {
+        certificateRegistry: (
+          <Tag variant='outline' colorScheme={'green'}>
+            {CertificateRegistry.toString(_.get(previewInfo, 'certificateRegistry'))}
+          </Tag>
+        ),
+        companyNameVIE: _.get(previewInfo, 'companyNameVIE', ''),
+        companyNameEN: _.get(previewInfo, 'companyNameEN', ''),
+      },
     },
     avatar: _.get(previewInfo, 'avatarPath', ''),
     fullName: _.get(previewInfo, 'fullName', ''),

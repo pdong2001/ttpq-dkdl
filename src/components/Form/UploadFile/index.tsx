@@ -1,9 +1,10 @@
 import {
   AspectRatio,
+  AspectRatioProps,
   Box,
+  Button,
   Container,
   Heading,
-  Image,
   Input,
   InputProps,
   Stack,
@@ -15,38 +16,74 @@ import { useEffect, useState } from 'react';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import useCustomColorMode from '~/hooks/useColorMode';
-import { formatUrl } from '~/utils/functions';
+import { getImageSrc } from '~/utils/functions';
+import { Image as PrimeImage } from 'primereact/image';
 
-type UploadFileProps = InputProps & { dropLabel?: string };
+type UploadFileProps = InputProps &
+  AspectRatioProps & {
+    dropLabel?: string;
+    ratio?: number;
+    onSelectFile?: (file: File) => void;
+    file?: File;
+    setOpenCrop?: (value: boolean) => void;
+  };
 type ImageResponse = {
   fileName: string;
   storedFileName: string;
 };
 type UploadResponse = { data?: ImageResponse[] };
 export default function UploadFile(props: UploadFileProps) {
-  const { name = '', placeholder, dropLabel } = props;
+  const {
+    name = '',
+    placeholder,
+    dropLabel,
+    ratio,
+    width,
+    onSelectFile,
+    file,
+    setOpenCrop,
+  } = props;
   const [label, setLabel] = useState(placeholder);
-  const [file, setFile] = useState<File | undefined>();
   const [data, setData] = useState<any>();
   const [field, _, helpers] = useField(name);
   const { primaryColor } = useCustomColorMode();
+  const [imgSrc, setImgSrc] = useState(getImageSrc(field.value));
+  const [innerFile, setInnerFile] = useState<File>();
 
   const handleChange = (e) => {
-    setFile(e.target.files[0]);
+    if (!onSelectFile) {
+      setInnerFile(e.target.files[0]);
+    } else {
+      onSelectFile?.(e.target.files[0]);
+      setOpenCrop?.(true);
+    }
   };
   const handleDrop = (e) => {
-    setFile(e.dataTransfer.files[0]);
+    if (!onSelectFile) {
+      // setInnerFile(e.dataTransfer.files[0]);
+    } else {
+      onSelectFile?.(e.dataTransfer.files[0]);
+      setOpenCrop?.(true);
+    }
   };
   useEffect(() => {
+    const formData = new FormData();
     if (file) {
-      const formData = new FormData();
       formData.append('files', file);
       setData(formData);
     }
-  }, [file]);
+    if (innerFile) {
+      formData.append('files', innerFile);
+      setData(formData);
+    }
+  }, [file, innerFile]);
 
   /* Upload file */
-  const { cancel, data: uploadResponse } = useAxios<UploadResponse>(
+  const {
+    cancel,
+    data: uploadResponse,
+    loaded: isUploaded,
+  } = useAxios<UploadResponse>(
     {
       url: API.UPLOAD_PHOTO,
       method: 'post',
@@ -57,23 +94,30 @@ export default function UploadFile(props: UploadFileProps) {
     },
     [data],
   );
-  if (!file && cancel) {
+  if (!(file || innerFile) && cancel) {
     cancel.cancel();
   }
 
   useEffect(() => {
     if (uploadResponse?.data) {
-      helpers.setValue(
-        formatUrl(API.GET_PHOTO, {
-          key: uploadResponse.data[0]?.storedFileName,
-        }),
-      );
+      const src = encodeURIComponent(uploadResponse.data[0]?.storedFileName);
+      let directSrc;
+      if (isUploaded) {
+        if (file) {
+          directSrc = URL.createObjectURL(file as Blob);
+        }
+        if (innerFile) {
+          directSrc = URL.createObjectURL(innerFile as Blob);
+        }
+        setImgSrc(directSrc);
+        helpers.setValue(src);
+      }
     }
-  }, [uploadResponse]);
+  }, [uploadResponse, isUploaded]);
 
   return (
     <Container my='2' centerContent>
-      <AspectRatio width='64' ratio={1}>
+      <AspectRatio width={width} ratio={ratio}>
         <Box
           borderColor='gray.300'
           borderStyle='dashed'
@@ -110,14 +154,16 @@ export default function UploadFile(props: UploadFileProps) {
               >
                 {field.value ? (
                   <Box position='relative'>
-                    <Image src={field.value} />
+                    <PrimeImage preview src={imgSrc} />
                   </Box>
                 ) : (
                   <Stack p='8' textAlign='center' spacing='1'>
-                    <Heading fontSize='lg' color={primaryColor} fontWeight='bold'>
+                    <Heading fontSize={14} color={primaryColor} fontWeight='bold'>
                       {label}
                     </Heading>
-                    <Text fontWeight='light'>hoặc bấm để chọn ảnh</Text>
+                    <Text fontSize={12} fontWeight='light'>
+                      hoặc bấm để chọn ảnh
+                    </Text>
                   </Stack>
                 )}
               </Stack>
@@ -137,6 +183,7 @@ export default function UploadFile(props: UploadFileProps) {
               onDragEnter={() => setLabel(dropLabel)}
               onDrop={handleDrop}
               onChange={handleChange}
+              onClick={handleChange}
             />
           </Box>
         </Box>
@@ -148,4 +195,6 @@ export default function UploadFile(props: UploadFileProps) {
 UploadFile.defaultProps = {
   placeholder: 'Kéo ảnh vào',
   dropLabel: 'Thả vào đây ạ',
+  ratio: 3 / 4,
+  width: '32',
 } as UploadFileProps;

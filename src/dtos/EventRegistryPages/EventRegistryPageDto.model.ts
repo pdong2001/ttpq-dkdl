@@ -1,3 +1,5 @@
+import { NamedTimeDto } from './../NamedTimes/NamedTimeDto.model';
+import { ReceiveCardAddressDto } from '~/dtos/ReceiveCardLocations/ReceiveCardAddressDto.model';
 import { EventRegistryPageContentDto } from './../EventRegistryPageContents/EventRegistryPageContentDto.model';
 import { StartAddressDto } from './../Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from './../LeaveAddresses/LeaveAddressDto.model';
@@ -22,4 +24,9 @@ export type EventRegistryPageDto = {
   startAddresses?: StartAddressDto[];
   leaveAddresses?: LeaveAddressDto[];
   pageContent?: EventRegistryPageContentDto;
+  receiveCardAddresses?: ReceiveCardAddressDto[];
+  days?: NamedTimeDto[];
+  canMoveByPlane: boolean;
+  receiveVolunteeCert: boolean;
+  hotline?: string;
 };

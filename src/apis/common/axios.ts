@@ -6,6 +6,9 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const onFullfilledRequest = (response: AxiosResponse) => response;
 export const onRejectedResponse = (error: any): any => {
+  if (import.meta.env.TTQP_NODE_ENV === 'development') {
+    console.log('error global', error);
+  }
   if (error instanceof AxiosError) {
     return Promise.reject(getExceptionPayload(error.response?.data));
   }
@@ -13,7 +16,7 @@ export const onRejectedResponse = (error: any): any => {
 };
 
 const publicRequest = axios.create({
-  baseURL: `${process.env.TTPQ_BASE_URL}`,
+  baseURL: `${import.meta.env.TTPQ_BASE_URL}`,
 });
 
 publicRequest.interceptors.response.use(onFullfilledRequest, onRejectedResponse);
@@ -27,6 +30,7 @@ publicRequest.interceptors.request.use(
   },
   (error: AxiosError): Promise<AxiosError> => {
     // Do something with request error
+
     return Promise.reject(error);
   },
 );

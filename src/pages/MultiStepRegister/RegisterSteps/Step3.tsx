@@ -2,7 +2,6 @@ import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid } from '@chakra-ui
 import _ from 'lodash';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import Select from '~/components/Form/CustomSelect';
 import { Form, FormikProvider, useFormik } from 'formik';
 import Radios from '~/components/Form/Radios';
 import { fillDataPreview } from '~/slices/previewInfo';
@@ -10,19 +9,17 @@ import FloatingLabel from '~/components/Form/FloatingLabel/FloatingLabel';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import { useEffect, useState } from 'react';
 import { fillForm } from '../../../slices/register';
-import step3Schema from '../validationSchema/step3';
+import step3Schema from '../validationSchema/step3_1';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
 import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
-import { MOVE_TYPE_TITLE } from '~/configs/register';
 import { useRouteMatch } from 'react-router-dom';
-import { ADD_NEW_REGISTER_PATH } from '~/routes';
 import { convertToAppDateTime } from '~/utils/date';
 import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
+import OurSelect from '~/components/Form/MultiSelect';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -47,68 +44,46 @@ const Step3 = (props: StepProps) => {
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { leaveAddresses, startAddresses } = registerPage;
+  const { leaveAddresses, startAddresses, canMoveByPlane } = registerPage;
 
   const { register } = useAppSelector((state) => state.register.data);
   const {
     moveType: editMoveType,
     startTimeId: editStartTimeId,
-    leaveTimeId: editLeaveTimeId,
     otherStartAddress: editOtherStartAddress,
     otherStartTime: editOtherStartTime,
-    otherLeaveTime: editOtherLeaveTime,
     startPlaneCode: editStartPlaneCode,
-    returnPlaneCode: editReturnPlaneCode,
-    leaveTime,
     startTime,
-    //thêm field
-    carBookingType: editCarBookingType,
   } = useAppSelector((state) => state.registerInfo.data);
   const { addressId: editStartAddressId } = startTime || {};
-  const { addressId: editLeaveAddressId } = leaveTime || {};
   const {
     moveType: moveTypeInStore,
     startAddressId: startAddressIdInStore = '',
-    leaveAddressId: leaveAddressIdInStore = '',
 
     startTimeId = '',
-    leaveTimeId: leaveTimeIdInStore = '',
 
     startPlaneCode = '',
-    returnPlaneCode = '',
-    otherLeaveTime = '',
     otherStartTime = '',
     otherStartAddress = '',
-    // thêm field
-    carBookingType: carBookingTypeInStore,
   } = register || {};
 
   const hasStartAddress = !!startAddresses?.length;
-  const isAddNew = path === ADD_NEW_REGISTER_PATH;
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       moveType:
         moveTypeInStore ||
-        (editMoveType && editMoveType + '') ||
-        (hasStartAddress ? MoveType.WithCTN : MoveType.Other),
+        (!!editMoveType && editMoveType + '') ||
+        (hasStartAddress ? MoveType.WithCTN : canMoveByPlane && MoveType.ByPlane) ||
+        MoveType.Other,
 
       startAddressId: startAddressIdInStore || editStartAddressId,
       startTimeId: startTimeId || editStartTimeId,
-      leaveAddressId: leaveAddressIdInStore || editLeaveAddressId,
-      leaveTimeId: leaveTimeIdInStore || editLeaveTimeId,
 
       otherStartAddress: otherStartAddress || editOtherStartAddress,
       otherStartTime: otherStartTime || editOtherStartTime,
-      otherLeaveTime: otherLeaveTime || editOtherLeaveTime,
       startPlaneCode: startPlaneCode || editStartPlaneCode,
-      returnPlaneCode: returnPlaneCode || editReturnPlaneCode,
-      // thêm field
-      carBookingType:
-        carBookingTypeInStore ||
-        (editCarBookingType && editCarBookingType + '') ||
-        CarBookingType.Both,
     },
     validationSchema: step3Schema,
     onSubmit: (values) => {
@@ -116,25 +91,16 @@ const Step3 = (props: StepProps) => {
         // máy bay
         values.startAddressId = undefined;
         values.startTimeId = undefined;
-        values.leaveAddressId = undefined;
-        values.leaveTimeId = undefined;
 
         if (moveType == MoveType.Other) {
           // tự túc
           values.startPlaneCode = '';
-          values.returnPlaneCode = '';
-          // thêm field
-          values.carBookingType = '';
         }
       } else {
         // with CTN
         values.otherStartAddress = '';
         values.otherStartTime = '';
-        values.otherLeaveTime = '';
         values.startPlaneCode = '';
-        values.returnPlaneCode = '';
-        // thêm field
-        values.carBookingType = '';
       }
       dispatch(
         fillForm({
@@ -147,25 +113,24 @@ const Step3 = (props: StepProps) => {
   });
 
   const { moveType } = formik.values;
-  console.log(formik.errors);
 
-  // thời gian khởi hành theo địa điểm xuất phát
-  const { startAddressId, leaveAddressId } = formik.values;
-
-  const [leaveTimes, setLeaveTimes] = useState<Time[] | never[]>();
-  const [startTimes, setStartTimes] = useState<Time[] | never[]>();
+  const [startTimes, setStartTimes] = useState<(StartTimeDto | undefined)[]>();
 
   useEffect(() => {
-    const times = leaveAddresses?.find((address) => address.id == leaveAddressId)?.times || [];
-    const mappingTimes = mappingTime(times);
-    setLeaveTimes(mappingTimes);
-  }, [leaveAddresses, leaveAddressId]);
-
-  useEffect(() => {
-    const times = startAddresses?.find((address) => address.id == startAddressId)?.times || [];
-    const mappingTimes = mappingTime(times);
-    setStartTimes(mappingTimes);
-  }, [startAddresses, startAddressId]);
+    const times = startAddresses
+      ?.map((address) => {
+        const newAddress = { ...address } as StartAddressDto;
+        newAddress.times = address.times?.map((time) => {
+          const newTime = { ...time };
+          newTime.name = `${time.name} tại ${address.name}`;
+          return newTime;
+        });
+        return newAddress || [];
+      })
+      .flatMap((address) => address.times)
+      .sort((t1, t2) => new Date(t1?.time || '').getTime() - new Date(t2?.time || '').getTime());
+    setStartTimes(times);
+  }, [startAddresses]);
 
   useEffect(() => {
     formik.setTouched({});
@@ -182,16 +147,14 @@ const Step3 = (props: StepProps) => {
     dispatch(
       fillDataPreview({
         ...values,
-        startAddressId: `${filterTitle(mappingAddress(startAddresses), values.startAddressId)}`,
-        leaveAddressId: `${filterTitle(mappingAddress(leaveAddresses), values.leaveAddressId)}`,
+        startAddressId: `${filterTitle(startAddresses, values.startAddressId)}`,
         startTimeId: `${filterTitle(startTimes, values.startTimeId)}`,
-        leaveTimeId: `${filterTitle(leaveTimes, values.leaveTimeId)}`,
       }),
     );
   };
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -208,84 +171,64 @@ const Step3 = (props: StepProps) => {
         <FormikProvider value={formik}>
           <Form noValidate>
             <Stack spacing={4}>
-              <Radios label='Hình thức di chuyển' name='moveType'>
-                {startAddresses?.length && (
-                  <Radio value={MoveType.WithCTN}>{MOVE_TYPE_TITLE[MoveType.WithCTN]}</Radio>
+              <Radios label='Về chùa' name='moveType'>
+                {!!startAddresses?.length && (
+                  <Radio value={MoveType.WithCTN}>{MoveType.toString(MoveType.WithCTN)}</Radio>
                 )}
-                <Radio value={MoveType.ByPlane}>{MOVE_TYPE_TITLE[MoveType.ByPlane]}</Radio>
-                <Radio value={MoveType.Other}>{MOVE_TYPE_TITLE[MoveType.Other]}</Radio>
+                {canMoveByPlane && (
+                  <Radio value={MoveType.ByPlane}>{MoveType.toString(MoveType.ByPlane)}</Radio>
+                )}
+                <Radio value={MoveType.Other}>{MoveType.toString(MoveType.Other)}</Radio>
               </Radios>
               {moveType == MoveType.WithCTN && (
                 // WithCTN
                 <>
-                  <Select
+                  {/* <OurSelect
                     name='startAddressId'
-                    data={mappingAddress(startAddresses)}
+                    options={startAddresses}
                     label='Nơi xuất phát'
                     placeholder='Nơi xuất phát'
                     isRequired
                     onChange={() => {
                       formik.setFieldValue('startTimeId', '');
                     }}
-                  />
-                  <Select
+                    optionValue='id'
+                    optionLabel='name'
+                  /> */}
+                  <OurSelect
                     name='startTimeId'
-                    data={startTimes}
+                    options={startTimes}
                     label='Thời gian khởi hành'
                     placeholder='Thời gian khởi hành'
+                    optionValue='id'
+                    optionLabel='name'
                     isRequired
-                  />
-                  <Select
-                    name='leaveAddressId'
-                    data={mappingAddress(leaveAddresses)}
-                    label='Địa điểm trở về'
-                    placeholder='Địa điểm trở về'
-                    onChange={() => {
-                      formik.setFieldValue('leaveTimeId', '');
-                    }}
-                  />
-                  <Select
-                    name='leaveTimeId'
-                    data={leaveTimes}
-                    label='Thời gian trở về'
-                    placeholder='Thời gian trở về'
                   />
                 </>
               )}
               {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  <FloatingLabel name='otherStartAddress' label='Nơi xuất phát' isRequired />
-                  <DateTimePicker name='otherStartTime' label='Ngày giờ đi' isRequired />
-                  {moveType === MoveType.ByPlane && (
+                  <DateTimePicker
+                    name='otherStartTime'
+                    label={
+                      moveType === MoveType.ByPlane ? 'Ngày giờ bay đi' : 'Ngày giờ có mặt tại chùa'
+                    }
+                    isRequired
+                  />
+                  {canMoveByPlane && moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />
-                  )}
-                  <DateTimePicker name='otherLeaveTime' label='Ngày giờ về' isRequired />
-                  {moveType === MoveType.ByPlane && (
-                    <>
-                      <FloatingLabel name='returnPlaneCode' label='Mã chuyến bay - Giờ bay về' />
-                      {/* thêm field */}
-                      <Radios
-                        spacing={2}
-                        direction='column'
-                        label='Đăng ký ô tô'
-                        name='carBookingType'
-                        isRequired
-                      >
-                        <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>
-                        <Radio value={CarBookingType.Return}>
-                          Chiều về (Từ chùa ra Tân Sơn Nhất)
-                        </Radio>
-                        <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
-                        <Radio value={CarBookingType.ByYourSelf}>Tự túc</Radio>
-                      </Radios>
-                    </>
                   )}
                 </>
               )}
             </Stack>
             <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
-              <Button colorScheme='gray' flexGrow={1} fontFamily={'heading'} onClick={previousStep}>
+              <Button
+                colorScheme='gray'
+                flexGrow={1}
+                fontFamily={'heading'}
+                onClick={() => previousStep()}
+              >
                 Trở về
               </Button>
               <Button flexGrow={1} type='submit' fontFamily={'heading'}>

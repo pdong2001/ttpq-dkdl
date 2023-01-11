@@ -1,6 +1,12 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Switch, useHistory, useParams } from 'react-router-dom';
+
+import 'primereact/resources/themes/saga-orange/theme.css'; //theme
+import 'primereact/resources/primereact.min.css'; //core css
+import 'primeicons/primeicons.css';
+
+import { Switch, useHistory, useLocation, useParams } from 'react-router-dom';
+
 import { ROUTES, AppRoute } from './routes';
 import { nanoid, unwrapResult } from '@reduxjs/toolkit';
 import { useContext, useEffect } from 'react';
@@ -9,13 +15,14 @@ import { useAppDispatch } from './hooks/reduxHook';
 import { MessageContext } from './providers/message';
 
 function App() {
-  const { shortUri } = useParams<any>();
+  const { shortUri, eventId } = useParams<any>();
   const dispatch = useAppDispatch();
   const messageService = useContext(MessageContext);
   const history = useHistory();
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    if (shortUri) {
+    if (shortUri && !eventId) {
       dispatch(getRegisterPage({ shortUri }))
         .then(unwrapResult)
         .then(({ data }) => {
@@ -39,10 +46,15 @@ function App() {
           }
         })
         .catch(() => {
-          history.push('/not-found');
+          if (shortUri != 'register-info') {
+            const redirectUrl = pathname.replace('/' + shortUri, '');
+            history.replace(redirectUrl);
+            history.go(0);
+            console.log('🚀 ~ file: App.tsx:45 ~ useEffect ~ redirectUrl', redirectUrl);
+          }
         });
     }
-  }, [shortUri]);
+  }, [shortUri, eventId]);
   return (
     <Switch>
       {ROUTES.map((route) => (

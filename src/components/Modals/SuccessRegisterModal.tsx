@@ -1,5 +1,7 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import cover from '~/assets/cover/ptd-cover.jpeg';
+import PTD_cover from '~/assets/cover/ptd-cover.jpeg';
+import Tet_cover from '~/assets/cover/Tet-cover.jpeg';
+import cqhn_cover from '~/assets/cover/cqhn-cover.jpeg';
 import {
   Modal,
   ModalOverlay,
@@ -23,8 +25,13 @@ import {
   Divider,
   Tag,
   HStack,
+  Flex,
+  Tooltip,
+  useToast,
+  Text,
+  Link,
 } from '@chakra-ui/react';
-import { MdContentCopy } from 'react-icons/md';
+import { MdContentCopy, MdVerified } from 'react-icons/md';
 import QRCode from 'react-qr-code';
 import { useAppSelector } from '~/hooks/reduxHook';
 
@@ -34,10 +41,12 @@ import { REGISTER_INFO_TITLE } from '~/configs/register';
 import * as htmlToImage from 'html-to-image';
 import useAxios from '~/hooks/useAxios';
 import API from '~/apis/constants';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '~/providers/auth';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { EDIT_REGISTER_PATH } from '~/routes';
+import { ADD_NEW_REGISTER_PATH } from '~/routes';
+import { getImageSrc } from '~/utils/functions';
+import { EventType } from '~/dtos/event/EventType.enum';
 
 const PATH_URL = window.location.origin;
 
@@ -46,20 +55,41 @@ export default function SuccessRegisterModal({
   onClose,
   title,
   isCentered,
+  isSuccessPopup,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   isCentered?: boolean;
+  isSuccessPopup?: boolean;
 }) {
+  const toast = useToast();
   const history = useHistory();
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
-  const { eventId } = useAppSelector((state) => state.registerPage.data);
+  const { event, hotline = '0866.884.669' } = useAppSelector((state) => state.registerPage.data);
   const { member } = useContext(AuthContext);
-  const isRegisterPopup = path === EDIT_REGISTER_PATH;
+  const [isDownloading, setDownloading] = useState(false);
+
+  const { register } = member || {};
+  const { type: eventType } = event || {};
+  let cover;
+  switch (eventType) {
+    case EventType.DaiLe:
+      cover = PTD_cover;
+      break;
+    case EventType.Tet:
+      cover = Tet_cover;
+      break;
+    case EventType.CCHN:
+      cover = cqhn_cover;
+      break;
+    default:
+      cover = cqhn_cover;
+  }
+  const isRegisterPopup = path === ADD_NEW_REGISTER_PATH;
   const organizationStructureId =
     registerResult.organizationStructureId || member.organizationStructureId;
   const { data: ctnName, cancel: ctnToken } = useAxios(
@@ -83,14 +113,23 @@ export default function SuccessRegisterModal({
       email: registerResult?.email || member.email,
     },
     avatar: registerResult.avatarPath || member.avatarPath,
-    LinkQrCode: `${PATH_URL}/${shortUri}/register-info/${registerId}`,
+    LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
     registerInfoPath: `/${shortUri}/register-info/${registerId}`,
     fullName: registerResult.fullName || member.fullName,
   };
 
   const { infosSuccess, LinkQrCode, avatar, fullName, registerInfoPath } = dataSuccess;
 
-  const onImageDownload = async (fullName) => {
+  const onImageDownload = async (fullName = '') => {
+    toast({
+      title: 'Đang tải xuống',
+      description: 'Qúy phật tử vui lòng chờ trong giây lát!',
+      status: 'success',
+      duration: 10000,
+      isClosable: true,
+      // zIn
+    });
+    setDownloading(true);
     function coverName(string) {
       return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     }
@@ -102,6 +141,10 @@ export default function SuccessRegisterModal({
     link.download = `${coverName(fullName)}_thong-tin-dang-ky.png`;
     link.href = dataUrl;
     link.click();
+    setDownloading(false);
+    setTimeout(() => {
+      toast.closeAll();
+    }, 1000);
   };
 
   const copyLinkQR = () => {
@@ -116,6 +159,9 @@ export default function SuccessRegisterModal({
       eleAlert.style.display = 'none';
     }, 1000);
   };
+
+  const isShowRegisterInfo = register || isSuccessPopup;
+
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -133,8 +179,8 @@ export default function SuccessRegisterModal({
           </Heading>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody px={0} background={'#FFFFFF'}>
-          {/* <GridItem colSpan={{ base: 3, md: 5, lg: 4 }}> */}
+        <ModalBody px={0} background={'#FFFFFF'} position={'relative'}>
+          {/* {isDownloading && DownloadingRender()} */}
           <Stack>
             <Box position={'relative'} pb={[8, 12]}>
               <Box
@@ -152,23 +198,44 @@ export default function SuccessRegisterModal({
                 transform='translate(-50%, -50%)'
                 left='50%'
               >
-                <Avatar size={['lg', 'xl']} src={avatar} backgroundColor={'#c7ced6'} />
+                <Avatar size={['lg', 'xl']} src={getImageSrc(avatar)} backgroundColor={'#c7ced6'} />
               </Box>
             </Box>
             <Box px={5}>
               <Box textAlign={'center'}>
                 <Heading fontSize={['lg', 'xl', 'xl']} fontFamily={'body'} mb={2}>
-                  {fullName}
+                  <Flex justify='center' gap={2}>
+                    {member?.fullName || registerResult.fullName}{' '}
+                    {register?.isArrived && (
+                      <Tooltip hasArrow rounded='md' label='Đã về chùa'>
+                        <span>
+                          <MdVerified color='green' />
+                        </span>
+                      </Tooltip>
+                    )}
+                  </Flex>
                 </Heading>
-                {isRegisterPopup && (
-                  <Heading
-                    mb={2}
-                    as='h5'
-                    fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
-                    color={'red'}
-                  >
-                    <Tag>Dạ, sẽ có huynh đệ phụ trách liên hệ lại sau ạ</Tag>
-                  </Heading>
+                {isRegisterPopup ||
+                  (true && (
+                    <Heading mb={2} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'md' }}>
+                      <Tag colorScheme={'green'} rounded='md'>
+                        Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
+                        thời gian sớm nhất ạ
+                      </Tag>
+                    </Heading>
+                  ))}
+                {hotline && (
+                  <Text bgColor={'pink.100'} rounded='md' mb={2}>
+                    Mọi thắc mắc xin liên hệ: Ban Nhân Sự -
+                    <Link
+                      ms={'1'}
+                      fontWeight={'bold'}
+                      colorScheme={'green'}
+                      href={`tel:${hotline}`}
+                    >
+                      {hotline}
+                    </Link>
+                  </Text>
                 )}
               </Box>
               <Divider borderBottomWidth={'2px'} />
@@ -177,14 +244,14 @@ export default function SuccessRegisterModal({
                 <Divider borderBottomWidth={'2px'} />
                 <Box>
                   <HStack>
-                    <Box w={eventId ? '70%' : '100%'} pt={3}>
+                    <Box w={isShowRegisterInfo ? '70%' : '100%'} pt={3}>
                       {OtherInfo({
                         isLeader: false,
                         title: registerResult?.religiousName || member.religiousName,
                         subTitle: previewInfo.organizationStructureId || ctnName,
                       })}
                     </Box>
-                    {eventId && (
+                    {isShowRegisterInfo && (
                       <Box w='30%' pt={3} textAlign='center'>
                         <QRCode
                           id='QRCode'
@@ -196,7 +263,7 @@ export default function SuccessRegisterModal({
                       </Box>
                     )}
                   </HStack>
-                  {eventId && (
+                  {isShowRegisterInfo && (
                     <Box w='100%' pt={3} textAlign={'center'} float={'right'}>
                       <Stack pt={1} textAlign={'center'} spacing={2} direction='column'>
                         <InputGroup size='md'>
@@ -236,10 +303,16 @@ export default function SuccessRegisterModal({
         </ModalBody>
 
         <ModalFooter>
-          {eventId && (
+          {isShowRegisterInfo && (
             <>
-              <Button variant='ghost' onClick={() => onImageDownload(fullName || '')} mr={3}>
-                Lưu về máy
+              <Button
+                isLoading={isDownloading}
+                disabled={isDownloading}
+                variant='ghost'
+                onClick={() => onImageDownload(fullName || '')}
+                mr={3}
+              >
+                {isDownloading ? 'Đang tải xuống...' : 'Tải về máy'}
               </Button>
               <Button
                 colorScheme='yellow'

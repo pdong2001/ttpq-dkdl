@@ -25,6 +25,8 @@ import { BiLogOutCircle, BiQr, BiUserCircle } from 'react-icons/bi';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { AuthContext } from '~/providers/auth';
 import SuccessRegisterModal from '../Modals/SuccessRegisterModal';
+import { formatUrl, getImageSrc } from '~/utils/functions';
+import API from '~/apis/constants';
 
 const NavLink = ({ children, to, onClick }: { children: ReactNode; to: string; onClick?: any }) => (
   <Link
@@ -53,6 +55,7 @@ const delta = window.innerHeight / 1.5;
 export default function NavBar() {
   const history = useHistory();
   const registerPage = useAppSelector((state) => state.registerPage.data);
+  const registerInfo = useAppSelector((state) => state.registerInfo.data);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shortUri = '' } = useParams<any>();
   const { path } = useRouteMatch();
@@ -65,7 +68,12 @@ export default function NavBar() {
     { title: 'Chương trình', to: `/${shortUri}#timeline` },
   ];
 
-  const { login, logout, member } = useContext(AuthContext);
+  const { login, logout } = useContext(AuthContext);
+  let { member } = useContext(AuthContext);
+  if (!member?.avatarPath) {
+    member = { ...member, ...registerInfo?.member };
+  }
+  const { register } = member || {};
 
   const [navBarBg, setNavbarBg] = useState('blue.500');
   const [color, setColor] = useState('blue.500');
@@ -125,14 +133,14 @@ export default function NavBar() {
               <Menu>
                 <MenuButton cursor={'pointer'} minW={0}>
                   <HStack color='white'>
-                    <Text>{`Xin chào, ${member.fullName || ''}`}</Text>
-                    <Avatar size={'sm'} src={member.avatarPath} />
+                    <Text>{`Xin chào, ${member.religiousName || member.fullName || ''}`}</Text>
+                    <Avatar size={'sm'} src={getImageSrc(member.avatarPath, 120)} />
                   </HStack>
                 </MenuButton>
                 <MenuList color={'blue.500'}>
                   <MenuItem onClick={showQR}>
                     <HStack spacing={1}>
-                      {registerPage.eventId ? (
+                      {register ? (
                         <>
                           <BiQr /> <span>Mã QR cá nhân</span>
                         </>
@@ -143,7 +151,7 @@ export default function NavBar() {
                       )}
                     </HStack>
                   </MenuItem>
-                  {registerPage.eventId && (
+                  {register && (
                     <>
                       <MenuItem
                         onClick={() => {
@@ -192,8 +200,8 @@ export default function NavBar() {
           onClose={() => {
             setOpenQR(false);
           }}
-          title={`${registerPage.eventId ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
-          isCentered={!registerPage.eventId}
+          title={`${register ? 'Thông tin đăng ký' : 'Thông tin cá nhân'}`}
+          isCentered={!register}
         />
       </Box>
     </>

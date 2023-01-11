@@ -2,26 +2,38 @@ import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import { StepProps } from '..';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
-import { fillForm } from '~/slices/register';
+import { fillForm, getExistMember, resetRegister } from '~/slices/register';
 import { fillDataPreview } from '~/slices/previewInfo';
-import { searchMember } from '../../../slices/register';
 import step1Schema from '../validationSchema/step1';
 import FormInput from '~/components/Form/FormInput';
-import { useRouteMatch } from 'react-router-dom';
-import { HOME_WITH_SHORT_URI } from '~/routes';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { EDIT_REGISTER_PATH, HOME_WITH_SHORT_URI } from '~/routes';
 import FadeInUp from '~/components/Animation/FadeInUp';
+import { unwrapResult } from '@reduxjs/toolkit';
+import publicRequest from '~/apis/common/axios';
+import { formatUrl } from '~/utils/functions';
+import API from '~/apis/constants';
+import { useContext } from 'react';
+import { MessageContext } from '~/providers/message';
 
 const Step1 = (props: StepProps) => {
   const { nextStep } = props;
+  const messageService = useContext(MessageContext);
   const dispatch = useAppDispatch();
   const { path } = useRouteMatch();
+  const { shortUri } = useParams<any>();
+  const history = useHistory();
   const isHomePage = path === HOME_WITH_SHORT_URI;
+  const isEditRegisterPage = path === EDIT_REGISTER_PATH;
+
+  const { event, eventId } = useAppSelector((state) => state.registerPage.data);
 
   const {
     fullName = '',
     phoneNumber,
     identityCard,
     register,
+    isChecked,
   } = useAppSelector((state) => state.register.data) || {};
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
 
@@ -33,19 +45,20 @@ const Step1 = (props: StepProps) => {
       fullName: fullName || member?.fullName,
       phoneNumber: phoneNumber || member?.phoneNumber,
       identityCard: identityCard || member?.identityCard,
-      // registerType:
-      //   register?.registerType ||
-      //   (registerInfo?.registerType && registerInfo.registerType + '') ||
-      //   RegisterType.SINGLE,
-      // leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
     validationSchema: step1Schema,
     onSubmit: (values) => {
       const { fullName, identityCard, /*registerType*/ phoneNumber } = values;
-      // let { leaderId } = values;
-      // if (registerType === RegisterType.SINGLE) {
-      //   leaderId = '';
-      // }
+      const handleNext = () => {
+        dispatch(
+          fillDataPreview({
+            fullName,
+            identityCard,
+            phoneNumber,
+          }),
+        );
+        nextStep();
+      };
       dispatch(
         fillForm({
           fullName,
@@ -58,41 +71,56 @@ const Step1 = (props: StepProps) => {
           },
         }),
       );
-      dispatch(
-        searchMember({
-          data: {
-            phoneNumber,
-            identityCard,
-          },
-        }),
-      );
-      dispatch(
-        fillDataPreview({
-          fullName,
-          identityCard,
-          phoneNumber,
-        }),
-      );
-      nextStep();
+      if (!isChecked) {
+        dispatch(
+          getExistMember({
+            data: {
+              phoneNumber,
+              identityCard,
+            },
+          }),
+        )
+          .then(unwrapResult)
+          .then(({ data }) => {
+            const { member } = data || {};
+            if (member?.id) {
+              publicRequest
+                .get(formatUrl(API.CHECK_EXIST_REGISTER, { eventId }), {
+                  params: { memberId: member.id },
+                })
+                .then(({ data }) => {
+                  if (data.data && !isEditRegisterPage) {
+                    messageService.add({
+                      title: 'Bạn đã đăng ký lễ này rồi ạ',
+                      status: 'error',
+                    });
+                    setTimeout(() => {
+                      history.replace(`/${shortUri}/register-info/${data.data}`);
+                      history.go(0);
+                    }, 1000);
+                  } else {
+                    handleNext();
+                  }
+                })
+                .catch(() => {
+                  handleNext();
+                });
+            }
+          })
+          .catch(() => {
+            dispatch(resetRegister({ fullName, identityCard, phoneNumber }));
+            handleNext();
+          });
+      } else {
+        handleNext();
+      }
     },
   });
 
-  // const setLeaderPreview = (leader) => {
-  //   if (_.get(leader, 'success', false)) {
-  //     dispatch(
-  //       fillDataPreview({
-  //         leader: _.get(leader, 'data', {}),
-  //       }),
-  //     );
-  //   }
-  // };
-  // const { registerType: localRegisterType } = formik.values;
-
-  const greatCeremony = 'Đại Lễ Phật Thành Đạo 2023';
-  // const isRegisterFollowGroup = localRegisterType === RegisterType.GROUP;
+  const greatCeremony = event?.name || '';
 
   return (
-    <FadeInUp>
+    <FadeInUp delay={0}>
       <Box>
         <Stack spacing={4}>
           <Heading
@@ -132,22 +160,6 @@ const Step1 = (props: StepProps) => {
                   inputMode='numeric'
                   type='number'
                 />
-                {/* <Radios
-                {...(isHomePage && { color: 'white' })}
-                label='Hình thức đăng ký'
-                name='registerType'
-              >
-                <Radio value={RegisterType.SINGLE}>Cá nhân</Radio>
-                <Radio value={RegisterType.GROUP}>Nhóm</Radio>
-              </Radios> */}
-                {/* {isRegisterFollowGroup && (
-                <SearchLeader
-                  {...(isHomePage && { color: 'white' })}
-                  name='leaderId'
-                  getLeader={(leader) => setLeaderPreview(leader)}
-                  label='Trưởng nhóm'
-                />
-              )} */}
               </Stack>
               <Button type='submit' fontFamily={'heading'} mt={8} w={'full'}>
                 Tiếp theo
