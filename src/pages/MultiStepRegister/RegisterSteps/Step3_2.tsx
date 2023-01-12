@@ -1,4 +1,4 @@
-import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid } from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid, Tag } from '@chakra-ui/react';
 import _ from 'lodash';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -228,6 +228,7 @@ const Step3 = (props: StepProps) => {
                   <DateTimePicker
                     name='otherLeaveTime'
                     label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
+                    isRequired
                   />
                   {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
                     <>
@@ -236,9 +237,12 @@ const Step3 = (props: StepProps) => {
                       <Radios
                         spacing={2}
                         direction='column'
-                        label='Đăng ký ô tô'
+                        label={
+                          <Text>
+                            Đăng ký ô tô <Tag>HĐ thư ký sẽ xếp xe cho HĐ nếu đủ số lượng ạ</Tag>
+                          </Text>
+                        }
                         name='carBookingType'
-                        isRequired
                       >
                         <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
                         <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>

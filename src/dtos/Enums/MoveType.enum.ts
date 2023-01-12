@@ -9,7 +9,7 @@ export namespace MoveType {
   export function toString(type: string): string {
     switch (type) {
       case MoveType.WithCTN:
-        return 'Đi với CTN';
+        return 'Đi cùng CTN';
       case MoveType.ByPlane:
         return 'Máy Bay';
       case MoveType.Other:

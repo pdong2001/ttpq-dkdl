@@ -39,9 +39,10 @@ function CultivationPlace(props: CultivationPlaceProps) {
   );
 
   useEffect(() => {
-    const placeName = _.get(_.filter(data, (g) => g.id == id)[0], 'name', '');
-    setDataPreview({ [`${name}`]: placeName });
     if (id && loaded) {
+      const placeName = _.get(_.filter(data, (g) => g.id == id)[0], 'name', '');
+
+      setDataPreview({ [`${name}`]: placeName });
       const parent = CTNs.find((ctn) => ctn.id == id);
       // const groups = data
       //   ?.filter((ctn) => ctn.parentId == id)

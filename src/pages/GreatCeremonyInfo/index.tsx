@@ -56,10 +56,10 @@ const coundown = (startTime) => {
   setInterval(() => {
     const today = new Date().getTime();
     const diff = targetDate - today;
-    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
     const timeParse = [days, hours, minutes, seconds];
     for (let i = 0; i < times.length; i++) {
       const timesRuner = times[i];
@@ -93,7 +93,9 @@ const eventImgages = [
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
   const { event } = useAppSelector((state) => state.registerPage.data);
-  const { startDate: startTime } = event || { startDate: BuddhaEnlightenmentStartTime };
+  const { startDate: startTime, name: eventName } = event || {
+    startDate: BuddhaEnlightenmentStartTime,
+  };
   const { shortUri } = useParams<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -102,7 +104,7 @@ const GreatCeremonyInfo = () => {
     if (startDate.getTime() > new Date().getTime()) {
       coundown(startTime);
     }
-  }, []);
+  }, [startTime]);
 
   const handleViewDetail = () => {};
 
@@ -145,27 +147,35 @@ const GreatCeremonyInfo = () => {
                     fontSize={{ base: '2xl', md: '2xl', lg: '2xl' }}
                     mb={2}
                   >
-                    Đại lễ Phật Thành Đạo
+                    {eventName}
                   </Heading>
                 </FadeInUp>
                 <FadeInUp>
                   <Box textAlign='justify'>
                     <Text mb={2}>
-                      “Cứ mỗi lần ngồi lại với nhau để tưởng nhớ đến đêm Phật Thành Đạo Quả Vô
-                      Thượng Chánh Đẳng Chánh Giác, chúng con lại khởi lên niềm vui bất tận. Giống
-                      như trong khu rừng rậm gai góc, bỗng có con đường hiện ra. Giống như trong
-                      trại giam tăm tối, bỗng cánh cửa hé mở. Khi tâm của Phật bừng chiếu cả pháp
-                      giới thì cũng là lúc thế gian có con đường dẫn ra khỏi luân hồi khổ đau.” -
-                      Trích Cảm niệm Thành Đạo.
+                      <Text fontStyle={'italic'}>
+                        <Text>“Vui vì Tết được về chùa</Text>
+                        <Text>Được quỳ bên Phật đón mùa xuân sang</Text>
+                        <Text>Hoa đào thắm, sắc mai vàng</Text>
+                        <Text>Trong tình huynh đệ lòng càng thêm xuân&quot;</Text>
+                      </Text>
                     </Text>
                     <Text mb={2}>
-                      Kính mừng sự kiện vĩ đại ấy, Thiền Tôn Phật Quang long trọng tổ chức chương
-                      trình Đại lễ kỷ niệm mừng ngày Đức Phật Bổn Sư Thích Ca Mâu Ni thành đạo PL.
-                      2566 - DL. 2022.
+                      Tết Nguyên Đán là lúc mọi người được đoàn viên, ôn lại câu chuyện năm cũ và
+                      hứa hẹn với nhau về những điều tốt đẹp trong năm mới. Đặc biệt may mắn hơn
+                      nữa, chúng ta dành tâm hồn để được tắm mình trong đạo lý thiêng liêng, thì
+                      cuộc đời ta trong năm đó sẽ gặp được nhiều may mắn hơn.
                     </Text>
                     <Text mb={2}>
-                      Chúng Thanh Niên Phật Tử Phật Quang xin kêu gọi quý Phật tử cùng các bạn thanh
-                      niên, sinh viên đăng kí công quả và tham dự Đại lễ.
+                      Mùa xuân tại Thiền Tôn Phật Quang, luôn ngập tràn muôn hoa đủ sắc màu rực rỡ,
+                      tươi đẹp đón chào hàng vạn lượt Phật tử từ mọi miền tổ quốc. Nhiều chương
+                      trình đặc sắc như tụng kinh cầu quốc thái dân an, chúc Tết, thuyết giảng...
+                      diễn ra từ đêm 30 Tết đến Mùng 6 Tết.
+                    </Text>
+                    <Text mb={2}>
+                      Chúng Thanh Niên Phật Tử Phật Quang xin mời quý Phật tử cùng các bạn thanh
+                      niên, sinh viên hưởng trọn hương vị Xuân và cùng tham gia công quả tại Thiền
+                      Tôn Phật Quang.
                     </Text>
                   </Box>
                 </FadeInUp>
@@ -183,7 +193,7 @@ const GreatCeremonyInfo = () => {
                   >
                     Tìm hiểu thêm
                   </Button> */}
-                  <Button onClick={onOpen}>Tìm hiểu thêm</Button>
+                  {/* <Button onClick={onOpen}>Tìm hiểu thêm</Button> */}
                 </FadeInUp>
               </Box>
             </VStack>

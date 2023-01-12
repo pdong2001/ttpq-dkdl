@@ -55,7 +55,6 @@ const mapSuccessData = (previewInfo) => {
               {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
             </Tag>
           ),
-          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
           otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
         },
       },
@@ -102,7 +101,7 @@ const mapSuccessData = (previewInfo) => {
                   previewInfo?.registeredDays?.indexOf?.(day) % 7 || 0,
                 )}
               >
-                {day}
+                {day.name}
               </Tag>
             );
           })}

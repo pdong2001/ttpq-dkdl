@@ -156,12 +156,12 @@ const RegisterInfo = () => {
   ];
 
   const schedule = {
-    departure_address: '',
-    departure_time: '',
-    return_address: '',
-    return_time: '',
-    departure_flight_code: '',
-    return_flight_code: '',
+    go: { address: '', time: '', flight_code: '' },
+    return: {
+      address: '',
+      time: '',
+      flight_code: '',
+    },
   };
 
   const contactStatusMap = {
@@ -175,18 +175,22 @@ const RegisterInfo = () => {
   const leaveAddress = data.leaveTime?.address;
   const contactStatus = data.contactStatus?.toString();
   if (moveType == MoveType.WithCTN) {
-    schedule.departure_address = startAddress?.name || startAddress?.address || '';
-    schedule.departure_time =
-      data.startTime?.name || convertToAppDateTime(data.startTime?.time) || '';
-    schedule.return_time = data.leaveTime?.name || convertToAppDateTime(data.leaveTime?.time) || '';
-    schedule.return_address = leaveAddress?.name || leaveAddress?.address || '';
+    schedule.go.address = startAddress?.name || startAddress?.address || '';
+    schedule.go.time = data.startTime?.name || convertToAppDateTime(data.startTime?.time) || '';
   } else {
-    // schedule.departure_address = data.otherStartAddress || '';
-    schedule.departure_time = convertToAppDateTime(data.otherStartTime) || '';
-    schedule.return_time = convertToAppDateTime(data.otherLeaveTime) || '';
+    schedule.go.time = convertToAppDateTime(data.otherStartTime) || '';
     if (moveType == MoveType.ByPlane) {
-      schedule.departure_flight_code = data.startPlaneCode || '';
-      schedule.return_flight_code = data.returnPlaneCode || '';
+      schedule.go.flight_code = data.startPlaneCode || '';
+    }
+  }
+
+  if (returnMoveType == MoveType.WithCTN) {
+    schedule.return.time = data.leaveTime?.name || convertToAppDateTime(data.leaveTime?.time) || '';
+    schedule.return.address = leaveAddress?.name || leaveAddress?.address || '';
+  } else {
+    schedule.return.time = convertToAppDateTime(data.otherLeaveTime) || '';
+    if (returnMoveType == MoveType.ByPlane) {
+      schedule.return.flight_code = data.returnPlaneCode || '';
     }
   }
 
@@ -513,7 +517,7 @@ const RegisterInfo = () => {
                         <MdLocationCity />
                         <Text as='b'>Nơi xuất phát</Text>
                       </HStack>
-                      <Text>{schedule && schedule?.departure_address}</Text>
+                      <Text>{schedule && schedule?.go.address}</Text>
                     </Box>
                     <Box>
                       <HStack>
@@ -522,15 +526,13 @@ const RegisterInfo = () => {
                       </HStack>
                       <Box mt={2}>
                         <Tag mr={2} mb={1} colorScheme={'blue'}>
-                          {schedule && schedule?.departure_time}
+                          {schedule && schedule.go.time}
                         </Tag>
-                        {moveType == MoveType.ByPlane &&
-                          schedule &&
-                          schedule.departure_flight_code && (
-                            <Tag mr={2} mb={1} colorScheme={'blue'}>
-                              Mã chuyến bay: {schedule?.departure_flight_code}
-                            </Tag>
-                          )}
+                        {moveType == MoveType.ByPlane && schedule && schedule.go.flight_code && (
+                          <Tag mr={2} mb={1} colorScheme={'blue'}>
+                            Mã chuyến bay: {schedule.go.flight_code}
+                          </Tag>
+                        )}
                       </Box>
                     </Box>
                     <Box>
@@ -541,6 +543,7 @@ const RegisterInfo = () => {
                         </Tag>
                       </Box>
                     </Box>
+
                     <Box>
                       <HStack>
                         <MdDepartureBoard />
@@ -548,25 +551,27 @@ const RegisterInfo = () => {
                       </HStack>
                       <Box mt={2}>
                         <Tag mr={2} mb={1} colorScheme={'pink'}>
-                          {schedule && schedule?.return_time}
+                          {schedule && schedule.return.time}
                         </Tag>
                         {returnMoveType == MoveType.ByPlane &&
                           schedule &&
-                          schedule.return_flight_code && (
+                          schedule.return.flight_code && (
                             <Tag mr={2} mb={1} colorScheme={'pink'}>
-                              Mã chuyến bay: {schedule?.return_flight_code}
+                              Mã chuyến bay: {schedule.return.flight_code}
                             </Tag>
                           )}
                       </Box>
                     </Box>
-                    {schedule?.return_address && returnMoveType == MoveType.WithCTN && (
-                      <Box>
-                        <HStack>
-                          <MdLocationCity />
-                          <Text as='b'>Nơi trở về</Text>
-                        </HStack>
-                        <Text>{schedule && schedule?.return_address}</Text>
-                      </Box>
+                    {schedule.return.address && returnMoveType == MoveType.WithCTN && (
+                      <>
+                        <Box>
+                          <HStack>
+                            <MdLocationCity />
+                            <Text as='b'>{MoveType.toString(returnMoveType)}</Text>
+                          </HStack>
+                          <Text>{schedule && schedule.return.address}</Text>
+                        </Box>
+                      </>
                     )}
 
                     {(moveType == MoveType.ByPlane || returnMoveType == MoveType.ByPlane) && (
