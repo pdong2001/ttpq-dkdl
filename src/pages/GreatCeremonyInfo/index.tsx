@@ -25,22 +25,17 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { useParams } from 'react-router-dom';
 import Carousels from '~/components/Carousels';
-import EVENT_INFO_00 from '~/assets/event-info/dai-le-00.jpg';
-import EVENT_INFO_01 from '~/assets/event-info/dai-le-01.jpg';
-import EVENT_INFO_10 from '~/assets/event-info/dai-le-10.jpg';
-import EVENT_INFO_11 from '~/assets/event-info/dai-le-11.jpg';
-import EVENT_INFO_20 from '~/assets/event-info/dai-le-20.jpg';
-import EVENT_INFO_21 from '~/assets/event-info/dai-le-21.jpg';
-import EVENT_INFO_30 from '~/assets/event-info/dai-le-30.jpg';
-import EVENT_INFO_31 from '~/assets/event-info/dai-le-31.jpg';
-import EVENT_INFO_40 from '~/assets/event-info/dai-le-40.jpg';
-import EVENT_INFO_41 from '~/assets/event-info/dai-le-41.jpg';
-import EVENT_INFO_42 from '~/assets/event-info/dai-le-42.jpg';
-import EVENT_INFO_50 from '~/assets/event-info/dai-le-50.jpg';
-import EVENT_INFO_51 from '~/assets/event-info/dai-le-51.jpg';
-import EVENT_INFO_52 from '~/assets/event-info/dai-le-52.jpg';
-import EVENT_INFO_53 from '~/assets/event-info/dai-le-53.jpg';
-import EVENT_INFO_54 from '~/assets/event-info/dai-le-54.jpg';
+import EVENT_INFO_00 from '~/assets/event-info/new-year/new-year-1.jpg';
+import EVENT_INFO_01 from '~/assets/event-info/new-year/new-year-2.jpg';
+import EVENT_INFO_10 from '~/assets/event-info/new-year/new-year-3.jpg';
+import EVENT_INFO_11 from '~/assets/event-info/new-year/new-year-4.jpg';
+import EVENT_INFO_20 from '~/assets/event-info/new-year/new-year-5.jpg';
+import EVENT_INFO_21 from '~/assets/event-info/new-year/new-year-6.jpg';
+import EVENT_INFO_30 from '~/assets/event-info/new-year/new-year-7.jpg';
+import EVENT_INFO_31 from '~/assets/event-info/new-year/new-year-8.jpg';
+import EVENT_INFO_40 from '~/assets/event-info/new-year/new-year-9.jpg';
+import EVENT_INFO_41 from '~/assets/event-info/new-year/new-year-10.jpg';
+import EVENT_INFO_42 from '~/assets/event-info/new-year/new-year-11.jpg';
 import GreatCeremonyInfoDetails from './details';
 
 const BuddhaEnlightenmentStartTime = 'December 27, 2022 00:00:00';
@@ -83,11 +78,6 @@ const eventImgages = [
   EVENT_INFO_40,
   EVENT_INFO_41,
   EVENT_INFO_42,
-  EVENT_INFO_50,
-  EVENT_INFO_51,
-  EVENT_INFO_52,
-  EVENT_INFO_53,
-  EVENT_INFO_54,
 ];
 
 const GreatCeremonyInfo = () => {
