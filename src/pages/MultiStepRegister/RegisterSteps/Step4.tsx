@@ -308,6 +308,7 @@ const Step4 = (props: StepProps) => {
               />
               {!!receiveCardAddresses.length && (
                 <OurSelect
+                  isClearable
                   name='receiveCardAddressId'
                   options={receiveCardAddresses}
                   optionValue='id'
