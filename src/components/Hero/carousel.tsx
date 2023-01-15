@@ -5,11 +5,7 @@ import Slider from 'react-slick';
 import { DeferredContent } from 'primereact/deferredcontent';
 
 import cover01 from '~/assets/event-info/new-year/cover/cover-1.jpg';
-import cover02 from '~/assets/event-info/new-year/cover/cover-2.jpg';
-import cover03 from '~/assets/event-info/new-year/cover/cover-3.jpg';
-import cover04 from '~/assets/event-info/new-year/cover/cover-4.jpg';
 import cover05 from '~/assets/event-info/new-year/cover/cover-5.jpg';
-import cover06 from '~/assets/event-info/new-year/cover/cover-6.jpg';
 import cover07 from '~/assets/event-info/new-year/cover/cover-7.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
