@@ -1,6 +1,6 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import PTD_cover from '~/assets/cover/ptd-cover.jpeg';
-import Tet_cover from '~/assets/cover/Tet-cover.jpeg';
+import Tet_cover from '~/assets/cover/Tet-cover.jpg';
 import cqhn_cover from '~/assets/cover/cqhn-cover.jpeg';
 import {
   Modal,
