@@ -262,7 +262,7 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
               <PrimeMultiSelect
-                options={days}
+                options={days?.filter((day) => day.name)}
                 optionValue='id'
                 optionLabel='name'
                 name='registeredDays'
