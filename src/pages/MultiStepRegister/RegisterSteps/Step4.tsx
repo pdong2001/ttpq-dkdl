@@ -36,6 +36,7 @@ import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
+import moment from 'moment';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -237,12 +238,12 @@ const Step4 = (props: StepProps) => {
     );
   };
 
-  console.log('____', formik.values);
-
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const validServeDays =
     days
       ?.filter((day) => day.name)
-      .filter((day) => new Date(day.time)?.getTime() > new Date().getTime()) || [];
+      .filter((day) => new Date(day.time)?.getTime() > today.getTime()) || [];
 
   return (
     <FadeInUp delay={0}>
