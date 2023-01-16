@@ -12,6 +12,7 @@ import {
   Image,
   FormHelperText,
   Tag,
+  Flex,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -343,7 +344,9 @@ const Step4 = (props: StepProps) => {
                   isRequired
                 >
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
-                  <Image srcSet={sampleAvatar} height={[64, 80]} />
+                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                    <Image srcSet={sampleAvatar} objectFit='contain' height={'100%'} />
+                  </Flex>
 
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
@@ -368,7 +371,9 @@ const Step4 = (props: StepProps) => {
                 >
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
 
-                  <Image srcSet={cccdTemplate} height={[64, 80]} />
+                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                    <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
+                  </Flex>
 
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
