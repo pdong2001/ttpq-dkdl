@@ -76,31 +76,31 @@ export default function CaptionCarousel() {
       text: '',
       image: cover01,
     },
-    {
-      title: '',
-      text: '',
-      image: cover02,
-    },
-    {
-      title: '',
-      text: '',
-      image: cover03,
-    },
-    {
-      title: '',
-      text: '',
-      image: cover04,
-    },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover02,
+    // },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover03,
+    // },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover04,
+    // },
     {
       title: '',
       text: '',
       image: cover05,
     },
-    {
-      title: '',
-      text: '',
-      image: cover06,
-    },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover06,
+    // },
     {
       title: '',
       text: '',
