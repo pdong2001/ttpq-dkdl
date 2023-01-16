@@ -25,17 +25,10 @@ import useCustomColorMode from '~/hooks/useColorMode';
 import { useAppSelector } from '~/hooks/reduxHook';
 import { useParams } from 'react-router-dom';
 import Carousels from '~/components/Carousels';
-import EVENT_INFO_00 from '~/assets/event-info/new-year/new-year-1.jpg';
-import EVENT_INFO_01 from '~/assets/event-info/new-year/new-year-2.jpg';
-import EVENT_INFO_10 from '~/assets/event-info/new-year/new-year-3.jpg';
-import EVENT_INFO_11 from '~/assets/event-info/new-year/new-year-4.jpg';
 import EVENT_INFO_20 from '~/assets/event-info/new-year/new-year-5.jpg';
 import EVENT_INFO_21 from '~/assets/event-info/new-year/new-year-6.jpg';
 import EVENT_INFO_30 from '~/assets/event-info/new-year/new-year-7.jpg';
-import EVENT_INFO_31 from '~/assets/event-info/new-year/new-year-8.jpg';
 import EVENT_INFO_40 from '~/assets/event-info/new-year/new-year-9.jpg';
-import EVENT_INFO_41 from '~/assets/event-info/new-year/new-year-10.jpg';
-import EVENT_INFO_42 from '~/assets/event-info/new-year/new-year-11.jpg';
 import GreatCeremonyInfoDetails from './details';
 
 const BuddhaEnlightenmentStartTime = 'December 27, 2022 00:00:00';
@@ -66,19 +59,7 @@ const coundown = (startTime) => {
   }, 1000);
 };
 
-const eventImgages = [
-  EVENT_INFO_00,
-  EVENT_INFO_01,
-  EVENT_INFO_10,
-  EVENT_INFO_11,
-  EVENT_INFO_20,
-  EVENT_INFO_21,
-  EVENT_INFO_30,
-  EVENT_INFO_31,
-  EVENT_INFO_40,
-  EVENT_INFO_41,
-  EVENT_INFO_42,
-];
+const eventImgages = [EVENT_INFO_20, EVENT_INFO_21, EVENT_INFO_30, EVENT_INFO_40];
 
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
@@ -95,8 +76,6 @@ const GreatCeremonyInfo = () => {
       coundown(startTime);
     }
   }, [startTime]);
-
-  const handleViewDetail = () => {};
 
   return (
     <>

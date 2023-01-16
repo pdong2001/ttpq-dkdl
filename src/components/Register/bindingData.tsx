@@ -114,9 +114,9 @@ const mapSuccessData = (previewInfo) => {
       expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
       wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
 
-      receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
-      clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
-      note: _.get(previewInfo, 'note', ''),
+      // receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
+      // clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
+      note: _.get(previewInfo, 'question', ''),
     },
     certRegistry: {
       [CertificateRegistry.NO]: {

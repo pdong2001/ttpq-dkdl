@@ -12,6 +12,7 @@ import {
   Image,
   FormHelperText,
   Tag,
+  Flex,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -36,6 +37,7 @@ import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
+import moment from 'moment';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -237,7 +239,12 @@ const Step4 = (props: StepProps) => {
     );
   };
 
-  console.log('____', formik.values);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const validServeDays =
+    days
+      ?.filter((day) => day.name)
+      .filter((day) => new Date(day.time)?.getTime() > today.getTime()) || [];
 
   return (
     <FadeInUp delay={0}>
@@ -262,7 +269,7 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
               <PrimeMultiSelect
-                options={days}
+                options={validServeDays}
                 optionValue='id'
                 optionLabel='name'
                 name='registeredDays'
@@ -308,6 +315,7 @@ const Step4 = (props: StepProps) => {
               />
               {!!receiveCardAddresses.length && (
                 <OurSelect
+                  isClearable
                   name='receiveCardAddressId'
                   options={receiveCardAddresses}
                   optionValue='id'
@@ -336,7 +344,9 @@ const Step4 = (props: StepProps) => {
                   isRequired
                 >
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
-                  <Image srcSet={sampleAvatar} height={[64, 80]} />
+                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                    <Image srcSet={sampleAvatar} objectFit='contain' height={'100%'} />
+                  </Flex>
 
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
@@ -361,7 +371,9 @@ const Step4 = (props: StepProps) => {
                 >
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
 
-                  <Image srcSet={cccdTemplate} height={[64, 80]} />
+                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                    <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
+                  </Flex>
 
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
