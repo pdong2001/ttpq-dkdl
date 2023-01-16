@@ -31,6 +31,7 @@ export type UpSertEventRegistryDto = {
   otherLeaveAddress?: string;
   type?: string;
   ctnId?: string;
+  ctnGroupId?: string;
   // thêm field
   carBookingType?: CarBookingType;
   clothingSize?: ClothingSize;

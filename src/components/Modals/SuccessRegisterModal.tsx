@@ -90,18 +90,17 @@ export default function SuccessRegisterModal({
       cover = cqhn_cover;
   }
   const isRegisterPopup = path === ADD_NEW_REGISTER_PATH;
-  const organizationStructureId =
-    registerResult.organizationStructureId || member.organizationStructureId;
+  const ctnId = registerResult.ctnId || member.ctnId;
   const { data: ctnName, cancel: ctnToken } = useAxios(
     {
       method: 'get',
       url: API.GET_CTN,
-      params: { CTNGroupId: organizationStructureId },
-      transformResponse: ({ data }) => data?.find((ctn) => ctn.id === organizationStructureId).name,
+      params: { CTNGroupId: ctnId },
+      transformResponse: ({ data }) => data?.find((ctn) => ctn.id === ctnId).name,
     },
-    [organizationStructureId],
+    [ctnId],
   );
-  if (!organizationStructureId || previewInfo.organizationStructureId) {
+  if (!ctnId || previewInfo.ctnId) {
     ctnToken.cancel();
   }
   const registerId = registerResult.register?.id || member.register?.id;
@@ -247,7 +246,7 @@ export default function SuccessRegisterModal({
                       {OtherInfo({
                         isLeader: false,
                         title: registerResult?.religiousName || member.religiousName,
-                        subTitle: previewInfo.organizationStructureId || ctnName,
+                        subTitle: previewInfo.ctnId || ctnName,
                       })}
                     </Box>
                     {isShowRegisterInfo && (

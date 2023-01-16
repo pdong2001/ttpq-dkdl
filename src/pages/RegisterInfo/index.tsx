@@ -74,7 +74,7 @@ const RegisterInfo = () => {
   const leaderId = data?.leaderId;
   const moveType = data?.moveType?.toString();
   const returnMoveType = data?.returnMoveType?.toString();
-  const organizationStructureId = member?.organizationStructureId;
+  const ctnId = member?.ctnId;
   const receiveCardAddress = mapReceiverCardAddressDetail(data?.receiveCardAddress);
   const expDepartments = data?.expDepartments || [];
   const wishDepartment = data?.wishDepartment;
@@ -124,12 +124,12 @@ const RegisterInfo = () => {
     {
       method: 'get',
       url: API.GET_CTN,
-      params: { CTNGroupId: organizationStructureId },
+      params: { CTNGroupId: ctnId },
       transformResponse: ({ data }) => data,
     },
-    [organizationStructureId],
+    [ctnId],
   );
-  if (!organizationStructureId) {
+  if (!ctnId) {
     ctnToken.cancel();
   }
 
@@ -148,7 +148,7 @@ const RegisterInfo = () => {
     { title: 'Pháp Danh', value: member?.religiousName },
     {
       title: 'Nơi sinh hoạt',
-      value: ctnInfo?.find((ctn) => ctn.id === organizationStructureId).name,
+      value: ctnInfo?.find((ctn) => ctn.id === ctnId).name,
     },
     { title: 'Địa chỉ thường trú', value: permanent },
     { title: 'Địa chỉ tạm trú', value: temporary },

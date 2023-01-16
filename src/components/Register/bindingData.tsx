@@ -18,7 +18,7 @@ const mapSuccessData = (previewInfo) => {
         _.get(previewInfo, 'dateOfBirth', '') &&
         moment(_.get(previewInfo, 'dateOfBirth')).format('DD-MM-YYYY'),
       email: _.get(previewInfo, 'email', ''),
-      organizationStructureId: _.get(previewInfo, 'organizationStructureId', ''),
+      ctnId: _.get(previewInfo, 'ctnId', ''),
       permanentAddress: _.get(previewInfo, 'permanentAddress', ''),
       temporaryAddress: _.get(previewInfo, 'temporaryAddress', ''),
       gender: _.get(previewInfo, 'gender') == 0 ? 'Nam' : 'Nữ',

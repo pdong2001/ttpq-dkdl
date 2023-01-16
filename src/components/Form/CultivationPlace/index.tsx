@@ -12,52 +12,56 @@ import { useField } from 'formik';
 import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import OurSelect from '../MultiSelect';
+import { ChungThanhNienDto } from '~/dtos/CTN/ChungThanhNienDto.model';
 
 type CultivationPlaceProps = InputProps &
   FormControlProps &
   StackProps & {
     setDataPreview: Function;
+    groupName: string;
+    ctnName: string;
   };
 
 function CultivationPlace(props: CultivationPlaceProps) {
-  const { name, label, isRequired, setDataPreview } = props;
-  // const groupName = `${name}_group`;
+  const { groupName, ctnName, label, isRequired, setDataPreview } = props;
 
   //@ts-ignore
-  const [field, { value: id, error, touched }, { setValue }] = useField(name);
-  // const [groupField, , { setValue: setGroup }] = useField(groupName);
-  // const [groups, setGroups] = useState([]);
-  const [CTNs, setCTNs] = useState([]);
+  const [field, { value: ctnId, error, touched }, { setValue }] = useField(ctnName);
+  const [groupField, { value: groupId }, { setValue: setGroup }] = useField(groupName);
+  const [groups, setGroups] = useState<ChungThanhNienDto[]>([]);
+  const [CTNs, setCTNs] = useState<ChungThanhNienDto[]>([]);
 
-  const { data, loaded } = useAxios(
+  const { data: ctnList, loaded } = useAxios<ChungThanhNienDto[]>(
     {
       method: 'get',
       url: API.GET_CTN,
       transformResponse: ({ data }) => data,
     },
     [],
+    true,
   );
 
   useEffect(() => {
-    if (id && loaded) {
-      const placeName = _.get(_.filter(data, (g) => g.id == id)[0], 'name', '');
+    if (ctnId && loaded) {
+      const ctn = ctnList?.find((ctn) => ctn.id == ctnId)?.name || '';
+      const group = ctnList?.find((ctn) => ctn.id == groupId)?.name || '';
 
-      setDataPreview({ [`${name}`]: placeName });
-      const parent = CTNs.find((ctn) => ctn.id == id);
-      // const groups = data
-      //   ?.filter((ctn) => ctn.parentId == id)
-      //   .map((group) => {
-      //     group.name = `${group.name} - ${parent?.name}`;
-      //     return group;
-      //   });
-      // setGroups(groups);
+      setDataPreview({ [`${ctnName}`]: ctn, [groupName]: group });
+      const CTN = CTNs.find((ctn) => ctn.id == ctnId);
+      const groups =
+        ctnList
+          ?.filter((ctn) => ctn.parentId == ctnId)
+          .map((group) => {
+            group.name = `${group.name} - ${CTN?.name}`;
+            return group;
+          }) || [];
+      setGroups(groups);
     }
-    if (loaded) {
-      const CTNs = data.filter((ctn) => ctn.parentId == 0);
+    if (loaded && ctnList) {
+      const CTNs = ctnList.filter((ctn) => ctn.parentId == 0);
       setCTNs(CTNs);
     }
-  }, [id, loaded]);
-  console.log('ctn error', error, touched);
+  }, [ctnId, loaded]);
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>
@@ -71,19 +75,19 @@ function CultivationPlace(props: CultivationPlaceProps) {
         placeholder='Chọn điểm tu tập'
         hiddenErrorMessage
         isSearchable
-        // onChange={(e) => {
-        //   field.onChange(e);
-        //   // setGroup(undefined);
-        // }}
+        onChange={(e) => {
+          field.onChange(e);
+          setGroup(undefined);
+        }}
       />
-      {/* <OurSelect
+      <OurSelect
         {...groupField}
         optionValue='id'
         optionLabel='name'
         options={groups}
         placeholder='Tổ'
         hiddenErrorMessage
-      /> */}
+      />
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );

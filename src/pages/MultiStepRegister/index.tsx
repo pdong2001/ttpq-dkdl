@@ -9,7 +9,7 @@ import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useAppSelector } from '~/hooks/reduxHook';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { HOME_WITH_SHORT_URI, ADD_NEW_REGISTER_PATH } from '~/routes';
-import { formatUrl } from '~/utils/functions';
+import { alertUnsave, formatUrl } from '~/utils/functions';
 import Step5 from './RegisterSteps/Step5';
 import Step6 from './RegisterSteps/Step6';
 
@@ -22,19 +22,6 @@ export type StepProps = {
 const registerSteps = [Step1, Step2, Step31, Step32, Step4, Step5, Step6];
 
 const MultiStepRegister = () => {
-  useEffect(() => {
-    window.addEventListener('beforeunload', function (e) {
-      const confirmationMessage = 'o/';
-      (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-      return confirmationMessage; //Webkit, Safari, Chrome
-    });
-    return () => {
-      window.removeEventListener('beforeunload', () => {
-        console.log('close tab');
-      });
-    };
-  });
-
   // });
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
   const [step, setStep] = useState<number>(0);
@@ -44,6 +31,13 @@ const MultiStepRegister = () => {
   const history = useHistory();
   const Step: Step = registerSteps[step];
   const { loaded } = useAppSelector((state) => state.registerPage);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', alertUnsave);
+    return () => {
+      window.removeEventListener('beforeunload', alertUnsave);
+    };
+  }, [step]);
 
   useEffect(() => {
     if (path === ADD_NEW_REGISTER_PATH && step === 0 && identityCard && phoneNumber) {

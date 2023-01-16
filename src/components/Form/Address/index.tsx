@@ -51,6 +51,7 @@ function Address(props: AddressProps) {
       transformResponse: ({ data }) => data,
     },
     [],
+    true,
   );
   const { data: districts, cancel: cancelDistrict } = useAxios(
     {
@@ -60,6 +61,7 @@ function Address(props: AddressProps) {
       transformResponse: ({ data }) => data,
     },
     [provinceId],
+    true,
   );
   if (cancelDistrict && !provinceId) {
     cancelDistrict.cancel();
@@ -76,6 +78,7 @@ function Address(props: AddressProps) {
       transformResponse: ({ data }) => data,
     },
     [districtId],
+    true,
   );
   if (cancelWard && !districtId) {
     cancelWard.cancel();

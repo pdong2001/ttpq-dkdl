@@ -26,7 +26,7 @@ import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon, StarIcon } from '@chakra-ui/icons';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
-import { formatUrl, getImageSrc } from '~/utils/functions';
+import { alertUnsave, formatUrl, getImageSrc } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useContext, useRef, useState } from 'react';
 import { MessageContext } from '~/providers/message';
@@ -96,6 +96,7 @@ const Step6 = (props: StepProps) => {
             return Promise.reject(member);
           }
           messageService.add({ title: 'Cập nhật thành công', status: 'success' });
+          window.removeEventListener('beforeunload', alertUnsave);
           setTimeout(() => {
             history.replace(`/${shortUri}/register-info/${register?.id}`);
             history.go(0);

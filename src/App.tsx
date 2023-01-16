@@ -50,7 +50,6 @@ function App() {
             const redirectUrl = pathname.replace('/' + shortUri, '');
             history.replace(redirectUrl);
             history.go(0);
-            console.log('🚀 ~ file: App.tsx:45 ~ useEffect ~ redirectUrl', redirectUrl);
           }
         });
     }
