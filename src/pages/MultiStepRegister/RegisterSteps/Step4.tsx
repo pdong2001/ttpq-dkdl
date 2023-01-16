@@ -239,6 +239,11 @@ const Step4 = (props: StepProps) => {
 
   console.log('____', formik.values);
 
+  const validServeDays =
+    days
+      ?.filter((day) => day.name)
+      .filter((day) => new Date(day.time)?.getTime() > new Date().getTime()) || [];
+
   return (
     <FadeInUp delay={0}>
       <Stack spacing={4}>
@@ -262,7 +267,7 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
               <PrimeMultiSelect
-                options={days?.filter((day) => day.name)}
+                options={validServeDays}
                 optionValue='id'
                 optionLabel='name'
                 name='registeredDays'
