@@ -138,7 +138,7 @@ const Step2 = (props: StepProps) => {
           email,
           dateOfBirth,
 
-          ...(ctnId && { ctnId: ctnName }),
+          ...(!ctnId && { ctnId: ctnName }),
         }),
       );
       nextStep();
