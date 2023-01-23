@@ -36,6 +36,7 @@ import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
 import ImageCropper from '~/components/Form/CropImage/ImageCopper';
+import UploadFile from '~/components/Form/UploadFile';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -245,7 +246,7 @@ const Step4 = (props: StepProps) => {
       .filter((day) => new Date(day.time)?.getTime() > today.getTime()) || [];
 
   return (
-    <FadeInUp delay={0} viewport={0.1}>
+    <>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -349,13 +350,7 @@ const Step4 = (props: StepProps) => {
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
                   </FormHelperText>
-                  {/* <Box display={{ base: 'none', lg: 'none' }}> */}
-                  <ImageCropper aspect={3 / 4} name='avatarPath' />
-                  {/* </Box> */}
-
-                  {/* <Box display={{ base: 'block', lg: 'block' }}>
-                    <UploadFile ratio={3 / 4} name='avatarPath' />
-                  </Box> */}
+                  <UploadFile ratio={3 / 4} name='avatarPath' />
                 </FormControl>
                 <FormControl
                   name='identityCardImagePathFront'
@@ -377,14 +372,7 @@ const Step4 = (props: StepProps) => {
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
                     Chùa
                   </FormHelperText>
-                  {/* <Box display={{ base: 'none', lg: 'none' }}> */}
-                  <ImageCropper aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
-
-                  {/* </Box> */}
-
-                  {/* <Box display={{ base: 'block', lg: 'block' }}>
-                    <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
-                  </Box> */}
+                  <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
                 </FormControl>
 
                 {/* <FormControl name='avatarPath' as='fieldset' border={1}>
@@ -415,7 +403,7 @@ const Step4 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </FadeInUp>
+    </>
   );
 };
 

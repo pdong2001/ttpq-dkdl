@@ -5,6 +5,7 @@ import {
   FormLabel,
   HStack,
   SelectProps,
+  Stack,
   StackProps,
   VisuallyHiddenInput,
 } from '@chakra-ui/react';
@@ -41,7 +42,7 @@ const dayOfMonths = new Array(31)
 type DateOfBirthProps = SelectProps & FormControlProps & StackProps;
 
 function DateOfBirth(props: DateOfBirthProps) {
-  const { name, label, isRequired } = props;
+  const { name, label, isRequired, direction } = props;
 
   const dateName = `${name}Date`;
   const monthName = `${name}Month`;
@@ -62,7 +63,7 @@ function DateOfBirth(props: DateOfBirthProps) {
       isInvalid={!!meta.error && dayTouched && monthTouched && yearTouched}
     >
       <FormLabel mb={0}>{label}</FormLabel>
-      <HStack align='flex-end'>
+      <Stack direction={direction} align='flex-end'>
         <MultiSelect name={dateName} options={dayOfMonths} placeholder='Ngày' hiddenErrorMessage />
         <MultiSelect
           placeholder='Tháng'
@@ -72,7 +73,7 @@ function DateOfBirth(props: DateOfBirthProps) {
         />
         <FloatingLabel inputMode='numeric' name={yearName} label='Năm' hiddenErrorMessage />
         <VisuallyHiddenInput tabIndex={-1} {...field} />
-      </HStack>
+      </Stack>
       <FormErrorMessage>{meta?.error}</FormErrorMessage>
     </FormControl>
   );

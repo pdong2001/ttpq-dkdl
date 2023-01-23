@@ -12,7 +12,6 @@ import {
   SliderThumb,
   HStack,
   Stack,
-  Flex,
 } from '@chakra-ui/react';
 import { MdGraphicEq } from 'react-icons/md';
 

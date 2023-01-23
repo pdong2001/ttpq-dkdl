@@ -155,7 +155,7 @@ const Step3 = (props: StepProps) => {
   };
 
   return (
-    <FadeInUp delay={0}>
+    <>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -239,7 +239,7 @@ const Step3 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </FadeInUp>
+    </>
   );
 };
 

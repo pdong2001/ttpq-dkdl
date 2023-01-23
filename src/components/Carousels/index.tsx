@@ -1,5 +1,5 @@
 import { Box, Image, useBreakpointValue, Flex } from '@chakra-ui/react';
-import { DeferredContent } from 'primereact/deferredcontent';
+import { nanoid } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import Slider from 'react-slick';
@@ -110,17 +110,16 @@ const Carousels = ({ images, styles, settings = {}, imageProps = { height: '100%
             setSlider(slider);
           }}
         >
-          {images.map((image, index) => (
-            <DeferredContent key={index}>
-              <Image
-                alt={'feature image'}
-                // height='100%'
-                src={image}
-                objectFit={'cover'}
-                {...imageProps}
-                // width={'100vh'}
-              />
-            </DeferredContent>
+          {images.map((image) => (
+            <Image
+              key={nanoid()}
+              alt={'feature image'}
+              // height='100%'
+              src={image}
+              objectFit={'cover'}
+              {...imageProps}
+              // width={'100vh'}
+            />
           ))}
         </Slider>
       </Box>

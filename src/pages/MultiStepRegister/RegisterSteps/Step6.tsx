@@ -31,7 +31,6 @@ import API from '~/apis/constants';
 import { useContext, useRef, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
-import FadeInUp from '~/components/Animation/FadeInUp';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 import { BiUser } from 'react-icons/bi';
 
@@ -111,7 +110,7 @@ const Step6 = (props: StepProps) => {
   const { infos, schedules, jobs, avatar, fullName, certRegistry } = mapSuccessData(previewInfo);
 
   return (
-    <FadeInUp delay={0}>
+    <>
       <Stack spacing={4}>
         <Box textAlign={'center'}>
           <Heading
@@ -215,8 +214,8 @@ const Step6 = (props: StepProps) => {
           </Box>
         </GridItem>
       </Stack>
-      <Box mt={10}>
-        <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} mt={8} w={'full'}>
+      <Box p={2} position='sticky' bottom={0}>
+        <SimpleGrid columns={{ base: 2 }} spacing={{ base: 4, lg: 8 }} w={'full'}>
           <Button
             colorScheme='gray'
             flexGrow={1}
@@ -250,7 +249,7 @@ const Step6 = (props: StepProps) => {
         title='Đăng ký thành công'
         isSuccessPopup
       />
-    </FadeInUp>
+    </>
   );
 };
 

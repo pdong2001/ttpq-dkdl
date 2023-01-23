@@ -161,7 +161,7 @@ const Step2 = (props: StepProps) => {
     }
   };
   return (
-    <FadeInUp delay={0}>
+    <>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
         <Heading
           color={primaryColor}
@@ -198,7 +198,12 @@ const Step2 = (props: StepProps) => {
                     <Radio value={Gender.FEMALE}>Nữ</Radio>
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' />
-                  <DateOfBirth name='dob' label='Ngày sinh' isRequired />
+                  <DateOfBirth
+                    direction={{ base: 'column', md: 'row' }}
+                    name='dob'
+                    label='Ngày sinh'
+                    isRequired
+                  />
                   <Box display={ctnIdFromPageConfig ? 'none' : 'block'}>
                     <CultivationPlace
                       ctnName='ctnId'
@@ -212,12 +217,14 @@ const Step2 = (props: StepProps) => {
                 <Stack spacing={3}>
                   <FormInput name='email' label='Email' isRequired />
                   <Address
+                    direction={{ base: 'column', md: 'row' }}
                     setDataPreview={setDataPreview}
                     name='permanentAddress'
                     label='Địa chỉ thường trú'
                     isRequired
                   />
                   <Address
+                    direction={{ base: 'column', md: 'row' }}
                     setDataPreview={setDataPreview}
                     name='temporaryAddress'
                     label='Địa chỉ tạm trú'
@@ -256,7 +263,7 @@ const Step2 = (props: StepProps) => {
           </Form>
         </FormikProvider>
       </Box>
-    </FadeInUp>
+    </>
   );
 };
 

@@ -123,7 +123,7 @@ const Step1 = (props: StepProps) => {
   const greatCeremony = event?.name || '';
 
   return (
-    <FadeInUp delay={0}>
+    <>
       <Box>
         <Stack spacing={4}>
           <Heading
@@ -171,7 +171,7 @@ const Step1 = (props: StepProps) => {
           </FormikProvider>
         </Box>
       </Box>
-    </FadeInUp>
+    </>
   );
 };
 

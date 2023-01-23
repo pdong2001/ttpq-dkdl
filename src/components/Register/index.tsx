@@ -13,6 +13,7 @@ import {
   Divider,
   Th,
   Thead,
+  Flex,
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import { Card, CardBody } from '@chakra-ui/card';
@@ -25,13 +26,16 @@ const TableComponent = (infos, mapTitles): JSX.Element => {
       <Table variant='simple' colorScheme={'gray'} style={{ tableLayout: 'fixed' }} w='full'>
         <Tbody>
           {_.map(infos, (info, key) => {
+            if (!info) return;
             return (
               <Tr key={key}>
-                <Td w={[20, 32, 40, 64]} style={{ whiteSpace: 'break-spaces' }} py={2} px={0}>
-                  {mapTitles[key]}
-                </Td>
                 <Td>
-                  <Box>{info}</Box>
+                  <Flex flexWrap={'wrap'} gap='3'>
+                    <Box fontWeight={'bold'} whiteSpace={'nowrap'}>
+                      {mapTitles[key]}
+                    </Box>
+                    <Box>{info}</Box>
+                  </Flex>
                 </Td>
               </Tr>
             );

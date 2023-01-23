@@ -88,7 +88,7 @@ const mapSuccessData = (previewInfo) => {
               {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
-          otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
+          yourselfLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
         },
       },
       registeredDays: (

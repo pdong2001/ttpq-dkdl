@@ -5,8 +5,9 @@ import {
   InputProps,
   FormControlProps,
   Input,
-  Stack,
   Box,
+  Button,
+  ButtonGroup,
 } from '@chakra-ui/react';
 import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
@@ -15,6 +16,8 @@ import {
   IonButtons,
   IonContent,
   IonDatetime,
+  IonDatetimeButton,
+  IonFooter,
   IonHeader,
   IonModal,
   IonTitle,
@@ -29,21 +32,83 @@ type Props = InputProps &
     showTime?: boolean;
   };
 
-const IonicDatePicker = ({
-  name = 'datePicker',
-  label,
-  dateFormat,
-  placeholder,
-  ...rest
-}: Props) => {
-  const [field, meta, { setValue }] = useField(name);
+const IonicDatePicker = ({ name = 'datePicker', label, dateFormat, ...rest }: Props) => {
+  const [{ value }, meta, { setValue }] = useField(name);
   const { bgColor } = useCustomColorMode();
 
-  const modal = useRef<HTMLIonModalElement>(null);
+  const dateModal = useRef<HTMLIonModalElement>(null);
+  const timeModal = useRef<HTMLIonModalElement>(null);
 
   return (
     <FormControl isInvalid={!!meta.error && meta.touched} {...rest}>
       <FormLabel bgColor={bgColor}>{label}</FormLabel>
+
+      <ButtonGroup>
+        <Button id='date'>{value ? moment(value).format(dateFormat) : 'Chọn ngày'}</Button>
+        <Button id='time'>{value ? moment(value).format('HH:mm') : 'Chọn giờ'}</Button>
+      </ButtonGroup>
+
+      <IonModal
+        ref={dateModal}
+        class='ion-datetime-button-overlay'
+        trigger='date'
+        keepContentsMounted={true}
+      >
+        <IonFooter>
+          <IonToolbar>
+            <IonButtons slot='end'>
+              <IonButton
+                disabled={!value}
+                strong={true}
+                onClick={() => dateModal.current?.dismiss()}
+              >
+                Chọn
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonFooter>
+        <IonDatetime
+          value={value}
+          presentation='date'
+          onIonChange={(e) => {
+            setValue(e.detail.value);
+          }}
+          lang='vi'
+          locale='vi'
+        ></IonDatetime>
+      </IonModal>
+
+      <IonModal
+        ref={timeModal}
+        class='ion-datetime-button-overlay'
+        trigger='time'
+        keepContentsMounted={true}
+      >
+        <IonDatetime
+          value={value}
+          presentation='time'
+          onIonChange={(e) => {
+            setValue(e.detail.value);
+          }}
+          id='datetime'
+          locale='vi'
+        ></IonDatetime>
+        <IonFooter>
+          <IonToolbar>
+            <IonButtons slot='end'>
+              <IonButton
+                disabled={!value}
+                strong={true}
+                onClick={() => timeModal.current?.dismiss()}
+              >
+                Chọn
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonFooter>
+      </IonModal>
+
+      {/* 
       <Input
         id='date'
         placeholder={placeholder}
@@ -75,7 +140,7 @@ const IonicDatePicker = ({
             }}
           ></Box>
         </IonContent>
-      </IonModal>
+      </IonModal> */}
 
       {meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>
@@ -83,7 +148,7 @@ const IonicDatePicker = ({
 };
 
 IonicDatePicker.defaultProps = {
-  dateFormat: 'DD-MM-yyyy HH:mm',
+  dateFormat: 'DD-MM-yyyy',
 };
 
 export default IonicDatePicker;

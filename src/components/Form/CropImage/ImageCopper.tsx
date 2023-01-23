@@ -2,18 +2,8 @@ import { useState, ComponentProps } from 'react';
 
 import 'react-image-crop/dist/ReactCrop.css';
 import { Dialog } from 'primereact/dialog';
-import {
-  Box,
-  Button,
-  SimpleGrid,
-  Slider,
-  SliderMark,
-  SliderThumb,
-  SliderTrack,
-} from '@chakra-ui/react';
-import { BiRotateRight } from 'react-icons/bi';
+import { Box, SimpleGrid } from '@chakra-ui/react';
 import UploadFile from '../UploadFile';
-import { MdGraphicEq } from 'react-icons/md';
 import ImgCropper from './Copper';
 
 type Props = {
