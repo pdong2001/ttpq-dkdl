@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { fillForm } from '../../../slices/register';
 import step3Schema from '../validationSchema/step3_1';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
-import DateTimePicker from '~/components/Form/DatePicker';
 import { LeaveTimeDto } from '~/dtos/TimeToLeaves/LeaveTimeDto.model';
 import { StartTimeDto } from '~/dtos/StartTimes/StartTimeDto.model';
 import { useRouteMatch } from 'react-router-dom';
@@ -20,6 +19,8 @@ import { StartAddressDto } from '~/dtos/Addresses/StartAddressDto.model';
 import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import OurSelect from '~/components/Form/MultiSelect';
+import PrimeDatePicker from '~/components/Form/DatePicker/PrimeDatePicker';
+import IonicDatePicker from '~/components/Form/DatePicker/IonicDatePicker';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -209,12 +210,19 @@ const Step3 = (props: StepProps) => {
               {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  <DateTimePicker
+                  {/* <PrimeDatePicker
                     name='otherStartTime'
                     label={
                       moveType === MoveType.ByPlane ? 'Ngày giờ bay đi' : 'Ngày giờ có mặt tại chùa'
                     }
                     isRequired
+                    showTime
+                  /> */}
+                  <IonicDatePicker
+                    name='otherStartTime'
+                    label={
+                      moveType === MoveType.ByPlane ? 'Ngày giờ bay đi' : 'Ngày giờ có mặt tại chùa'
+                    }
                   />
                   {canMoveByPlane && moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />

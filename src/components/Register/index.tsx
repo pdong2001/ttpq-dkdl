@@ -22,17 +22,17 @@ import { getImageSrc } from '~/utils/functions';
 const TableComponent = (infos, mapTitles): JSX.Element => {
   return (
     <TableContainer>
-      <Table variant='simple' colorScheme={'gray'}>
+      <Table variant='simple' colorScheme={'gray'} style={{ tableLayout: 'fixed' }} w='full'>
         <Tbody>
           {_.map(infos, (info, key) => {
             return (
               <Tr key={key}>
-                <Td w={{ base: '120px', sm: '200px', md: '300px' }} p={0}>
-                  <Text as='b' fontSize={{ base: 14, sm: 16 }}>
-                    {mapTitles[key]}
-                  </Text>
+                <Td w={[20, 32, 40, 64]} style={{ whiteSpace: 'break-spaces' }} py={2} px={0}>
+                  {mapTitles[key]}
                 </Td>
-                <Td fontSize={{ base: 14, sm: 16 }}> {info}</Td>
+                <Td>
+                  <Box>{info}</Box>
+                </Td>
               </Tr>
             );
           })}

@@ -174,7 +174,7 @@ const Step6 = (props: StepProps) => {
                     REGISTER_INFO_TITLE,
                   )}
                   {TableComponent(
-                    { registeredDays: schedules.registeredDays },
+                    { registeredDays: schedules?.registeredDays || [] },
                     REGISTER_INFO_TITLE,
                   )}
                 </AccordionPanel>

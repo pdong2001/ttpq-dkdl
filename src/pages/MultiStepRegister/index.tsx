@@ -20,11 +20,10 @@ export type StepProps = {
 };
 
 const registerSteps = [Step1, Step2, Step31, Step32, Step4, Step5, Step6];
-
 const MultiStepRegister = () => {
   // });
   const { identityCard, phoneNumber } = useAppSelector((state) => state.register.data);
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(3);
 
   const { shortUri } = useParams<any>();
   const { path } = useRouteMatch();

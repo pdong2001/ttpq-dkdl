@@ -11,16 +11,20 @@ const fadeInVariants: Variants = {
   },
 };
 
-type FadeInUpProps = { delay?: number; duration?: number } & HTMLMotionProps<'div'>;
+type FadeInUpProps = {
+  delay?: number;
+  duration?: number;
+  viewport?: number;
+} & HTMLMotionProps<'div'>;
 
 const FadeInUp = (props: FadeInUpProps) => {
-  const { delay, duration } = props;
+  const { delay, duration, viewport } = props;
   return (
     <motion.div
       variants={fadeInVariants}
       initial='start'
       whileInView='end'
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: viewport }}
       transition={{ delay, ease: [0.4, 0, 0.2, 1], duration }} //cubic-bezier(0.4, 0, 0.2, 1)
       {...props}
     />
@@ -30,6 +34,7 @@ const FadeInUp = (props: FadeInUpProps) => {
 FadeInUp.defaultProps = {
   delay: 0.3,
   duration: 1,
+  viewport: 0.3,
 };
 
 export default FadeInUp;

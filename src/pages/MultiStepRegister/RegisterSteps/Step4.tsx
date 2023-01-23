@@ -247,7 +247,7 @@ const Step4 = (props: StepProps) => {
       .filter((day) => new Date(day.time)?.getTime() > today.getTime()) || [];
 
   return (
-    <FadeInUp delay={0}>
+    <FadeInUp delay={0} viewport={0.1}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}

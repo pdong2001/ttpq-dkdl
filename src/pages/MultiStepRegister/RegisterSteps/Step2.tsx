@@ -20,6 +20,9 @@ import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import _ from 'lodash';
 
 const Step2 = (props: StepProps) => {
+  // window.removeEventListener('beforeunload', () => {
+  //   console.log('close tab');
+  // });
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();

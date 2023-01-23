@@ -1,8 +1,8 @@
-import { Flex, Stack, Tag } from '@chakra-ui/react';
+import { Flex, Tag } from '@chakra-ui/react';
 import { nanoid } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
-import { CAR_BOOKING_TYPE_TITLE, CLOTHING_SIZE_TITLE } from '~/configs/register';
+import { CAR_BOOKING_TYPE_TITLE } from '~/configs/register';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';

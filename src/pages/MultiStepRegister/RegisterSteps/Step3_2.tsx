@@ -21,6 +21,8 @@ import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 import OurSelect from '~/components/Form/MultiSelect';
+import PrimeDatePicker from '~/components/Form/DatePicker/PrimeDatePicker';
+import IonicDatePicker from '~/components/Form/DatePicker/IonicDatePicker';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -225,10 +227,16 @@ const Step3 = (props: StepProps) => {
                 // tỉnh khác and tự túc
                 <>
                   {/* <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' /> */}
-                  <DateTimePicker
+                  {/* <PrimeDatePicker
                     name='otherLeaveTime'
                     label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
                     isRequired
+                    showTime
+                  /> */}
+                  <IonicDatePicker
+                    name='otherLeaveTime'
+                    label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
+                    dateFormat='DD-MM-yyyy HH:mm'
                   />
                   {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
                     <>

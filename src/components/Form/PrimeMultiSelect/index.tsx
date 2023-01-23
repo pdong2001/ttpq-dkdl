@@ -4,20 +4,13 @@ import {
   FormErrorMessage,
   InputProps,
   FormHelperText,
-  Box,
   Flex,
 } from '@chakra-ui/react';
 import { useField } from 'formik';
-import { useEffect, useRef, useState } from 'react';
-import useCustomColorMode from '~/hooks/useColorMode';
+import { useEffect, useRef } from 'react';
 import { MultiSelect } from 'primereact/multiselect';
 import { SelectItemOptionsType } from 'primereact/selectitem';
 
-type MultiSelectOption = {
-  label: string;
-  value: any;
-  colorScheme?: string;
-};
 type Props = InputProps & {
   tagColorScheme?: string;
   optionLabel?: string;
@@ -43,7 +36,6 @@ const PrimeMultiSelect = (props: Props) => {
     placeholder,
     helperText,
   } = props;
-  const { primaryColor } = useCustomColorMode();
   //@ts-ignore
   const [field, { error, touched }, helpers] = useField(name);
   const isInvalid = !!error && touched;
@@ -51,10 +43,10 @@ const PrimeMultiSelect = (props: Props) => {
   //   ? validOptions.filter((item) => field.value?.includes?.(item.value))
   //   : validOptions.find((item) => field.value === item.value);
 
-  const selectRef = useRef<any>();
+  const selectRef = useRef<MultiSelect>(null);
   useEffect(() => {
     if (isInvalid && selectRef.current) {
-      selectRef.current.focus?.();
+      selectRef.current.getInput?.()?.focus?.();
     }
   }, [isInvalid]);
 
