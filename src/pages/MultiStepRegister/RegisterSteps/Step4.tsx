@@ -34,8 +34,8 @@ import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
-import CropImage from '~/components/Form/CropImage/EasyCrop';
 import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
+import ImageCropper from '~/components/Form/CropImage/ImageCopper';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -350,7 +350,7 @@ const Step4 = (props: StepProps) => {
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
                   </FormHelperText>
                   {/* <Box display={{ base: 'none', lg: 'none' }}> */}
-                  <CropImage aspect={3 / 4} name='avatarPath' />
+                  <ImageCropper aspect={3 / 4} name='avatarPath' />
                   {/* </Box> */}
 
                   {/* <Box display={{ base: 'block', lg: 'block' }}>
@@ -378,7 +378,8 @@ const Step4 = (props: StepProps) => {
                     Chùa
                   </FormHelperText>
                   {/* <Box display={{ base: 'none', lg: 'none' }}> */}
-                  <CropImage aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  <ImageCropper aspect={16 / 9} width={'72'} name='identityCardImagePathFront' />
+
                   {/* </Box> */}
 
                   {/* <Box display={{ base: 'block', lg: 'block' }}>
