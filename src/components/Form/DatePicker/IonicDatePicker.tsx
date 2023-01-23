@@ -56,23 +56,6 @@ const IonicDatePicker = ({
   const [field, meta, { setValue }] = useField(name);
   const { bgColor } = useCustomColorMode();
 
-  const [openModal, setOpenModal] = useState(false);
-
-  const onOpen = () => {
-    setOpenModal(true);
-  };
-  const onClose = () => {
-    setOpenModal(false);
-  };
-
-  // useEffect(() => {
-  //   const { body } = document;
-  //   if (body.classList.contains('backdrop-no-scroll')) {
-  //     body.classList.remove('backdrop-no-scroll');
-  //   }
-  //   debugger;
-  // }, [document.body.classList.length]);
-
   const modal = useRef<HTMLIonModalElement>(null);
 
   return (
