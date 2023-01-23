@@ -78,7 +78,11 @@ const IonicDatePicker = ({
   return (
     <FormControl isInvalid={!!meta.error && meta.touched} {...rest}>
       <FormLabel bgColor={bgColor}>{label}</FormLabel>
-      <Input id='date' placeholder={placeholder} value={moment(field.value).format(dateFormat)} />
+      <Input
+        id='date'
+        placeholder={placeholder}
+        value={field.value && moment(field.value).format(dateFormat)}
+      />
       <IonModal ref={modal} trigger='date'>
         <IonHeader>
           <IonToolbar>
@@ -108,6 +112,10 @@ const IonicDatePicker = ({
       {meta.error && <FormErrorMessage>{meta.error}</FormErrorMessage>}
     </FormControl>
   );
+};
+
+IonicDatePicker.defaultProps = {
+  dateFormat: 'DD-MM-yyyy HH:mm',
 };
 
 export default IonicDatePicker;
