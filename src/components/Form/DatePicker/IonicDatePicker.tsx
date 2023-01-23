@@ -5,21 +5,8 @@ import {
   InputProps,
   FormControlProps,
   Input,
-  Button,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
+  Stack,
+  Box,
 } from '@chakra-ui/react';
 import { useField } from 'formik';
 import useCustomColorMode from '~/hooks/useColorMode';
@@ -29,16 +16,12 @@ import {
   IonContent,
   IonDatetime,
   IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
   IonModal,
-  IonPopover,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
 import moment from 'moment';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 type Props = InputProps &
   FormControlProps & {
@@ -81,14 +64,16 @@ const IonicDatePicker = ({
           </IonToolbar>
         </IonHeader>
         <IonContent className='ion-padding'>
-          <IonDatetime
+          <Box
+            margin={'0 auto'}
+            as={IonDatetime}
             locale='vi'
             lang='vi'
             value={field.value}
             onIonChange={(e) => {
               setValue(e.detail.value);
             }}
-          ></IonDatetime>
+          ></Box>
         </IonContent>
       </IonModal>
 
