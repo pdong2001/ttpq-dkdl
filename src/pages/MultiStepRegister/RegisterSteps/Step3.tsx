@@ -210,19 +210,12 @@ const Step3 = (props: StepProps) => {
               {moveType !== MoveType.WithCTN && (
                 // tỉnh khác and tự túc
                 <>
-                  {/* <PrimeDatePicker
-                    name='otherStartTime'
-                    label={
-                      moveType === MoveType.ByPlane ? 'Ngày giờ bay đi' : 'Ngày giờ có mặt tại chùa'
-                    }
-                    isRequired
-                    showTime
-                  /> */}
                   <IonicDatePicker
                     name='otherStartTime'
                     label={
                       moveType === MoveType.ByPlane ? 'Ngày giờ bay đi' : 'Ngày giờ có mặt tại chùa'
                     }
+                    placeholder='Chọn ngày giờ'
                   />
                   {canMoveByPlane && moveType === MoveType.ByPlane && (
                     <FloatingLabel name='startPlaneCode' label='Mã chuyến bay - Giờ bay đi' />

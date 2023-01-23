@@ -227,16 +227,10 @@ const Step3 = (props: StepProps) => {
                 // tỉnh khác and tự túc
                 <>
                   {/* <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' /> */}
-                  {/* <PrimeDatePicker
-                    name='otherLeaveTime'
-                    label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
-                    isRequired
-                    showTime
-                  /> */}
                   <IonicDatePicker
                     name='otherLeaveTime'
                     label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
-                    dateFormat='DD-MM-yyyy HH:mm'
+                    placeholder='Chọn ngày giờ'
                   />
                   {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
                     <>
