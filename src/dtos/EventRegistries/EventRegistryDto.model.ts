@@ -73,4 +73,5 @@ export type EventRegistryDto = {
   eventRegistryPage?: EventRegistryPageDto;
   receiveCardAddress?: ReceiveCardAddressDto;
   registeredDays?: NamedTimeDto[];
+  registeredDayIds?: number[];
 };

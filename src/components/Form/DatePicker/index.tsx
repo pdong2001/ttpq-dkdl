@@ -17,7 +17,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.css';
 
 type Props = InputProps &
-  FormControlProps & { dateFormat?: string; showTimeSelect?: boolean; timeIntervals?: number };
+  FormControlProps & {
+    dateFormat?: string;
+    showTimeSelect?: boolean;
+    timeIntervals?: number;
+    minDate?: Date;
+    minTime?: Date;
+    maxDate?: Date;
+    maxTime?: Date;
+  };
 
 const CustomDateInput = ({ value, onClick, onChange, label }: any, ref) => {
   const { bgColor } = useCustomColorMode();
@@ -45,6 +53,10 @@ const DateTimePicker = ({
   dateFormat,
   showTimeSelect,
   timeIntervals,
+  minDate,
+  minTime,
+  maxDate,
+  maxTime,
   ...rest
 }: Props) => {
   const [{ value }, meta, { setValue }] = useField(name);
@@ -64,6 +76,10 @@ const DateTimePicker = ({
           customInput={<CustomInput label={label} />}
           showTimeSelect={showTimeSelect}
           timeIntervals={timeIntervals}
+          minDate={minDate}
+          minTime={minTime}
+          maxDate={maxDate}
+          maxTime={maxTime}
         />
         <InputRightElement children={<MdDateRange />} />
       </InputGroup>

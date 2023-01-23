@@ -55,6 +55,8 @@ const delta = window.innerHeight / 1.5;
 export default function NavBar() {
   const history = useHistory();
   const registerPage = useAppSelector((state) => state.registerPage.data);
+  const { event } = registerPage || {};
+  const { enableTimeLine } = event || {};
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shortUri = '' } = useParams<any>();
@@ -65,8 +67,10 @@ export default function NavBar() {
     { title: 'Trang chủ', to: `/${shortUri}#` },
     { title: 'Giới thiệu', to: `/${shortUri}#eventInfo` },
     { title: 'Các công việc', to: `/${shortUri}#departmentInfo` },
-    { title: 'Chương trình', to: `/${shortUri}#timeline` },
   ];
+  if (enableTimeLine) {
+    Links.push({ title: 'Chương trình', to: `/${shortUri}#timeline` });
+  }
 
   const { login, logout } = useContext(AuthContext);
   let { member } = useContext(AuthContext);

@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useField } from 'formik';
 
-type RadiosProps = { label: string } & RadioGroupProps & StackProps & FormControlProps;
+type RadiosProps = { label: any } & RadioGroupProps & StackProps & FormControlProps;
 const Radios = (props: RadiosProps) => {
   const { spacing, direction, name, children, label, defaultValue, color } = props;
   // @ts-ignore

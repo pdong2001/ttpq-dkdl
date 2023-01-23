@@ -7,6 +7,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import MessageProvider from './providers/message';
 import AppContainer from './AppContainer';
 import { CHECK_IN_PATH, HOME_WITH_SHORT_URI } from './routes';
+import { IonApp, IonContent } from '@ionic/react';
 
 const theme = extendTheme(
   primaryColor,
@@ -21,9 +22,13 @@ root.render(
   <ReduxProvider store={store}>
     <ChakraProvider theme={theme}>
       <BrowserRouter>
-        <MessageProvider>
-          <Route component={AppContainer} path={[CHECK_IN_PATH, HOME_WITH_SHORT_URI, '/']} />
-        </MessageProvider>
+        <IonApp>
+          <IonContent className='ion-page'>
+            <MessageProvider>
+              <Route component={AppContainer} path={[CHECK_IN_PATH, HOME_WITH_SHORT_URI, '/']} />
+            </MessageProvider>
+          </IonContent>
+        </IonApp>
       </BrowserRouter>
     </ChakraProvider>
   </ReduxProvider>,

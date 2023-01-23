@@ -1,8 +1,8 @@
-import { Flex, Stack, Tag } from '@chakra-ui/react';
+import { Flex, Tag } from '@chakra-ui/react';
 import { nanoid } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
-import { CAR_BOOKING_TYPE_TITLE, CLOTHING_SIZE_TITLE } from '~/configs/register';
+import { CAR_BOOKING_TYPE_TITLE } from '~/configs/register';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { MoveType } from '~/dtos/Enums/MoveType.enum';
@@ -18,7 +18,7 @@ const mapSuccessData = (previewInfo) => {
         _.get(previewInfo, 'dateOfBirth', '') &&
         moment(_.get(previewInfo, 'dateOfBirth')).format('DD-MM-YYYY'),
       email: _.get(previewInfo, 'email', ''),
-      organizationStructureId: _.get(previewInfo, 'organizationStructureId', ''),
+      ctnId: _.get(previewInfo, 'ctnId', ''),
       permanentAddress: _.get(previewInfo, 'permanentAddress', ''),
       temporaryAddress: _.get(previewInfo, 'temporaryAddress', ''),
       gender: _.get(previewInfo, 'gender') == 0 ? 'Nam' : 'Nữ',
@@ -55,7 +55,6 @@ const mapSuccessData = (previewInfo) => {
               {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
             </Tag>
           ),
-          otherStartAddress: _.get(previewInfo, 'otherStartAddress', ''),
           otherStartTime: convertToAppDateTime(_.get(previewInfo, 'otherStartTime', '')),
         },
       },
@@ -63,7 +62,7 @@ const mapSuccessData = (previewInfo) => {
         [MoveType.WithCTN]: {
           returnMoveType: (
             <Tag variant='outline' colorScheme={'green'}>
-              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
           leaveTimeId: _.get(previewInfo, 'leaveTimeId', ''),
@@ -71,7 +70,7 @@ const mapSuccessData = (previewInfo) => {
         [MoveType.ByPlane]: {
           returnMoveType: (
             <Tag variant='outline' colorScheme={'blue'}>
-              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
           otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
@@ -86,18 +85,12 @@ const mapSuccessData = (previewInfo) => {
         [MoveType.Other]: {
           returnMoveType: (
             <Tag variant='outline' colorScheme={'pink'}>
-              {MoveType.toString(_.get(previewInfo, 'moveType', 0) + '')}
+              {MoveType.toString(_.get(previewInfo, 'returnMoveType', 0) + '')}
             </Tag>
           ),
           otherLeaveTime: convertToAppDateTime(_.get(previewInfo, 'otherLeaveTime', '')),
         },
       },
-    },
-    jobs: {
-      exps: EventExp.toString(_.get(previewInfo, 'exps', 0) + ''),
-      strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
-      expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
-      wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
       registeredDays: (
         <Flex gap={2} flexWrap='wrap'>
           {_.map(_.get(previewInfo, 'registeredDays', []), (day) => {
@@ -108,15 +101,22 @@ const mapSuccessData = (previewInfo) => {
                   previewInfo?.registeredDays?.indexOf?.(day) % 7 || 0,
                 )}
               >
-                {day}
+                {day.name}
               </Tag>
             );
           })}
         </Flex>
       ),
-      receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
-      clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
-      note: _.get(previewInfo, 'note', ''),
+    },
+    jobs: {
+      exps: EventExp.toString(_.get(previewInfo, 'exps', 0) + ''),
+      strongPointIds: _.get(previewInfo, 'strongPointIds', ''),
+      expDepartmentIds: _.get(previewInfo, 'expDepartmentIds', ''),
+      wishDepartmentId: _.get(previewInfo, 'wishDepartmentId', ''),
+
+      // receiveCardAddressId: _.get(previewInfo, 'receiveCardAddressId', ''),
+      // clothingSize: CLOTHING_SIZE_TITLE[_.get(previewInfo, 'clothingSize', '')],
+      note: _.get(previewInfo, 'question', ''),
     },
     certRegistry: {
       [CertificateRegistry.NO]: {

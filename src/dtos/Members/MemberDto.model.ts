@@ -28,7 +28,8 @@ export type MemberDto = {
   permanentDistrict?: AddressDto;
   temporaryProvince?: AddressDto;
   temporaryDistrict?: AddressDto;
-  organizationStructureId?: number;
+  ctnId?: string;
+  ctnGroupId?: string;
   strongPoints?: SkillForRegisterDto[];
   register?: EventRegistryDto;
 };

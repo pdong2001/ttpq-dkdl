@@ -11,7 +11,7 @@ import { EDIT_REGISTER_PATH, HOME_WITH_SHORT_URI } from '~/routes';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { unwrapResult } from '@reduxjs/toolkit';
 import publicRequest from '~/apis/common/axios';
-import { formatUrl } from '~/utils/functions';
+import { alertUnsave, formatUrl } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useContext } from 'react';
 import { MessageContext } from '~/providers/message';
@@ -90,6 +90,9 @@ const Step1 = (props: StepProps) => {
                 })
                 .then(({ data }) => {
                   if (data.data && !isEditRegisterPage) {
+                    if (window) {
+                      window.removeEventListener('beforeunload', alertUnsave);
+                    }
                     messageService.add({
                       title: 'Bạn đã đăng ký lễ này rồi ạ',
                       status: 'error',

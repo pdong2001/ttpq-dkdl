@@ -4,14 +4,9 @@ import { Box, useBreakpointValue, Stack, Heading, Text, Show, Container } from '
 import Slider from 'react-slick';
 import { DeferredContent } from 'primereact/deferredcontent';
 
-import cover00 from '~/assets/cover-hero/cover-00.jpg';
-import cover01 from '~/assets/cover-ctn/cover-1.jpg';
-// import cover02 from '~/assets/cover-ctn/cover-2.jpg';
-import cover03 from '~/assets/cover-ctn/cover-3.jpg';
-// import cover04 from '~/assets/cover-ctn/cover-4.jpg';
-import cover05 from '~/assets/cover-ctn/cover-5.jpg';
-import cover06 from '~/assets/event-info/dai-le-10.jpg';
-import cover07 from '~/assets/event-info/dai-le-20.jpg';
+import cover01 from '~/assets/event-info/new-year/cover/cover-1.jpg';
+import cover05 from '~/assets/event-info/new-year/cover/cover-5.jpg';
+import cover07 from '~/assets/event-info/new-year/cover/cover-7.jpg';
 
 import FadeInUp from '~/components/Animation/FadeInUp';
 import Step1 from '~/pages/MultiStepRegister/RegisterSteps/Step1';
@@ -81,30 +76,35 @@ export default function CaptionCarousel() {
       text: '',
       image: cover01,
     },
-    {
-      title: '',
-      text: '',
-      image: cover00,
-    },
-    {
-      title: '',
-      text: '',
-      image: cover06,
-    },
-    {
-      title: '',
-      text: '',
-      image: cover03,
-    },
-    {
-      title: '',
-      text: '',
-      image: cover07,
-    },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover02,
+    // },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover03,
+    // },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover04,
+    // },
     {
       title: '',
       text: '',
       image: cover05,
+    },
+    // {
+    //   title: '',
+    //   text: '',
+    //   image: cover06,
+    // },
+    {
+      title: '',
+      text: '',
+      image: cover07,
     },
   ];
   const { bgColor } = useCustomColorMode();

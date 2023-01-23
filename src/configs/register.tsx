@@ -46,7 +46,7 @@ const REGISTER_INFO_TITLE = {
   phoneNumber: 'Số điện thoại',
   email: 'Email',
   identityCard: 'Căn cước',
-  organizationStructureId: 'Địa điểm tu tập',
+  ctnId: 'Địa điểm tu tập',
   permanentAddress: 'Địa chỉ thường trú',
   temporaryAddress: 'Địa chỉ tạm trú',
   // schedules

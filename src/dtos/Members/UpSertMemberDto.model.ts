@@ -18,7 +18,7 @@ export type UpSertMemberDto = {
   exps?: EventExp;
   ctnType?: PhanLoaiThanhNien;
   dateOfBirth?: string;
-  organizationStructureId?: number;
+  ctnId?: number;
   strongPointIds?: number[];
   permanentAddress?: UpSertAddressDto;
   temporaryAddress?: UpSertAddressDto;

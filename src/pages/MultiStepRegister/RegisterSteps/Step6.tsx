@@ -13,7 +13,6 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionButton,
-  AccordionIcon,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import _ from 'lodash';
@@ -25,17 +24,16 @@ import { TableComponent, LeaderComponent } from '~/components/Register';
 import { mapSuccessData } from '~/components/Register/bindingData';
 import { REGISTER_INFO_TITLE } from '~/configs/register';
 import { CalendarIcon, HamburgerIcon, StarIcon } from '@chakra-ui/icons';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { ADD_NEW_REGISTER_PATH } from '~/routes';
-import { formatUrl, getImageSrc } from '~/utils/functions';
+import { alertUnsave, formatUrl, getImageSrc } from '~/utils/functions';
 import API from '~/apis/constants';
 import { useContext, useRef, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import SuccessRegisterModal from '~/components/Modals/SuccessRegisterModal';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { CertificateRegistry } from '~/dtos/Enums/CertificateRegistry.enum';
-import { HashLink } from 'react-router-hash-link';
-import { BiUser, BiUserCircle } from 'react-icons/bi';
+import { BiUser } from 'react-icons/bi';
 
 const Step6 = (props: StepProps) => {
   const { previousStep, nextStep } = props;
@@ -67,7 +65,7 @@ const Step6 = (props: StepProps) => {
           setOpenSuccess(true);
         })
         .catch((e) => {
-          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
+          messageService.add({ description: e?.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
         });
     } else {
       const updateRegisterInfo = dispatch(
@@ -98,13 +96,14 @@ const Step6 = (props: StepProps) => {
             return Promise.reject(member);
           }
           messageService.add({ title: 'Cập nhật thành công', status: 'success' });
+          window.removeEventListener('beforeunload', alertUnsave);
           setTimeout(() => {
             history.replace(`/${shortUri}/register-info/${register?.id}`);
             history.go(0);
           }, 1000);
         })
         .catch((e) => {
-          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
+          messageService.add({ description: e?.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
         });
     }
   };
@@ -161,7 +160,7 @@ const Step6 = (props: StepProps) => {
                   <Alert status='success'>
                     <CalendarIcon />
                     <Heading p={2} as='h5' size='md'>
-                      Lịch trình di chuyển
+                      Lịch trình
                     </Heading>
                   </Alert>
                 </AccordionButton>
@@ -171,7 +170,11 @@ const Step6 = (props: StepProps) => {
                     REGISTER_INFO_TITLE,
                   )}
                   {TableComponent(
-                    _.get(schedules.return, _.get(previewInfo, 'moveType', 0)),
+                    _.get(schedules.return, _.get(previewInfo, 'returnMoveType', 0)),
+                    REGISTER_INFO_TITLE,
+                  )}
+                  {TableComponent(
+                    { registeredDays: schedules?.registeredDays || [] },
                     REGISTER_INFO_TITLE,
                   )}
                 </AccordionPanel>

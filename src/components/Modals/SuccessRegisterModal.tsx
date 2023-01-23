@@ -1,6 +1,6 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import PTD_cover from '~/assets/cover/ptd-cover.jpeg';
-import Tet_cover from '~/assets/cover/Tet-cover.jpeg';
+import Tet_cover from '~/assets/cover/Tet-cover.jpg';
 import cqhn_cover from '~/assets/cover/cqhn-cover.jpeg';
 import {
   Modal,
@@ -29,6 +29,7 @@ import {
   Tooltip,
   useToast,
   Text,
+  Link,
 } from '@chakra-ui/react';
 import { MdContentCopy, MdVerified } from 'react-icons/md';
 import QRCode from 'react-qr-code';
@@ -68,7 +69,7 @@ export default function SuccessRegisterModal({
   const { path } = useRouteMatch();
   const registerResult = useAppSelector((state) => state.register.data);
   const previewInfo = useAppSelector((state) => state.previewInfo.data);
-  const { event, hotline } = useAppSelector((state) => state.registerPage.data);
+  const { event, hotline = '0866.884.669' } = useAppSelector((state) => state.registerPage.data);
   const { member } = useContext(AuthContext);
   const [isDownloading, setDownloading] = useState(false);
 
@@ -89,18 +90,17 @@ export default function SuccessRegisterModal({
       cover = cqhn_cover;
   }
   const isRegisterPopup = path === ADD_NEW_REGISTER_PATH;
-  const organizationStructureId =
-    registerResult.organizationStructureId || member.organizationStructureId;
+  const ctnId = registerResult.ctnId || member.ctnId;
   const { data: ctnName, cancel: ctnToken } = useAxios(
     {
       method: 'get',
       url: API.GET_CTN,
-      params: { CTNGroupId: organizationStructureId },
-      transformResponse: ({ data }) => data?.find((ctn) => ctn.id === organizationStructureId).name,
+      params: { CTNGroupId: ctnId },
+      transformResponse: ({ data }) => data?.find((ctn) => ctn.id === ctnId).name,
     },
-    [organizationStructureId],
+    [ctnId],
   );
-  if (!organizationStructureId || previewInfo.organizationStructureId) {
+  if (!ctnId || previewInfo.ctnId) {
     ctnToken.cancel();
   }
   const registerId = registerResult.register?.id || member.register?.id;
@@ -112,7 +112,7 @@ export default function SuccessRegisterModal({
       email: registerResult?.email || member.email,
     },
     avatar: registerResult.avatarPath || member.avatarPath,
-    LinkQrCode: `${PATH_URL}/${shortUri}/register-info/${registerId}`,
+    LinkQrCode: `${PATH_URL}/register-info/${registerId}`,
     registerInfoPath: `/${shortUri}/register-info/${registerId}`,
     fullName: registerResult.fullName || member.fullName,
   };
@@ -215,21 +215,24 @@ export default function SuccessRegisterModal({
                   </Flex>
                 </Heading>
                 {isRegisterPopup && (
-                  <Heading
-                    mb={2}
-                    as='h5'
-                    fontSize={{ base: 'xs', sm: 'md', md: 'md' }}
-                    color={'red'}
-                  >
-                    <Tag colorScheme={'green'}>
+                  <Heading mb={2} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'md' }}>
+                    <Tag colorScheme={'green'} rounded='md'>
                       Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
                       thời gian sớm nhất ạ
                     </Tag>
                   </Heading>
                 )}
                 {hotline && (
-                  <Text fontWeight={'bold'}>
-                    <Tag>{`Mọi thắc mắc xin liên hệ: Ban Nhân Sự - ${hotline}`}</Tag>
+                  <Text bgColor={'pink.100'} rounded='md' mb={2}>
+                    Mọi thắc mắc xin liên hệ: Ban Nhân Sự -
+                    <Link
+                      ms={'1'}
+                      fontWeight={'bold'}
+                      colorScheme={'green'}
+                      href={`tel:${hotline}`}
+                    >
+                      {hotline}
+                    </Link>
                   </Text>
                 )}
               </Box>
@@ -243,7 +246,7 @@ export default function SuccessRegisterModal({
                       {OtherInfo({
                         isLeader: false,
                         title: registerResult?.religiousName || member.religiousName,
-                        subTitle: previewInfo.organizationStructureId || ctnName,
+                        subTitle: previewInfo.ctnId || ctnName,
                       })}
                     </Box>
                     {isShowRegisterInfo && (

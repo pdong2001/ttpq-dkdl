@@ -12,6 +12,7 @@ import {
   Image,
   FormHelperText,
   Tag,
+  Flex,
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -23,19 +24,18 @@ import API from '~/apis/constants';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
 import step4Schema from '../validationSchema/step4';
 import { fillDataPreview } from '~/slices/previewInfo';
-import UploadFile from '~/components/Form/UploadFile';
 import OurSelect from '~/components/Form/MultiSelect';
 import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
 import FadeInUp from '~/components/Animation/FadeInUp';
-import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 import CropImage from '~/components/Form/CropImage/EasyCrop';
+import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -74,7 +74,7 @@ const Step4 = (props: StepProps) => {
     // thêm field
     clothingSize,
     question,
-    registeredDays,
+    registeredDays: prevRegisterdDays,
   } = previousStepData.register || {};
 
   // lấy kĩ năng sở trường
@@ -90,14 +90,17 @@ const Step4 = (props: StepProps) => {
 
   useEffect(() => {
     if (strongPointLoaded) {
-      const strongPoints = [{ id: 0, name: 'Không có' }, ...(strongPointList || [])];
+      const strongPoints = [{ id: undefined, name: 'Không có' }, ...(strongPointList || [])];
       setStrongPointOptions(strongPoints);
     }
   }, [strongPointLoaded]);
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
   const { departments, event } = registerPage;
-  const customDepartments = [{ id: 0, name: 'Theo sự sắp xếp của CTN' }, ...(departments || [])];
+  const customDepartments = [
+    { id: undefined, name: 'Theo sự sắp xếp của CTN' },
+    ...(departments || []),
+  ];
   const { days } = event || {};
 
   // lấy nơi nhận thẻ
@@ -107,6 +110,8 @@ const Step4 = (props: StepProps) => {
   //   url: formatUrl(API.GET_RECEIVE_CARD_ADDRESSES_BY_EVENT, { id: eventId }),
   //   transformResponse: ({ data }) => data.map(mapReceiverCardAddressDetail),
   // });
+
+  const serveDateIds = prevRegisterdDays || (editServeDays || []).map((date) => date?.id);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -123,7 +128,7 @@ const Step4 = (props: StepProps) => {
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
-      registeredDays: registeredDays || editServeDays || [],
+      registeredDays: serveDateIds,
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
@@ -155,7 +160,7 @@ const Step4 = (props: StepProps) => {
       }
       const identityCardImagePaths = [identityCardImagePathFront];
       const fillData = {
-        strongPointIds,
+        strongPointIds: strongPointIds?.filter((stp) => stp) || [],
         exps,
         avatarPath,
         identityCardImagePaths,
@@ -172,7 +177,7 @@ const Step4 = (props: StepProps) => {
           // thêm field
           clothingSize,
           registeredDays,
-        } as EventRegistryDto,
+        },
       };
       dispatch(fillForm(fillData));
       mapMultiTitle({
@@ -215,6 +220,7 @@ const Step4 = (props: StepProps) => {
         (a) => a.name,
       ).join(', ');
     }
+    const dates = days?.filter((day) => registeredDays.includes(day.id));
     dispatch(
       fillDataPreview({
         question,
@@ -223,18 +229,23 @@ const Step4 = (props: StepProps) => {
         exps,
         strongPointIds: mapName(strongPointList, strongPointIds),
         expDepartmentIds: mapName(departments, expDepartmentIds),
-        wishDepartmentId: mapName(departments, [+wishDepartmentId]),
+        wishDepartmentId: mapName(departments, [+wishDepartmentId]) || 'Theo sự sắp xếp của CTN',
         receiveCardAddressId: mapName(receiveCardAddresses, [+receiveCardAddressId]),
         clothingSize,
-        registeredDays: registeredDays.map((dayId) => days?.find((date) => date.id == dayId)?.name),
+        registeredDays: dates,
       }),
     );
   };
 
-  console.log('____', registeredDays);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const validServeDays =
+    days
+      ?.filter((day) => day.name)
+      .filter((day) => new Date(day.time)?.getTime() > today.getTime()) || [];
 
   return (
-    <FadeInUp delay={0}>
+    <FadeInUp delay={0} viewport={0.1}>
       <Stack spacing={4}>
         <Heading
           color={primaryColor}
@@ -255,10 +266,13 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
-              <OurSelect
-                isMulti
+              <PrimeMultiSelect
+                options={validServeDays}
+                optionValue='id'
+                optionLabel='name'
                 name='registeredDays'
-                options={days}
+                isRequired
+                placeholder='Chọn ngày công quả'
                 label={
                   <Box display={'inline-block'}>
                     <Text>Thời gian công quả ở chùa </Text>
@@ -268,12 +282,8 @@ const Step4 = (props: StepProps) => {
                     </Text>
                   </Box>
                 }
-                optionValue='id'
-                optionLabel='name'
-                closeMenuOnSelect={false}
-                isRequired={!!days?.length}
-                placeholder='Thời gian công quả'
               />
+
               <OurSelect
                 isMulti
                 name='strongPointIds'
@@ -286,7 +296,7 @@ const Step4 = (props: StepProps) => {
               <OurSelect
                 isMulti
                 name='expDepartmentIds'
-                options={customDepartments}
+                options={departments}
                 label='Kinh nghiệm ở ban'
                 optionValue='id'
                 optionLabel='name'
@@ -303,6 +313,7 @@ const Step4 = (props: StepProps) => {
               />
               {!!receiveCardAddresses.length && (
                 <OurSelect
+                  isClearable
                   name='receiveCardAddressId'
                   options={receiveCardAddresses}
                   optionValue='id'
@@ -331,7 +342,9 @@ const Step4 = (props: StepProps) => {
                   isRequired
                 >
                   <FormLabel as='legend'>Hình thẻ</FormLabel>
-                  <Image srcSet={sampleAvatar} height={[64, 80]} />
+                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                    <Image srcSet={sampleAvatar} objectFit='contain' height={'100%'} />
+                  </Flex>
 
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh đúng quy chuẩn với hình ảnh minh họa (bên trên)
@@ -356,7 +369,9 @@ const Step4 = (props: StepProps) => {
                 >
                   <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
 
-                  <Image srcSet={cccdTemplate} height={[64, 80]} />
+                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                    <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
+                  </Flex>
 
                   <FormHelperText color={primaryColor}>
                     HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở

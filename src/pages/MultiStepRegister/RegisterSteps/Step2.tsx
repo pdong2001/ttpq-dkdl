@@ -20,12 +20,15 @@ import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import _ from 'lodash';
 
 const Step2 = (props: StepProps) => {
+  // window.removeEventListener('beforeunload', () => {
+  //   console.log('close tab');
+  // });
   const { nextStep, previousStep } = props;
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { ctnId, ctnName } = registerPage;
+  const { ctnId: ctnIdFromPageConfig, ctnName } = registerPage;
   const {
     fullName,
     phoneNumber,
@@ -44,7 +47,8 @@ const Step2 = (props: StepProps) => {
     temporaryDistrict,
     temporaryWard,
 
-    organizationStructureId = '',
+    ctnId = '',
+    ctnGroupId,
 
     dateOfBirth,
     register,
@@ -88,9 +92,8 @@ const Step2 = (props: StepProps) => {
       temporaryAddressProvince,
       temporaryAddressDistrict,
       temporaryAddressWard,
-
-      organizationStructureId: organizationStructureId ? organizationStructureId : ctnId,
-      organizationStructureId_group: '',
+      ctnGroupId,
+      ctnId: ctnId ? ctnId : ctnIdFromPageConfig,
 
       registerType:
         register?.registerType ||
@@ -98,7 +101,7 @@ const Step2 = (props: StepProps) => {
         RegisterType.SINGLE,
       leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
-    validationSchema: step2Schema(organizationStructureId || ctnId),
+    validationSchema: step2Schema(ctnId || ctnIdFromPageConfig),
     onSubmit: (values) => {
       const {
         gender,
@@ -107,8 +110,8 @@ const Step2 = (props: StepProps) => {
         email,
         permanentAddress,
         temporaryAddress,
-        organizationStructureId,
-        // organizationStructureId_group,
+        ctnId,
+        ctnGroupId,
         registerType,
       } = values;
       let { leaderId } = values;
@@ -122,8 +125,9 @@ const Step2 = (props: StepProps) => {
           gender,
           religiousName,
           email,
-          // organizationStructureId: organizationStructureId_group || organizationStructureId,
-          organizationStructureId,
+          // ctnId: ctnId_group || ctnId,
+          ctnGroupId,
+          ctnId,
           dateOfBirth,
           temporaryAddress,
           permanentAddress,
@@ -136,7 +140,8 @@ const Step2 = (props: StepProps) => {
           religiousName,
           email,
           dateOfBirth,
-          ...(!ctnId && { organizationStructureId: ctnName }),
+
+          ...(!ctnId && { ctnId: ctnName }),
         }),
       );
       nextStep();
@@ -194,13 +199,13 @@ const Step2 = (props: StepProps) => {
                   </Radios>
                   <FormInput name='religiousName' label='Pháp danh' />
                   <DateOfBirth name='dob' label='Ngày sinh' isRequired />
-                  <Box display={ctnId ? 'none' : 'block'}>
+                  <Box display={ctnIdFromPageConfig ? 'none' : 'block'}>
                     <CultivationPlace
-                      name='organizationStructureId'
+                      ctnName='ctnId'
+                      groupName='ctnGroupId'
                       setDataPreview={setDataPreview}
-                      className='organizationStructureId'
                       label='Địa điểm tu tập'
-                      isRequired={!ctnId}
+                      isRequired={!ctnIdFromPageConfig}
                     />
                   </Box>
                 </Stack>

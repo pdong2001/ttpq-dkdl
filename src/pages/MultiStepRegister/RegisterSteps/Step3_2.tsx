@@ -1,4 +1,4 @@
-import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid } from '@chakra-ui/react';
+import { Stack, Heading, Button, Box, Text, Radio, SimpleGrid, Tag } from '@chakra-ui/react';
 import _ from 'lodash';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
@@ -21,6 +21,8 @@ import { LeaveAddressDto } from '~/dtos/LeaveAddresses/LeaveAddressDto.model';
 import FadeInUp from '~/components/Animation/FadeInUp';
 import { CarBookingType } from '~/dtos/Enums/CarBookingType.enum';
 import OurSelect from '~/components/Form/MultiSelect';
+import PrimeDatePicker from '~/components/Form/DatePicker/PrimeDatePicker';
+import IonicDatePicker from '~/components/Form/DatePicker/IonicDatePicker';
 
 type Time = StartTimeDto | LeaveTimeDto;
 const mappingTime = (times: Time[]) => {
@@ -225,9 +227,10 @@ const Step3 = (props: StepProps) => {
                 // tỉnh khác and tự túc
                 <>
                   {/* <FloatingLabel name='otherLeaveAddress' label='Nơi trở về' /> */}
-                  <DateTimePicker
+                  <IonicDatePicker
                     name='otherLeaveTime'
                     label={returnMoveType === MoveType.ByPlane ? 'Ngày giờ bay về' : 'Ngày giờ về'}
+                    placeholder='Chọn ngày giờ'
                   />
                   {canMoveByPlane && returnMoveType === MoveType.ByPlane && (
                     <>
@@ -236,9 +239,12 @@ const Step3 = (props: StepProps) => {
                       <Radios
                         spacing={2}
                         direction='column'
-                        label='Đăng ký ô tô'
+                        label={
+                          <Text>
+                            Đăng ký ô tô <Tag>HĐ thư ký sẽ xếp xe cho HĐ nếu đủ số lượng ạ</Tag>
+                          </Text>
+                        }
                         name='carBookingType'
-                        isRequired
                       >
                         <Radio value={CarBookingType.Both}>Cả 2 chiều</Radio>
                         <Radio value={CarBookingType.Go}>Chiều đi (Từ Tân Sơn Nhất về Chùa)</Radio>

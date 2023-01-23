@@ -1,6 +1,23 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+/* ionic */
+/* Core CSS required for Ionic components to work properly */
+import '@ionic/react/css/core.css';
+
+/* Basic CSS for apps built with Ionic */
+import '@ionic/react/css/normalize.css';
+import '@ionic/react/css/structure.css';
+import '@ionic/react/css/typography.css';
+
+/* Optional CSS utils that can be commented out */
+import '@ionic/react/css/padding.css';
+import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/text-alignment.css';
+import '@ionic/react/css/text-transformation.css';
+import '@ionic/react/css/flex-utils.css';
+import '@ionic/react/css/display.css';
+
 import 'primereact/resources/themes/saga-orange/theme.css'; //theme
 import 'primereact/resources/primereact.min.css'; //core css
 import 'primeicons/primeicons.css';
@@ -13,6 +30,9 @@ import { useContext, useEffect } from 'react';
 import { getRegisterPage } from './slices/registerPage';
 import { useAppDispatch } from './hooks/reduxHook';
 import { MessageContext } from './providers/message';
+import { setupIonicReact } from '@ionic/react';
+
+setupIonicReact();
 
 function App() {
   const { shortUri, eventId } = useParams<any>();
@@ -50,7 +70,6 @@ function App() {
             const redirectUrl = pathname.replace('/' + shortUri, '');
             history.replace(redirectUrl);
             history.go(0);
-            console.log('🚀 ~ file: App.tsx:45 ~ useEffect ~ redirectUrl', redirectUrl);
           }
         });
     }
