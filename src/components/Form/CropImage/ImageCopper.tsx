@@ -89,6 +89,7 @@ export default function ImageCropper(props: Props) {
                           lastModified: new Date().getTime(),
                         });
                         setConfirmCropFile(file);
+                        setOpenCrop(false);
                       });
                   }}
                 />
