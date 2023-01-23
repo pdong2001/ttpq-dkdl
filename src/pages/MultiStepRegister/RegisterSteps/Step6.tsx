@@ -65,7 +65,7 @@ const Step6 = (props: StepProps) => {
           setOpenSuccess(true);
         })
         .catch((e) => {
-          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
+          messageService.add({ description: e?.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
         });
     } else {
       const updateRegisterInfo = dispatch(
@@ -103,7 +103,7 @@ const Step6 = (props: StepProps) => {
           }, 1000);
         })
         .catch((e) => {
-          messageService.add({ description: e.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
+          messageService.add({ description: e?.message || 'Dạ có lỗi xảy ra ạ', status: 'error' });
         });
     }
   };
