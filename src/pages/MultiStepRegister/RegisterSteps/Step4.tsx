@@ -267,23 +267,25 @@ const Step4 = (props: StepProps) => {
                 <Radio value={EventExp.Duoi3Lan}>{EventExp.toString(EventExp.Duoi3Lan)}</Radio>
                 <Radio value={EventExp.Tren3Lan}>{EventExp.toString(EventExp.Tren3Lan)}</Radio>
               </Radios>
-              <PrimeMultiSelect
-                options={validServeDays}
-                optionValue='id'
-                optionLabel='name'
-                name='registeredDays'
-                isRequired
-                placeholder='Chọn ngày công quả'
-                label={
-                  <Box display={'inline-block'}>
-                    <Text>Thời gian công quả ở chùa </Text>
-                    <Text color={primaryColor}>
-                      HD vui lòng chọn <Tag colorScheme={'red'}>ĐẦY ĐỦ</Tag> các ngày công quả tại
-                      chùa
-                    </Text>
-                  </Box>
-                }
-              />
+              {validServeDays.length && (
+                <PrimeMultiSelect
+                  options={validServeDays}
+                  optionValue='id'
+                  optionLabel='name'
+                  name='registeredDays'
+                  isRequired
+                  placeholder='Chọn ngày công quả'
+                  label={
+                    <Box display={'inline-block'}>
+                      <Text>Thời gian công quả ở chùa </Text>
+                      <Text color={primaryColor}>
+                        HD vui lòng chọn <Tag colorScheme={'red'}>ĐẦY ĐỦ</Tag> các ngày công quả tại
+                        chùa
+                      </Text>
+                    </Box>
+                  }
+                />
+              )}
 
               <OurSelect
                 isMulti
