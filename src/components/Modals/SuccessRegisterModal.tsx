@@ -214,14 +214,13 @@ export default function SuccessRegisterModal({
                     )}
                   </Flex>
                 </Heading>
-                {/* {isRegisterPopup && (
+                {isRegisterPopup && (
                   <Heading mb={2} as='h5' fontSize={{ base: 'xs', sm: 'md', md: 'md' }}>
                     <Tag colorScheme={'green'} rounded='md'>
-                      Cảm ơn huynh đệ đã đăng ký công quả. Ban nhân sự sẽ liên hệ huynh đệ trong
-                      thời gian sớm nhất ạ
+                      Cảm ơn huynh đệ đã đăng ký công quả. Chúc huynh đệ có mùa công quả ý nghĩa ạ
                     </Tag>
                   </Heading>
-                )} */}
+                )}
                 {hotline && (
                   <Text bgColor={'pink.100'} rounded='md' mb={2}>
                     Mọi thắc mắc xin liên hệ: Ban Nhân Sự -
