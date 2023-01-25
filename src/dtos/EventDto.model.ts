@@ -12,4 +12,5 @@ export type EventDto = {
   days?: NamedTimeDto[];
   type: EventType;
   enableTimeLine?: boolean;
+  description?: string;
 };

@@ -29,14 +29,13 @@ import useAxios from '~/hooks/useAxios';
 import { EventExp } from '~/dtos/Enums/EventExp.enum';
 import { fillForm } from '~/slices/register';
 import FormInput from '~/components/Form/FormInput';
-import FadeInUp from '~/components/Animation/FadeInUp';
 import { useContext, useEffect, useState } from 'react';
 import { MessageContext } from '~/providers/message';
 import sampleAvatar from '~/assets/misc/avatar_temp.png';
 import cccdTemplate from '~/assets/misc/CCCD_template.jpeg';
 import PrimeMultiSelect from '~/components/Form/PrimeMultiSelect';
-import ImageCropper from '~/components/Form/CropImage/ImageCopper';
 import UploadFile from '~/components/Form/UploadFile';
+import { InfoStatus } from '~/dtos/Enums/InfoStatus.enum';
 
 const mapObjectArrayToIds = (array) => array?.map(({ id }) => id) || [];
 
@@ -58,6 +57,7 @@ const Step4 = (props: StepProps) => {
     clothingSize: editClothingSize,
     question: editNote,
     registeredDays: editServeDays,
+    infoStatus: editInfoStatus,
   } = useAppSelector((state) => state.registerInfo.data);
   const {
     strongPoints,
@@ -76,8 +76,10 @@ const Step4 = (props: StepProps) => {
     clothingSize,
     question,
     registeredDays: prevRegisterdDays,
+    infoStatus,
   } = previousStepData.register || {};
 
+  const isVerifiedInfo = [infoStatus, editInfoStatus].some((i) => i === InfoStatus.Verified);
   // lấy kĩ năng sở trường
   const [strongPointOptions, setStrongPointOptions] = useState<any[]>([]);
   const { loaded: strongPointLoaded, data: strongPointList } = useAxios(
@@ -147,7 +149,7 @@ const Step4 = (props: StepProps) => {
         // identityCardImagePathBack,
         registeredDays,
       } = values;
-      if (!identityCardImagePathFront) {
+      if (!identityCardImagePathFront && !isVerifiedInfo) {
         return messageService.add({
           title: 'HD vui lòng bổ sung CCCD để hoàn tất thủ tục đăng ký',
           status: 'error',
@@ -354,28 +356,30 @@ const Step4 = (props: StepProps) => {
                   </FormHelperText>
                   <UploadFile ratio={3 / 4} name='avatarPath' />
                 </FormControl>
-                <FormControl
-                  name='identityCardImagePathFront'
-                  as='fieldset'
-                  border={1}
-                  display='flex'
-                  justifyContent={'center'}
-                  flexDirection='column'
-                  alignItems={'center'}
-                  isRequired
-                >
-                  <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
+                {!isVerifiedInfo && (
+                  <FormControl
+                    name='identityCardImagePathFront'
+                    as='fieldset'
+                    border={1}
+                    display='flex'
+                    justifyContent={'center'}
+                    flexDirection='column'
+                    alignItems={'center'}
+                    isRequired
+                  >
+                    <FormLabel as='legend'>Hình ảnh MẶT TRƯỚC CCCD/CMND/Hộ Chiếu</FormLabel>
 
-                  <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
-                    <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
-                  </Flex>
+                    <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
+                      <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
+                    </Flex>
 
-                  <FormHelperText color={primaryColor}>
-                    HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
-                    Chùa
-                  </FormHelperText>
-                  <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
-                </FormControl>
+                    <FormHelperText color={primaryColor}>
+                      HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
+                      Chùa
+                    </FormHelperText>
+                    <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
+                  </FormControl>
+                )}
 
                 {/* <FormControl name='avatarPath' as='fieldset' border={1}>
                   <FormLabel as='legend'>CCCD mặt sau</FormLabel>
