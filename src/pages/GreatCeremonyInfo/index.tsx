@@ -8,9 +8,9 @@ import {
   Stack,
   VStack,
   Flex,
+  Center,
 } from '@chakra-ui/layout';
 import {
-  Button,
   Text,
   Modal,
   ModalOverlay,
@@ -30,6 +30,8 @@ import EVENT_INFO_21 from '~/assets/event-info/new-year/new-year-6.jpg';
 import EVENT_INFO_30 from '~/assets/event-info/new-year/new-year-7.jpg';
 import EVENT_INFO_40 from '~/assets/event-info/new-year/new-year-9.jpg';
 import GreatCeremonyInfoDetails from './details';
+
+import './index.scss';
 
 const BuddhaEnlightenmentStartTime = 'December 27, 2022 00:00:00';
 const times = [
@@ -64,18 +66,26 @@ const eventImgages = [EVENT_INFO_20, EVENT_INFO_21, EVENT_INFO_30, EVENT_INFO_40
 const GreatCeremonyInfo = () => {
   const { primaryColor } = useCustomColorMode();
   const { event } = useAppSelector((state) => state.registerPage.data);
-  const { startDate: startTime, name: eventName } = event || {
+  const {
+    startDate: startTime,
+    endDate: endTime,
+    name: eventName,
+    description,
+  } = event || {
     startDate: BuddhaEnlightenmentStartTime,
   };
-  const { shortUri } = useParams<any>();
+  // const { shortUri } = useParams<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const today = new Date();
+  const startDate = new Date(startTime || '');
+  const isComming = startDate.getTime() > today.getTime();
+  const isEnded = new Date(endTime || '').getTime() < today.getTime();
 
   useEffect(() => {
-    const startDate = new Date(startTime || '');
-    if (startDate.getTime() > new Date().getTime()) {
+    if (isComming) {
       coundown(startTime);
     }
-  }, [startTime]);
+  }, [startTime, isComming]);
 
   return (
     <>
@@ -110,46 +120,63 @@ const GreatCeremonyInfo = () => {
           >
             <VStack align={'start'} spacing={{ sx: 10 }}>
               <Box mb={{ base: 4, md: 0 }} color='gray.700'>
-                <FadeInUp>
-                  <Heading
-                    textTransform={'uppercase'}
-                    fontSize={{ base: '2xl', md: '2xl', lg: '2xl' }}
-                    mb={2}
-                  >
-                    {eventName}
-                  </Heading>
-                </FadeInUp>
-                <FadeInUp>
-                  <Box textAlign='justify'>
-                    <Text mb={2}>
-                      <Text fontStyle={'italic'}>
-                        <Text>“Vui vì Tết được về chùa</Text>
-                        <Text>Được quỳ bên Phật đón mùa xuân sang</Text>
-                        <Text>Hoa đào thắm, sắc mai vàng</Text>
-                        <Text>Trong tình huynh đệ lòng càng thêm xuân&quot;</Text>
+                {description ? (
+                  <FadeInUp>
+                    <Box className='p-editor-container'>
+                      <Box className='p-editor-content ql-container'>
+                        <Box
+                          className='ql-editor'
+                          style={{
+                            background: 'unset',
+                            padding: 'unset',
+                            fontSize: 'unset',
+                            fontWeight: 'unset',
+                          }}
+                          dangerouslySetInnerHTML={{ __html: description || '' }}
+                        ></Box>
+                      </Box>
+                    </Box>
+                  </FadeInUp>
+                ) : (
+                  <FadeInUp>
+                    <Heading
+                      textTransform={'uppercase'}
+                      fontSize={{ base: '2xl', md: '2xl', lg: '2xl' }}
+                      mb={2}
+                    >
+                      {eventName}
+                    </Heading>
+                    <Box textAlign='justify'>
+                      <Text mb={2}>
+                        <Text fontStyle={'italic'}>
+                          <Text>“Vui vì Tết được về chùa</Text>
+                          <Text>Được quỳ bên Phật đón mùa xuân sang</Text>
+                          <Text>Hoa đào thắm, sắc mai vàng</Text>
+                          <Text>Trong tình huynh đệ lòng càng thêm xuân&quot;</Text>
+                        </Text>
                       </Text>
-                    </Text>
-                    <Text mb={2}>
-                      Tết Nguyên Đán là lúc mọi người được đoàn viên, ôn lại câu chuyện năm cũ và
-                      hứa hẹn với nhau về những điều tốt đẹp trong năm mới. Đặc biệt may mắn hơn
-                      nữa, chúng ta dành tâm hồn để được tắm mình trong đạo lý thiêng liêng, thì
-                      cuộc đời ta trong năm đó sẽ gặp được nhiều may mắn hơn.
-                    </Text>
-                    <Text mb={2}>
-                      Mùa xuân tại Thiền Tôn Phật Quang, luôn ngập tràn muôn hoa đủ sắc màu rực rỡ,
-                      tươi đẹp đón chào hàng vạn lượt Phật tử từ mọi miền tổ quốc. Nhiều chương
-                      trình đặc sắc như tụng kinh cầu quốc thái dân an, chúc Tết, thuyết giảng...
-                      diễn ra từ đêm 30 Tết đến Mùng 6 Tết.
-                    </Text>
-                    <Text mb={2}>
-                      Chúng Thanh Niên Phật Tử Phật Quang xin mời quý Phật tử cùng các bạn thanh
-                      niên, sinh viên hưởng trọn hương vị Xuân và cùng tham gia công quả tại Thiền
-                      Tôn Phật Quang.
-                    </Text>
-                  </Box>
-                </FadeInUp>
-                <FadeInUp>
-                  {/* <Button
+                      <Text mb={2}>
+                        Tết Nguyên Đán là lúc mọi người được đoàn viên, ôn lại câu chuyện năm cũ và
+                        hứa hẹn với nhau về những điều tốt đẹp trong năm mới. Đặc biệt may mắn hơn
+                        nữa, chúng ta dành tâm hồn để được tắm mình trong đạo lý thiêng liêng, thì
+                        cuộc đời ta trong năm đó sẽ gặp được nhiều may mắn hơn.
+                      </Text>
+                      <Text mb={2}>
+                        Mùa xuân tại Thiền Tôn Phật Quang, luôn ngập tràn muôn hoa đủ sắc màu rực
+                        rỡ, tươi đẹp đón chào hàng vạn lượt Phật tử từ mọi miền tổ quốc. Nhiều
+                        chương trình đặc sắc như tụng kinh cầu quốc thái dân an, chúc Tết, thuyết
+                        giảng... diễn ra từ đêm 30 Tết đến Mùng 6 Tết.
+                      </Text>
+                      <Text mb={2}>
+                        Chúng Thanh Niên Phật Tử Phật Quang xin mời quý Phật tử cùng các bạn thanh
+                        niên, sinh viên hưởng trọn hương vị Xuân và cùng tham gia công quả tại Thiền
+                        Tôn Phật Quang.
+                      </Text>
+                    </Box>
+                  </FadeInUp>
+                )}
+
+                {/* <Button
                     mt={2}
                     cursor={'pointer'}
                     as={'a'}
@@ -162,8 +189,7 @@ const GreatCeremonyInfo = () => {
                   >
                     Tìm hiểu thêm
                   </Button> */}
-                  {/* <Button onClick={onOpen}>Tìm hiểu thêm</Button> */}
-                </FadeInUp>
+                {/* <Button onClick={onOpen}>Tìm hiểu thêm</Button> */}
               </Box>
             </VStack>
             <Box style={{ height: '100%' }}>
@@ -182,39 +208,43 @@ const GreatCeremonyInfo = () => {
               justifyContent='space-between'
               alignItems='center'
             >
-              <VStack
-                justifyContent='center'
-                alignItems={{ base: 'center', lg: 'start' }}
-                spacing={[2, 3, 4, 5]}
-              >
-                <Text
-                  textTransform='uppercase'
-                  fontWeight='bold'
-                  fontSize={['xl', 'lg', '2xl']}
-                  color={primaryColor}
-                >
-                  Thời gian diễn ra
-                </Text>
-                <Text textTransform='uppercase'>Số ngày còn lại</Text>
-              </VStack>
-              <HStack spacing={[4, 10, 16, 16]}>
-                {new Array(4).fill('00').map((time, i) => {
-                  return (
-                    <Square key={i} border='1px' size={[16, 16, 20, 24, 32]} rounded='xl'>
-                      <Flex align='center' direction='column'>
-                        <Text
-                          id={`countdown-${times[i].id}`}
-                          fontWeight={'bold'}
-                          fontSize={['xl', '2xl', '3xl', '4xl']}
-                        >
-                          {time}
-                        </Text>
-                        <Text>{times[i].title}</Text>
-                      </Flex>
-                    </Square>
-                  );
-                })}
-              </HStack>
+              {isComming && (
+                <>
+                  <VStack
+                    justifyContent='center'
+                    alignItems={{ base: 'center', lg: 'start' }}
+                    spacing={[2, 3, 4, 5]}
+                  >
+                    <Text
+                      textTransform='uppercase'
+                      fontWeight='bold'
+                      fontSize={['xl', 'lg', '2xl']}
+                      color={primaryColor}
+                    >
+                      Thời gian diễn ra
+                    </Text>
+                    <Text textTransform='uppercase'>Số ngày còn lại</Text>
+                  </VStack>
+                  <HStack spacing={[4, 10, 16, 16]}>
+                    {new Array(4).fill('00').map((time, i) => {
+                      return (
+                        <Square key={i} border='1px' size={[16, 16, 20, 24, 32]} rounded='xl'>
+                          <Flex align='center' direction='column'>
+                            <Text
+                              id={`countdown-${times[i].id}`}
+                              fontWeight={'bold'}
+                              fontSize={['xl', '2xl', '3xl', '4xl']}
+                            >
+                              {time}
+                            </Text>
+                            <Text>{times[i].title}</Text>
+                          </Flex>
+                        </Square>
+                      );
+                    })}
+                  </HStack>
+                </>
+              )}
             </Stack>
           </FadeInUp>
         </Container>

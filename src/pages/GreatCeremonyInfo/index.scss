@@ -1,0 +1,39 @@
+.ql-editor {
+    p,
+    ul,
+    ol,
+    dl,
+    blockquote,
+    pre,
+    dialog {
+      font-size: 1em; /* 13px */
+    }
+    h1 {
+      font-size: 2.4615em; /* 32px */
+      line-height: 1.125em; /* 36px */
+    } 
+    h2 {
+      font-size: 1.5385em; /* 20px */
+      font-weight: normal;
+    }
+    h3 {
+      font-size: 1.2308em; /* 16px */
+      line-height: 1.125em; /* 18px */
+    }
+    h4 {
+      font-size: 1.0769em; /* 14px */
+      line-height: 1.2857em; /* 18px */
+    }
+    h5 {
+      font-size: 1em; /* 13px */
+      line-height: 1.3846em; /* 18px */
+    }
+    h6 {
+      font-size: 1em; /* 13px */
+      font-weight: normal;
+      font-variant: small-caps;
+      letter-spacing: 2px;
+      line-height: 1.3846em; /* 18px */
+    }
+  }
+  
