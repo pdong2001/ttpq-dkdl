@@ -1,3 +1,10 @@
+/* polyfills */
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
+import 'core-js/features/array/find';
+import 'core-js/features/array/includes';
+import 'core-js/features/number/is-nan';
+
 import store from './store';
 import { primaryColor, floatingLabel } from './theme';
 import { Provider as ReduxProvider } from 'react-redux';
