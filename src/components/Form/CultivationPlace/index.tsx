@@ -32,7 +32,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
   const [groups, setGroups] = useState<ChungThanhNienDto[]>([]);
   const [CTNs, setCTNs] = useState<ChungThanhNienDto[]>([]);
 
-  const {ctnId: configCTNIds } = useAppSelector(state => state.registerPage.data); 
+  const { ctnId: configCTNIds } = useAppSelector((state) => state.registerPage.data);
 
   const { data: ctnList, loaded } = useAxios<ChungThanhNienDto[]>(
     {
@@ -46,18 +46,13 @@ function CultivationPlace(props: CultivationPlaceProps) {
 
   useEffect(() => {
     if (ctnId && loaded) {
-      const ctn = ctnList?.find((ctn) => ctn.id == ctnId)?.name || '';
       const group = ctnList?.find((ctn) => ctn.id == groupId)?.name || '';
+      const ctn = ctnList?.find((ctn) => ctn.id == ctnId)?.name || '';
 
-      setDataPreview({ [`${ctnName}`]: ctn, [groupName]: group });
-      const CTN = CTNs.find((ctn) => ctn.id == ctnId);
-      const groups =
-        ctnList
-          ?.filter((ctn) => ctn.parentId == ctnId)
-          .map((group) => {
-            group.name = `${group.name} - ${CTN?.name}`;
-            return group;
-          }) || [];
+      setDataPreview({ [`${ctnName}`]: [ctn, group].join(' - ') });
+      debugger;
+      // const CTN = CTNs.find((ctn) => ctn.id == ctnId);
+      const groups = ctnList?.filter((ctn) => ctn.parentId == ctnId) || [];
       setGroups(groups);
     }
     if (loaded && ctnList) {
