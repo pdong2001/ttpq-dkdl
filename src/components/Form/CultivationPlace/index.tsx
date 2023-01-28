@@ -13,6 +13,7 @@ import API from '~/apis/constants';
 import useAxios from '~/hooks/useAxios';
 import OurSelect from '../MultiSelect';
 import { ChungThanhNienDto } from '~/dtos/CTN/ChungThanhNienDto.model';
+import { useAppSelector } from '~/hooks/reduxHook';
 
 type CultivationPlaceProps = InputProps &
   FormControlProps &
@@ -30,6 +31,8 @@ function CultivationPlace(props: CultivationPlaceProps) {
   const [groupField, { value: groupId }, { setValue: setGroup }] = useField(groupName);
   const [groups, setGroups] = useState<ChungThanhNienDto[]>([]);
   const [CTNs, setCTNs] = useState<ChungThanhNienDto[]>([]);
+
+  const {ctnId: configCTNIds } = useAppSelector(state => state.registerPage.data); 
 
   const { data: ctnList, loaded } = useAxios<ChungThanhNienDto[]>(
     {
@@ -58,7 +61,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
       setGroups(groups);
     }
     if (loaded && ctnList) {
-      const CTNs = ctnList.filter((ctn) => ctn.parentId == 0);
+      const CTNs = ctnList.filter((ctn) => ctn.parentId == 0 && configCTNIds?.includes(ctn.id));
       setCTNs(CTNs);
     }
   }, [ctnId, loaded]);

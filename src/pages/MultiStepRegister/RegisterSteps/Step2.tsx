@@ -101,7 +101,7 @@ const Step2 = (props: StepProps) => {
         RegisterType.SINGLE,
       leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
-    validationSchema: step2Schema(ctnId || ctnIdFromPageConfig),
+    validationSchema: step2Schema(ctnIdFromPageConfig?.length),
     onSubmit: (values) => {
       const {
         gender,
@@ -204,7 +204,7 @@ const Step2 = (props: StepProps) => {
                     label='Ngày sinh'
                     isRequired
                   />
-                  <Box display={ctnIdFromPageConfig ? 'none' : 'block'}>
+                  <Box>
                     <CultivationPlace
                       ctnName='ctnId'
                       groupName='ctnGroupId'

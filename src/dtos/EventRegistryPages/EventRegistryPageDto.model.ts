@@ -15,7 +15,7 @@ export type EventRegistryPageDto = {
   start?: string;
   event?: EventDto;
   type?: ScopeType;
-  ctnId?: number;
+  ctnId?: number[];
   ctnName?: string;
   provinceId?: number;
   pageContentId?: number;
