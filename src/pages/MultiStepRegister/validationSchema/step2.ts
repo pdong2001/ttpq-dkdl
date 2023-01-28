@@ -52,18 +52,18 @@ const step2Schema = (ctnId) =>
       then: Yup.string().required('Hãy tìm trưởng đoàn của bạn'),
       otherwise: Yup.string(),
     }),
-    // ctnId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
-    ctnId: Yup.number()
-      .nullable()
-      .test({
-        name: 'ctnId',
-        test: (value, context) => {
-          if (!ctnId && !value) {
-            return context.createError({ message: 'Xin hãy chọn nơi sinh hoạt' });
-          }
-          return true;
-        },
-      }),
+    ctnId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
+    // ctnId: Yup.number()
+    //   .nullable()
+    //   .test({
+    //     name: 'ctnId',
+    //     test: (value, context) => {
+    //       if (!ctnId && !value) {
+    //         return context.createError({ message: 'Xin hãy chọn nơi sinh hoạt' });
+    //       }
+    //       return true;
+    //     },
+    //   }),
   });
 
 export default step2Schema;

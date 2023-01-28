@@ -93,7 +93,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressDistrict,
       temporaryAddressWard,
       ctnGroupId,
-      ctnId: ctnId ? ctnId : ctnIdFromPageConfig,
+      ctnId,
 
       registerType:
         register?.registerType ||
@@ -101,7 +101,7 @@ const Step2 = (props: StepProps) => {
         RegisterType.SINGLE,
       leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
-    validationSchema: step2Schema(ctnIdFromPageConfig?.length),
+    validationSchema: step2Schema(!ctnIdFromPageConfig?.length),
     onSubmit: (values) => {
       const {
         gender,
@@ -210,7 +210,7 @@ const Step2 = (props: StepProps) => {
                       groupName='ctnGroupId'
                       setDataPreview={setDataPreview}
                       label='Địa điểm tu tập'
-                      isRequired={!ctnIdFromPageConfig}
+                      isRequired
                     />
                   </Box>
                 </Stack>
