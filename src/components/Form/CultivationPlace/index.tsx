@@ -50,7 +50,6 @@ function CultivationPlace(props: CultivationPlaceProps) {
       const ctn = ctnList?.find((ctn) => ctn.id == ctnId)?.name || '';
 
       setDataPreview({ [`${ctnName}`]: [ctn, group].join(' - ') });
-      debugger;
       // const CTN = CTNs.find((ctn) => ctn.id == ctnId);
       const groups = ctnList?.filter((ctn) => ctn.parentId == ctnId) || [];
       setGroups(groups);
