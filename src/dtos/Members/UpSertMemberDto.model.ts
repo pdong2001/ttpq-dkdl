@@ -1,3 +1,4 @@
+import { JoinCTN } from './../Enums/JoinCTNType.enum';
 import { Gender } from '../Enums/Gender.enum';
 import { UpSertAddressDto } from '../UpSertAddressDto.model';
 import { EventExp } from '../Enums/EventExp.enum';
@@ -19,6 +20,7 @@ export type UpSertMemberDto = {
   ctnType?: PhanLoaiThanhNien;
   dateOfBirth?: string;
   ctnId?: number;
+  JoinedCtn: JoinCTN;
   strongPointIds?: number[];
   permanentAddress?: UpSertAddressDto;
   temporaryAddress?: UpSertAddressDto;

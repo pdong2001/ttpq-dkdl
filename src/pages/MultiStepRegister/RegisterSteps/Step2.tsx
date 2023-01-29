@@ -14,10 +14,10 @@ import { Gender } from '~/dtos/Enums/Gender.enum';
 import CultivationPlace from '~/components/Form/CultivationPlace';
 import FormInput from '~/components/Form/FormInput';
 import { nanoid } from '@reduxjs/toolkit';
-import FadeInUp from '~/components/Animation/FadeInUp';
 import SearchLeader from '~/components/Form/SearchLeader';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import _ from 'lodash';
+import { JoinCTN } from '~/dtos/Enums/JoinCTNType.enum';
 
 const Step2 = (props: StepProps) => {
   // window.removeEventListener('beforeunload', () => {
@@ -52,6 +52,7 @@ const Step2 = (props: StepProps) => {
 
     dateOfBirth,
     register,
+    joinedCtn: prevJoinedCtn,
   } = useAppSelector((state) => state.register.data) || {};
 
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
@@ -94,6 +95,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressWard,
       ctnGroupId,
       ctnId,
+      joinedCtn: prevJoinedCtn ?? JoinCTN.JOINED,
 
       registerType:
         register?.registerType ||
@@ -113,6 +115,7 @@ const Step2 = (props: StepProps) => {
         ctnId,
         ctnGroupId,
         registerType,
+        joinedCtn,
       } = values;
       let { leaderId } = values;
       if (registerType === RegisterType.SINGLE) {
@@ -131,6 +134,7 @@ const Step2 = (props: StepProps) => {
           dateOfBirth,
           temporaryAddress,
           permanentAddress,
+          joinedCtn,
           register: { ...register, leaderId, registerType },
         }),
       );
@@ -160,6 +164,9 @@ const Step2 = (props: StepProps) => {
       );
     }
   };
+  const { joinedCtn } = formik.values;
+  console.log(!!joinedCtn);
+
   return (
     <>
       <Stack spacing={4} mb={{ base: 2, lg: 4 }}>
@@ -204,7 +211,12 @@ const Step2 = (props: StepProps) => {
                     label='Ngày sinh'
                     isRequired
                   />
-                  <Box>
+                  <Radios name='joinedCtn'>
+                    <Radio value={JoinCTN.JOINED}>Đã tham gia CTN</Radio>
+                    <Radio value={JoinCTN.NOT_YET}>Chưa tham gia CTN</Radio>
+                  </Radios>
+
+                  <Box display={joinedCtn === JoinCTN.JOINED ? 'block' : 'none'}>
                     <CultivationPlace
                       ctnName='ctnId'
                       groupName='ctnGroupId'

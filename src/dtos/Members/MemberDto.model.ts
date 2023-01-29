@@ -1,3 +1,4 @@
+import { JoinCTN } from './../Enums/JoinCTNType.enum';
 import { Gender } from '../Enums/Gender.enum';
 import { AddressDto } from '../AddressDto.model';
 import { SkillForRegisterDto } from '../SkillForRegisters/SkillForRegisterDto.model';
@@ -29,6 +30,7 @@ export type MemberDto = {
   temporaryProvince?: AddressDto;
   temporaryDistrict?: AddressDto;
   ctnId?: string;
+  joinedCtn: JoinCTN;
   ctnGroupId?: string;
   strongPoints?: SkillForRegisterDto[];
   register?: EventRegistryDto;
