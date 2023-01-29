@@ -27,7 +27,7 @@ const TableComponent = (infos, mapTitles): JSX.Element => {
   //   if (_.isArray(value)) {
   //     if (value.length) {
   //       filteredInfos[key] = value;
-  //       debugger;
+  //       ;
   //   } else if (value) {
   //     filteredInfos[key] = value;
   //   }
