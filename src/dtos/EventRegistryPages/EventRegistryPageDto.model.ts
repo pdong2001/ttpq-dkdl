@@ -29,4 +29,5 @@ export type EventRegistryPageDto = {
   canMoveByPlane: boolean;
   receiveVolunteeCert: boolean;
   hotline?: string;
+  hideWishDepartment: boolean;
 };

@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import _ from 'lodash';
+import _, { initial } from 'lodash';
 import { Form, FormikProvider, useFormik } from 'formik';
 // import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
@@ -99,7 +99,7 @@ const Step4 = (props: StepProps) => {
   }, [strongPointLoaded]);
 
   const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { departments, event } = registerPage;
+  const { departments, event, hideWishDepartment } = registerPage;
   const customDepartments = [
     { id: undefined, name: 'Theo sự sắp xếp của CTN' },
     ...(departments || []),
@@ -127,14 +127,18 @@ const Step4 = (props: StepProps) => {
       // thêm field
       clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
-      identityCardImagePathFront: identityCardImagePaths?.[0] || editIdentityCardPaths?.[0] || '',
+      identityCardImagePathFront: '',
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
       registeredDays: serveDateIds,
+      hidenCardImagePathFront: identityCardImagePaths?.[0] || editIdentityCardPaths?.[0],
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
+      if (!values.identityCardImagePathFront) {
+        values.identityCardImagePathFront = values.hidenCardImagePathFront || '';
+      }
       const {
         strongPointIds,
         expDepartmentIds,
@@ -307,16 +311,26 @@ const Step4 = (props: StepProps) => {
                 optionLabel='name'
                 placeholder='Chọn ban kinh nghiệm'
               />
-              <OurSelect
-                name='wishDepartmentId'
-                options={customDepartments}
-                label='Nguyện vọng vào ban'
-                placeholder='Chọn ban nguyện vọng'
-                optionValue='id'
-                optionLabel='name'
-                isRequired
-              />
-              {!!receiveCardAddresses.length && (
+              {hideWishDepartment == false && (
+                <OurSelect
+                  name='wishDepartmentId'
+                  options={customDepartments}
+                  label='Nguyện vọng vào ban'
+                  placeholder='Chọn ban nguyện vọng'
+                  optionValue='id'
+                  optionLabel='name'
+                  isRequired
+                />
+              )}
+              {hideWishDepartment == true && (
+                <Stack>
+                  <Text>
+                    Huynh đệ sẽ được phân <Text as='b'>BAN</Text> khi về chùa theo sự sắp xếp của
+                    CTN
+                  </Text>
+                </Stack>
+              )}
+              {receiveCardAddresses.length > 0 && (
                 <OurSelect
                   isClearable
                   name='receiveCardAddressId'
@@ -326,6 +340,9 @@ const Step4 = (props: StepProps) => {
                   label='Nơi nhận thẻ'
                   placeholder='Chọn nơi nhận thẻ'
                 />
+              )}
+              {receiveCardAddresses.length == 0 && (
+                <Text>Huynh đệ sẽ nhận được thẻ tại Thiền Tôn Phật Quang</Text>
               )}
               {/* thêm field */}
               {/* <OurSelect
@@ -372,11 +389,17 @@ const Step4 = (props: StepProps) => {
                     <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
                       <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
                     </Flex>
-
-                    <FormHelperText color={primaryColor}>
-                      HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
-                      Chùa
-                    </FormHelperText>
+                    {!identityCardImagePaths?.length && (
+                      <FormHelperText color={primaryColor}>
+                        HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
+                        Chùa
+                      </FormHelperText>
+                    )}
+                    {identityCardImagePaths?.length && (
+                      <FormHelperText color={primaryColor}>
+                        HĐ đã có ảnh CCCD, có thể bỏ qua thông tin này
+                      </FormHelperText>
+                    )}
                     <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
                   </FormControl>
                 )}
