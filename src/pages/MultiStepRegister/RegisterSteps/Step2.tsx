@@ -103,7 +103,7 @@ const Step2 = (props: StepProps) => {
         RegisterType.SINGLE,
       leaderId: register?.leaderId || registerInfo?.leaderId || '',
     },
-    validationSchema: step2Schema(!ctnIdFromPageConfig?.length),
+    validationSchema: step2Schema(),
     onSubmit: (values) => {
       const {
         gender,
@@ -145,7 +145,7 @@ const Step2 = (props: StepProps) => {
           email,
           dateOfBirth,
 
-          ...(!ctnId && { ctnId: ctnName }),
+          ...(!ctnId && { ctnId: 'Chưa tham gia CTN' }),
         }),
       );
       nextStep();
@@ -165,7 +165,6 @@ const Step2 = (props: StepProps) => {
     }
   };
   const { joinedCtn } = formik.values;
-  console.log(!!joinedCtn);
 
   return (
     <>
@@ -218,6 +217,7 @@ const Step2 = (props: StepProps) => {
 
                   <Box display={joinedCtn === JoinCTN.JOINED ? 'block' : 'none'}>
                     <CultivationPlace
+                      joinedCtn={joinedCtn}
                       ctnName='ctnId'
                       groupName='ctnGroupId'
                       setDataPreview={setDataPreview}

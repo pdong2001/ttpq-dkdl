@@ -14,6 +14,7 @@ import useAxios from '~/hooks/useAxios';
 import OurSelect from '../MultiSelect';
 import { ChungThanhNienDto } from '~/dtos/CTN/ChungThanhNienDto.model';
 import { useAppSelector } from '~/hooks/reduxHook';
+import { JoinCTN } from '~/dtos/Enums/JoinCTNType.enum';
 
 type CultivationPlaceProps = InputProps &
   FormControlProps &
@@ -21,10 +22,11 @@ type CultivationPlaceProps = InputProps &
     setDataPreview: Function;
     groupName: string;
     ctnName: string;
+    joinedCtn: JoinCTN;
   };
 
 function CultivationPlace(props: CultivationPlaceProps) {
-  const { groupName, ctnName, label, isRequired, setDataPreview } = props;
+  const { groupName, ctnName, label, isRequired, setDataPreview, joinedCtn } = props;
 
   //@ts-ignore
   const [field, { value: ctnId, error, touched }, { setValue }] = useField(ctnName);
@@ -48,8 +50,13 @@ function CultivationPlace(props: CultivationPlaceProps) {
     if (ctnId && loaded) {
       const group = ctnList?.find((ctn) => ctn.id == groupId)?.name || '';
       const ctn = ctnList?.find((ctn) => ctn.id == ctnId)?.name || '';
-
-      setDataPreview({ [`${ctnName}`]: [ctn, group].join(' - ') });
+      if (joinedCtn === JoinCTN.JOINED) {
+        setDataPreview({ [`${ctnName}`]: [ctn, group].join(' - ') });
+      } else {
+        setDataPreview({ [`${ctnName}`]: '' });
+        setValue('');
+        setGroup('');
+      }
       // const CTN = CTNs.find((ctn) => ctn.id == ctnId);
       const groups = ctnList?.filter((ctn) => ctn.parentId == ctnId) || [];
       setGroups(groups);
@@ -58,7 +65,8 @@ function CultivationPlace(props: CultivationPlaceProps) {
       const CTNs = ctnList.filter((ctn) => ctn.parentId == 0 && configCTNIds?.includes(ctn.id));
       setCTNs(CTNs);
     }
-  }, [ctnId, loaded]);
+  }, [ctnId, loaded, joinedCtn]);
+  console.log('render ctn');
 
   return (
     <FormControl isRequired={isRequired} isInvalid={!!error && touched}>

@@ -21,6 +21,17 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { getImageSrc } from '~/utils/functions';
 
 const TableComponent = (infos, mapTitles): JSX.Element => {
+  // const filteredInfos = {};
+  // Object.keys(infos).forEach((key) => {
+  //   const value = infos[key];
+  //   if (_.isArray(value)) {
+  //     if (value.length) {
+  //       filteredInfos[key] = value;
+  //       debugger;
+  //   } else if (value) {
+  //     filteredInfos[key] = value;
+  //   }
+  // });
   return (
     <TableContainer>
       <Table variant='simple' colorScheme={'gray'} style={{ tableLayout: 'fixed' }} w='full'>

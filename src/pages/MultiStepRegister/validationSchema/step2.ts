@@ -1,9 +1,10 @@
 import * as Yup from 'yup';
+import { JoinCTN } from '~/dtos/Enums/JoinCTNType.enum';
 import { RegisterType } from '~/dtos/Enums/RegisterType.enum';
 import { REGEX_YEAR_MONTH_DAY } from '~/utils/common';
 import Validator from '~/utils/common/validator';
 
-const step2Schema = (ctnId) =>
+const step2Schema = () =>
   Yup.object({
     dob: Yup.object()
       .shape({
@@ -52,18 +53,16 @@ const step2Schema = (ctnId) =>
       then: Yup.string().required('Hãy tìm trưởng đoàn của bạn'),
       otherwise: Yup.string(),
     }),
-    ctnId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
-    // ctnId: Yup.number()
-    //   .nullable()
-    //   .test({
-    //     name: 'ctnId',
-    //     test: (value, context) => {
-    //       if (!ctnId && !value) {
-    //         return context.createError({ message: 'Xin hãy chọn nơi sinh hoạt' });
-    //       }
-    //       return true;
-    //     },
-    //   }),
+    // ctnId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
+    ctnId: Yup.number().when(['joinedCtn'], {
+      is: (joinedCtn: JoinCTN) => {
+        if (joinedCtn === JoinCTN.JOINED) {
+          return true; // validate and go to then function
+        }
+        return false;
+      },
+      then: (schema) => schema.required('Xin hãy chọn nơi sinh hoạt'),
+    }),
   });
 
 export default step2Schema;
