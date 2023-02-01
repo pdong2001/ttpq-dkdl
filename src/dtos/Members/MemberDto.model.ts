@@ -30,7 +30,7 @@ export type MemberDto = {
   temporaryProvince?: AddressDto;
   temporaryDistrict?: AddressDto;
   ctnId?: string;
-  joinedCtn: JoinCTN;
+  joinedCTN: JoinCTN;
   ctnGroupId?: string;
   strongPoints?: SkillForRegisterDto[];
   register?: EventRegistryDto;

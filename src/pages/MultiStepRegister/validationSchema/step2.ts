@@ -54,9 +54,9 @@ const step2Schema = () =>
       otherwise: Yup.string(),
     }),
     // ctnId: Yup.number().required('Xin hãy chọn nơi sinh hoạt'),
-    ctnId: Yup.number().when(['joinedCtn'], {
-      is: (joinedCtn: JoinCTN) => {
-        if (joinedCtn === JoinCTN.JOINED) {
+    ctnId: Yup.number().when(['joinedCTN'], {
+      is: (joinedCTN: JoinCTN) => {
+        if (joinedCTN === JoinCTN.JOINED) {
           return true; // validate and go to then function
         }
         return false;

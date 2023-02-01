@@ -22,11 +22,11 @@ type CultivationPlaceProps = InputProps &
     setDataPreview: Function;
     groupName: string;
     ctnName: string;
-    joinedCtn: JoinCTN;
+    joinedCTN: JoinCTN;
   };
 
 function CultivationPlace(props: CultivationPlaceProps) {
-  const { groupName, ctnName, label, isRequired, setDataPreview, joinedCtn } = props;
+  const { groupName, ctnName, label, isRequired, setDataPreview, joinedCTN } = props;
 
   //@ts-ignore
   const [field, { value: ctnId, error, touched }, { setValue }] = useField(ctnName);
@@ -50,7 +50,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
     if (ctnId && loaded) {
       const group = ctnList?.find((ctn) => ctn.id == groupId)?.name || '';
       const ctn = ctnList?.find((ctn) => ctn.id == ctnId)?.name || '';
-      if (joinedCtn === JoinCTN.JOINED) {
+      if (joinedCTN === JoinCTN.JOINED) {
         setDataPreview({ [`${ctnName}`]: [ctn, group].join(' - ') });
       } else {
         setDataPreview({ [`${ctnName}`]: '' });
@@ -65,7 +65,7 @@ function CultivationPlace(props: CultivationPlaceProps) {
       const CTNs = ctnList.filter((ctn) => ctn.parentId == 0 && configCTNIds?.includes(ctn.id));
       setCTNs(CTNs);
     }
-  }, [ctnId, loaded, joinedCtn]);
+  }, [ctnId, loaded, joinedCTN]);
   console.log('render ctn');
 
   return (

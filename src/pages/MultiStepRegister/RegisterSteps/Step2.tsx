@@ -52,7 +52,7 @@ const Step2 = (props: StepProps) => {
 
     dateOfBirth,
     register,
-    joinedCtn: prevJoinedCtn,
+    joinedCTN: prevJoinedCTN,
   } = useAppSelector((state) => state.register.data) || {};
 
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
@@ -95,7 +95,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressWard,
       ctnGroupId,
       ctnId,
-      joinedCtn: prevJoinedCtn ? JoinCTN.JOINED : JoinCTN.NOT_YET,
+      joinedCTN: prevJoinedCTN ? JoinCTN.JOINED : JoinCTN.NOT_YET,
 
       registerType:
         register?.registerType ||
@@ -115,7 +115,7 @@ const Step2 = (props: StepProps) => {
         ctnId,
         ctnGroupId,
         registerType,
-        joinedCtn,
+        joinedCTN: joinedCTN,
       } = values;
       let { leaderId } = values;
       if (registerType === RegisterType.SINGLE) {
@@ -134,7 +134,7 @@ const Step2 = (props: StepProps) => {
           dateOfBirth,
           temporaryAddress,
           permanentAddress,
-          joinedCtn,
+          joinedCTN,
           register: { ...register, leaderId, registerType },
         }),
       );
@@ -164,7 +164,7 @@ const Step2 = (props: StepProps) => {
       );
     }
   };
-  const { joinedCtn } = formik.values;
+  const { joinedCTN: joinedCTN } = formik.values;
 
   return (
     <>
@@ -210,14 +210,14 @@ const Step2 = (props: StepProps) => {
                     label='Ngày sinh'
                     isRequired
                   />
-                  <Radios name='joinedCtn'>
+                  <Radios name='joinedCTN'>
                     <Radio value={JoinCTN.JOINED}>Đã tham gia CTN</Radio>
                     <Radio value={JoinCTN.NOT_YET}>Chưa tham gia CTN</Radio>
                   </Radios>
 
-                  <Box display={joinedCtn === JoinCTN.JOINED ? 'block' : 'none'}>
+                  <Box display={joinedCTN === JoinCTN.JOINED ? 'block' : 'none'}>
                     <CultivationPlace
-                      joinedCtn={joinedCtn}
+                      joinedCTN={joinedCTN}
                       ctnName='ctnId'
                       groupName='ctnGroupId'
                       setDataPreview={setDataPreview}
