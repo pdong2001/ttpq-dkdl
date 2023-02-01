@@ -23,7 +23,7 @@ import { ResponseData } from '~/apis/common/type';
 import { useField } from 'formik';
 import { useAppSelector } from '~/hooks/reduxHook';
 import useAxios from '~/hooks/useAxios';
-import { formatUrl } from '~/utils/functions';
+import { formatUrl, getImageSrc } from '~/utils/functions';
 import { EventRegistryDto } from '~/dtos/EventRegistries/EventRegistryDto.model';
 import { useRouteMatch } from 'react-router-dom';
 import { HOME_WITH_SHORT_URI } from '~/routes';
@@ -56,16 +56,26 @@ const SearchLeader = (props: Props) => {
   const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
   const { register } = useAppSelector((state) => state.register.data);
   const { leaderId } = register || {};
+
+  const [leader, setLeader] = useState<any>();
+  /* from update and navigate case*/
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
       url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId || editLeaderId }),
       transformResponse: ({ data }) => data,
     },
-    [leaderId],
+    [leaderId, editLeaderId],
   );
   if (!leaderId && !editLeaderId) {
     editToken.cancel();
   }
+
+  useEffect(() => {
+    setLeader(editLeader);
+    setValue(editLeader?.id);
+    getLeader(editLeader);
+  }, [editLeader]);
+
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
     {
       method: 'post',
@@ -80,23 +90,21 @@ const SearchLeader = (props: Props) => {
   );
 
   useEffect(() => {
-    const { data: leader } = data || {};
-    if (leader || editLeader) {
-      setValue(leader?.id || editLeader?.id);
-    } else {
-      setValue('');
-    }
+    const { data: newLeader } = data || {};
+    setValue(newLeader?.id || '');
+    setLeader(newLeader);
     if (registerTypeField.value === RegisterType.GROUP) {
-      getLeader(data || editLeader);
+      getLeader(data);
     } else {
       getLeader({});
     }
-  }, [data, editLeader, registerTypeField.value]);
+  }, [data, registerTypeField.value]);
   const isShow = registerTypeField.value === RegisterType.GROUP;
   const isInvalid = !!error && touched;
   const isValidSearchValue = inputValue?.length >= 8;
 
   const isHomePage = path === HOME_WITH_SHORT_URI;
+
   return (
     <FormControl display={isShow ? 'block' : 'none'} isInvalid={isInvalid}>
       <FormLabel color={color}>{label}</FormLabel>
@@ -127,7 +135,7 @@ const SearchLeader = (props: Props) => {
           </InputRightElement>
         </InputGroup>
         <HStack spacing={{ base: 4, md: 6, lg: 2 }} justifyContent='center'>
-          {!data?.data && !editLeader ? (
+          {!leader ? (
             searchValue &&
             (loaded ? (
               <Text color='blue.300'>{'Không tìm thấy trưởng đoàn'}</Text>
@@ -136,14 +144,13 @@ const SearchLeader = (props: Props) => {
             ))
           ) : (
             <>
-              <Avatar src={data?.data?.avatarPath || editLeader?.member?.avatarPath} />
+              <Avatar src={getImageSrc(leader?.avatarPath || leader?.member?.avatarPath)} />
               <VStack alignItems='start'>
                 <Text color={primaryColor} fontWeight='bold'>
-                  {data?.data?.fullName || editLeader?.member?.fullName}
+                  {leader?.religiousName || leader?.member?.religiousName}
                 </Text>
-
                 <Text color={isHomePage ? 'white' : ''}>
-                  {data?.data?.religiousName || editLeader?.member?.religiousName}
+                  {leader?.fullName || leader?.member?.fullName}
                 </Text>
               </VStack>
             </>
