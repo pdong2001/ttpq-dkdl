@@ -27,8 +27,6 @@ const Step2 = (props: StepProps) => {
   const { primaryColor } = useCustomColorMode();
   const dispatch = useAppDispatch();
 
-  const { data: registerPage } = useAppSelector((state) => state.registerPage);
-  const { ctnId: ctnIdFromPageConfig, ctnName } = registerPage;
   const {
     fullName,
     phoneNumber,
@@ -52,7 +50,6 @@ const Step2 = (props: StepProps) => {
 
     dateOfBirth,
     register,
-    joinedCTN: prevJoinedCTN,
   } = useAppSelector((state) => state.register.data) || {};
 
   const registerInfo = useAppSelector((state) => state.registerInfo.data);
@@ -95,7 +92,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressWard,
       ctnGroupId,
       ctnId,
-      joinedCTN: prevJoinedCTN ? JoinCTN.JOINED : JoinCTN.NOT_YET,
+      joinedCTN: ctnId ? JoinCTN.JOINED : JoinCTN.NOT_YET,
 
       registerType:
         register?.registerType ||
@@ -115,7 +112,7 @@ const Step2 = (props: StepProps) => {
         ctnId,
         ctnGroupId,
         registerType,
-        joinedCTN: joinedCTN,
+        joinedCTN,
       } = values;
       let { leaderId } = values;
       if (registerType === RegisterType.SINGLE) {
