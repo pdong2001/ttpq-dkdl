@@ -95,7 +95,7 @@ const Step2 = (props: StepProps) => {
       temporaryAddressWard,
       ctnGroupId,
       ctnId,
-      joinedCtn: prevJoinedCtn ?? JoinCTN.JOINED,
+      joinedCtn: prevJoinedCtn ? JoinCTN.JOINED : JoinCTN.NOT_YET,
 
       registerType:
         register?.registerType ||

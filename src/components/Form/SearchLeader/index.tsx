@@ -53,17 +53,17 @@ const SearchLeader = (props: Props) => {
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const { primaryColor } = useCustomColorMode();
-  // const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
+  const { leaderId: editLeaderId } = useAppSelector((state) => state.registerInfo.data);
   const { register } = useAppSelector((state) => state.register.data);
   const { leaderId } = register || {};
   const { data: editLeader, cancel: editToken } = useAxios<EventRegistryDto>(
     {
-      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId }),
+      url: formatUrl(API.GET_REGISTER_INFO, { id: leaderId || editLeaderId }),
       transformResponse: ({ data }) => data,
     },
     [leaderId],
   );
-  if (!leaderId) {
+  if (!leaderId && !editLeaderId) {
     editToken.cancel();
   }
   const { data, loaded } = useSearch<any, ResponseData<LeaderData>>(
