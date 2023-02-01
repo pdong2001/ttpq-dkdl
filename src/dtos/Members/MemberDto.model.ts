@@ -5,6 +5,7 @@ import { SkillForRegisterDto } from '../SkillForRegisters/SkillForRegisterDto.mo
 import { EventExp } from '../Enums/EventExp.enum';
 import { PhanLoaiThanhNien } from '../Enums/PhanLoaiThanhNien.enum';
 import { EventRegistryDto } from '../EventRegistries/EventRegistryDto.model';
+import { InfoStatus } from '../Enums/InfoStatus.enum';
 
 export type MemberDto = {
   id?: string;
@@ -34,4 +35,5 @@ export type MemberDto = {
   ctnGroupId?: string;
   strongPoints?: SkillForRegisterDto[];
   register?: EventRegistryDto;
+  infoStatus?: InfoStatus;
 };

@@ -19,7 +19,6 @@ import { GroupDto } from '../Groups/GroupDto.model';
 import { CarBookingType } from '../Enums/CarBookingType.enum';
 import { StatusType } from '../Enums/StatusType.enum';
 import { ClothingSize } from '../Enums/ClothingSize.enum';
-import { InfoStatus } from '../Enums/InfoStatus.enum';
 
 export type EventRegistryDto = {
   registerGroup?: string;
@@ -75,5 +74,4 @@ export type EventRegistryDto = {
   receiveCardAddress?: ReceiveCardAddressDto;
   registeredDays?: NamedTimeDto[];
   registeredDayIds?: number[];
-  infoStatus?: InfoStatus;
 };

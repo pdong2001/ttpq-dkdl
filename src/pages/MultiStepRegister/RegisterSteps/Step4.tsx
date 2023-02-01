@@ -16,9 +16,8 @@ import {
 } from '@chakra-ui/react';
 import useCustomColorMode from '~/hooks/useColorMode';
 import { StepProps } from '..';
-import _, { initial } from 'lodash';
+import _ from 'lodash';
 import { Form, FormikProvider, useFormik } from 'formik';
-// import UploadFile from '~/components/Form/UploadFile';
 import Radios from '~/components/Form/Radios';
 import API from '~/apis/constants';
 import { useAppDispatch, useAppSelector } from '~/hooks/reduxHook';
@@ -57,8 +56,8 @@ const Step4 = (props: StepProps) => {
     clothingSize: editClothingSize,
     question: editNote,
     registeredDays: editServeDays,
-    infoStatus: editInfoStatus,
   } = useAppSelector((state) => state.registerInfo.data);
+  const { infoStatus: editInfoStatus } = member || {};
   const {
     strongPoints,
     avatarPath: editAvatarPath,
@@ -76,10 +75,10 @@ const Step4 = (props: StepProps) => {
     clothingSize,
     question,
     registeredDays: prevRegisterdDays,
-    infoStatus,
   } = previousStepData.register || {};
 
-  const isVerifiedInfo = [infoStatus, editInfoStatus].some((i) => i === InfoStatus.Verified);
+  const isVerifiedInfo = editInfoStatus === InfoStatus.Verified;
+  const isVerifiedCCCD = isVerifiedInfo && member?.identityCardImagePaths?.length;
   // lấy kĩ năng sở trường
   const [strongPointOptions, setStrongPointOptions] = useState<any[]>([]);
   const { loaded: strongPointLoaded, data: strongPointList } = useAxios(
@@ -127,18 +126,14 @@ const Step4 = (props: StepProps) => {
       // thêm field
       clothingSize: clothingSize || editClothingSize || '',
       avatarPath: avatarPath || editAvatarPath || '',
-      identityCardImagePathFront: '',
+      identityCardImagePathFront: identityCardImagePaths?.[0] || editIdentityCardPaths?.[0] || '',
       // identityCardImagePathBack: '',
       identityCardImagePaths: '',
       question: question || editNote || '',
       registeredDays: serveDateIds,
-      hidenCardImagePathFront: identityCardImagePaths?.[0] || editIdentityCardPaths?.[0],
     },
     validationSchema: step4Schema(days),
     onSubmit: (values) => {
-      if (!values.identityCardImagePathFront) {
-        values.identityCardImagePathFront = values.hidenCardImagePathFront || '';
-      }
       const {
         strongPointIds,
         expDepartmentIds,
@@ -311,7 +306,11 @@ const Step4 = (props: StepProps) => {
                 optionLabel='name'
                 placeholder='Chọn ban kinh nghiệm'
               />
-              {hideWishDepartment == false && (
+              {hideWishDepartment ? (
+                <Text color={primaryColor}>
+                  Huynh đệ sẽ được phân <Text as='b'>BAN</Text> khi về chùa theo sự sắp xếp của CTN
+                </Text>
+              ) : (
                 <OurSelect
                   name='wishDepartmentId'
                   options={customDepartments}
@@ -322,15 +321,7 @@ const Step4 = (props: StepProps) => {
                   isRequired
                 />
               )}
-              {hideWishDepartment == true && (
-                <Stack>
-                  <Text>
-                    Huynh đệ sẽ được phân <Text as='b'>BAN</Text> khi về chùa theo sự sắp xếp của
-                    CTN
-                  </Text>
-                </Stack>
-              )}
-              {receiveCardAddresses.length > 0 && (
+              {receiveCardAddresses.length ? (
                 <OurSelect
                   isClearable
                   name='receiveCardAddressId'
@@ -340,11 +331,9 @@ const Step4 = (props: StepProps) => {
                   label='Nơi nhận thẻ'
                   placeholder='Chọn nơi nhận thẻ'
                 />
+              ) : (
+                <Text color={primaryColor}>Huynh đệ sẽ nhận được thẻ tại Thiền Tôn Phật Quang</Text>
               )}
-              {receiveCardAddresses.length == 0 && (
-                <Text>Huynh đệ sẽ nhận được thẻ tại Thiền Tôn Phật Quang</Text>
-              )}
-              {/* thêm field */}
               {/* <OurSelect
                 name='clothingSize'
                 options={ClothingSize.getList()}
@@ -373,7 +362,7 @@ const Step4 = (props: StepProps) => {
                   </FormHelperText>
                   <UploadFile ratio={3 / 4} name='avatarPath' />
                 </FormControl>
-                {!isVerifiedInfo && (
+                {!isVerifiedCCCD && (
                   <FormControl
                     name='identityCardImagePathFront'
                     as='fieldset'
@@ -389,17 +378,11 @@ const Step4 = (props: StepProps) => {
                     <Flex height={[64, 80]} justifyContent='center' alignItems={'center'}>
                       <Image srcSet={cccdTemplate} objectFit='contain' height={'100%'} />
                     </Flex>
-                    {!identityCardImagePaths?.length && (
-                      <FormHelperText color={primaryColor}>
-                        HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
-                        Chùa
-                      </FormHelperText>
-                    )}
-                    {identityCardImagePaths?.length && (
-                      <FormHelperText color={primaryColor}>
-                        HĐ đã có ảnh CCCD, có thể bỏ qua thông tin này
-                      </FormHelperText>
-                    )}
+                    <FormHelperText color={primaryColor}>
+                      HD vui lòng gửi ảnh chụp mặt TRƯỚC ảnh CCCD/CMND/Hộ Chiếu để được bảo lãnh ở
+                      Chùa
+                    </FormHelperText>
+
                     <UploadFile ratio={16 / 9} width={'72'} name='identityCardImagePathFront' />
                   </FormControl>
                 )}
